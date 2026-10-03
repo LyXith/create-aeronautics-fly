@@ -14,6 +14,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.Fluid;
 
 import static net.minecraft.tags.BlockTags.DAMPENS_VIBRATIONS;
 
@@ -95,5 +96,10 @@ public class AeroTags {
 			prov.tag(BURNER_FIRE)
 					.add(Items.COAL_BLOCK);
 		}
+	}
+
+	public static class FluidTags {
+		/** Levitite Blend fluid states, used for entity movement and camera fog. */
+		public static final TagKey<Fluid> LEVITITE_BLEND = TagKey.create(Registries.FLUID, Aeronautics.path("levitite_blend"));
 	}
 }

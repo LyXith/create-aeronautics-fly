@@ -10,7 +10,7 @@ import dev.simulated_team.simulated.mixin_interface.PlayerLaunchedPlungerExtensi
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.SubmitNodeCollector;
@@ -23,6 +23,7 @@ import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.ItemOwner;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -69,21 +70,24 @@ public final class PlungerLauncherItemModel implements ItemModel, SpecialModelRe
         state.setAnimated();
 
         final Minecraft minecraft = Minecraft.getInstance();
-        final LocalPlayer player = minecraft.player;
+        final AbstractClientPlayer focusOwner = owner != null && owner.asLivingEntity() instanceof AbstractClientPlayer holder
+                ? holder : null;
+        final Player player = focusOwner != null ? focusOwner : minecraft.player;
         final DeltaTracker timer = minecraft.getDeltaTracker();
         final float partialTicks = timer.getGameTimeDeltaPartialTick(false);
         final ItemStackRenderState.FoilType foil = stack.hasFoil()
                 ? ItemStackRenderState.FoilType.STANDARD
                 : ItemStackRenderState.FoilType.NONE;
-        final boolean captureBodyFocus = FirstPersonItemFocus.isLocalPlayerBodyRender(
-                displayContext, owner, minecraft);
+        final boolean captureWorldFocus = focusOwner != null
+                && (displayContext == ItemDisplayContext.THIRD_PERSON_LEFT_HAND
+                || displayContext == ItemDisplayContext.THIRD_PERSON_RIGHT_HAND);
         final Consumer<PoseStack> commonTransform = matrices -> {
             matrices.scale(0.8f, 0.8f, 0.8f);
             matrices.translate(0, 0, 0.15f);
         };
 
         addLayer(state, displayContext, item, Sheets.cutoutBlockSheet(), foil,
-                commonTransform, true, displayContext.firstPerson() || captureBodyFocus, partialTicks);
+                commonTransform, true, displayContext.firstPerson() || captureWorldFocus, partialTicks, focusOwner);
 
         boolean renderFirst = player == null;
         boolean renderSecond = player == null;
@@ -130,14 +134,14 @@ public final class PlungerLauncherItemModel implements ItemModel, SpecialModelRe
 
         // Unlike the launcher base, these partials are authored around [0, 0, 0].
         addLayer(state, displayContext, body, Sheets.solidBlockSheet(),
-                ItemStackRenderState.FoilType.NONE, bodyTransform, false, false, 0);
+                ItemStackRenderState.FoilType.NONE, bodyTransform, false, false, 0, null);
         addLayer(state, displayContext, joint, Sheets.solidBlockSheet(),
-                ItemStackRenderState.FoilType.NONE, bodyTransform, false, false, 0);
+                ItemStackRenderState.FoilType.NONE, bodyTransform, false, false, 0, null);
         addLayer(state, displayContext, spool, Sheets.solidBlockSheet(),
                 ItemStackRenderState.FoilType.NONE, matrices -> {
                     bodyTransform.accept(matrices);
                     matrices.translate(0, 0, 3 / 16.0);
-                }, false, false, 0);
+                }, false, false, 0, null);
     }
 
     private void addLayer(
@@ -149,7 +153,8 @@ public final class PlungerLauncherItemModel implements ItemModel, SpecialModelRe
             final Consumer<PoseStack> transform,
             final boolean centerQuads,
             final boolean captureFocus,
-            final float partialTicks
+            final float partialTicks,
+            @Nullable final AbstractClientPlayer focusOwner
     ) {
         final LayerRenderState layer = state.newLayer();
         layer.setRenderType(renderType);
@@ -158,7 +163,7 @@ public final class PlungerLauncherItemModel implements ItemModel, SpecialModelRe
         layer.prepareQuadList().addAll(part.quads());
         layer.setFoilType(foil);
         layer.setupSpecialModel(this,
-                new RenderData(layer, renderType, foil, transform, centerQuads, captureFocus, partialTicks));
+                new RenderData(layer, renderType, foil, transform, centerQuads, captureFocus, partialTicks, focusOwner));
     }
 
     @Override
@@ -177,12 +182,18 @@ public final class PlungerLauncherItemModel implements ItemModel, SpecialModelRe
         data.transform().accept(matrices);
         if (data.captureFocus()) {
             matrices.pushPose();
-            matrices.translate(2 / 16.0, -1 / 16.0, -4 / 16.0);
+            // The tether spool is rendered two sixteenths in front of the
+            // launcher body; capture its center so the world rope meets it.
+            matrices.translate(2 / 16.0, -1 / 16.0, -2 / 16.0);
             if (displayContext.firstPerson()) {
                 PlungerLauncherItemRenderer.captureFirstPersonFocus(
                         matrices, Minecraft.getInstance(), data.partialTicks());
             } else {
-                PlungerLauncherItemRenderer.captureFirstPersonBodyFocus(matrices);
+                PlungerLauncherItemRenderer.captureThirdPersonFocus(
+                        data.focusOwner(), displayContext, matrices, data.partialTicks());
+                if (FirstPersonItemFocus.isLocalPlayerBodyRender(displayContext, data.focusOwner(), Minecraft.getInstance())) {
+                    PlungerLauncherItemRenderer.captureFirstPersonBodyFocus(matrices);
+                }
             }
             matrices.popPose();
         }
@@ -222,7 +233,8 @@ public final class PlungerLauncherItemModel implements ItemModel, SpecialModelRe
             Consumer<PoseStack> transform,
             boolean centerQuads,
             boolean captureFocus,
-            float partialTicks
+            float partialTicks,
+            @Nullable AbstractClientPlayer focusOwner
     ) {
     }
 

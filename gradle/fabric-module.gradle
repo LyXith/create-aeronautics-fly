@@ -12,9 +12,6 @@ java {
 sourceSets {
     main {
         java {
-            exclude 'dev/simulated_team/simulated/mixin/creative_tab_sections/SpriteContentsMixin.java'
-            exclude 'dev/simulated_team/simulated/mixin/creative_tab_sections/SpriteContentsTickerMixin.java'
-            exclude 'dev/simulated_team/simulated/mixin_interface/SpriteContentsExtension.java'
             exclude 'dev/simulated_team/simulated/mixin/diagram/VanillaSubLevelRenderDispatcherMixin.java'
             exclude 'dev/simulated_team/simulated/mixin/end_sea/VanillaSubLevelRenderDispatcherMixin.java'
             exclude 'dev/simulated_team/simulated/mixin/hold_interaction/LocalPlayerMixin.java'
@@ -62,6 +59,7 @@ dependencies {
     mappings loom.layered { officialMojangMappings() }
 
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+    modImplementation "io.github.llamalad7:mixinextras-fabric:${mixinextras_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
     modImplementation "maven.modrinth:create-fly:${create_fly_version}"
     modImplementation "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${forgeconfigapiport_version}"

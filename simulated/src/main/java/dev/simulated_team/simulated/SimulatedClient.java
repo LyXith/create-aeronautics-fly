@@ -3,6 +3,7 @@ package dev.simulated_team.simulated;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.zurrtum.create.AllBlockEntityTypes;
 import com.zurrtum.create.client.AllBlockEntityBehaviours;
+import com.zurrtum.create.client.content.redstone.link.LinkBehaviour;
 import com.zurrtum.create.client.content.kinetics.transmission.SplitShaftVisual;
 import com.zurrtum.create.client.foundation.blockEntity.behaviour.audio.KineticAudioBehaviour;
 import com.zurrtum.create.client.flywheel.lib.visualization.SimpleBlockEntityVisualizer;
@@ -179,6 +180,7 @@ public class SimulatedClient {
                     AllBlockEntityTypes.FLAP_DISPLAY,
                     AllBlockEntityTypes.NIXIE_TUBE,
                     AllBlockEntityTypes.ANALOG_LEVER,
+                    AllBlockEntityTypes.REDSTONE_LINK,
                     AllBlockEntityTypes.PECULIAR_BELL,
                     AllBlockEntityTypes.HAUNTED_BELL,
                     AllBlockEntityTypes.TOOLBOX,
@@ -243,7 +245,8 @@ public class SimulatedClient {
             registerLegacySubLevelRenderer(register, rendererType, SimBlockEntityTypes.STEERING_WHEEL.get());
             registerLegacySubLevelRenderer(register, rendererType, SimBlockEntityTypes.THROTTLE_LEVER.get());
             registerLegacySubLevelRenderer(register, rendererType, SimBlockEntityTypes.LINKED_TYPEWRITER.get());
-            registerLegacySubLevelRenderer(register, rendererType, SimBlockEntityTypes.MODULATING_LINKED_RECEIVER.get());
+            registerSableImmediateRenderer(register, rendererType, SimBlockEntityTypes.MODULATING_LINKED_RECEIVER.get(),
+                    SableCreateBlockEntityRenderer::render);
             registerLegacySubLevelRenderer(register, rendererType, SimBlockEntityTypes.REDSTONE_ACCUMULATOR.get());
             registerSableImmediateRenderer(register, rendererType, SimBlockEntityTypes.REDSTONE_INDUCTOR.get(),
                     (be, partialTick, poseStack, bufferSource, light, overlay) ->
@@ -339,6 +342,7 @@ public class SimulatedClient {
     }
 
     private static void registerBlockEntityBehaviours() {
+        AllBlockEntityBehaviours.add(SimBlockEntityTypes.MODULATING_LINKED_RECEIVER.get(), LinkBehaviour::new);
         AllBlockEntityBehaviours.add(SimBlockEntityTypes.SIMPLE_BE.get(), LegacyKineticTooltipBehaviour::new, KineticAudioBehaviour::new);
         AllBlockEntityBehaviours.add(SimBlockEntityTypes.TORSION_SPRING.get(), LegacyKineticTooltipBehaviour::new, KineticAudioBehaviour::new, LegacyScrollValueClientBehaviour::new);
         AllBlockEntityBehaviours.add(SimBlockEntityTypes.ROPE_WINCH.get(), LegacyKineticTooltipBehaviour::new, KineticAudioBehaviour::new);

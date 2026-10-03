@@ -19,7 +19,9 @@ import com.zurrtum.create.infrastructure.packet.c2s.ValueSettingsPacket;
 import com.zurrtum.create.infrastructure.fluids.BucketFluidInventory;
 import dev.eriksonn.aeronautics.content.blocks.hot_air.BlockEntityLiftingGasProvider;
 import dev.eriksonn.aeronautics.content.blocks.hot_air.hot_air_burner.HotAirBurnerBlockEntity;
+import dev.eriksonn.aeronautics.fabric.FabricAeroFluids;
 import dev.eriksonn.aeronautics.index.AeroBlocks;
+import dev.eriksonn.aeronautics.index.AeroTags;
 import dev.ryanhcode.sable.api.SubLevelAssemblyHelper;
 import dev.ryanhcode.sable.api.sublevel.ServerSubLevelContainer;
 import dev.ryanhcode.sable.api.sublevel.SubLevelContainer;
@@ -38,6 +40,7 @@ import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.CommonListenerCookie;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MoverType;
@@ -62,6 +65,47 @@ import java.util.UUID;
 
 @SuppressWarnings("UnstableApiUsage")
 public final class FunctionalGameTests {
+
+    @GameTest(maxTicks = 20)
+    public void levititeBlendSupportsJumpingAndAirMeter(final GameTestHelper helper) {
+        final BlockPos relativeFluidPos = new BlockPos(2, 1, 2);
+        final BlockState levitite = FabricAeroFluids.LEVITITE_BLEND.getSource()
+                .defaultFluidState()
+                .createLegacyBlock();
+        helper.setBlock(relativeFluidPos, levitite);
+        helper.setBlock(relativeFluidPos.above(), levitite);
+        helper.setBlock(relativeFluidPos.above(2), levitite);
+
+        final TestLocalPlayer player = spawnTestLocalPlayer(
+                helper,
+                Vec3.atBottomCenterOf(helper.absolutePos(relativeFluidPos))
+        );
+        player.baseTick();
+
+        helper.assertTrue(
+                player.getFluidHeight(AeroTags.FluidTags.LEVITITE_BLEND) > 0.0D,
+                Component.literal("Levitite Blend was not recorded in the player's fluid-height map")
+        );
+        helper.assertTrue(
+                player.isEyeInFluid(FluidTags.WATER),
+                Component.literal("Levitite Blend did not activate the vanilla air meter")
+        );
+        helper.assertTrue(
+                player.getAirSupply() < player.getMaxAirSupply(),
+                Component.literal("Levitite Blend did not consume the submerged player's air")
+        );
+
+        player.setDeltaMovement(Vec3.ZERO);
+        player.setJumping(true);
+        player.travel(Vec3.ZERO);
+        helper.assertTrue(
+                player.getDeltaMovement().y > 0.0D,
+                Component.literal("Holding jump in Levitite Blend did not produce upward movement")
+        );
+
+        player.discard();
+        helper.succeed();
+    }
 
     @GameTest(maxTicks = 20)
     public void liftingGasProviderAccessorsSurviveRuntimeRemapping(final GameTestHelper helper) {

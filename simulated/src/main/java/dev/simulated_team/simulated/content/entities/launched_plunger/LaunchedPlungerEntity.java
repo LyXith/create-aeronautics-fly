@@ -118,7 +118,14 @@ public class LaunchedPlungerEntity extends ThrowableProjectile {
             this.addedToPlungerHandler = true;
         }
 
-        super.tick();
+        // Once attached, this entity should no longer run projectile gravity
+        // or collision tracing. The base entity tick is still needed for
+        // ordinary entity bookkeeping and fluid state updates.
+        if (this.isPlunged()) {
+            this.baseTick();
+        } else {
+            super.tick();
+        }
 
         final Entity owner = this.getOwner();
 
@@ -326,6 +333,13 @@ public class LaunchedPlungerEntity extends ThrowableProjectile {
 
     @Override
     protected void onHitBlock(final @NotNull BlockHitResult blockHitResult) {
+        // A plunged plunger keeps zero movement at the impact point. Projectile
+        // collision tracing can still report that same block on later ticks,
+        // so ignore duplicate hits until the plunger is released.
+        if (this.isPlunged()) {
+            return;
+        }
+
         super.onHitBlock(blockHitResult);
         this.removeConstraint();
         this.noPhysics = true;

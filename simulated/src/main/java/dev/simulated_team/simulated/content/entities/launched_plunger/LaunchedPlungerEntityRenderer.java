@@ -10,6 +10,7 @@ import dev.ryanhcode.sable.api.SubLevelHelper;
 import dev.ryanhcode.sable.companion.math.Pose3dc;
 import dev.ryanhcode.sable.sublevel.ClientSubLevel;
 import dev.ryanhcode.sable.sublevel.SubLevel;
+import dev.simulated_team.simulated.content.items.plunger_launcher.PlungerLauncherItem;
 import dev.simulated_team.simulated.content.items.plunger_launcher.PlungerLauncherItemRenderer;
 import dev.simulated_team.simulated.content.physics_staff.OptionalShaderMods;
 import dev.simulated_team.simulated.index.SimPartialModels;
@@ -32,6 +33,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
@@ -153,14 +155,7 @@ public class LaunchedPlungerEntityRenderer extends EntityRenderer<LaunchedPlunge
                 target = getFirstPersonFocusPos(pt);
             } else {
                 if (owner instanceof final AbstractClientPlayer player && entity.getOther() == null) {
-                    float headYDirection = Mth.lerp(pt, player.yHeadRotO, player.yHeadRot);
-                    final float bodyDifference = Math.abs(headYDirection - player.getPreciseBodyRotation(pt)) / 50f;
-                    final float headXDirection = Mth.lerp(pt, player.xRotO, player.getXRot());
-                    final float lookDelta = Math.abs(Mth.map(headXDirection, 90, 0, 1f, 0f));
-                    headYDirection = Mth.lerp(lookDelta, headYDirection, player.getPreciseBodyRotation(pt));
-                    final Vec3 viewDirection = player.calculateViewVector(headXDirection, headYDirection);
-                    final Vec3 handDirection = player.calculateViewVector(0, headYDirection + 90.0f);
-                    target = player.getPosition(pt).add(0.0, 1.28, 0.0).add(viewDirection.scale(0.875)).add(handDirection.scale(Math.abs(Mth.map(headXDirection, 90, 0, 0.325f, 0f)) * (1)));
+                    target = getThirdPersonFocusPos(player, pt);
                 } else {
                     target = Vec3.ZERO;
                 }
@@ -180,6 +175,7 @@ public class LaunchedPlungerEntityRenderer extends EntityRenderer<LaunchedPlunge
             final Vec3 toTarget = end.subtract(start);
             final Vec3 normalizedScalar = toTarget.normalize();
             final float length = (float) renderPos.distanceTo(target);
+            points.add(start);
             points.add(start);
 
             if (length < 1000.0) {
@@ -251,6 +247,29 @@ public class LaunchedPlungerEntityRenderer extends EntityRenderer<LaunchedPlunge
         poseStack.popPose();
 
         poseStack.popPose();
+    }
+
+    private static Vec3 getThirdPersonFocusPos(final AbstractClientPlayer player, final float pt) {
+        final Vec3 renderedFocus = PlungerLauncherItemRenderer.getThirdPersonFocusPos(player, pt);
+        if (renderedFocus != null) return renderedFocus;
+        // The item may be outside the camera frustum and have no captured hand transform yet.
+        final float bodyYaw = player.getPreciseBodyRotation(pt);
+        final float headYaw = Mth.lerp(pt, player.yHeadRotO, player.yHeadRot);
+        final float headPitch = Mth.lerp(pt, player.xRotO, player.getXRot());
+        // Follow the player's aim for the forward part of the anchor. This keeps
+        // the tether attached to the lowered/raised launcher when looking up or down.
+        final float aimBlend = Mth.clamp(Math.abs(Mth.map(headPitch, 90.0F, 0.0F, 1.0F, 0.0F)), 0.0F, 1.0F);
+        final float aimYaw = Mth.lerp(aimBlend, headYaw, bodyYaw);
+        final Vec3 viewDirection = player.calculateViewVector(headPitch, aimYaw);
+        final Vec3 handDirection = player.calculateViewVector(0.0F, aimYaw + 90.0F);
+        final boolean launcherInMainHand = player.getMainHandItem().getItem() instanceof PlungerLauncherItem
+                || !(player.getOffhandItem().getItem() instanceof PlungerLauncherItem);
+        final boolean rightHand = launcherInMainHand == (player.getMainArm() == HumanoidArm.RIGHT);
+
+        return player.getPosition(pt)
+                .add(0.0D, 1.28D, 0.0D)
+                .add(viewDirection.scale(0.875D))
+                .add(handDirection.scale(0.325D * (rightHand ? 1.0D : -1.0D)));
     }
 
     public static void renderRope(final List<Vec3> positions, final MultiBufferSource multiBufferSource, final BlockAndTintGetter level, final PoseStack poseStack) {

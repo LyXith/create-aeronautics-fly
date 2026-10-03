@@ -18,6 +18,13 @@ public class CatmulRomSpline {
             }
         }
 
+        if (controlPoints.size() >= 4) {
+            // The loop deliberately excludes t=1 to avoid duplicate points between
+            // adjacent spans. Add the final span endpoint once so rendered ropes
+            // meet their attachment instead of stopping one subdivision short.
+            splinePoints.add(controlPoints.get(controlPoints.size() - 2));
+        }
+
         return splinePoints;
     }
 

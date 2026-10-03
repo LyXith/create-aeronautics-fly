@@ -19,6 +19,7 @@ import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.Mth;
@@ -29,10 +30,17 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
+
+import java.util.EnumMap;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 public class PlungerLauncherItemRenderer extends CustomRenderedItemModelRenderer {
 
     private static final FirstPersonItemFocus FIRST_PERSON_FOCUS = new FirstPersonItemFocus();
+    private static final Map<AbstractClientPlayer, EnumMap<HumanoidArm, Vec3>> THIRD_PERSON_FOCUS = new WeakHashMap<>();
 
     static void captureFirstPersonFocus(final PoseStack matrices, final Minecraft minecraft,
                                         final float partialTicks) {
@@ -41,6 +49,28 @@ public class PlungerLauncherItemRenderer extends CustomRenderedItemModelRenderer
 
     static void captureFirstPersonBodyFocus(final PoseStack matrices) {
         FIRST_PERSON_FOCUS.captureCameraRelativeWorld(matrices);
+    }
+
+    static void captureThirdPersonFocus(final AbstractClientPlayer player, final ItemDisplayContext displayContext,
+                                        final PoseStack matrices, final float partialTicks) {
+        final Vector3f point = matrices.last().pose().transformPosition(new Vector3f());
+        final Vec3 worldPoint = new Vec3(point.x, point.y, point.z)
+                .add(Minecraft.getInstance().gameRenderer.getMainCamera().getPosition());
+        final HumanoidArm arm = displayContext == ItemDisplayContext.THIRD_PERSON_LEFT_HAND
+                ? HumanoidArm.LEFT : HumanoidArm.RIGHT;
+        // Keep an offset from this player so movement between render submissions does not leave a stale world point.
+        THIRD_PERSON_FOCUS.computeIfAbsent(player, ignored -> new EnumMap<>(HumanoidArm.class))
+                .put(arm, worldPoint.subtract(player.getPosition(partialTicks)));
+    }
+
+    public static @Nullable Vec3 getThirdPersonFocusPos(final AbstractClientPlayer player, final float partialTicks) {
+        final var hands = THIRD_PERSON_FOCUS.get(player);
+        if (hands == null) return null;
+        final boolean mainHand = player.getMainHandItem().getItem() instanceof PlungerLauncherItem
+                || !(player.getOffhandItem().getItem() instanceof PlungerLauncherItem);
+        final HumanoidArm arm = mainHand ? player.getMainArm() : player.getMainArm().getOpposite();
+        final Vec3 offset = hands.get(arm);
+        return offset == null ? null : player.getPosition(partialTicks).add(offset);
     }
 
     public static Vec3 getFirstPersonFocusPos(final float partialTicks,
@@ -71,7 +101,7 @@ public class PlungerLauncherItemRenderer extends CustomRenderedItemModelRenderer
         }
 
         ms.translate(2 / 16f, -1 / 16f, -5 / 16f);
-        ms.translate(0, 0, 1 / 16f);
+        ms.translate(0, 0, 3 / 16f);
 
         if (transformType.firstPerson()) {
             captureFirstPersonFocus(ms, Minecraft.getInstance(), partialTicks);

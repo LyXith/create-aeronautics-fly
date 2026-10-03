@@ -1,0 +1,7 @@
+{
+  "priority": 1001,
+  "selector": "#sable:cardboard",
+  "properties": {
+    "sable:mass": 0.5
+  }
+}

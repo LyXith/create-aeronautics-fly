@@ -4,7 +4,10 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [],
   "client": [
-    "burner_flame.GameRendererMixin"
+    "burner_flame.GameRendererMixin",
+    "levitite.CameraMixin",
+    "levitite.FogRendererMixin",
+    "levitite.WaterFogEnvironmentMixin"
   ],
   "injectors": { "defaultRequire": 1 }
 }

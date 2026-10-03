@@ -1,7 +1,6 @@
 package dev.simulated_team.simulated.client.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.zurrtum.create.client.catnip.animation.AnimationTickHolder;
 import dev.ryanhcode.sable.companion.math.JOMLConversion;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
@@ -26,6 +25,8 @@ import org.joml.Vector4f;
  * first-person projection conversion to an already-world-relative position.</p>
  */
 public final class FirstPersonItemFocus {
+    private static final Matrix4f WORLD_PROJECTION = new Matrix4f();
+    private static boolean hasWorldProjection;
     private final Vector3d capturedPosition = new Vector3d();
     private final Matrix4f capturedProjection = new Matrix4f();
     private boolean cameraRelativeWorldSpace;
@@ -35,9 +36,18 @@ public final class FirstPersonItemFocus {
      */
     public void captureProjected(final PoseStack matrices, final Minecraft minecraft, final float partialTicks) {
         this.capturePosition(matrices);
+        final Camera camera = minecraft.gameRenderer.getMainCamera();
+        camera.rotation().transformInverse(this.capturedPosition);
+        // The hand pass has its own lens; the configured world FOV does not apply to it.
         this.capturedProjection.set(minecraft.gameRenderer.getProjectionMatrix(
-                minecraft.gameRenderer.getFov(minecraft.gameRenderer.getMainCamera(), partialTicks, true)));
+                minecraft.gameRenderer.getFov(camera, partialTicks, false)));
         this.cameraRelativeWorldSpace = false;
+    }
+
+    /** Records the current world lens, including view bobbing and other camera effects. */
+    public static void captureWorldProjection(final Matrix4f projection) {
+        WORLD_PROJECTION.set(projection);
+        hasWorldProjection = true;
     }
 
     /**
@@ -70,18 +80,18 @@ public final class FirstPersonItemFocus {
         final GameRenderer gameRenderer = Minecraft.getInstance().gameRenderer;
         final Camera camera = gameRenderer.getMainCamera();
         final Quaternionf orientation = camera.rotation();
-        orientation.transformInverse(focusPoint);
-
         final Vector4f projectedPoint = new Vector4f(
                 (float) focusPoint.x, (float) focusPoint.y, (float) focusPoint.z, 1.0f);
-        final Matrix4f actualProjection = gameRenderer.getProjectionMatrix(
-                gameRenderer.getFov(camera, AnimationTickHolder.getPartialTicks(), true));
-        actualProjection.invert(new Matrix4f()).transform(projectedPoint);
+        final Matrix4f actualProjection = hasWorldProjection ? WORLD_PROJECTION
+                : gameRenderer.getProjectionMatrix(gameRenderer.getFov(camera, partialTicks, true));
+        // Match the hand's clip-space position using the world projection, then return
+        // to world orientation. Uniformly scaling by FOV cannot change screen position.
         this.capturedProjection.transform(projectedPoint);
+        actualProjection.invert(new Matrix4f()).transform(projectedPoint);
 
-        focusPoint.set(projectedPoint.x, projectedPoint.y, projectedPoint.z);
+        focusPoint.set(projectedPoint.x / projectedPoint.w,
+                projectedPoint.y / projectedPoint.w, projectedPoint.z / projectedPoint.w);
         orientation.transform(focusPoint);
-        focusPoint.mul(100 / gameRenderer.getFov(camera, partialTicks, true));
 
         if (rotateProjectedForShader) {
             orientation.transform(focusPoint);

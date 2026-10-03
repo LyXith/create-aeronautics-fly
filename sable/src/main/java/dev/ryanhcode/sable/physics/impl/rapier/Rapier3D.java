@@ -50,13 +50,45 @@ public final class Rapier3D {
         final Path gameDir = SableLoaderPlatform.INSTANCE.getGameDirectory();
         if (gameDir != null) {
             final Path gameDirRelativeDir = gameDir.resolve(".sable").resolve("natives").normalize();
-            Sable.LOGGER.info("Using game-dir-relative Rapier native directory {}", gameDirRelativeDir.toAbsolutePath());
-            return gameDirRelativeDir;
+            /*
+             * On Windows, the JDK native loader can report the rather misleading
+             * "Can't find dependent libraries" error when a DLL with dependencies
+             * is loaded from a path containing non-ASCII characters.  Launchers
+             * commonly put instances below a user-selected (and potentially
+             * non-ASCII) directory, so keep the game-relative location only when
+             * it is safe for the platform loader.
+             */
+            if (Util.getPlatform() != OS.WINDOWS || isAscii(gameDirRelativeDir)) {
+                Sable.LOGGER.info("Using game-dir-relative Rapier native directory {}", gameDirRelativeDir.toAbsolutePath());
+                return gameDirRelativeDir;
+            }
+
+            Sable.LOGGER.warn(
+                    "Game directory contains non-ASCII characters; extracting Rapier natives to an ASCII-safe temporary directory instead ({})",
+                    gameDirRelativeDir.toAbsolutePath());
+        }
+
+        final String tempDirectory = System.getProperty("java.io.tmpdir");
+        if (tempDirectory != null) {
+            // Include the process id so separate game instances never delete or
+            // overwrite a native library that another instance has loaded.
+            final Path tempDir = Paths.get(tempDirectory)
+                    .resolve("sable-" + ProcessHandle.current().pid())
+                    .resolve("natives")
+                    .normalize();
+            if (isAscii(tempDir)) {
+                Sable.LOGGER.info("Using temporary Rapier native directory {}", tempDir.toAbsolutePath());
+                return tempDir;
+            }
         }
 
         final Path fallbackDir = Paths.get(System.getProperty("user.home", System.getProperty("user.dir")), ".sable", "natives");
         Sable.LOGGER.info("Using fallback Rapier native directory {}", fallbackDir.toAbsolutePath());
         return fallbackDir;
+    }
+
+    private static boolean isAscii(final Path path) {
+        return path.toString().chars().allMatch(character -> character < 128);
     }
 
     private static String getNativeName() {

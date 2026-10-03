@@ -46,6 +46,5 @@ public class PlungerLauncherShootPacket implements CustomPacketPayload {
         final PlungerLauncherItemRenderer.RenderHandler handler = SimulatedClient.PLUNGER_LAUNCHER_RENDER_HANDLER;
         PlungerLauncherItem.reloadCooldown = this.reload;
         handler.basicShoot(this.hand);
-        handler.playSound(this.hand, context.player().position());
     }
 }

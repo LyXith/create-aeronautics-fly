@@ -16,6 +16,8 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.input.KeyEvent;
+import dev.simulated_team.simulated.mixin.hold_interaction.KeyMappingInvoker;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
@@ -64,6 +66,7 @@ public class LinkedTypewriterInteractionHandler {
             stopInteraction();
         } else {
             MODE = Mode.ACTIVE;
+            KeyMapping.releaseAll();
         }
 
         TYPEWRITER = new WeakReference<>(be);
@@ -149,6 +152,17 @@ public class LinkedTypewriterInteractionHandler {
     }
 
     public static void preventPress(final int key, final int scanCode) {
+        final KeyEvent event = new KeyEvent(key, scanCode, 0);
+        for (final KeyMapping mapping : Minecraft.getInstance().options.keyMappings) {
+            if (mapping.matches(event)) {
+                // Release resets toggle bindings as well as ordinary held keys.
+                ((KeyMappingInvoker) mapping).invokeRelease();
+                // ToggleKeyMapping.release() does not clear the vanilla click
+                // queue, which KeyboardHandler has updated before our tail hook.
+                while (mapping.consumeClick()) {
+                }
+            }
+        }
     }
 
     private static void checkKeyCodeAndSetPressed(final int keycode, final boolean pressed) {

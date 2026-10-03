@@ -1,0 +1,6 @@
+{
+  "values": [
+    { "id": "create:cardboard_block", "required": false },
+    { "id": "create:bound_cardboard_block", "required": false }
+  ]
+}

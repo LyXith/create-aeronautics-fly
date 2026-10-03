@@ -1,5 +1,6 @@
 package dev.eriksonn.aeronautics.fabric;
 
+import com.zurrtum.create.client.catnip.placement.PlacementClient;
 import dev.eriksonn.aeronautics.Aeronautics;
 import dev.eriksonn.aeronautics.AeronauticsClient;
 import dev.eriksonn.aeronautics.content.blocks.hot_air.hot_air_burner.IrisBurnerFlameRenderQueue;
@@ -56,6 +57,8 @@ public final class AeronauticsFabricClient implements ClientModInitializer {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (Boolean.getBoolean("aeronautics.productionSmokeTest")
                     && PRODUCTION_SMOKE_TICKS.incrementAndGet() == PRODUCTION_SMOKE_REQUIRED_TICKS) {
+                // Create normally loads this only after joining a world. Exercise its mixins in production too.
+                PlacementClient.tick(client);
                 Aeronautics.LOGGER.info("AERONAUTICS_PRODUCTION_CLIENT_SMOKE_OK");
                 client.stop();
             }

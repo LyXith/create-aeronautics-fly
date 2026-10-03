@@ -10,7 +10,6 @@ import dev.simulated_team.simulated.index.SimPartialModels;
 import dev.simulated_team.simulated.network.packets.ConfigureModulatingLinkedRecieverPacket;
 import dev.simulated_team.simulated.util.SimColors;
 import foundry.veil.api.network.VeilPacketManager;
-import com.zurrtum.create.catnip.data.Iterate;
 import com.zurrtum.create.client.catnip.gui.AbstractSimiScreen;
 import com.zurrtum.create.client.catnip.gui.ScreenOpener;
 import com.zurrtum.create.client.catnip.gui.element.GuiGameElement;
@@ -19,7 +18,6 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import org.joml.Matrix3x2fStack;
 
 public class ModulatingLinkedReceiverScreen extends AbstractSimiScreen {
     private final ModulatingLinkedReceiverBlockEntity be;
@@ -28,12 +26,39 @@ public class ModulatingLinkedReceiverScreen extends AbstractSimiScreen {
     private ScrollInput minScroll;
     private ScrollInput maxScroll;
     private int lastModification;
+    private final GuiGameElement.GuiPartialRenderBuilder lowerPlate;
+    private final GuiGameElement.GuiPartialRenderBuilder upperPlate;
+    private final GuiGameElement.GuiBlockStateRenderBuilder blockPreview;
+    private int previewMinRange = -1;
+    private int previewMaxRange = -1;
 
     public ModulatingLinkedReceiverScreen(final ModulatingLinkedReceiverBlockEntity be) {
         super(SimLang.translate("gui.modulating_linked_receiver.title").component());
         this.be = be;
         this.background = SimGUITextures.MODULATINGLINK;
         this.lastModification = -1;
+        // Create Fly caches partial preview textures by render-state identity.
+        // Keep these builders for the screen's lifetime, then release them.
+        this.lowerPlate = createPlatePreview(true);
+        this.upperPlate = createPlatePreview(false);
+        this.blockPreview = GuiGameElement.of(be.getBlockState()
+                        .setValue(ModulatingLinkedReceiverBlock.FACING, Direction.UP))
+                .scale(2.5f).padding(20).rotate(-22, 63, 0);
+    }
+
+    private GuiGameElement.GuiPartialRenderBuilder createPlatePreview(final boolean bottom) {
+        return GuiGameElement.of(SimPartialModels.MODULATING_RECEIVER_PLATE)
+                .scale(2.5f).padding(20)
+                .transform((pose, pt) -> {
+                    final float distance = (bottom ? this.be.minRange : this.be.maxRange);
+                    final float offset = 5.5f * (distance - 1) * (20 + 256 - 1)
+                            / ((256 - 1) * (20 + distance - 1));
+                    pose.translate(0.75, 0.75, 0);
+                    TransformStack.of(pose).rotateXDegrees(-22).rotateYDegrees(63);
+                    pose.scale(1, -1, 1);
+                    pose.translate(-0.5, -0.5, -0.5);
+                    pose.translate(0, (offset + (bottom ? 0 : 0.5)) / 16.0, 0);
+                });
     }
 
     public static void open(final ModulatingLinkedReceiverBlockEntity be) {
@@ -83,7 +108,7 @@ public class ModulatingLinkedReceiverScreen extends AbstractSimiScreen {
                 .setState(this.be.minRange)
                 .onChanged();
         this.maxScroll.withRange(1, 257)
-                .titled(SimLang.translate("gui.modulating_linked_receiver.minimum_range").component())
+                .titled(SimLang.translate("gui.modulating_linked_receiver.maximum_range").component())
                 .withShiftStep(10)
                 .setState(this.be.maxRange)
                 .onChanged();
@@ -103,8 +128,6 @@ public class ModulatingLinkedReceiverScreen extends AbstractSimiScreen {
     protected void renderWindow(final GuiGraphics graphics, final int mouseX, final int mouseY, final float partialTicks) {
         final int x = this.guiLeft;
         final int y = this.guiTop;
-
-        final Matrix3x2fStack ms = graphics.pose();
 
         this.background.render(graphics, x, y);
 
@@ -148,37 +171,21 @@ public class ModulatingLinkedReceiverScreen extends AbstractSimiScreen {
             SimGUITextures.MODULATINGLINK_TARGET.render(graphics, x + sourcePos, y + 16);
         }
 
-        final float minPos2 = 5.5f * ((this.be.minRange - 1) * (smoothing + maxDistance - 1)) / ((maxDistance - 1) * (smoothing + this.be.minRange - 1));
-        final float maxPos2 = 5.5f * ((this.be.maxRange - 1) * (smoothing + maxDistance - 1)) / ((maxDistance - 1) * (smoothing + this.be.maxRange - 1));
-
-        for (final boolean bottom : Iterate.trueAndFalse) {
-
-
-            GuiGameElement.of(SimPartialModels.MODULATING_RECEIVER_PLATE)
-                    .scale(40)
-                    .transform((pose, pt) -> {
-                        final var transform = TransformStack.of(pose)
-                                .rotateXDegrees(-22)
-                                .rotateYDegrees(63);
-                        if (!bottom) {
-                            transform.translate(0, -0.5 / 16.0, 0);
-                        }
-                        transform.translate(0, -(bottom ? minPos2 : maxPos2) / 16.0, 0);
-                    })
-                    .at(x + this.background.width + 4, y + this.background.height + 4)
-                    .render(graphics);
+        if (this.previewMinRange != this.be.minRange || this.previewMaxRange != this.be.maxRange) {
+            this.lowerPlate.markDirty();
+            this.upperPlate.markDirty();
+            this.previewMinRange = this.be.minRange;
+            this.previewMaxRange = this.be.maxRange;
         }
-
-        GuiGameElement.of(this.be.getBlockState()
-                        .setValue(ModulatingLinkedReceiverBlock.FACING, Direction.UP))
-                .scale(40)
-                .rotate(-22, 63, 0)
-                .at(x + this.background.width + 4, y + this.background.height + 4)
-                .render(graphics);
+        final int previewX = x + this.background.width - 8;
+        final int previewY = y + this.background.height - 52;
+        this.lowerPlate.at(previewX, previewY).render(graphics);
+        this.upperPlate.at(previewX, previewY).render(graphics);
+        this.blockPreview.at(previewX, previewY).render(graphics);
     }
 
     private void label(final GuiGraphics graphics, final int x, final int y, final Component text) {
-        graphics.drawString(this.font, text, this.guiLeft + x, this.guiTop + 26 + y, 0xFFFFEE);
+        graphics.drawString(this.font, text, this.guiLeft + x, this.guiTop + 26 + y, 0xFFFFFFEE);
     }
 
     @Override
@@ -196,7 +203,11 @@ public class ModulatingLinkedReceiverScreen extends AbstractSimiScreen {
 
     @Override
     public void removed() {
+        this.lowerPlate.clear();
+        this.upperPlate.clear();
+        this.blockPreview.clear();
         this.send();
+        super.removed();
     }
 
     protected void send() {

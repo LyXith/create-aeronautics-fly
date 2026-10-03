@@ -4,6 +4,8 @@ import com.mojang.blaze3d.platform.Window;
 import dev.simulated_team.simulated.client.sections.SimulatedSection;
 import dev.simulated_team.simulated.index.SimResourceManagers;
 import dev.simulated_team.simulated.mixin.accessor.CreativeModeInventoryScreenAccessor;
+import dev.simulated_team.simulated.mixin_interface.SpriteContentsExtension;
+import dev.simulated_team.simulated.mixin_interface.TickerExtension;
 import dev.simulated_team.simulated.registrate.SimulatedRegistrate;
 import foundry.veil.api.client.color.Color;
 import foundry.veil.api.client.color.Colorc;
@@ -13,6 +15,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.data.AtlasIds;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
@@ -44,7 +47,10 @@ public class SimulatedCreativeTab {
 			ResourceLocation id = SimResourceManagers.SIMULATED_SECTION.getId(section);
 			int yValue = SECTION_Y_VALUES.getInt(id);
 			final int sectionRow = (yValue - CURRENT_ROW);
-			if(sectionRow < 0 || sectionRow > 4) continue;
+			if(sectionRow < 0 || sectionRow > 4) {
+				if (section.animateOnHover()) setPlaying(section.sprite(), false);
+				continue;
+			}
 
 			Font font = Minecraft.getInstance().font;
 			int x = 0;
@@ -151,7 +157,12 @@ public class SimulatedCreativeTab {
 	}
 
     public static void setPlaying(ResourceLocation resourceLocation, boolean playing) {
-        // Animated creative-tab sprites are left to the vanilla ticker on Fabric.
+        final var contents = Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(AtlasIds.GUI)
+                .getSprite(resourceLocation).contents();
+        final var ticker = ((SpriteContentsExtension) contents).simulated$getTicker();
+        if (ticker instanceof final TickerExtension extension) {
+            extension.simulated$setPlaying(playing);
+        }
     }
 
 }

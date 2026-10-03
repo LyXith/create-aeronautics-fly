@@ -13,21 +13,21 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class SpriteContentsMixin implements SpriteContentsExtension {
 
     @Unique
-    private SpriteContents.Ticker simulated$ticker = null;
+    private SpriteTicker simulated$ticker = null;
 
     @Override
-    public SpriteContents.Ticker simulated$getTicker() {
+    public SpriteTicker simulated$getTicker() {
         return this.simulated$ticker;
     }
 
     @Override
-    public void simulated$setTicker(SpriteContents.Ticker ticker) {
+    public void simulated$setTicker(SpriteTicker ticker) {
         this.simulated$ticker = ticker;
     }
 
     @Inject(method = "createTicker", at = @At("RETURN"))
     private void simulated$createTicker(CallbackInfoReturnable<SpriteTicker> cir) {
-        simulated$setTicker((SpriteContents.Ticker) cir.getReturnValue());
+        simulated$setTicker(cir.getReturnValue());
     }
 
 }

@@ -78,6 +78,8 @@ dependencies {
     mappings loom.layered { officialMojangMappings() }
 
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+    // Handles redirect annotation arrays emitted by newer Mixin versions, including on older loaders.
+    include(modImplementation("io.github.llamalad7:mixinextras-fabric:${mixinextras_version}"))
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
     modCompileOnly "maven.modrinth:sodium:${sodium_version}"
     modCompileOnly("maven.modrinth:scalablelux:${scalablelux_version}") {
@@ -113,6 +115,7 @@ processResources {
             java_version             : java_version,
             minecraft_version        : minecraft_version,
             fabric_loader_version    : fabric_loader_version,
+            mixinextras_version      : mixinextras_version,
             fabric_version           : fabric_version,
             sodium_version           : sodium_mod_version,
             sable_companion_version  : sable_companion_version

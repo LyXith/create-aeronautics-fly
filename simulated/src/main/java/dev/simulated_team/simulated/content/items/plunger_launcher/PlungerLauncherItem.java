@@ -71,7 +71,7 @@ public class PlungerLauncherItem extends Item implements CustomArmPoseItem {
 
             final BarrelAndCorrectionInfo info = this.getCorrectionInfo(player, interactionHand);
             final Vec3 barrelPos = info.barrelPos();
-            level.playSound(null, barrelPos.x, barrelPos.y, barrelPos.z, SimSoundEvents.PLUNGER_LAUNCH.event(), SoundSource.PLAYERS, 1.0f, 1.0f);
+            level.playSound(null, barrelPos.x, barrelPos.y, barrelPos.z, SimSoundEvents.PLUNGER_LAUNCH.event(), SoundSource.PLAYERS, 0.5f, 1.0f);
 
             // add new plunger and set relevant data
             final LaunchedPlungerEntity newPlunger = SimEntityTypes.PLUNGER.create(level);

@@ -784,6 +784,7 @@ public class SimBlocks {
     public static final BlockEntry<SymmetricSailBlock> WHITE_SYMMETRIC_SAIL =
             REGISTRATE.block("white_symmetric_sail", (prov) -> SymmetricSailBlock.withCanvas(prov, DyeColor.WHITE))
                     .initialProperties(SharedProperties::wooden)
+                    .addLayer(() -> RenderType::cutoutMipped)
                     .properties(p -> p.sound(SoundType.SCAFFOLDING))
                     .properties(BlockBehaviour.Properties::noOcclusion)
                     .lang("Symmetric Sail")
@@ -814,7 +815,9 @@ public class SimBlocks {
             String colorName = colour.getSerializedName();
             return REGISTRATE.block(colorName + "_symmetric_sail", p -> SymmetricSailBlock.withCanvas(p, colour))
                     .initialProperties(SharedProperties::wooden)
+                    .addLayer(() -> RenderType::cutoutMipped)
                     .properties(p -> p.sound(SoundType.SCAFFOLDING))
+                    .properties(BlockBehaviour.Properties::noOcclusion)
                     .blockstate((c, p) -> {
                         final var model = p.models()
                                 .withExistingParent(colorName + "_symmetric_sail",

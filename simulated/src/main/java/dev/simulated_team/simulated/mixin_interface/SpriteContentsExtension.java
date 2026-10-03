@@ -1,8 +1,8 @@
 package dev.simulated_team.simulated.mixin_interface;
 
-import net.minecraft.client.renderer.texture.SpriteContents;
+import net.minecraft.client.renderer.texture.SpriteTicker;
 
 public interface SpriteContentsExtension {
-    SpriteContents.Ticker simulated$getTicker();
-    void simulated$setTicker(SpriteContents.Ticker ticker);
+    SpriteTicker simulated$getTicker();
+    void simulated$setTicker(SpriteTicker ticker);
 }
