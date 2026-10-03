@@ -3,7 +3,7 @@ package dev.ryanhcode.sable.command.argument.modifier_type;
 import dev.ryanhcode.sable.command.argument.SubLevelSelectorModifierType;
 import dev.ryanhcode.sable.sublevel.ServerSubLevel;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.advancements.criterion.MinMaxBounds;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;

@@ -34,9 +34,13 @@ public class GameRendererMixin {
     @Unique
     private UUID sable$lastSubLevel = null;
 
-    @Inject(method = "renderLevel", at = @At("HEAD"))
-    public void renderLevel(final DeltaTracker deltaTracker, final CallbackInfo ci) {
+    @Inject(method = "updateCamera", at = @At("HEAD"))
+    public void sable$updatePlayerRotation(final DeltaTracker deltaTracker, final CallbackInfo ci) {
         final LocalPlayer player = this.minecraft.player;
+        if (player == null) {
+            this.sable$lastSubLevel = null;
+            return;
+        }
         final SubLevel standingSubLevel = Sable.HELPER.getTrackingSubLevel(player);
 
         if (standingSubLevel != null && player.getVehicle() == null && !standingSubLevel.isRemoved() && !EntitySubLevelUtil.hasCustomEntityOrientation(player)) {

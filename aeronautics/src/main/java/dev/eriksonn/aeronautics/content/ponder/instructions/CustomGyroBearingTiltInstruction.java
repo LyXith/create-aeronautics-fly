@@ -60,7 +60,7 @@ public class CustomGyroBearingTiltInstruction extends TickingInstruction {
 	@Override
 	protected final void firstTick(final PonderScene scene) {
 		super.firstTick(scene);
-		final PonderLevel level = scene.getWorld();
+		final PonderLevel level = scene.getLevel();
 		if (this.link != null) {
 			this.element = Objects.requireNonNull(scene.resolve(this.link), "element");
 		}
@@ -75,7 +75,7 @@ public class CustomGyroBearingTiltInstruction extends TickingInstruction {
 	public void tick(final PonderScene scene) {
 		super.tick(scene);
 
-		final PonderLevel level = scene.getWorld();
+		final PonderLevel level = scene.getLevel();
 		final BlockEntity be = level.getBlockEntity(this.location);
 
 		if (be instanceof final GyroscopicPropellerBearingBlockEntity gbe) {

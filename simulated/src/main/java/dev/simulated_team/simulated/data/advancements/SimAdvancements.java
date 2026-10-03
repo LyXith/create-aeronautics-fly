@@ -10,7 +10,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.NotNull;
@@ -275,9 +275,9 @@ public class SimAdvancements implements DataProvider {
             final PackOutput.PathProvider pathProvider = this.output.createPathProvider(PackOutput.Target.DATA_PACK, "advancement");
             final List<CompletableFuture<?>> futures = new ArrayList<>();
 
-            final Set<ResourceLocation> set = Sets.newHashSet();
+            final Set<Identifier> set = Sets.newHashSet();
             final Consumer<AdvancementHolder> consumer = (advancement) -> {
-                final ResourceLocation id = advancement.id();
+                final Identifier id = advancement.id();
                 if (!set.add(id)) {
                     throw new IllegalStateException("Duplicate advancement " + id);
                 }

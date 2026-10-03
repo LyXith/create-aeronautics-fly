@@ -10,14 +10,15 @@ import com.zurrtum.create.catnip.theme.Color;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
 
 public class SimIcons extends AllIcons {
-    public static final ResourceLocation ICON_ATLAS = Simulated.path("textures/gui/icons.png");
+    public static final Identifier ICON_ATLAS = Simulated.path("textures/gui/icons.png");
     public static final int ICON_ATLAS_SIZE = 64;
 
     private static int x = 0, y = -1;
@@ -57,7 +58,7 @@ public class SimIcons extends AllIcons {
 
     @Override
     public RenderType bind() {
-        return RenderType.text(ICON_ATLAS);
+        return RenderTypes.text(ICON_ATLAS);
     }
 
     @Override
@@ -66,7 +67,7 @@ public class SimIcons extends AllIcons {
     }
 
     public void render(final PoseStack ms, final MultiBufferSource buffer, final int color) {
-        final VertexConsumer builder = buffer.getBuffer(RenderType.text(ICON_ATLAS));
+        final VertexConsumer builder = buffer.getBuffer(RenderTypes.text(ICON_ATLAS));
         final Matrix4f matrix = ms.last().pose();
         final Color rgb = new Color(color);
         final int light = LightTexture.FULL_BRIGHT;

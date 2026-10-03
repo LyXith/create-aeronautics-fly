@@ -10,8 +10,8 @@ import org.jetbrains.annotations.Nullable;
 public class ExplorersCompassNavigationTarget implements NavigationTarget {
 	@Override
 	public @Nullable Vec3 getTarget(final NavTableBlockEntity navBE, final ItemStack self) {
-		final Integer x = self.getComponents().get(ExplorersCompass.FOUND_X_COMPONENT);
-		final Integer z = self.getComponents().get(ExplorersCompass.FOUND_Z_COMPONENT);
+		final Integer x = self.getComponents().get(ExplorersCompass.FOUND_X);
+		final Integer z = self.getComponents().get(ExplorersCompass.FOUND_Z);
 		if (x != null && z != null) {
 			final Vec3 pos = navBE.getProjectedSelfPos();
 			return new Vec3(x, pos.y(), z);

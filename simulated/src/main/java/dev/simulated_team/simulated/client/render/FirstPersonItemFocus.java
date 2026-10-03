@@ -125,6 +125,6 @@ public final class FirstPersonItemFocus {
         final Camera camera = minecraft.gameRenderer.getMainCamera();
         return minecraft.options.getCameraType().isFirstPerson()
                 && !camera.isDetached()
-                && camera.getEntity() == player;
+                && camera.entity() == player;
     }
 }

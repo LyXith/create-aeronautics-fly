@@ -15,11 +15,11 @@ public abstract class FogRendererMixin {
     @Inject(method = "computeFogColor", at = @At("RETURN"), cancellable = true)
     private void aeronautics$levititeFogColor(final Camera camera, final float partialTick,
                                                final ClientLevel level, final int renderDistance,
-                                               final float darkenWorld, final boolean bossFog,
+                                               final float darkenWorld,
                                                final CallbackInfoReturnable<Vector4f> cir) {
-        final var blockPos = camera.getBlockPosition();
+        final var blockPos = camera.blockPosition();
         final var fluidState = level.getFluidState(blockPos);
-        final var position = camera.getPosition();
+        final var position = camera.position();
         if (fluidState.is(AeroTags.FluidTags.LEVITITE_BLEND)
                 && position.y < blockPos.getY() + fluidState.getHeight(level, blockPos)) {
             // AeroColors.LEVIBLEND_THE_FOG_IS_COMING (16, 62, 68).

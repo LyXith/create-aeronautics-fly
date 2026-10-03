@@ -8,7 +8,7 @@ import com.zurrtum.create.client.ponder.api.registration.IndexExclusionHelper;
 import com.zurrtum.create.client.ponder.api.registration.PonderSceneRegistrationHelper;
 import com.zurrtum.create.client.ponder.api.registration.PonderTagRegistrationHelper;
 import com.zurrtum.create.client.ponder.api.registration.SharedTextRegistrationHelper;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class AeroPonderPlugin extends CreatePonderPlugin {
     public AeroPonderPlugin() {
@@ -19,12 +19,12 @@ public class AeroPonderPlugin extends CreatePonderPlugin {
     }
 
     @Override
-    public void registerScenes(final PonderSceneRegistrationHelper<ResourceLocation> helper) {
+    public void registerScenes(final PonderSceneRegistrationHelper<Identifier> helper) {
         AeroPonderScenes.register(helper);
     }
 
     @Override
-    public void registerTags(final PonderTagRegistrationHelper<ResourceLocation> helper) {
+    public void registerTags(final PonderTagRegistrationHelper<Identifier> helper) {
         AeroPonderTags.register(helper);
     }
 

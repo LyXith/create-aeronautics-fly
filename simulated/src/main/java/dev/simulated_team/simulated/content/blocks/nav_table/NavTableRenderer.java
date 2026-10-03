@@ -14,7 +14,8 @@ import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.core.Direction;
@@ -60,7 +61,7 @@ public class NavTableRenderer extends SmartBlockEntityRenderer<NavTableBlockEnti
                 final int color = SimColors.redstone(signalStrength); // Analog indicators (mixes between colors smoothly)
                 indicator.light(light)
                         .color(color)
-                        .renderInto(ms.last(), buffer.getBuffer(RenderType.cutout()));
+                        .renderInto(ms.last(), buffer.getBuffer(RenderTypes.cutoutMovingBlock()));
 
                 ms.popPose();
             }
@@ -72,7 +73,7 @@ public class NavTableRenderer extends SmartBlockEntityRenderer<NavTableBlockEnti
             final SuperByteBuffer pointer = CachedBuffers.partial(SimPartialModels.NAV_TABLE_POINTER, navState);
 
             pointer.rotateY(arrowAngle);
-            pointer.light(light).renderInto(ms.last(), buffer.getBuffer(RenderType.cutout()));
+            pointer.light(light).renderInto(ms.last(), buffer.getBuffer(RenderTypes.cutoutMovingBlock()));
             ms.popPose();
         }
 

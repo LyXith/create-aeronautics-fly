@@ -12,7 +12,8 @@ import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
@@ -35,11 +36,11 @@ public class PortableEngineRenderer extends KineticBlockEntityRenderer<PortableE
     protected void renderSafe(final PortableEngineBlockEntity be, final float partialTicks, final PoseStack ms, final MultiBufferSource buffer,
                               final int light, final int overlay) {
         final BlockState state = this.getRenderedBlockState(be);
-        final RenderType type = RenderType.solid();
+        final RenderType type = RenderTypes.solidMovingBlock();
         renderRotatingBuffer(be, this.getRotatedModel(be, state), ms, buffer.getBuffer(type), light);
 
         FilteringRenderer.renderOnBlockEntity(be, partialTicks, ms, buffer, light, overlay);
-        final VertexConsumer cutout = buffer.getBuffer(RenderType.cutout());
+        final VertexConsumer cutout = buffer.getBuffer(RenderTypes.cutoutMovingBlock());
 
         final Direction direction = be.getBlockState()
                 .getValue(BlockStateProperties.HORIZONTAL_FACING);
@@ -55,14 +56,14 @@ public class PortableEngineRenderer extends KineticBlockEntityRenderer<PortableE
 
         final float hatchOpenProgress = 1.0f - getHatchOpenProgress(be, partialTicks);
         if (visualStrength > 0) {
-            final VertexConsumer translucent = buffer.getBuffer(RenderType.solid());
+            final VertexConsumer translucent = buffer.getBuffer(RenderTypes.solidMovingBlock());
             engineParts = be.isSuperHeated() ? SimPartialModels.ENGINE_PARTS_SUPERHEATED : SimPartialModels.ENGINE_PARTS_HEATED;
 
             this.renderPipes(be, partialTicks, ms, LightTexture.FULL_BRIGHT, blockState, direction, translucent, (int) (visualStrength * 255), engineParts, true);
         }
 
         if (lit) {
-            final VertexConsumer translucent = buffer.getBuffer(RenderType.solid());
+            final VertexConsumer translucent = buffer.getBuffer(RenderTypes.solidMovingBlock());
             this.renderHatch(be, partialTicks, ms, LightTexture.FULL_BRIGHT, blockState, direction, translucent, (int) (hatchOpenProgress * 255), engineParts, lit, true);
         }
     }

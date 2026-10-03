@@ -32,7 +32,7 @@ public class DebugRendererMixin {
             if (subLevel != null) {
                 poseStack.pushPose();
                 final Pose3dc renderPose = subLevel.renderPose();
-                final Vec3 pos = renderPose.transformPosition(blockPos.getCenter()).subtract(camera.getPosition());
+                final Vec3 pos = renderPose.transformPosition(blockPos.getCenter()).subtract(camera.position());
                 poseStack.translate(pos.x, pos.y, pos.z);
                 poseStack.mulPose(new Quaternionf(renderPose.orientation()));
                 DebugRenderer.renderFilledBox(poseStack, bufferSource, new AABB(0.0, 0.0, 0.0, 0.0, 0.0, 0.0).inflate(0.5).inflate(f), g, h, i, j);
@@ -40,7 +40,7 @@ public class DebugRendererMixin {
                 return;
             }
 
-            final Vec3 relativePos = camera.getPosition().reverse();
+            final Vec3 relativePos = camera.position().reverse();
             final AABB box = new AABB(blockPos).move(relativePos).inflate(f);
 
 

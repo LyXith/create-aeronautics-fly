@@ -18,7 +18,7 @@ public class GyroActorBehaviour<T extends GyroscopicPropellerBearingBlockEntity>
 
     @Override
     public void additionalTooltipInfo(final List<Component> tooltip, final boolean isPlayerSneaking) {
-        final double gravStrength = DimensionPhysicsData.getGravity(this.getWorld(), JOMLConversion.toJOML(this.getPos().getCenter())).length();
+        final double gravStrength = DimensionPhysicsData.getGravity(this.getLevel(), JOMLConversion.toJOML(this.getPos().getCenter())).length();
 
         final MutableComponent canLiftComponent = AeroLang.kilopixelGram(Math.abs(this.propeller.getScaledThrust()) / gravStrength)
                 .style(ChatFormatting.AQUA)

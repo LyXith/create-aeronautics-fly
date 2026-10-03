@@ -11,6 +11,7 @@
       "dev.eriksonn.aeronautics.gametest.Issue6GameTests"
     ],
     "fabric-client-gametest": [
+      "dev.eriksonn.aeronautics.gametest.ModelTextureClientGameTest",
       "dev.eriksonn.aeronautics.gametest.PlungerLauncherClientGameTest",
       "dev.eriksonn.aeronautics.gametest.Issue6ClientGameTest",
       "dev.eriksonn.aeronautics.gametest.ClientSkullRenderGameTest",

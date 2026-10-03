@@ -21,7 +21,7 @@ public class ToggleConnectorLockInstruction extends PonderInstruction {
 
     @Override
     public void tick(PonderScene scene) {
-        final PonderLevel world = scene.getWorld();
+        final PonderLevel world = scene.getLevel();
         if (world.getBlockEntity(pos) instanceof final DockingConnectorBlockEntity be) {
             be.setVirtualLock(lock);
             if(!lock)

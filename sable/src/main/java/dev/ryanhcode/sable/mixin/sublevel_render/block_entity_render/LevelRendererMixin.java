@@ -90,7 +90,7 @@ public class LevelRendererMixin implements SubLevelBlockEntityRenderExtension {
             return;
         }
 
-        final Vec3 cameraPosition = camera.getPosition();
+        final Vec3 cameraPosition = camera.position();
         final BlockEntityRenderDispatcherExtension dispatcherExtension = (BlockEntityRenderDispatcherExtension) this.blockEntityRenderDispatcher;
 
         try (final EntityCullingCompat.Scope ignored = EntityCullingCompat.suspendBlockEntityCulling()) {

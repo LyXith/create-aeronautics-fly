@@ -558,7 +558,7 @@ public class GimbalSensorBlockEntity extends SmartBlockEntity implements IHaveGo
         private boolean isRandom = false;
 
         public void update(final Vec3 pos, final Level level) {
-            this.isRandom = !level.dimensionType().natural();
+            this.isRandom = level.dimension() != Level.OVERWORLD;
             if (!this.isRandom) {
                 this.target.set(0, 0, -1);
             } else {

@@ -12,7 +12,8 @@ import com.zurrtum.create.catnip.math.VecHelper;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
@@ -58,7 +59,7 @@ public class GyroscopicPropellerBearingRenderer extends KineticBlockEntityRender
         }
 
         superBuffer.rotateCentered(AngleHelper.rad(-90 - AngleHelper.verticalAngle(facing)), Direction.EAST);
-        superBuffer.renderInto(ms.last(), buffer.getBuffer(RenderType.solid()));
+        superBuffer.renderInto(ms.last(), buffer.getBuffer(RenderTypes.solidMovingBlock()));
 
 
         for (int i = 0; i < 4; i++) {
@@ -108,8 +109,8 @@ public class GyroscopicPropellerBearingRenderer extends KineticBlockEntityRender
             headBuffer.rotate(AngleHelper.rad(-90 * j), Direction.UP);
             poleBuffer.rotate(AngleHelper.rad(-90 * j), Direction.UP);
 
-            headBuffer.light(light).renderInto(ms.last(), buffer.getBuffer(RenderType.solid()));
-            poleBuffer.light(light).renderInto(ms.last(), buffer.getBuffer(RenderType.solid()));
+            headBuffer.light(light).renderInto(ms.last(), buffer.getBuffer(RenderTypes.solidMovingBlock()));
+            poleBuffer.light(light).renderInto(ms.last(), buffer.getBuffer(RenderTypes.solidMovingBlock()));
 
         }
     }

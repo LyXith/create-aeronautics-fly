@@ -4,7 +4,7 @@ import dev.ryanhcode.sable.mixinterface.block_properties.BlockStateExtension;
 import dev.ryanhcode.sable.physics.config.block_properties.BlockStateConditionSet;
 import dev.ryanhcode.sable.physics.config.block_properties.PhysicsBlockPropertiesDefinition;
 import dev.ryanhcode.sable.physics.config.block_properties.PhysicsBlockPropertyTypes;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -33,7 +33,7 @@ public class BlockStateMixin implements BlockStateExtension {
         this.sable$applyPropertySet(definition.properties());
 
         if (definition.overrides().isPresent()) {
-            for (final Map.Entry<BlockStateConditionSet, Map<ResourceLocation, Object>> override : definition.overrides().get().entrySet()) {
+            for (final Map.Entry<BlockStateConditionSet, Map<Identifier, Object>> override : definition.overrides().get().entrySet()) {
                 if (override.getKey().matches(stateDefinition, (BlockState) (Object) this)) {
                     this.sable$applyPropertySet(override.getValue());
                 }
@@ -42,8 +42,8 @@ public class BlockStateMixin implements BlockStateExtension {
     }
 
     @Unique
-    private void sable$applyPropertySet(final Map<ResourceLocation, Object> properties) {
-        for (final Map.Entry<ResourceLocation, Object> entry : properties.entrySet()) {
+    private void sable$applyPropertySet(final Map<Identifier, Object> properties) {
+        for (final Map.Entry<Identifier, Object> entry : properties.entrySet()) {
             final int index = PhysicsBlockPropertyTypes.getPropertyType(entry.getKey()).id();
             this.sable$properties[index] = entry.getValue();
         }

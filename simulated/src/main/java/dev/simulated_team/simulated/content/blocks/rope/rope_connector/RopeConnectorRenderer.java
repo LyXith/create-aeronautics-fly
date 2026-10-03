@@ -11,7 +11,8 @@ import com.zurrtum.create.catnip.math.AngleHelper;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -65,6 +66,6 @@ public class RopeConnectorRenderer extends SafeBlockEntityRenderer<RopeConnector
         knotBuffer.rotateCentered((float) ((zRotLast) / 180 * Math.PI), Direction.SOUTH);
 
         knotBuffer.rotateCentered((float) (Math.PI / 2.0), Direction.UP);
-        knotBuffer.renderInto(ms.last(), buffer.getBuffer(RenderType.solid()));
+        knotBuffer.renderInto(ms.last(), buffer.getBuffer(RenderTypes.solidMovingBlock()));
     }
 }

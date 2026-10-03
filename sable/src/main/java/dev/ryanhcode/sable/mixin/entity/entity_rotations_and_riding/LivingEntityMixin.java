@@ -51,7 +51,7 @@ public abstract class LivingEntityMixin extends Entity{
                 this.addDeltaMovement(JOMLConversion.toMojang(orientation.transform(JOMLConversion.toJOML(horizontalImpulse))));
             }
 
-            this.hasImpulse = true;
+            this.needsSync = true;
         }
 
         ci.cancel();

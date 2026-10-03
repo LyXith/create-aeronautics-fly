@@ -21,7 +21,7 @@ import io.github.fabricators_of_create.porting_lib.util.DeferredHolder;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.SpawnPlacements.SpawnPredicate;
@@ -215,7 +215,7 @@ public class EntityBuilder<T extends Entity, P> extends AbstractBuilder<EntityTy
     @Deprecated
     public ItemBuilder<? extends SpawnEggItem, EntityBuilder<T, P>> spawnEgg(int primaryColor, int secondaryColor) {
         return getOwner().<SpawnEggItem, EntityBuilder<T, P>>item(this, getName() + "_spawn_egg", SpawnEggItem::new).tab(CreativeModeTabs.SPAWN_EGGS)
-                .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("item/template_spawn_egg")));
+                .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), Identifier.withDefaultNamespace("item/template_spawn_egg")));
     }
 
     /**
@@ -268,7 +268,7 @@ public class EntityBuilder<T extends Entity, P> extends AbstractBuilder<EntityTy
         FabricEntityTypeBuilder<T> builder = this.builder.get();
         builderCallback.accept(builder);
         EntityType<T> type = builder.build(net.minecraft.resources.ResourceKey.create(Registries.ENTITY_TYPE,
-                ResourceLocation.fromNamespaceAndPath(getOwner().getModid(), getName())));
+                Identifier.fromNamespaceAndPath(getOwner().getModid(), getName())));
         if (renderer != null) {
             EnvExecutor.runWhenOn(EnvType.CLIENT, () -> () ->
                     EntityRendererRegistry.register(type, context -> renderer.get().apply(context)));

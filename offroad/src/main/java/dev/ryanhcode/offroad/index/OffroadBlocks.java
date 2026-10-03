@@ -20,7 +20,7 @@ import dev.ryanhcode.offroad.content.blocks.rock_cutting_wheel.RockCuttingWheelB
 import dev.ryanhcode.offroad.content.blocks.wheel_mount.WheelMountBlock;
 import dev.ryanhcode.offroad.content.components.TireLike;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.tags.ItemTags;
@@ -49,7 +49,7 @@ public class OffroadBlocks {
                             .isRedstoneConductor((state, level, pos) -> false))
                     .transform(pickaxeOnly())
                     .transform(OffroadStress.setImpact(8))
-                    .addLayer(() -> RenderType::cutoutMipped)
+                    .addLayer(() -> net.minecraft.client.renderer.rendertype.RenderTypes::cutoutMovingBlock)
                     .blockstate(BlockStateGen.directionalAxisBlockProvider())
                     .recipe((c, p) -> p.shaped(RecipeCategory.MISC, c.get(), 1)
                             .pattern("S")
@@ -74,7 +74,7 @@ public class OffroadBlocks {
                     .transform(pickaxeOnly())
                     .onRegister(block -> AllMovementBehaviours.register(ROCK_CUTTING_WHEEL_ACTOR, block))
                     .properties(BlockBehaviour.Properties::noOcclusion)
-                    .addLayer(() -> RenderType::cutoutMipped)
+                    .addLayer(() -> net.minecraft.client.renderer.rendertype.RenderTypes::cutoutMovingBlock)
                     .blockstate(SimBlockStateGen::directionalAxisBlock)
                     .recipe((c, p) -> p.shaped(RecipeCategory.MISC, c.get(), 1)
                             .pattern("C")
@@ -98,7 +98,7 @@ public class OffroadBlocks {
                             .noOcclusion()
                             .isRedstoneConductor((state, level, pos) -> false))
                     .transform(axeOrPickaxe())
-                    .addLayer(() -> RenderType::cutoutMipped)
+                    .addLayer(() -> net.minecraft.client.renderer.rendertype.RenderTypes::cutoutMovingBlock)
                     .tag(AllTags.AllBlockTags.SAFE_NBT.tag)
                     .blockstate(BlockStateGen.horizontalBlockProvider(true))
                     .transform(OffroadStress.setImpact(16.0))

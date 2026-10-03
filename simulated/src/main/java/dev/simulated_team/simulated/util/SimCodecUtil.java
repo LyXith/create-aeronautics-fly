@@ -12,7 +12,7 @@ import dev.ryanhcode.sable.util.SableBufferUtils;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
@@ -30,7 +30,7 @@ public class SimCodecUtil {
     public static final StreamCodec<ByteBuf, BoundingBox3d> BOUNDING_BOX_3D_STREAM_CODEC = ByteBufCodecs.DOUBLE.apply(ByteBufCodecs.list(6))
             .map(l -> new BoundingBox3d(l.getFirst(), l.get(1), l.get(2), l.get(3), l.get(4), l.get(5)), bb -> List.of(bb.minX, bb.minY, bb.minZ, bb.maxX, bb.maxY, bb.maxZ));
 
-    public static final StreamCodec<ByteBuf, ForceGroup> STREAM_FORCE_GROUP = ResourceLocation.STREAM_CODEC.map(ForceGroups.REGISTRY::getValue, ForceGroups.REGISTRY::getKey);
+    public static final StreamCodec<ByteBuf, ForceGroup> STREAM_FORCE_GROUP = Identifier.STREAM_CODEC.map(ForceGroups.REGISTRY::getValue, ForceGroups.REGISTRY::getKey);
 
     public static final StreamCodec<ByteBuf, QueuedForceGroup.PointForce> STREAM_POINT_FORCE = STREAM_VECTOR3DC.apply(ByteBufCodecs.list(2))
             .map(l -> new QueuedForceGroup.PointForce(l.getFirst(), l.get(1)), p -> List.of(p.point(), p.force()));

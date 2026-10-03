@@ -19,7 +19,7 @@ public class RandomPosMixin {
      * @reason Wandering on sub-levels
      */
     @Overwrite
-    public static BlockPos generateRandomPosTowardDirection(final PathfinderMob mob, final int xzDist, final RandomSource random, final BlockPos pos) {
+    public static BlockPos generateRandomPosTowardDirection(final PathfinderMob mob, final double xzDist, final RandomSource random, final BlockPos pos) {
         final SubLevel trackingSubLevel = Sable.HELPER.getTrackingSubLevel(mob);
         Vec3 effectiveMobPos = mob.position();
 
@@ -33,15 +33,15 @@ public class RandomPosMixin {
         if (mob.hasHome() && xzDist > 1.0) {
             final BlockPos blockPos = mob.getHomePosition();
             if (effectiveMobPos.x() > (double) blockPos.getX()) {
-                ox -= random.nextInt(xzDist / 2);
+                ox -= random.nextInt((int) (xzDist / 2));
             } else {
-                ox += random.nextInt(xzDist / 2);
+                ox += random.nextInt((int) (xzDist / 2));
             }
 
             if (effectiveMobPos.z() > (double) blockPos.getZ()) {
-                oz -= random.nextInt(xzDist / 2);
+                oz -= random.nextInt((int) (xzDist / 2));
             } else {
-                oz += random.nextInt(xzDist / 2);
+                oz += random.nextInt((int) (xzDist / 2));
             }
         }
 

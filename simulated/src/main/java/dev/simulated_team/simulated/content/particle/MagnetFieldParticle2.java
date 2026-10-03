@@ -78,7 +78,7 @@ public class MagnetFieldParticle2 extends SimpleAnimatedParticle {
         //quaternionf.set(1,1,-1,1);
         //quaternionf.set(new Quaternionf().slerp(quaternionf,partialTicks));
 
-        final Vec3 vec3 = renderInfo.getPosition();
+        final Vec3 vec3 = renderInfo.position();
         final float x = (float)(this.x - vec3.x());
         final float y = (float)(this.y - vec3.y());
         final float z = (float)(this.z - vec3.z());

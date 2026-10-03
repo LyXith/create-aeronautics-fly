@@ -16,7 +16,8 @@ import com.zurrtum.create.client.catnip.render.SuperByteBufferCache;
 import com.zurrtum.create.catnip.theme.Color;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.BlockModelPart;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
@@ -24,7 +25,7 @@ import net.minecraft.client.renderer.block.model.SimpleModelWrapper;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -54,7 +55,7 @@ public class SteeringWheelRenderer extends KineticBlockEntityRenderer<SteeringWh
 
         if (be.shouldRenderShaft()) {
             final BlockState state = this.getRenderedBlockState(be);
-            final RenderType type = RenderType.solid();
+            final RenderType type = RenderTypes.solidMovingBlock();
             renderRotatingBuffer(be, CachedBuffers.partialFacing(
                     AllPartialModels.SHAFT_HALF,
                     be.getBlockState(),
@@ -74,7 +75,7 @@ public class SteeringWheelRenderer extends KineticBlockEntityRenderer<SteeringWh
 
         model.light(light);
         model.color(Color.WHITE);
-        model.renderInto(ms.last(), buffer.getBuffer(RenderType.solid()));
+        model.renderInto(ms.last(), buffer.getBuffer(RenderTypes.solidMovingBlock()));
     }
 
     private SuperByteBuffer getWheelModel(final SteeringWheelBlockEntity be) {
@@ -87,7 +88,7 @@ public class SteeringWheelRenderer extends KineticBlockEntityRenderer<SteeringWh
 
     public static SimpleModelWrapper generateModel(final SimpleModelWrapper template, final BlockState planksBlockState) {
         final Block planksBlock = planksBlockState.getBlock();
-        final ResourceLocation id = RegisteredObjectsHelper.getKeyOrThrow(planksBlock);
+        final Identifier id = RegisteredObjectsHelper.getKeyOrThrow(planksBlock);
         final String wood = plankStateToWoodName(planksBlockState);
 
         if (wood == null)
@@ -106,7 +107,7 @@ public class SteeringWheelRenderer extends KineticBlockEntityRenderer<SteeringWh
     @Nullable
     private static String plankStateToWoodName(final BlockState planksBlockState) {
         final Block planksBlock = planksBlockState.getBlock();
-        final ResourceLocation id = RegisteredObjectsHelper.getKeyOrThrow(planksBlock);
+        final Identifier id = RegisteredObjectsHelper.getKeyOrThrow(planksBlock);
         final String path = id.getPath();
 
         if (path.endsWith("_planks")) // Covers most wood types

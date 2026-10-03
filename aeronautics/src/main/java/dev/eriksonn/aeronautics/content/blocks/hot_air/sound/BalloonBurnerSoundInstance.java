@@ -134,12 +134,12 @@ public class BalloonBurnerSoundInstance extends AbstractTickableSoundInstance {
 
     private static double distSquared(final Camera camera, final Vector3dc pos) {
         final ClientLevel level = Minecraft.getInstance().level;
-        return Sable.HELPER.distanceSquaredWithSubLevels(level, camera.getPosition(), pos.x(), pos.y(), pos.z());
+        return Sable.HELPER.distanceSquaredWithSubLevels(level, camera.position(), pos.x(), pos.y(), pos.z());
     }
 
     private static double distSquared(final Camera camera, final Vec3i pos) {
         final ClientLevel level = Minecraft.getInstance().level;
-        return Sable.HELPER.distanceSquaredWithSubLevels(level, camera.getPosition(), pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5);
+        return Sable.HELPER.distanceSquaredWithSubLevels(level, camera.position(), pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5);
     }
 
     @Override

@@ -16,7 +16,8 @@ import com.zurrtum.create.client.ponder.api.level.PonderLevel;
 import dev.eriksonn.aeronautics.index.client.AeroRenderTypes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
@@ -36,7 +37,7 @@ public class HotAirBurnerRenderer extends SmartBlockEntityRenderer<HotAirBurnerB
     protected void renderSafe(final HotAirBurnerBlockEntity be, final float partialTicks, final PoseStack ms, final MultiBufferSource buffer, final int light, final int overlay) {
         final float signalStrength = Math.max(0, be.getSignalStrength() / 15F);
         final SuperByteBuffer indicator = CachedBuffers.partial(AeroPartialModels.HOT_AIR_BURNER_INDICATOR, be.getBlockState());
-        final VertexConsumer vb = buffer.getBuffer(RenderType.cutoutMipped());
+        final VertexConsumer vb = buffer.getBuffer(RenderTypes.cutoutMovingBlock());
         indicator.light(light)
                 .color(SimColors.redstone(signalStrength))
                 .renderInto(ms.last(), vb);
@@ -53,7 +54,7 @@ public class HotAirBurnerRenderer extends SmartBlockEntityRenderer<HotAirBurnerB
         final BlockPos pos = be.getBlockPos();
         final Vec3 center = pos.getCenter();
         final Minecraft minecraft = Minecraft.getInstance();
-        Vec3 camera = minecraft.gameRenderer.getMainCamera().getPosition();
+        Vec3 camera = minecraft.gameRenderer.getMainCamera().position();
         if (be.getLevel() instanceof PonderLevel && minecraft.getCameraEntity() != null) {
             camera = minecraft.getCameraEntity().getPosition(partialTicks);
         }

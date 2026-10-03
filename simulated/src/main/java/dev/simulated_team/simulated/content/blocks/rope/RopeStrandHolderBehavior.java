@@ -43,7 +43,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
@@ -198,7 +198,7 @@ public class RopeStrandHolderBehavior extends BlockEntityBehaviour {
 
         // todo: no nice way to grab a potentially causing player to check for infinite materials :p
         final boolean tileDrops = level instanceof final ServerLevel serverLevel
-                && serverLevel.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS);
+                && serverLevel.getGameRules().get(GameRules.BLOCK_DROPS);
 
         if (endAttachment == null) {
             this.destroyRope(null, this.getAttachmentPoint(), tileDrops);
@@ -258,7 +258,7 @@ public class RopeStrandHolderBehavior extends BlockEntityBehaviour {
             return false;
         }
 
-        this.destroyRope(null, null, dropItem && level.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS));
+        this.destroyRope(null, null, dropItem && level.getGameRules().get(GameRules.BLOCK_DROPS));
 
         final double distance = ropeTarget.distanceTo(ropeStart);
         final int oneLongSegments = Mth.floor(distance);
@@ -294,7 +294,8 @@ public class RopeStrandHolderBehavior extends BlockEntityBehaviour {
         return true;
     }
 
-    private @Nullable Level getLevel() {
+    @Override
+    public @Nullable Level getLevel() {
         return this.blockEntity.getLevel();
     }
 
@@ -574,7 +575,7 @@ public class RopeStrandHolderBehavior extends BlockEntityBehaviour {
         }
 
         final boolean tileDrops = level instanceof final ServerLevel serverLevel
-                && serverLevel.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS);
+                && serverLevel.getGameRules().get(GameRules.BLOCK_DROPS);
 
         if (!this.strandOwner && attachedStrand != null) {
             final RopeAttachment startAttachment = attachedStrand.getAttachment(RopeAttachmentPoint.START);

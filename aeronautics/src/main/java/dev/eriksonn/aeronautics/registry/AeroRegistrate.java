@@ -5,10 +5,10 @@ import com.tterrag.registrate.util.entry.RegistryEntry;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import dev.eriksonn.aeronautics.content.blocks.hot_air.lifting_gas.LiftingGasType;
 import dev.eriksonn.aeronautics.index.AeroRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class AeroRegistrate extends SimulatedRegistrate {
-    public AeroRegistrate(final ResourceLocation initialSection, final String modId) {
+    public AeroRegistrate(final Identifier initialSection, final String modId) {
         super(initialSection, modId);
     }
 

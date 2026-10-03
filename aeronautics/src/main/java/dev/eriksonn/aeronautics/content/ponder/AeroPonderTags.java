@@ -13,7 +13,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.tags.TagsProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
@@ -21,10 +21,10 @@ import net.minecraft.world.level.block.Blocks;
 
 public class AeroPonderTags {
 
-    public static final ResourceLocation
+    public static final Identifier
             LEVITITE_BREAKABLE = Aeronautics.path("levitite_breakable");
 
-    public static void register(final PonderTagRegistrationHelper<ResourceLocation> helper) {
+    public static void register(final PonderTagRegistrationHelper<Identifier> helper) {
         final PonderTagRegistrationHelper<ItemLike> itemHelper = helper.withKeyFunction(
                 RegisteredObjectsHelper::getKeyOrThrow);
 

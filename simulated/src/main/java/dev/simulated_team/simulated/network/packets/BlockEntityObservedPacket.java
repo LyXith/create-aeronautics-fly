@@ -26,7 +26,7 @@ public record BlockEntityObservedPacket(BlockPos pos) implements CustomPacketPay
         final ServerPlayer player = context.player();
 
         // More than 4 blocks + interaction range is way too far to observe a block
-        if (!player.canInteractWithBlock(this.pos, 4.0)) {
+        if (!player.isWithinBlockInteractionRange(this.pos, 4.0)) {
             return;
         }
 

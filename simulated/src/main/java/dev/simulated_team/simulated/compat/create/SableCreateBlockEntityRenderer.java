@@ -15,7 +15,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.OrderedSubmitNodeCollector;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.block.ModelBlockRenderer;
 import net.minecraft.client.renderer.block.MovingBlockRenderState;
@@ -25,7 +25,6 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
-import net.minecraft.client.renderer.entity.state.HitboxesRenderState;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer.CrumblingOverlay;
 import net.minecraft.client.renderer.item.ItemStackRenderState.FoilType;
 import net.minecraft.client.renderer.state.CameraRenderState;
@@ -78,7 +77,7 @@ public final class SableCreateBlockEntityRenderer {
         final Camera camera = minecraft.gameRenderer.getMainCamera();
         final Pose3dc renderPose = subLevel.renderPose(partialTick);
         final Vec3 localCameraPosition =
-                renderPose.transformPositionInverse(camera.getPosition());
+                renderPose.transformPositionInverse(camera.position());
         final CameraRenderState cameraState = createCameraState(
                 camera,
                 renderPose,
@@ -299,14 +298,6 @@ public final class SableCreateBlockEntityRenderer {
                     light,
                     overlay
             );
-        }
-
-        @Override
-        public void submitHitbox(
-                final PoseStack poseStack,
-                final EntityRenderState entityState,
-                final HitboxesRenderState hitboxes
-        ) {
         }
 
         @Override

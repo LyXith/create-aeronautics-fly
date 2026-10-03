@@ -16,7 +16,7 @@ import foundry.veil.api.client.render.shader.uniform.ShaderUniformAccess;
 import foundry.veil.api.event.VeilRenderLevelStageEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
@@ -26,13 +26,13 @@ import org.lwjgl.opengl.GL30;
 
 public class ClientBalloonEffectRenderer {
 
-    private static final ResourceLocation FBO_ID = Aeronautics.path("soft_light");
-    private static final ResourceLocation POST_SHADER_ID = Aeronautics.path("soft_light");
+    private static final Identifier FBO_ID = Aeronautics.path("soft_light");
+    private static final Identifier POST_SHADER_ID = Aeronautics.path("soft_light");
 
-    private static final ResourceLocation SIDE_TEXTURE = Aeronautics.path("textures/special/heat_overlay.png");
-    private static final ResourceLocation TOP_TEXTURE = Aeronautics.path("textures/special/lava_still.png");
+    private static final Identifier SIDE_TEXTURE = Aeronautics.path("textures/special/heat_overlay.png");
+    private static final Identifier TOP_TEXTURE = Aeronautics.path("textures/special/lava_still.png");
 
-    private static final ResourceLocation SHADER_ID = Aeronautics.path("hot_air_overlay");
+    private static final Identifier SHADER_ID = Aeronautics.path("hot_air_overlay");
 
     @Nullable
     private static AdvancedFbo overlayFbo;

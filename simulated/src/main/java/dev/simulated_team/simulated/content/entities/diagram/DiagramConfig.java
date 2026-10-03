@@ -10,14 +10,14 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectList;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.List;
 
 public class DiagramConfig {
 
     public static final Codec<DiagramConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Codec.list(ResourceLocation.CODEC).fieldOf("enabled_force_groups").forGetter(DiagramConfig::enabledForceGroups),
+            Codec.list(Identifier.CODEC).fieldOf("enabled_force_groups").forGetter(DiagramConfig::enabledForceGroups),
             Codec.BOOL.fieldOf("display_center_of_mass").forGetter(DiagramConfig::displayCenterOfMass),
             Codec.BOOL.fieldOf("merge_forces").forGetter(DiagramConfig::mergeForces),
             Codec.DOUBLE.fieldOf("yaw").forGetter(DiagramConfig::yaw),
@@ -26,7 +26,7 @@ public class DiagramConfig {
     ).apply(instance, DiagramConfig::new));
 
     public static final StreamCodec<ByteBuf, DiagramConfig> STREAM_CODEC = StreamCodec.composite(
-            ResourceLocation.STREAM_CODEC.apply(ByteBufCodecs.list()), DiagramConfig::enabledForceGroups,
+            Identifier.STREAM_CODEC.apply(ByteBufCodecs.list()), DiagramConfig::enabledForceGroups,
             ByteBufCodecs.BOOL, DiagramConfig::displayCenterOfMass,
             ByteBufCodecs.BOOL, DiagramConfig::mergeForces,
             ByteBufCodecs.DOUBLE, DiagramConfig::yaw,
@@ -34,7 +34,7 @@ public class DiagramConfig {
             NoteConfigs.NOTE_CONFIG_STREAM_CODEC, DiagramConfig::getNoteConfigs,
             DiagramConfig::new);
 
-    private final List<ResourceLocation> enabledForceGroups;
+    private final List<Identifier> enabledForceGroups;
     private boolean displayCenterOfMass;
     private boolean mergeForces;
     private double yaw;
@@ -43,9 +43,9 @@ public class DiagramConfig {
     private final NoteConfigs noteConfig;
 
     public static DiagramConfig makeDefault(final DiagramEntity entity) {
-        final ObjectList<ResourceLocation> enabledForceGroups = new ObjectArrayList<>();
+        final ObjectList<Identifier> enabledForceGroups = new ObjectArrayList<>();
 
-        for (final ResourceLocation groupId : ForceGroups.REGISTRY.keySet()) {
+        for (final Identifier groupId : ForceGroups.REGISTRY.keySet()) {
             if (ForceGroups.REGISTRY.getValue(groupId).defaultDisplayed())
                 enabledForceGroups.add(groupId);
         }
@@ -54,7 +54,7 @@ public class DiagramConfig {
         return new DiagramConfig(enabledForceGroups, false, false, -entity.getYRot(), entity.getXRot(), noteConfig);
     }
 
-    public DiagramConfig(final List<ResourceLocation> enabledForceGroups,
+    public DiagramConfig(final List<Identifier> enabledForceGroups,
                          final boolean displayCenterOfMass,
                          final boolean mergeForces,
                          final double yaw,
@@ -69,7 +69,7 @@ public class DiagramConfig {
         this.noteConfig = noteConfig;
     }
 
-    public List<ResourceLocation> enabledForceGroups() {
+    public List<Identifier> enabledForceGroups() {
         return this.enabledForceGroups;
     }
 

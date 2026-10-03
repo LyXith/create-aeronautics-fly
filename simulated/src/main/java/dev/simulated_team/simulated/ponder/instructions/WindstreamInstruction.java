@@ -37,9 +37,9 @@ public class WindstreamInstruction extends TickingInstruction {
     protected void firstTick(final PonderScene scene) {
         super.firstTick(scene);
         final Vec3 lineBase = new Vec3(
-                (this.bb.maxX - this.bb.minX) * scene.getWorld().getRandom().nextDouble() + this.bb.minX,
-                (this.bb.maxY - this.bb.minY) * scene.getWorld().getRandom().nextDouble() + this.bb.minY,
-                (this.bb.maxZ - this.bb.minZ) * scene.getWorld().getRandom().nextDouble() + this.bb.minZ
+                (this.bb.maxX - this.bb.minX) * scene.getLevel().getRandom().nextDouble() + this.bb.minX,
+                (this.bb.maxY - this.bb.minY) * scene.getLevel().getRandom().nextDouble() + this.bb.minY,
+                (this.bb.maxZ - this.bb.minZ) * scene.getLevel().getRandom().nextDouble() + this.bb.minZ
         );
         this.line = PonderLineRecord.withOffset(lineBase, lineBase.add(this.windDir));
 

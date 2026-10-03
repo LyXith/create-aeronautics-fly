@@ -10,7 +10,8 @@ import com.zurrtum.create.catnip.math.AngleHelper;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
@@ -38,11 +39,11 @@ public class TorsionSpringRenderer extends KineticBlockEntityRenderer<TorsionSpr
             spring.rotateCentered(AngleHelper.rad(AngleHelper.horizontalAngle(facing.getOpposite())), Direction.UP);
         }
         spring.rotateCentered(AngleHelper.rad(-90 - AngleHelper.verticalAngle(facing)), Direction.EAST);
-        spring.renderInto(ms.last(), buffer.getBuffer(RenderType.solid()));
+        spring.renderInto(ms.last(), buffer.getBuffer(RenderTypes.solidMovingBlock()));
 
         final SuperByteBuffer shaftOut = CachedBuffers.partialFacing(AllPartialModels.SHAFT_HALF, be.getBlockState(), facing);
         kineticRotationTransform(shaftOut, be, facing.getAxis(), getAngleForBe(be.getExtraKinetics(), be.getBlockPos(), facing.getAxis()), light);
-        shaftOut.renderInto(ms.last(), buffer.getBuffer(RenderType.solid()));
+        shaftOut.renderInto(ms.last(), buffer.getBuffer(RenderTypes.solidMovingBlock()));
     }
 
     @Override

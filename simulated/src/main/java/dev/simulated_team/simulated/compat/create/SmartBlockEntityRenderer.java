@@ -32,7 +32,7 @@ public class SmartBlockEntityRenderer<T extends net.minecraft.world.level.block.
                                    @Nullable final ModelFeatureRenderer.CrumblingOverlay crumblingOverlay) {
         BlockEntityRenderState.extractBase(blockEntity, state, crumblingOverlay);
         if (blockEntity instanceof final com.zurrtum.create.foundation.blockEntity.SmartBlockEntity smartBlockEntity) {
-            createRenderer.updateRenderState(smartBlockEntity, state.createState, partialTicks, cameraPos, crumblingOverlay);
+            createRenderer.extractRenderState(smartBlockEntity, state.createState, partialTicks, cameraPos, crumblingOverlay);
         }
         state.blockEntity = blockEntity;
         state.partialTicks = partialTicks;
@@ -41,7 +41,7 @@ public class SmartBlockEntityRenderer<T extends net.minecraft.world.level.block.
     @Override
     public void submit(final RenderState<T> state, final PoseStack poseStack, final SubmitNodeCollector queue, final CameraRenderState cameraState) {
         if (state.blockEntity instanceof com.zurrtum.create.foundation.blockEntity.SmartBlockEntity) {
-            createRenderer.render(state.createState, poseStack, queue, cameraState);
+            createRenderer.submit(state.createState, poseStack, queue, cameraState);
         }
         if (state.blockEntity == null || state.blockEntity.isRemoved() || shouldSkipLegacyRender(state.blockEntity)) {
             return;

@@ -2,6 +2,7 @@
 	"credit": "Made by Farcr",
 	"parent": "minecraft:block/block",
 	"textures": {
+		"particle": "#1",
 		"1": "simulated:block/rope_particle"
 	},
 	"elements": [

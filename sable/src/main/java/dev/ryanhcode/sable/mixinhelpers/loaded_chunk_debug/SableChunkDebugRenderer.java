@@ -37,7 +37,7 @@ public class SableChunkDebugRenderer {
         final long time = System.currentTimeMillis();
 
         final Minecraft minecraft = Minecraft.getInstance();
-        final Entity entity = minecraft.gameRenderer.getMainCamera().getEntity();
+        final Entity entity = minecraft.gameRenderer.getMainCamera().entity();
 
         final ClientLevel level = minecraft.level;
         final int minBuildHeight = level.getMinY();

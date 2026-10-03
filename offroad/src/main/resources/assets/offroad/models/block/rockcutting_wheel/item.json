@@ -1,6 +1,7 @@
 {
 	"parent": "block/block",
 	"textures": {
+		"particle": "#wheel",
 		"wheel": "offroad:block/rockcutting_wheel",
 		"base": "offroad:block/rockcutting_base"
 	},

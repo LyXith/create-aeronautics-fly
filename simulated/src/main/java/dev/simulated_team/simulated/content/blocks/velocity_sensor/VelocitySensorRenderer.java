@@ -9,7 +9,8 @@ import dev.simulated_team.simulated.util.SimColors;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
@@ -21,7 +22,7 @@ public class VelocitySensorRenderer extends SafeBlockEntityRenderer<VelocitySens
 
     @Override
     protected void renderSafe(final VelocitySensorBlockEntity be, final float partialTicks, final PoseStack ms, final MultiBufferSource buffer, final int light, final int overlay) {
-        final VertexConsumer vb = buffer.getBuffer(RenderType.cutoutMipped());
+        final VertexConsumer vb = buffer.getBuffer(RenderTypes.cutoutMovingBlock());
 
         final BlockState state  = be.getBlockState();
         final SuperByteBuffer diode = CachedBuffers.partial(SimPartialModels.VELOCITY_SENSOR_DIODE, state);

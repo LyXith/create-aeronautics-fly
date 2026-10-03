@@ -35,8 +35,6 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import org.joml.Matrix4fc;
 import org.joml.Vector3dc;
-import org.joml.Vector3f;
-import org.joml.Vector4f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -111,10 +109,8 @@ public abstract class LevelRendererMixin {
             drawsPerLayer.put(layer, existingDraws == null ? new ArrayList<>() : new ArrayList<>(existingDraws));
         }
 
-        final int originalTransformCount = original.dynamicTransforms().length;
-        final List<DynamicUniforms.Transform> transforms = new ArrayList<>();
-        final Vector4f white = new Vector4f(1.0F, 1.0F, 1.0F, 1.0F);
-        final Matrix4f textureMatrix = new Matrix4f();
+        final int originalTransformCount = original.chunkSectionInfos().length;
+        final List<DynamicUniforms.ChunkSectionInfo> transforms = new ArrayList<>();
         int maxIndicesRequired = original.maxIndicesRequired();
 
         for (final ClientSubLevel subLevel : container.getAllSubLevels()) {
@@ -128,6 +124,15 @@ public abstract class LevelRendererMixin {
             for (final SectionRenderDispatcher.RenderSection section : renderData.allRenderSections()) {
                 final SectionMesh mesh = section.getSectionMesh();
                 final BlockPos origin = section.getRenderOrigin();
+                final BlockPos worldOrigin = BlockPos.containing(subLevel.renderPose()
+                        .transformPosition(Vec3.atLowerCornerOf(origin)));
+                // Terrain now subtracts the camera through Globals before applying ModelViewMat.
+                // Cancel that offset in local coordinates; keep ChunkPosition near the physical
+                // section origin so vanilla fog measures distance in world space rather than plot space.
+                final Matrix4f sectionModelView = new Matrix4f(modelView).translate(
+                        (float) (origin.getX() - rotationPoint.x() + cameraX - worldOrigin.getX()),
+                        (float) (origin.getY() - rotationPoint.y() + cameraY - worldOrigin.getY()),
+                        (float) (origin.getZ() - rotationPoint.z() + cameraZ - worldOrigin.getZ()));
 
                 for (final ChunkSectionLayer layer : ChunkSectionLayer.values()) {
                     final SectionBuffers buffers = mesh.getBuffers(layer);
@@ -147,16 +152,11 @@ public abstract class LevelRendererMixin {
                     }
 
                     final int transformIndex = originalTransformCount + transforms.size();
-                    transforms.add(new DynamicUniforms.Transform(
-                            modelView,
-                            white,
-                            new Vector3f(
-                                    (float) (origin.getX() - rotationPoint.x()),
-                                    (float) (origin.getY() - rotationPoint.y()),
-                                    (float) (origin.getZ() - rotationPoint.z())
-                            ),
-                            textureMatrix,
-                            1.0F
+                    transforms.add(new DynamicUniforms.ChunkSectionInfo(
+                            sectionModelView,
+                            worldOrigin.getX(), worldOrigin.getY(), worldOrigin.getZ(), 1.0F,
+                            original.textureView().texture().getWidth(0),
+                            original.textureView().texture().getHeight(0)
                     ));
                     drawsPerLayer.get(layer).add(new RenderPass.Draw<>(
                             0,
@@ -165,7 +165,7 @@ public abstract class LevelRendererMixin {
                             indexType,
                             0,
                             buffers.getIndexCount(),
-                            (dynamicTransforms, uploader) -> uploader.upload("DynamicTransforms", dynamicTransforms[transformIndex])
+                            (chunkSectionInfos, uploader) -> uploader.upload("ChunkSection", chunkSectionInfos[transformIndex])
                     ));
                 }
             }
@@ -175,13 +175,13 @@ public abstract class LevelRendererMixin {
             return;
         }
 
-        final GpuBufferSlice[] additionalTransforms = RenderSystem.getDynamicUniforms().writeTransforms(transforms.toArray(DynamicUniforms.Transform[]::new));
-        final GpuBufferSlice[] combinedTransforms = Arrays.copyOf(original.dynamicTransforms(), originalTransformCount + additionalTransforms.length);
+        final GpuBufferSlice[] additionalTransforms = RenderSystem.getDynamicUniforms().writeChunkSections(transforms.toArray(DynamicUniforms.ChunkSectionInfo[]::new));
+        final GpuBufferSlice[] combinedTransforms = Arrays.copyOf(original.chunkSectionInfos(), originalTransformCount + additionalTransforms.length);
         System.arraycopy(additionalTransforms, 0, combinedTransforms, originalTransformCount, additionalTransforms.length);
-        cir.setReturnValue(new ChunkSectionsToRender(drawsPerLayer, maxIndicesRequired, combinedTransforms));
+        cir.setReturnValue(new ChunkSectionsToRender(original.textureView(), drawsPerLayer, maxIndicesRequired, combinedTransforms));
     }
 
-    @Inject(method = "isSectionCompiled", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "isSectionCompiledAndVisible", at = @At("HEAD"), cancellable = true)
     private void sable$isSectionCompiled(final BlockPos blockPos, final CallbackInfoReturnable<Boolean> cir) {
         final ClientSubLevelContainer container = SubLevelContainer.getContainer(this.level);
 

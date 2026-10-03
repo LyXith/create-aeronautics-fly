@@ -43,7 +43,7 @@ public class ChangeBoreheadAndContraptionSpeedInstruction extends PonderInstruct
 
     @Override
     public void tick(final PonderScene scene) {
-        final Optional<BoreheadBearingBlockEntity> be = scene.getWorld().getBlockEntity(this.boreheadBearingPos, OffroadBlockEntityTypes.BOREHEAD_BEARING.get());
+        final Optional<BoreheadBearingBlockEntity> be = scene.getLevel().getBlockEntity(this.boreheadBearingPos, OffroadBlockEntityTypes.BOREHEAD_BEARING.get());
         if (be.isPresent()) {
             final BoreheadBearingBlockEntity bhb = be.get();
 

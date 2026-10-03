@@ -30,7 +30,7 @@ public class RedstoneInductorValueBehaviour extends ScrollValueBehaviour impleme
     public void onShortInteract(final Player player, final InteractionHand hand, final Direction side, final BlockHitResult hitResult) {
         final BlockState blockState = this.blockEntity.getBlockState();
         if (blockState.getBlock() instanceof final RedstoneInductorBlock bdb)
-            bdb.toggle(this.getWorld(), this.getPos(), blockState, player, hand);
+            bdb.toggle(this.getLevel(), this.getPos(), blockState, player, hand);
     }
 
     @Override

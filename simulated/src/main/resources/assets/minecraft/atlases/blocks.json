@@ -2,6 +2,14 @@
   "sources": [
     {
       "type": "single",
+      "resource": "simulated:item/plungerlauncher"
+    },
+    {
+      "type": "single",
+      "resource": "simulated:item/zapper_staff"
+    },
+    {
+      "type": "single",
       "resource": "simulated:entity/diagram_large"
     },
     {

@@ -88,7 +88,7 @@ public class PhysicsStaffClientHandler {
 
         if (player.isLocalPlayer() && !camera.isDetached()) {
             final Vec3 savedPos = PhysicsStaffItemRenderer.getFirstPersonFocusPos(pt)
-                    .add(camera.getPosition());
+                    .add(camera.position());
 
             return savedPos;
         }
@@ -363,7 +363,7 @@ public class PhysicsStaffClientHandler {
         final float pt = AnimationTickHolder.getPartialTicks();
         final Minecraft client = Minecraft.getInstance();
         final Camera mainCamera = client.gameRenderer.getMainCamera();
-        final Vec3 camera = mainCamera.getPosition();
+        final Vec3 camera = mainCamera.position();
 
         this.beams.forEach((uuid, beam) -> {
             final Player player = client.level.getPlayerByUUID(uuid);

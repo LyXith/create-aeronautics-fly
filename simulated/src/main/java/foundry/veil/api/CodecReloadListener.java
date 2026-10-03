@@ -11,7 +11,7 @@ import com.mojang.serialization.JsonOps;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.RegistryOps;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
@@ -24,7 +24,7 @@ import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class CodecReloadListener<T> extends SimplePreparableReloadListener<Map<ResourceLocation, T>> {
+public abstract class CodecReloadListener<T> extends SimplePreparableReloadListener<Map<Identifier, T>> {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     protected final Codec<T> codec;
@@ -43,16 +43,16 @@ public abstract class CodecReloadListener<T> extends SimplePreparableReloadListe
     }
 
     @Override
-    protected @NotNull Map<ResourceLocation, T> prepare(final ResourceManager resourceManager,
+    protected @NotNull Map<Identifier, T> prepare(final ResourceManager resourceManager,
                                                         final ProfilerFiller profilerFiller) {
-        final Map<ResourceLocation, T> data = new HashMap<>();
+        final Map<Identifier, T> data = new HashMap<>();
         final DynamicOps<JsonElement> ops = this.registries == null
                 ? JsonOps.INSTANCE
                 : RegistryOps.create(JsonOps.INSTANCE, this.registries);
 
-        for (final Map.Entry<ResourceLocation, Resource> entry : this.converter.listMatchingResources(resourceManager).entrySet()) {
-            final ResourceLocation location = entry.getKey();
-            final ResourceLocation id = this.converter.fileToId(location);
+        for (final Map.Entry<Identifier, Resource> entry : this.converter.listMatchingResources(resourceManager).entrySet()) {
+            final Identifier location = entry.getKey();
+            final Identifier id = this.converter.fileToId(location);
             try (Reader reader = entry.getValue().openAsReader()) {
                 final DataResult<T> result = this.codec.parse(ops, JsonParser.parseReader(reader));
                 if (result.error().isPresent()) {

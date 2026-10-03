@@ -1,6 +1,5 @@
 package dev.eriksonn.aeronautics.gametest;
 
-import dev.eriksonn.aeronautics.gametest.mixin.LevelRendererAccessor;
 import dev.ryanhcode.sable.Sable;
 import dev.ryanhcode.sable.api.SubLevelAssemblyHelper;
 import dev.ryanhcode.sable.companion.math.BoundingBox3i;
@@ -10,7 +9,6 @@ import net.fabricmc.fabric.api.client.gametest.v1.FabricClientGameTest;
 import net.fabricmc.fabric.api.client.gametest.v1.context.ClientGameTestContext;
 import net.fabricmc.fabric.api.client.gametest.v1.context.TestServerContext;
 import net.fabricmc.fabric.api.client.gametest.v1.context.TestSingleplayerContext;
-import net.minecraft.client.renderer.blockentity.state.SkullBlockRenderState;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -23,6 +21,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -31,6 +30,9 @@ import java.util.UUID;
  */
 @SuppressWarnings("UnstableApiUsage")
 public final class ClientSkullRenderGameTest implements FabricClientGameTest {
+
+    public static boolean observing;
+    public static Set<BlockPos> submittedHeads = Set.of();
 
     private static final List<Block> HEADS = List.of(
             Blocks.SKELETON_SKULL,
@@ -44,6 +46,10 @@ public final class ClientSkullRenderGameTest implements FabricClientGameTest {
 
     @Override
     public void runTest(final ClientGameTestContext context) {
+        context.runOnClient(client -> {
+            submittedHeads = Set.of();
+            observing = true;
+        });
         try (TestSingleplayerContext singleplayer = context.worldBuilder().create()) {
             final TestServerContext serverContext = singleplayer.getServer();
             final SkullScene scene = serverContext.computeOnServer(server -> createScene(server.overworld()));
@@ -69,14 +75,9 @@ public final class ClientSkullRenderGameTest implements FabricClientGameTest {
             });
 
             context.waitFor(client -> {
-                final var levelRenderState =
-                        ((LevelRendererAccessor) client.levelRenderer).aeronautics$getLevelRenderState();
                 for (int index = 0; index < HEADS.size(); index++) {
                     final BlockPos expectedPos = scene.plotHeadStart().east(index);
-                    final boolean extracted = levelRenderState.blockEntityRenderStates.stream()
-                            .anyMatch(state -> state instanceof SkullBlockRenderState
-                                    && state.blockPos.equals(expectedPos));
-                    if (!extracted) {
+                    if (!submittedHeads.contains(expectedPos)) {
                         return false;
                     }
                 }
@@ -85,6 +86,11 @@ public final class ClientSkullRenderGameTest implements FabricClientGameTest {
 
             context.waitTicks(5);
             context.takeScreenshot("vanilla-heads-inside-substructure");
+        } finally {
+            context.runOnClient(client -> {
+                observing = false;
+                submittedHeads = Set.of();
+            });
         }
     }
 

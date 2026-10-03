@@ -7,7 +7,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.data.tags.TagAppender;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import java.util.function.Function;
@@ -53,7 +53,7 @@ public final class TagGen {
             return this;
         }
 
-        public CreateTagAppender<T> addOptional(ResourceLocation id) {
+        public CreateTagAppender<T> addOptional(Identifier id) {
             delegate.addOptional(ResourceKey.create(registry, id));
             return this;
         }

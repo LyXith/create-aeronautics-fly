@@ -22,7 +22,7 @@ public class LinkDockingConnectorsInstruction extends PonderInstruction {
 
     @Override
     public void tick(PonderScene scene) {
-        final PonderLevel world = scene.getWorld();
+        final PonderLevel world = scene.getLevel();
 
         if (world.getBlockEntity(fromPos) instanceof final DockingConnectorBlockEntity be1 && world.getBlockEntity(toPos) instanceof final DockingConnectorBlockEntity be2)
             be1.tank.connect(toPos, be2.tank);

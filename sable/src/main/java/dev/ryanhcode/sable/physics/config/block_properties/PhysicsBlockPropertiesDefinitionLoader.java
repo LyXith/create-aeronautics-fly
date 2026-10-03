@@ -9,7 +9,7 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.FileToIdConverter;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.tags.TagKey;
@@ -28,7 +28,7 @@ import java.util.Optional;
 // performs the JSON decode (and logs failures) that apply() used to do by hand.
 public class PhysicsBlockPropertiesDefinitionLoader extends SimpleJsonResourceReloadListener<PhysicsBlockPropertiesDefinition> {
     public static final String NAME = "physics_block_properties";
-    public static final ResourceLocation ID = Sable.sablePath(NAME);
+    public static final Identifier ID = Sable.sablePath(NAME);
 
     public static final PhysicsBlockPropertiesDefinitionLoader INSTANCE = new PhysicsBlockPropertiesDefinitionLoader();
     private final ObjectList<PhysicsBlockPropertiesDefinition> definitions = new ObjectArrayList<>();
@@ -43,7 +43,7 @@ public class PhysicsBlockPropertiesDefinitionLoader extends SimpleJsonResourceRe
     }
 
     @Override
-    protected void apply(final Map<ResourceLocation, PhysicsBlockPropertiesDefinition> map, final ResourceManager resourceManager, final ProfilerFiller profilerFiller) {
+    protected void apply(final Map<Identifier, PhysicsBlockPropertiesDefinition> map, final ResourceManager resourceManager, final ProfilerFiller profilerFiller) {
         this.definitions.clear();
         this.definitions.addAll(map.values());
 

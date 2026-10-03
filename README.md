@@ -52,7 +52,11 @@ Crowdin: https://crowdin.com/project/create-aeronautics
 
 ## Fabric project layout
 
-This port is Fabric-only. Each shipped mod is a normal Gradle subproject with its sources under
+This port targets Minecraft 1.21.11 on Fabric and requires Java 21. Use Fabric Loader 0.18.3 or later,
+Fabric API 0.141.6+1.21.11 or later, Create Fly 6.0.9-5 for 1.21.11,
+Forge Config API Port 21.11.1, and Team Reborn Energy 4.2.0.
+
+Each shipped mod is a normal Gradle subproject with its sources under
 `<mod>/src/main`, and generated data under `<mod>/src/generated`:
 
 - `sable`

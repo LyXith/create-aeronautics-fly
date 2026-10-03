@@ -3,7 +3,7 @@ package dev.ryanhcode.offroad.index;
 import com.zurrtum.create.client.flywheel.lib.model.baked.PartialModel;
 import dev.ryanhcode.offroad.Offroad;
 import dev.ryanhcode.offroad.content.components.TireLike;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -26,7 +26,7 @@ public class OffroadPartialModels {
 			MONSTROUS_TIRE_WHEEL = item("monstrous_tire/item"),
 			ROCK_CUTTING_WHEEL_WHEEL = block("rockcutting_wheel/wheel");
 
-	private static final Map<ResourceLocation, MountedTireModel> TIRE_MODELS = new HashMap<>();
+	private static final Map<Identifier, MountedTireModel> TIRE_MODELS = new HashMap<>();
 
 	static {
 		// Keep the legacy TireLike model IDs as lookup keys for saved stacks.
@@ -62,7 +62,7 @@ public class OffroadPartialModels {
 	}
 
 	@Nullable
-	public static MountedTireModel getTireModel(final ResourceLocation model) {
+	public static MountedTireModel getTireModel(final Identifier model) {
 		return TIRE_MODELS.get(model);
 	}
 

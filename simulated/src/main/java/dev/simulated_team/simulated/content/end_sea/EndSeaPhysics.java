@@ -21,7 +21,7 @@ import dev.simulated_team.simulated.data.advancements.SimAdvancements;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import org.joml.Vector3d;
@@ -30,7 +30,7 @@ import org.joml.Vector3dc;
 import java.util.Optional;
 import java.util.UUID;
 
-public record EndSeaPhysics(ResourceLocation dimension, Optional<Integer> priority,
+public record EndSeaPhysics(Identifier dimension, Optional<Integer> priority,
                             double startY, double depthGradient, double drag) {
     /* {
      *    "dimension": "namespace:location",
@@ -41,7 +41,7 @@ public record EndSeaPhysics(ResourceLocation dimension, Optional<Integer> priori
      * }
      */
     public static final Codec<EndSeaPhysics> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            ResourceLocation.CODEC.fieldOf("dimension").forGetter(EndSeaPhysics::dimension),
+            Identifier.CODEC.fieldOf("dimension").forGetter(EndSeaPhysics::dimension),
             Codec.optionalField("priority", Codec.INT, true).forGetter(EndSeaPhysics::priority),
             Codec.DOUBLE.fieldOf("start_y").forGetter(EndSeaPhysics::startY),
             Codec.DOUBLE.optionalFieldOf("depth_gradient", 1d).forGetter(EndSeaPhysics::depthGradient),

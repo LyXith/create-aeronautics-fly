@@ -3,7 +3,7 @@ package dev.eriksonn.aeronautics.fabric.mixin.levitite;
 import dev.eriksonn.aeronautics.index.AeroTags;
 import net.minecraft.client.Camera;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.FogType;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -19,7 +19,7 @@ public abstract class CameraMixin {
     private Vec3 position;
 
     @Shadow
-    private @Nullable BlockGetter level;
+    private @Nullable Level level;
 
     @Inject(method = "getFluidInCamera", at = @At("RETURN"), cancellable = true)
     private void aeronautics$levititeFog(final CallbackInfoReturnable<FogType> cir) {

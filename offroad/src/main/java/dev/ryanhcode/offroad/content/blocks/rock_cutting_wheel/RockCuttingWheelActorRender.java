@@ -16,7 +16,8 @@ import com.zurrtum.create.content.contraptions.behaviour.MovementContext;
 import dev.ryanhcode.offroad.index.OffroadPartialModels;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.LevelRenderer;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -73,7 +74,7 @@ public class RockCuttingWheelActorRender implements MovementRenderBehaviour {
 
         @Override
         public void render(final PoseStack poseStack, final SubmitNodeCollector queue) {
-            queue.submitCustomGeometry(poseStack, RenderType.solid(), this);
+            queue.submitCustomGeometry(poseStack, RenderTypes.solidMovingBlock(), this);
         }
 
         @Override

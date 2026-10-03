@@ -23,7 +23,7 @@ import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.*;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Unit;
 import org.joml.Quaterniondc;
@@ -123,9 +123,9 @@ public class SableCommand {
                         source.sendSuccess(() -> {
                             final Vector3dc pos = pose.position();
                             final MutableComponent component = Component.translatable("commands.sable.info.name", Component.literal(subLevel.getName() != null ? subLevel.getName() : subLevel.getUniqueId().toString()));
-                            // PORT-NOTE(mc26.1): ResourceKey.location() -> identifier(); ClickEvent/HoverEvent
+                            // PORT-NOTE(mc26.1): ResourceKey.identifier() -> identifier(); ClickEvent/HoverEvent
                             // are sealed interfaces with per-action records now.
-                            final ResourceLocation dimension = subLevel.getLevel().dimension().location();
+                            final Identifier dimension = subLevel.getLevel().dimension().identifier();
                             final GlobalSavedSubLevelPointer pointer = subLevel.getLastSerializationPointer();
                             final Component fileId = Component.translatable("commands.sable.info.name.tooltip", pointer != null ? pointer.toString() : "None yet");
                             component.setStyle(Style.EMPTY.withClickEvent(new ClickEvent.SuggestCommand(new Formatter().format(Locale.ROOT, "/execute in %s run tp @s %.2f %.2f %.2f", dimension, pos.x(), pos.y(), pos.z()).toString()))

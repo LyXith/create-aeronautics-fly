@@ -96,7 +96,7 @@ tasks.register('runProductionClientSmoke', ClientProductionRunTask) {
 apply from: rootProject.file('gradle/ponder-gametest.gradle')
 
 def entityCullingBundle = configurations.detachedConfiguration(
-        dependencies.create('maven.modrinth:entityculling:2kbLrpzR')
+        dependencies.create("maven.modrinth:entityculling:${entityculling_version}")
 )
 entityCullingBundle.transitive = false
 
@@ -119,8 +119,10 @@ def entityCullingGametestLibraries = files(
 
 dependencies {
     // Exercise the renderer stack used by the distribution in rendered-client coverage.
-    add('modGametestRuntimeOnly', "maven.modrinth:sodium:${sodium_version}")
-    add('modGametestRuntimeOnly', 'maven.modrinth:iris:1.9.7+1.21.10-fabric')
-    add('modGametestRuntimeOnly', 'maven.modrinth:entityculling:2kbLrpzR')
-    add('modGametestRuntimeOnly', entityCullingGametestLibraries)
+    if (project.findProperty('vanillaClientGameTest') != 'true') {
+        add('modGametestRuntimeOnly', "maven.modrinth:sodium:${sodium_version}")
+        add('modGametestRuntimeOnly', "maven.modrinth:iris:${iris_version}")
+        add('modGametestRuntimeOnly', "maven.modrinth:entityculling:${entityculling_version}")
+        add('modGametestRuntimeOnly', entityCullingGametestLibraries)
+    }
 }

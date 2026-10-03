@@ -9,7 +9,7 @@ import dev.eriksonn.aeronautics.network.AeroPacketManager;
 import dev.eriksonn.aeronautics.registry.AeroRegistrate;
 import dev.ryanhcode.sable.platform.SableEventPlatform;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.CreativeModeTab;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +49,7 @@ public class Aeronautics {
 		return REGISTRATE.get();
 	}
 
-	public static ResourceLocation path(final String path) {
-		return ResourceLocation.tryBuild(MOD_ID, path);
+	public static Identifier path(final String path) {
+		return Identifier.tryBuild(MOD_ID, path);
 	}
 }

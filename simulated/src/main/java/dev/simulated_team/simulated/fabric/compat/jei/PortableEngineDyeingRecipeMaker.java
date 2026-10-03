@@ -4,7 +4,7 @@ import dev.simulated_team.simulated.Simulated;
 import dev.simulated_team.simulated.index.SimBlocks;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
@@ -38,7 +38,7 @@ public final class PortableEngineDyeingRecipeMaker {
         final ItemStack output = SimBlocks.PORTABLE_ENGINES.get(color)
                 .asItem()
                 .getDefaultInstance();
-        final ResourceLocation id = Simulated.path(
+        final Identifier id = Simulated.path(
                 "jei/portable_engine_dyeing/" + color.getSerializedName());
         final ResourceKey<Recipe<?>> recipeKey =
                 ResourceKey.create(Registries.RECIPE, id);

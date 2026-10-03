@@ -68,7 +68,7 @@ public class PropellerParticleSpawningInstruction extends TickingInstruction {
 		void tick(final PonderScene scene)
 		{
 
-			final PonderLevel level = scene.getWorld();
+			final PonderLevel level = scene.getLevel();
 			final float particleCount = this.particleAmount + level.random.nextFloat() - 1.0f;
 
 			Vec3 totalOffset = VecHelper.getCenterOf(this.location);

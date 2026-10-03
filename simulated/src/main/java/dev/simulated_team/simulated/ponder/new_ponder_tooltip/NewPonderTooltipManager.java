@@ -6,7 +6,7 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import dev.simulated_team.simulated.Simulated;
 import net.minecraft.client.Minecraft;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,10 +21,10 @@ import java.util.List;
 import java.util.Set;
 
 public class NewPonderTooltipManager {
-	private static final Codec<Set<ResourceLocation>> CODEC = ResourceLocation.CODEC.listOf().xmap(
+	private static final Codec<Set<Identifier>> CODEC = Identifier.CODEC.listOf().xmap(
 			HashSet::new, set -> set.stream().toList());
-	private static final HashMap<Item, Set<ResourceLocation>> NEW_PONDER_SCENES = new HashMap<>();
-	private static Set<ResourceLocation> WATCHED_PONDER_SCENES = null;
+	private static final HashMap<Item, Set<Identifier>> NEW_PONDER_SCENES = new HashMap<>();
+	private static Set<Identifier> WATCHED_PONDER_SCENES = null;
 
 	private static Path filePath() {
 		return Minecraft.getInstance().gameDirectory.toPath().resolve("ponders_watched.json");
@@ -37,13 +37,13 @@ public class NewPonderTooltipManager {
 	public static boolean hasWatchedAllScenes(final Item item) {
 		load();
 		if (NEW_PONDER_SCENES.containsKey(item)) {
-			final Set<ResourceLocation> scenes = NEW_PONDER_SCENES.get(item);
+			final Set<Identifier> scenes = NEW_PONDER_SCENES.get(item);
             return WATCHED_PONDER_SCENES.containsAll(scenes);
         }
 		return true;
 	}
 
-	public static void setSceneWatched(final ResourceLocation id) {
+	public static void setSceneWatched(final Identifier id) {
 		load();
 		if(WATCHED_PONDER_SCENES != null && !hasWatchedScene(id)) {
 			WATCHED_PONDER_SCENES.add(id);
@@ -51,7 +51,7 @@ public class NewPonderTooltipManager {
 		}
 	}
 
-	public static boolean hasWatchedScene(final ResourceLocation id) {
+	public static boolean hasWatchedScene(final Identifier id) {
 		load();
 		return WATCHED_PONDER_SCENES.contains(id);
 	}
@@ -73,7 +73,7 @@ public class NewPonderTooltipManager {
 	public static void load() {
 		if(WATCHED_PONDER_SCENES != null) return;
 
-		final DataResult<Set<ResourceLocation>> result = CODEC.parse(JsonOps.INSTANCE, getOrCreateFile());
+		final DataResult<Set<Identifier>> result = CODEC.parse(JsonOps.INSTANCE, getOrCreateFile());
 		WATCHED_PONDER_SCENES = new HashSet<>();
 		result.ifSuccess((set) -> WATCHED_PONDER_SCENES.addAll(set));
 	}
@@ -108,8 +108,8 @@ public class NewPonderTooltipManager {
 		/**
 		 * @param scenes set of scene IDs as set by {@link com.zurrtum.create.client.ponder.foundation.PonderSceneBuilder#title(java.lang.String, java.lang.String)}
 		 */
-		public RegisterBuilder addScenes(final ResourceLocation... scenes) {
-			final Set<ResourceLocation> sceneSet = new HashSet<>(List.of(scenes));
+		public RegisterBuilder addScenes(final Identifier... scenes) {
+			final Set<Identifier> sceneSet = new HashSet<>(List.of(scenes));
 			for (final Item item : this.items) {
 				NEW_PONDER_SCENES.computeIfAbsent(item, k -> new HashSet<>()).addAll(sceneSet);
 			}

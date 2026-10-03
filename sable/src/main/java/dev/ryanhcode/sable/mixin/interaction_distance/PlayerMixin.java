@@ -32,7 +32,7 @@ public abstract class PlayerMixin extends LivingEntity {
     @Shadow
     public abstract double entityInteractionRange();
 
-    @Inject(method = "canInteractWithBlock", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "isWithinBlockInteractionRange", at = @At("HEAD"), cancellable = true)
     private void sable$canInteractWithBlock(final BlockPos pos, final double slop, final CallbackInfoReturnable<Boolean> cir) {
         final SubLevel subLevel = Sable.HELPER.getContaining(this.level(), pos);
 
@@ -46,7 +46,7 @@ public abstract class PlayerMixin extends LivingEntity {
         }
     }
 
-    @Inject(method = "canInteractWithEntity(Lnet/minecraft/world/phys/AABB;D)Z", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "isWithinEntityInteractionRange(Lnet/minecraft/world/phys/AABB;D)Z", at = @At("HEAD"), cancellable = true)
     private void sable$canInteractWithEntity(final AABB aabb, final double slop, final CallbackInfoReturnable<Boolean> cir) {
         // should bottom center be assumed here?
         final SubLevel subLevel = Sable.HELPER.getContaining(this.level(), aabb.getBottomCenter());

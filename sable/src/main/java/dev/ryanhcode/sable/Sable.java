@@ -15,8 +15,8 @@ import dev.ryanhcode.sable.physics.impl.rapier.RapierPhysicsPipeline;
 import dev.ryanhcode.sable.sublevel.system.SubLevelPhysicsSystem;
 import dev.ryanhcode.sable.sublevel.system.SubLevelTrackingSystem;
 import dev.ryanhcode.sable.sublevel.tracking_points.SubLevelTrackingPointObserver;
-import net.minecraft.Util;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Util;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.ApiStatus;
@@ -55,10 +55,10 @@ public final class Sable {
 
     /**
      * @param path the path to the resource
-     * @return a {@link ResourceLocation} with a {@link Sable#MOD_ID} namespace
+     * @return a {@link Identifier} with a {@link Sable#MOD_ID} namespace
      */
-    public static ResourceLocation sablePath(final String path) {
-        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
+    public static Identifier sablePath(final String path) {
+        return Identifier.fromNamespaceAndPath(MOD_ID, path);
     }
 
     /**

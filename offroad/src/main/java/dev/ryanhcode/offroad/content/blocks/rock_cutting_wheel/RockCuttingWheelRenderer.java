@@ -13,7 +13,8 @@ import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
@@ -52,7 +53,7 @@ public class RockCuttingWheelRenderer extends SafeBlockEntityRenderer<RockCuttin
 
         wheel.light(LevelRenderer.getLightColor(renderWorld, context.localPos))
                 .useLevelLight(context.world, matrices.getWorld())
-                .renderInto(matrices.getViewProjection().last(), buffer.getBuffer(RenderType.solid()));
+                .renderInto(matrices.getViewProjection().last(), buffer.getBuffer(RenderTypes.solidMovingBlock()));
     }
 
     @Override
@@ -67,7 +68,7 @@ public class RockCuttingWheelRenderer extends SafeBlockEntityRenderer<RockCuttin
             wheel.rotateYCenteredDegrees(blockEntity.getAnimatedSpeed(partialTicks));
         }
 
-        wheel.light(light).renderInto(ms.last(), buffer.getBuffer(RenderType.solid()));
+        wheel.light(light).renderInto(ms.last(), buffer.getBuffer(RenderTypes.solidMovingBlock()));
         ms.popPose();
     }
 }

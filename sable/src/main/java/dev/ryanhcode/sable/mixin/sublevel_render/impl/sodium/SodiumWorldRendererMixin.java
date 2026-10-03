@@ -1,6 +1,7 @@
 package dev.ryanhcode.sable.mixin.sublevel_render.impl.sodium;
 
 import com.mojang.blaze3d.platform.Lighting;
+import com.mojang.blaze3d.textures.GpuSampler;
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.ryanhcode.sable.api.client.SubLevelBlockEntityRenderRegistry;
 import dev.ryanhcode.sable.api.sublevel.ClientSubLevelContainer;
@@ -47,7 +48,7 @@ import java.util.SortedSet;
 /**
  * Bridges Sable sub-levels into Sodium's terrain render phases.
  *
- * <p>The 1.21.10 Iris/Sodium pipeline requires its own extended vertex format.
+ * <p>The Iris/Sodium pipeline requires its own extended vertex format.
  * Sable's vanilla compiled section buffers are accepted by the GPU but discarded
  * by that shader pipeline. Render the sub-level blocks through Minecraft's
  * immediate block-model path instead; Iris decorates this path with the active
@@ -134,6 +135,7 @@ public abstract class SodiumWorldRendererMixin {
             final double cameraX,
             final double cameraY,
             final double cameraZ,
+            final GpuSampler terrainSampler,
             final CallbackInfo ci
     ) {
         if (this.level == null || group != ChunkSectionLayerGroup.OPAQUE) {

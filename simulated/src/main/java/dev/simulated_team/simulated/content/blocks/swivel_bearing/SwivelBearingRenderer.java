@@ -9,7 +9,8 @@ import dev.simulated_team.simulated.index.SimPartialModels;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
@@ -38,7 +39,7 @@ public class SwivelBearingRenderer extends KineticBlockEntityRenderer<SwivelBear
                 getAngleForBe(be.getExtraKinetics(), be.getBlockPos(), axis),
                 light);
 
-        final VertexConsumer vb = buffer.getBuffer(RenderType.solid());
+        final VertexConsumer vb = buffer.getBuffer(RenderTypes.solidMovingBlock());
         cogwheel.renderInto(ms.last(), vb);
         if (!be.isAssembled()) {
             renderRotatingBuffer(be, CachedBuffers.partialFacing(SimPartialModels.SHAFT_SIXTEENTH, state, state.getValue(SwivelBearingBlock.FACING)), ms, vb, light);

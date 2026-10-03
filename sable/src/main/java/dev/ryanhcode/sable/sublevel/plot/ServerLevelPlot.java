@@ -28,7 +28,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.*;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.FullChunkStatus;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
@@ -358,7 +358,7 @@ public class ServerLevelPlot extends LevelPlot {
         tag.putInt("plot_x", this.plotPos.x - this.container.getOrigin().x());
         tag.putInt("plot_z", this.plotPos.z - this.container.getOrigin().y);
         tag.putInt("log_size", this.logSize);
-        tag.putString("biome", this.biome.location().toString());
+        tag.putString("biome", this.biome.identifier().toString());
         tag.putInt("data_version", DATA_VERSION);
 
         final ServerLevel level = this.getSubLevel().getLevel();
@@ -456,7 +456,7 @@ public class ServerLevelPlot extends LevelPlot {
         final ServerLevel level = subLevel.getLevel();
 
         if (tag.contains("biome")) {
-            final ResourceLocation location = ResourceLocation.tryParse(tag.getStringOr("biome", ""));
+            final Identifier location = Identifier.tryParse(tag.getStringOr("biome", ""));
 
             if (location != null) {
                 this.biome = ResourceKey.create(Registries.BIOME, location);

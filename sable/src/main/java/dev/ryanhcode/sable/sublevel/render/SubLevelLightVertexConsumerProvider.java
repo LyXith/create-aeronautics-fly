@@ -7,7 +7,7 @@ import it.unimi.dsi.fastutil.longs.Long2IntOpenHashMap;
 import net.fabricmc.fabric.api.renderer.v1.render.BlockVertexConsumerProvider;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.LightLayer;
@@ -203,6 +203,12 @@ public final class SubLevelLightVertexConsumerProvider
         }
 
         @Override
+        public VertexConsumer setColor(final int color) {
+            this.delegate.setColor(color);
+            return this;
+        }
+
+        @Override
         public VertexConsumer setUv(final float u, final float v) {
             this.delegate.setUv(u, v);
             return this;
@@ -231,6 +237,12 @@ public final class SubLevelLightVertexConsumerProvider
         @Override
         public VertexConsumer setNormal(final float x, final float y, final float z) {
             this.delegate.setNormal(x, y, z);
+            return this;
+        }
+
+        @Override
+        public VertexConsumer setLineWidth(final float width) {
+            this.delegate.setLineWidth(width);
             return this;
         }
     }

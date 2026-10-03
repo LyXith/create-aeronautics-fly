@@ -3,7 +3,7 @@ package dev.ryanhcode.sable.platform.registry;
 import com.mojang.serialization.Lifecycle;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 
 import java.util.function.Supplier;
@@ -34,7 +34,7 @@ public final class SableRegistrationProvider<T> {
         return this.registry;
     }
 
-    public <I extends T> SableRegistryObject<I> register(final ResourceLocation name, final Supplier<I> supplier) {
+    public <I extends T> SableRegistryObject<I> register(final Identifier name, final Supplier<I> supplier) {
         final I value = supplier.get();
         Registry.register(this.registry, name, value);
         return new SableRegistryObject<>(name, value);

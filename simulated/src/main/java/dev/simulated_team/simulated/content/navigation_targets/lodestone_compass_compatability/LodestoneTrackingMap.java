@@ -39,17 +39,19 @@ public class LodestoneTrackingMap extends SavedData {
 	//Static members begin//
 	public static final String FILE_ID = "simulated_lodestone_tracker";
 	private static final Codec<List<LodestoneInformation>> INFORMATION_CODEC = LodestoneInformation.CODEC.listOf();
-	private static final SavedDataType<LodestoneTrackingMap> TYPE = new SavedDataType<>(
+	private static SavedDataType<LodestoneTrackingMap> type(final ServerLevel level) {
+		return new SavedDataType<>(
 			FILE_ID,
-			context -> new LodestoneTrackingMap(context.levelOrThrow()),
-			context -> INFORMATION_CODEC.fieldOf("TrackerInformation").codec().xmap(
-					information -> load(context.levelOrThrow(), information),
+			() -> new LodestoneTrackingMap(level),
+			INFORMATION_CODEC.fieldOf("TrackerInformation").codec().xmap(
+					information -> load(level, information),
 					map -> List.copyOf(map.lodestoneInformationSet)),
 			null);
+	}
 
 	private static final CommonLevelAttached<LodestoneTrackingMap> LODESTONE_MAP = new CommonLevelAttached<>(level -> {
 		if (level instanceof ServerLevel sl) {
-			return sl.getDataStorage().computeIfAbsent(TYPE);
+			return sl.getDataStorage().computeIfAbsent(type(sl));
 		}
 
 		return null;

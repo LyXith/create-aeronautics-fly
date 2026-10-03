@@ -8,7 +8,7 @@ import dev.ryanhcode.sable.sublevel.storage.region.SubLevelRegionFile;
 import dev.ryanhcode.sable.sublevel.storage.region.SubLevelStorageFile;
 import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap;
 import net.minecraft.core.SectionPos;
-import net.minecraft.FileUtil;
+import net.minecraft.util.FileUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.ExceptionCollector;
 import net.minecraft.world.level.ChunkPos;

@@ -10,7 +10,8 @@ import dev.simulated_team.simulated.index.SimPartialModels;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
@@ -27,13 +28,13 @@ public class AugerShaftRenderer extends KineticBlockEntityRenderer<AugerShaftBlo
         final BlockState state = this.getRenderedBlockState(be);
 
         if (isRenderingInSubLevel() || !VisualizationManager.supportsVisualization(be.getLevel())) {
-            final RenderType type = RenderType.solid();
+            final RenderType type = RenderTypes.solidMovingBlock();
             renderRotatingBuffer(be, this.getRotatedModel(be, state), ms, buffer.getBuffer(type), light);
         }
 
         if (be.getBlockState().getBlock() instanceof AugerCogBlock) {
             final Direction facing = Direction.get(Direction.AxisDirection.POSITIVE, state.getValue(AugerShaftBlock.AXIS));
-            final VertexConsumer solid = buffer.getBuffer(RenderType.solid());
+            final VertexConsumer solid = buffer.getBuffer(RenderTypes.solidMovingBlock());
 
             for (int i = 0; i < 2; i++) {
                 final SuperByteBuffer redstone = CachedBuffers.partialFacing(be.flowDirection == (i == 1 ? facing.getOpposite() : facing) && be.getSpeed() != 0 ? SimPartialModels.AUGER_REDSTONE_ON : SimPartialModels.AUGER_REDSTONE_OFF, state, facing);

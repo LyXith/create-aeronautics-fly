@@ -37,7 +37,7 @@ public abstract class AltitudeSensorVisualHeightInstruction extends TickingInstr
         @Override
         protected void firstTick(final PonderScene scene) {
             super.firstTick(scene);
-            final PonderLevel world = scene.getWorld();
+            final PonderLevel world = scene.getLevel();
             if (world.getBlockEntity(this.location) instanceof final AltitudeSensorBlockEntity be) {
                 be.updateVisualHeight = true;
                 be.previousVisualHeight = this.location.getY();
@@ -48,7 +48,7 @@ public abstract class AltitudeSensorVisualHeightInstruction extends TickingInstr
         @Override
         public void tick(final PonderScene scene) {
             super.tick(scene);
-            final PonderLevel world = scene.getWorld();
+            final PonderLevel world = scene.getLevel();
             if (world.getBlockEntity(this.location) instanceof final AltitudeSensorBlockEntity be) {
                 final float targetValue = this.getLerpedValue();
                 be.lowSignal = be.toNormalHeight(this.location.getY() - targetValue);
@@ -67,7 +67,7 @@ public abstract class AltitudeSensorVisualHeightInstruction extends TickingInstr
         @Override
         protected void firstTick(final PonderScene scene) {
             super.firstTick(scene);
-            final PonderLevel world = scene.getWorld();
+            final PonderLevel world = scene.getLevel();
             if (world.getBlockEntity(this.location) instanceof final AltitudeSensorBlockEntity be) {
                 be.updateVisualHeight = false;
                 be.previousVisualHeight = this.startValue;
@@ -78,7 +78,7 @@ public abstract class AltitudeSensorVisualHeightInstruction extends TickingInstr
         @Override
         public void tick(final PonderScene scene) {
             super.tick(scene);
-            final PonderLevel world = scene.getWorld();
+            final PonderLevel world = scene.getLevel();
             if (world.getBlockEntity(this.location) instanceof final AltitudeSensorBlockEntity be) {
                 final float targetValue = this.getLerpedValue();
                 be.visualHeight = targetValue;

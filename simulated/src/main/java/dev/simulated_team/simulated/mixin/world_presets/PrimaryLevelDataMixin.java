@@ -6,7 +6,7 @@ import com.mojang.serialization.Lifecycle;
 import dev.simulated_team.simulated.mixin_interface.PrimaryLevelDataExtension;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.LevelSettings;
 import net.minecraft.world.level.dimension.end.EndDragonFight;
 import net.minecraft.world.level.levelgen.WorldOptions;
@@ -27,13 +27,13 @@ public class PrimaryLevelDataMixin implements PrimaryLevelDataExtension {
 	private static final String simulated$WORLD_PRESET_KEY = "simulated:world_preset";
 
 	@Shadow private EndDragonFight.Data endDragonFightData;
-	private ResourceLocation simulated$worldPresetKey = WorldPresets.NORMAL.location();
+	private Identifier simulated$worldPresetKey = WorldPresets.NORMAL.identifier();
 
 	@Inject(method = "parse", at = @At("RETURN"))
 	private static <T> void simulated$parse(final Dynamic<T> dynamic, final LevelSettings levelSettings, final PrimaryLevelData.SpecialWorldProperty specialWorldProperty, final WorldOptions worldOptions, final Lifecycle lifecycle, final CallbackInfoReturnable<PrimaryLevelData> cir) {
 		final DataResult<String> string = dynamic.get(simulated$WORLD_PRESET_KEY).asString();
 		if(string.isSuccess()) {
-			((PrimaryLevelDataExtension) cir.getReturnValue()).setPreset(ResourceLocation.parse(string.getOrThrow()));
+			((PrimaryLevelDataExtension) cir.getReturnValue()).setPreset(Identifier.parse(string.getOrThrow()));
 		}
 	}
 
@@ -43,12 +43,12 @@ public class PrimaryLevelDataMixin implements PrimaryLevelDataExtension {
 	}
 
 	@Override
-	public ResourceLocation getPreset() {
+	public Identifier getPreset() {
 		return this.simulated$worldPresetKey;
 	}
 
 	@Override
-	public void setPreset(final ResourceLocation resourceLocation) {
+	public void setPreset(final Identifier resourceLocation) {
 		this.simulated$worldPresetKey = resourceLocation;
 	}
 

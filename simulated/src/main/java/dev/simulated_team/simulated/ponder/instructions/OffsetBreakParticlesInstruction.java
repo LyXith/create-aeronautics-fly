@@ -52,7 +52,7 @@ public class OffsetBreakParticlesInstruction extends PonderInstruction {
 
     @Override
     public void tick(final PonderScene scene) {
-        final PonderLevel level = scene.getWorld();
+        final PonderLevel level = scene.getLevel();
         this.addBlockDestroyEffects(level, this.bb, this.state);
     }
 }

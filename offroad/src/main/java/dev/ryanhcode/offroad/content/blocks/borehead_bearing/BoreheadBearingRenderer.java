@@ -11,7 +11,8 @@ import com.zurrtum.create.catnip.math.AngleHelper;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
@@ -47,7 +48,7 @@ public class BoreheadBearingRenderer extends KineticBlockEntityRenderer<Borehead
             angle += offset;
             angle = angle / 180f * (float) Math.PI;
             kineticRotationTransform(dirShaft, be, rotationAxis, angle, light);
-            dirShaft.renderInto(ms.last(), buffer.getBuffer(RenderType.solid()));
+            dirShaft.renderInto(ms.last(), buffer.getBuffer(RenderTypes.solidMovingBlock()));
         }
 
         final Direction facing = state.getValue(BlockStateProperties.FACING);
@@ -61,7 +62,7 @@ public class BoreheadBearingRenderer extends KineticBlockEntityRenderer<Borehead
         }
 
         bearingTop.rotateCentered(AngleHelper.rad(-90 - AngleHelper.verticalAngle(facing)), Direction.EAST);
-        bearingTop.renderInto(ms.last(), buffer.getBuffer(RenderType.solid()));
+        bearingTop.renderInto(ms.last(), buffer.getBuffer(RenderTypes.solidMovingBlock()));
     }
 
     @Override

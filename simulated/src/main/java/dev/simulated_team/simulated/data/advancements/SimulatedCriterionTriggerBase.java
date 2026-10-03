@@ -1,10 +1,10 @@
 package dev.simulated_team.simulated.data.advancements;
 
 import com.google.common.collect.Maps;
-import net.minecraft.MethodsReturnNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import net.minecraft.advancements.CriterionTrigger;
 import net.minecraft.advancements.CriterionTriggerInstance;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.PlayerAdvancements;
 import net.minecraft.server.level.ServerPlayer;
 import org.jetbrains.annotations.Nullable;
@@ -14,13 +14,13 @@ import java.util.*;
 import java.util.function.Supplier;
 
 @ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
+@NullMarked
 public abstract class SimulatedCriterionTriggerBase<T extends SimulatedCriterionTriggerBase.Instance> implements CriterionTrigger<T> {
 
-    private final ResourceLocation id;
+    private final Identifier id;
     protected final Map<PlayerAdvancements, Set<Listener<T>>> listeners = Maps.newHashMap();
 
-    public SimulatedCriterionTriggerBase(final ResourceLocation id) {
+    public SimulatedCriterionTriggerBase(final Identifier id) {
         this.id = id;
     }
 
@@ -46,7 +46,7 @@ public abstract class SimulatedCriterionTriggerBase<T extends SimulatedCriterion
         this.listeners.remove(pPlayerAdvancements);
     }
 
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return this.id;
     }
 
@@ -67,11 +67,11 @@ public abstract class SimulatedCriterionTriggerBase<T extends SimulatedCriterion
     }
 
     public abstract static class Instance implements CriterionTriggerInstance {
-        private final ResourceLocation id;
-        public Instance(final ResourceLocation id) {
+        private final Identifier id;
+        public Instance(final Identifier id) {
             this.id = id;
         }
-        public ResourceLocation getId() {
+        public Identifier getId() {
             return this.id;
         }
         protected abstract boolean test (@Nullable List<Supplier<Object>> suppliers);

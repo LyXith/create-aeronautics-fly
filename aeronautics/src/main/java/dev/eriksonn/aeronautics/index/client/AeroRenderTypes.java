@@ -6,13 +6,14 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import dev.eriksonn.aeronautics.Aeronautics;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.renderer.RenderStateShard;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.renderer.rendertype.RenderSetup;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.resources.Identifier;
 
 public final class AeroRenderTypes {
-    public static final ResourceLocation LEVITITE_SHADER = Aeronautics.path("levitite/levitite");
-    private static final ResourceLocation FIRE_PALETTE =
+    public static final Identifier LEVITITE_SHADER = Aeronautics.path("levitite/levitite");
+    private static final Identifier FIRE_PALETTE =
             Aeronautics.path("textures/effects/fire_palette.png");
 
     private static final RenderPipeline BURNER_FLAME_PIPELINE =
@@ -27,16 +28,12 @@ public final class AeroRenderTypes {
 
     private static final RenderType BURNER_FLAME = RenderType.create(
             "aeronautics_burner_flame",
-            RenderType.TRANSIENT_BUFFER_SIZE,
-            BURNER_FLAME_PIPELINE,
-            burnerFlameState()
+            burnerFlameState(BURNER_FLAME_PIPELINE)
     );
 
     private static final RenderType BURNER_FLAME_IRIS_COMPOSITE = RenderType.create(
             "aeronautics_burner_flame_iris_composite",
-            RenderType.TRANSIENT_BUFFER_SIZE,
-            BURNER_FLAME_IRIS_COMPOSITE_PIPELINE,
-            burnerFlameState()
+            burnerFlameState(BURNER_FLAME_IRIS_COMPOSITE_PIPELINE)
     );
 
     private AeroRenderTypes() {
@@ -59,13 +56,10 @@ public final class AeroRenderTypes {
                 .build());
     }
 
-    private static RenderType.CompositeState burnerFlameState() {
-        return RenderType.CompositeState.builder()
-                .setTextureState(new RenderStateShard.TextureStateShard(
-                        FIRE_PALETTE,
-                        false
-                ))
-                .createCompositeState(false);
+    private static RenderSetup burnerFlameState(final RenderPipeline pipeline) {
+        return RenderSetup.builder(pipeline)
+                .withTexture("Sampler0", FIRE_PALETTE)
+                .createRenderSetup();
     }
 
     public static void init() {
@@ -81,10 +75,10 @@ public final class AeroRenderTypes {
     }
 
     public static RenderType levitite() {
-        return RenderType.translucentMovingBlock();
+        return RenderTypes.translucentMovingBlock();
     }
 
     public static RenderType levititeGhosts() {
-        return RenderType.translucentMovingBlock();
+        return RenderTypes.translucentMovingBlock();
     }
 }

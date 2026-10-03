@@ -9,7 +9,7 @@ import com.zurrtum.create.client.ponder.api.registration.IndexExclusionHelper;
 import com.zurrtum.create.client.ponder.api.registration.PonderSceneRegistrationHelper;
 import com.zurrtum.create.client.ponder.api.registration.PonderTagRegistrationHelper;
 import com.zurrtum.create.client.ponder.api.registration.SharedTextRegistrationHelper;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 public class SimPonderPlugin extends CreatePonderPlugin {
@@ -21,12 +21,12 @@ public class SimPonderPlugin extends CreatePonderPlugin {
     }
 
     @Override
-    public void registerScenes(final PonderSceneRegistrationHelper<ResourceLocation> helper) {
+    public void registerScenes(final PonderSceneRegistrationHelper<Identifier> helper) {
         SimPonderScenes.register(helper);
     }
 
     @Override
-    public void registerTags(final PonderTagRegistrationHelper<ResourceLocation> helper) {
+    public void registerTags(final PonderTagRegistrationHelper<Identifier> helper) {
         SimPonderTags.register(helper);
     }
 

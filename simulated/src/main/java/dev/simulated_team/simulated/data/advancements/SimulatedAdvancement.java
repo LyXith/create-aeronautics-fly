@@ -3,13 +3,13 @@ package dev.simulated_team.simulated.data.advancements;
 import com.tterrag.registrate.util.entry.ItemProviderEntry;
 import dev.simulated_team.simulated.util.SimColors;
 import net.minecraft.advancements.*;
-import net.minecraft.advancements.critereon.InventoryChangeTrigger;
-import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.advancements.critereon.ItemUsedOnLocationTrigger;
+import net.minecraft.advancements.criterion.InventoryChangeTrigger;
+import net.minecraft.advancements.criterion.ItemPredicate;
+import net.minecraft.advancements.criterion.ItemUsedOnLocationTrigger;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
@@ -40,7 +40,7 @@ public class SimulatedAdvancement {
 
     AdvancementHolder datagenResult;
 
-    private final ResourceLocation background;
+    private final Identifier background;
     private final String lang;
 
     private final String id;
@@ -48,7 +48,7 @@ public class SimulatedAdvancement {
     private String title;
     private String description;
 
-    public SimulatedAdvancement(final String id, final UnaryOperator<Builder> b, final ResourceLocation background, final String modid, final BiFunction<String,String, SimpleSimulatedTrigger> triggerHandler) {
+    public SimulatedAdvancement(final String id, final UnaryOperator<Builder> b, final Identifier background, final String modid, final BiFunction<String,String, SimpleSimulatedTrigger> triggerHandler) {
         this.id = id;
         this.modid = modid;
         this.background = background;
@@ -77,7 +77,7 @@ public class SimulatedAdvancement {
             return true;
         final AdvancementHolder advancement = sp.level().getServer()
                 .getAdvancements()
-                .get(ResourceLocation.fromNamespaceAndPath(this.modid, this.id));
+                .get(Identifier.fromNamespaceAndPath(this.modid, this.id));
         if (advancement == null)
             return true;
         return sp.getAdvancements()
@@ -132,7 +132,7 @@ public class SimulatedAdvancement {
         if (this.parent != null)
             builder.parent(this.parent.datagenResult);
 
-        this.datagenResult = builder.save(t, ResourceLocation.fromNamespaceAndPath(this.modid, this.id)
+        this.datagenResult = builder.save(t, Identifier.fromNamespaceAndPath(this.modid, this.id)
                 .toString());
     }
 

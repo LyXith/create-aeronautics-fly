@@ -172,7 +172,7 @@ public class NameplateScreen extends Screen {
                 final int selectionEnd = Math.clamp(Math.max(cursorPos, selectionPos), 0, this.message.length());
                 final int selectionX1 = this.font.width(this.message.substring(0, selectionStart)) - textWidth / 2;
                 final int selectionX2 = this.font.width(this.message.substring(0, selectionEnd)) - textWidth / 2;
-                graphics.textHighlight(selectionX1, -1, selectionX2, lineHeight);
+                graphics.textHighlight(selectionX1, -1, selectionX2, lineHeight, true);
             }
         }
     }

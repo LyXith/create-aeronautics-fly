@@ -11,7 +11,8 @@ import com.zurrtum.create.client.catnip.animation.AnimationTickHolder;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
@@ -35,7 +36,7 @@ public class AltitudeSensorRenderer extends SmartBlockEntityRenderer<AltitudeSen
     public static void render(final BlockState blockState, final int tickCount, final float dialValue, final float visualHeight,
                               final PoseStack poseStack, final PoseStack contraptionPose, final Matrix4f worldLight, final MultiBufferSource bufferSource, final int light) {
         final Level level = SableDistUtil.getClientLevel();
-        final VertexConsumer vb = bufferSource.getBuffer(RenderType.cutout());
+        final VertexConsumer vb = bufferSource.getBuffer(RenderTypes.cutoutMovingBlock());
         final SuperByteBuffer indicator = CachedBuffers.partial(SimPartialModels.ALTITUDE_SENSOR_INDICATOR, blockState);
 
         PartialModel box = SimPartialModels.ALTITUDE_SENSOR_LINEAR_CASE;

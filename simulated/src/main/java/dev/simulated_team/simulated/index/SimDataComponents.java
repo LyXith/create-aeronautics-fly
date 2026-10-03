@@ -8,7 +8,7 @@ import net.minecraft.core.GlobalPos;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import java.util.UUID;
 import java.util.function.UnaryOperator;
 
@@ -30,7 +30,7 @@ public class SimDataComponents {
 
     public static final DataComponentType<NavigationTarget> TARGET = register("target", builder -> builder
             .persistent(SimRegistries.NAVIGATION_TARGET.byNameCodec())
-            .networkSynchronized(ResourceLocation.STREAM_CODEC
+            .networkSynchronized(Identifier.STREAM_CODEC
                     .map(id -> SimRegistries.NAVIGATION_TARGET.get(id).orElseThrow().value(),
                             SimRegistries.NAVIGATION_TARGET::getKey))
     );

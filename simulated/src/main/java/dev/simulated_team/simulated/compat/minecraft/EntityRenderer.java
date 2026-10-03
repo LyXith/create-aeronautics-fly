@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.client.renderer.state.CameraRenderState;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
@@ -57,7 +57,7 @@ public abstract class EntityRenderer<T extends Entity>
                        final MultiBufferSource bufferSource, final int light) {
     }
 
-    public abstract ResourceLocation getTextureLocation(T entity);
+    public abstract Identifier getTextureLocation(T entity);
 
     @Override
     public boolean shouldRender(final T entity, final Frustum frustum, final double x, final double y, final double z) {

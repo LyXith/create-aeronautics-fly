@@ -28,7 +28,7 @@ public class SimCommand {
 
         if(FabricLoader.getInstance().isDevelopmentEnvironment()) {
             cmd.then(Commands.literal("debugthing")
-                    .requires(command -> command.hasPermission(2))
+                    .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                     .then(Commands.literal("start")
                             .then(Commands.argument("steps", IntegerArgumentType.integer()).executes(SimDebugThingCommands::start)))
                     .then(Commands.literal("stop").executes(SimDebugThingCommands::stop))
@@ -37,13 +37,13 @@ public class SimCommand {
         }
 
         cmd.then(Commands.literal("lock")
-                .requires(command -> command.hasPermission(2))
+                .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                 .then(Commands.argument("sub_levels", SubLevelArgumentType.subLevels())
                         .executes(ctx -> lockSubLevels(ctx, true))
                         .then(Commands.argument("locked", BoolArgumentType.bool())
                                 .executes(ctx -> lockSubLevels(ctx, false)))));
         cmd.then(Commands.literal("glue")
-                .requires(command -> command.hasPermission(2))
+                .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                 .then(Commands.argument("from", BlockPosArgument.blockPos())
                         .then(Commands.argument("to", BlockPosArgument.blockPos())
                                 .executes(SimCommand::glueArea))));

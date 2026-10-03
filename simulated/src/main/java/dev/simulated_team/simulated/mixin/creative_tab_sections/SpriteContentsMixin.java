@@ -2,7 +2,7 @@ package dev.simulated_team.simulated.mixin.creative_tab_sections;
 
 import dev.simulated_team.simulated.mixin_interface.SpriteContentsExtension;
 import net.minecraft.client.renderer.texture.SpriteContents;
-import net.minecraft.client.renderer.texture.SpriteTicker;
+import net.minecraft.client.renderer.texture.SpriteContents.AnimationState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -13,20 +13,20 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class SpriteContentsMixin implements SpriteContentsExtension {
 
     @Unique
-    private SpriteTicker simulated$ticker = null;
+    private AnimationState simulated$ticker = null;
 
     @Override
-    public SpriteTicker simulated$getTicker() {
+    public AnimationState simulated$getTicker() {
         return this.simulated$ticker;
     }
 
     @Override
-    public void simulated$setTicker(SpriteTicker ticker) {
+    public void simulated$setTicker(AnimationState ticker) {
         this.simulated$ticker = ticker;
     }
 
-    @Inject(method = "createTicker", at = @At("RETURN"))
-    private void simulated$createTicker(CallbackInfoReturnable<SpriteTicker> cir) {
+    @Inject(method = "createAnimationState", at = @At("RETURN"))
+    private void simulated$createTicker(CallbackInfoReturnable<AnimationState> cir) {
         simulated$setTicker(cir.getReturnValue());
     }
 

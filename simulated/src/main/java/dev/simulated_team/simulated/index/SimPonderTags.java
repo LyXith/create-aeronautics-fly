@@ -6,7 +6,7 @@ import com.zurrtum.create.client.infrastructure.ponder.AllCreatePonderTags;
 import dev.simulated_team.simulated.Simulated;
 import com.zurrtum.create.catnip.registry.RegisteredObjectsHelper;
 import com.zurrtum.create.client.ponder.api.registration.PonderTagRegistrationHelper;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
@@ -14,13 +14,13 @@ import net.minecraft.world.level.block.Blocks;
 
 public class SimPonderTags {
 
-    public static final ResourceLocation
+    public static final Identifier
             NAVIGATION_ITEMS = Simulated.path("navigation_items"),
             PHYSICS_BEHAVIOR = Simulated.path("physics_behavior"),
             THRUST_PRODUCING_BLOCKS = Simulated.path("thrust_blocks"),
             PHYSICS_SENSORS = Simulated.path("physics_sensors");
 
-    public static void register(final PonderTagRegistrationHelper<ResourceLocation> helper) {
+    public static void register(final PonderTagRegistrationHelper<Identifier> helper) {
         final PonderTagRegistrationHelper<ItemLike> itemHelper = helper.withKeyFunction(
                 RegisteredObjectsHelper::getKeyOrThrow);
 

@@ -289,7 +289,7 @@ public class RedstoneScenes {
 
     private static void setNBTValue(final CreateSceneBuilder scene, final BlockPos modulatingLink, final String FrequencyLast, final ItemStack iron) {
         scene.addInstruction((final PonderScene subScene) -> {
-            final PonderLevel level = subScene.getWorld();
+            final PonderLevel level = subScene.getLevel();
             final BlockEntity blockEntity = level.getBlockEntity(modulatingLink);
             final RegistryAccess registryAccess = level.registryAccess();
             final CompoundTag tag = blockEntity.saveWithFullMetadata(registryAccess);

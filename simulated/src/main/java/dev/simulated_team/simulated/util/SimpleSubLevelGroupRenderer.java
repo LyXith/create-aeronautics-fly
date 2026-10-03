@@ -102,7 +102,7 @@ public class SimpleSubLevelGroupRenderer {
         drawFbo.bind(true);
 
         try {
-            lightTexture.turnOnLightLayer();
+
             SimpleSubLevelGroupRenderer.RENDERING_SIMPLE = true;
 
             for (final ClientSubLevel renderedSubLevel : subLevels) {

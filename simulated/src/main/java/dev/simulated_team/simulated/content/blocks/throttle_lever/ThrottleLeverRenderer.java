@@ -16,7 +16,8 @@ import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.FaceAttachedHorizontalDirectionalBlock;
@@ -65,7 +66,7 @@ public class ThrottleLeverRenderer extends SafeBlockEntityRenderer<ThrottleLever
         }
 
         if (isRenderingInSubLevel() || !VisualizationManager.supportsVisualization(be.getLevel())) {
-            final VertexConsumer vb = bufferSource.getBuffer(RenderType.cutoutMipped());
+            final VertexConsumer vb = bufferSource.getBuffer(RenderTypes.cutoutMovingBlock());
 
             final SuperByteBuffer handle = CachedBuffers.partial(SimPartialModels.THROTTLE_LEVER_HANDLE, leverState);
             final SuperByteBuffer button = CachedBuffers.partial(SimPartialModels.THROTTLE_LEVER_BUTTON, leverState);
@@ -105,7 +106,7 @@ public class ThrottleLeverRenderer extends SafeBlockEntityRenderer<ThrottleLever
     }
 
     private static void renderOutline(final ThrottleLeverBlockEntity be, final PoseStack ms, final MultiBufferSource bufferSource, final float angle) {
-        final VertexConsumer consumer = bufferSource.getBuffer(RenderType.lines());
+        final VertexConsumer consumer = bufferSource.getBuffer(RenderTypes.lines());
         final VoxelShape leverShape = SimBlocks.THROTTLE_LEVER.get().getHandleShape(SimBlocks.THROTTLE_LEVER.getDefaultState());
 
         ms.pushPose();
@@ -115,7 +116,7 @@ public class ThrottleLeverRenderer extends SafeBlockEntityRenderer<ThrottleLever
                 .translate(1 / 2f, 3.0 / 16.0, 1 / 2f)
                 .rotateX(angle)
                 .translateBack(1 / 2f, 3.0 / 16.0, 1 / 2f);
-        ShapeRenderer.renderShape(ms, consumer, leverShape, 0.0, 0.0, 0.0, 0x66000000);
+        ShapeRenderer.renderShape(ms, consumer, leverShape, 0.0, 0.0, 0.0, 0x66000000, 1.0f);
         ms.popPose();
     }
 

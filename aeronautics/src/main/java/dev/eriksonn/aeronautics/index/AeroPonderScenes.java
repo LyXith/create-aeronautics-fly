@@ -6,7 +6,7 @@ import dev.eriksonn.aeronautics.content.ponder.scenes.*;
 import com.zurrtum.create.client.ponder.api.registration.PonderSceneRegistrationHelper;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import java.util.List;
 
 public class AeroPonderScenes {
 
-    public static void register(final PonderSceneRegistrationHelper<ResourceLocation> registry) {
+    public static void register(final PonderSceneRegistrationHelper<Identifier> registry) {
         final PonderSceneRegistrationHelper<ItemProviderEntry<?, ?>> helper = registry.withKeyFunction(ItemProviderEntry::getId);
 
         helper.forComponents(aeroItemProvider("levitite_blend_bucket"))

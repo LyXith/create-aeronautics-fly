@@ -9,7 +9,8 @@ import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.state.CameraRenderState;
@@ -30,13 +31,13 @@ public class RedstoneInductorRenderer extends ColoredOverlayBlockEntityRenderer<
                                    final float tickProgress,
                                    final Vec3 cameraPos,
                                    @Nullable final ModelFeatureRenderer.CrumblingOverlay crumblingOverlay) {
-        super.updateRenderState(blockEntity, state, tickProgress, cameraPos, crumblingOverlay);
+        super.extractRenderState(blockEntity, state, tickProgress, cameraPos, crumblingOverlay);
     }
 
     @Override
     public void submit(final ColoredOverlayRenderState state, final PoseStack poseStack,
                        final SubmitNodeCollector queue, final CameraRenderState cameraState) {
-        super.render(state, poseStack, queue, cameraState);
+        super.submit(state, poseStack, queue, cameraState);
     }
 
     @Override
@@ -62,7 +63,7 @@ public class RedstoneInductorRenderer extends ColoredOverlayBlockEntityRenderer<
                 .rotateYDegrees(AngleHelper.horizontalAngle(facing))
                 .color(getIndicatorColor(be, partialTicks))
                 .light(light)
-                .renderInto(poseStack.last(), bufferSource.getBuffer(RenderType.solid()));
+                .renderInto(poseStack.last(), bufferSource.getBuffer(RenderTypes.solidMovingBlock()));
     }
 
     private static int getIndicatorColor(final RedstoneInductorBlockEntity be, final float partialTicks) {

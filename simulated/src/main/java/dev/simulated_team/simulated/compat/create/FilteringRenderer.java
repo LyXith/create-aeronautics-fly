@@ -4,7 +4,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.foundation.blockEntity.SmartBlockEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.world.item.BlockItem;
 
 public final class FilteringRenderer {
@@ -22,7 +23,7 @@ public final class FilteringRenderer {
             filtering.getSlotPositioning().transform(blockEntity.getBlockState(), poseStack);
             poseStack.scale(0.5f, 0.5f, 0.5f);
             CachedBuffers.block(blockItem.getBlock().defaultBlockState()).light(light)
-                    .renderInto(poseStack.last(), buffers.getBuffer(RenderType.cutout()));
+                    .renderInto(poseStack.last(), buffers.getBuffer(RenderTypes.cutoutMovingBlock()));
             poseStack.popPose();
         }
     }

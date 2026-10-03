@@ -43,9 +43,9 @@ public abstract class LevelRendererMixin {
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/renderer/LevelRenderer;addLateDebugPass(" +
                             "Lcom/mojang/blaze3d/framegraph/FrameGraphBuilder;" +
-                            "Lnet/minecraft/world/phys/Vec3;" +
+                            "Lnet/minecraft/client/renderer/state/CameraRenderState;" +
                             "Lcom/mojang/blaze3d/buffers/GpuBufferSlice;" +
-                            "Lnet/minecraft/client/renderer/culling/Frustum;)V"
+                            "Lorg/joml/Matrix4f;)V"
             )
     )
     private void simulated$addLaserAfterClouds(final GraphicsResourceAllocator allocator,

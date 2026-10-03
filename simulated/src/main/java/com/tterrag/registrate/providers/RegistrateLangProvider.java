@@ -30,7 +30,7 @@ import com.tterrag.registrate.util.nullness.NonnullType;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -79,9 +79,9 @@ public class RegistrateLangProvider extends BaseLangProvider implements Registra
 
     @SuppressWarnings("unchecked")
     public <T> String getAutomaticName(NonNullSupplier<? extends T> sup, ResourceKey<? extends Registry<T>> registry) {
-        return toEnglishName(BuiltInRegistries.REGISTRY.getOptional(registry.location())
+        return toEnglishName(BuiltInRegistries.REGISTRY.getOptional(registry.identifier())
                 .map(holder -> ((Registry<T>) holder).getKey(sup.get()))
-                .orElse(ResourceLocation.fromNamespaceAndPath(owner.getModid(), "entry")).getPath());
+                .orElse(Identifier.fromNamespaceAndPath(owner.getModid(), "entry")).getPath());
     }
 
     public void addBlock(NonNullSupplier<? extends Block> block) {

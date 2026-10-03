@@ -2,7 +2,7 @@ package dev.simulated_team.simulated.index;
 
 import dev.simulated_team.simulated.compat.create.CommonLangNumberFormat;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.stats.StatFormatter;
 import net.minecraft.world.entity.player.Player;
 
@@ -41,7 +41,7 @@ public abstract class SimStats {
 
     protected abstract SimStats.Stat makeCustomStat(final String key, final StatFormatter formatter);
 
-    public record Stat(Supplier<ResourceLocation> identifier, StatFormatter formatter) {
+    public record Stat(Supplier<Identifier> identifier, StatFormatter formatter) {
         public void awardTo(final Player player) {
             player.awardStat(this.identifier.get());
         }

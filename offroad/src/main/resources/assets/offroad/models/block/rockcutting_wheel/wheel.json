@@ -2,6 +2,7 @@
   "parent": "block/air",
   "ambientocclusion": false,
   "textures": {
+    "particle": "#wheel",
     "wheel": "offroad:block/rockcutting_wheel"
   },
   "loader": "neoforge:obj",

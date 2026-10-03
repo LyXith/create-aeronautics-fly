@@ -7,19 +7,19 @@ import foundry.veil.api.client.color.Color;
 import foundry.veil.api.client.color.Colorc;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.ExtraCodecs;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
-public record SimulatedSection(int priority, Title title, ResourceLocation sprite, boolean animateOnHover) implements Comparable<SimulatedSection> {
-    private static final ResourceLocation DEFAULT_BANNER = Simulated.path("default_banner");
+public record SimulatedSection(int priority, Title title, Identifier sprite, boolean animateOnHover) implements Comparable<SimulatedSection> {
+    private static final Identifier DEFAULT_BANNER = Simulated.path("default_banner");
 
     public static final Codec<SimulatedSection> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             ExtraCodecs.POSITIVE_INT.fieldOf("priority").orElse(0).forGetter(SimulatedSection::priority),
             Title.CODEC.fieldOf("title").forGetter(SimulatedSection::title),
-            ResourceLocation.CODEC.fieldOf("sprite").orElse(DEFAULT_BANNER).forGetter(SimulatedSection::sprite),
+            Identifier.CODEC.fieldOf("sprite").orElse(DEFAULT_BANNER).forGetter(SimulatedSection::sprite),
             Codec.BOOL.fieldOf("only_animate_on_hover").orElse(false).forGetter(SimulatedSection::animateOnHover)
     ).apply(instance, SimulatedSection::new));
 

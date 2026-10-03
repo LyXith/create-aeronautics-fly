@@ -6,7 +6,7 @@ import net.minecraft.core.HolderOwner;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,12 +19,12 @@ import java.util.stream.Stream;
 
 public class DeferredHolder<R, T extends R> implements Holder<R>, Supplier<T> {
     public static <R, T extends R> DeferredHolder<R, T> create(
-            final ResourceKey<? extends Registry<R>> registryKey, final ResourceLocation valueName) {
+            final ResourceKey<? extends Registry<R>> registryKey, final Identifier valueName) {
         return create(ResourceKey.create(registryKey, valueName));
     }
 
     public static <R, T extends R> DeferredHolder<R, T> create(
-            final ResourceLocation registryName, final ResourceLocation valueName) {
+            final Identifier registryName, final Identifier valueName) {
         return create(ResourceKey.createRegistryKey(registryName), valueName);
     }
 
@@ -78,8 +78,8 @@ public class DeferredHolder<R, T extends R> implements Holder<R>, Supplier<T> {
         }
     }
 
-    public ResourceLocation getId() {
-        return key.location();
+    public Identifier getId() {
+        return key.identifier();
     }
 
     public ResourceKey<R> getKey() {
@@ -93,8 +93,8 @@ public class DeferredHolder<R, T extends R> implements Holder<R>, Supplier<T> {
     }
 
     @Override
-    public boolean is(final ResourceLocation id) {
-        return id.equals(key.location());
+    public boolean is(final Identifier id) {
+        return id.equals(key.identifier());
     }
 
     @Override

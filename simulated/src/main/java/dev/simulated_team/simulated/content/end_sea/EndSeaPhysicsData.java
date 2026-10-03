@@ -6,7 +6,7 @@ import foundry.veil.api.network.VeilPacketManager;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.FileToIdConverter;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
@@ -62,14 +62,14 @@ public class EndSeaPhysicsData {
         public static final ReloadListener INSTANCE = new ReloadListener();
 
         public static final String NAME = "end_sea";
-        public static final ResourceLocation ID = Simulated.path(NAME);
+        public static final Identifier ID = Simulated.path(NAME);
 
         public ReloadListener() {
             super(EndSeaPhysics.CODEC, FileToIdConverter.json(NAME));
         }
 
         @Override
-        protected void apply(final Map<ResourceLocation, EndSeaPhysics> map, final ResourceManager resourceManager, final ProfilerFiller profiler) {
+        protected void apply(final Map<Identifier, EndSeaPhysics> map, final ResourceManager resourceManager, final ProfilerFiller profiler) {
             END_SEA_PHYSICS_DATA.clear();
 
             for (final EndSeaPhysics physics : map.values()) {

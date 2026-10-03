@@ -21,7 +21,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
@@ -55,7 +56,7 @@ public class PlungerLauncherItemRenderer extends CustomRenderedItemModelRenderer
                                         final PoseStack matrices, final float partialTicks) {
         final Vector3f point = matrices.last().pose().transformPosition(new Vector3f());
         final Vec3 worldPoint = new Vec3(point.x, point.y, point.z)
-                .add(Minecraft.getInstance().gameRenderer.getMainCamera().getPosition());
+                .add(Minecraft.getInstance().gameRenderer.getMainCamera().position());
         final HumanoidArm arm = displayContext == ItemDisplayContext.THIRD_PERSON_LEFT_HAND
                 ? HumanoidArm.LEFT : HumanoidArm.RIGHT;
         // Keep an offset from this player so movement between render submissions does not leave a stale world point.
@@ -76,7 +77,7 @@ public class PlungerLauncherItemRenderer extends CustomRenderedItemModelRenderer
     public static Vec3 getFirstPersonFocusPos(final float partialTicks,
                                               final boolean rotateProjectedForShader) {
         return FIRST_PERSON_FOCUS.resolveCameraRelative(partialTicks, rotateProjectedForShader)
-                .add(Minecraft.getInstance().gameRenderer.getMainCamera().getPosition());
+                .add(Minecraft.getInstance().gameRenderer.getMainCamera().position());
     }
 
     @Override
@@ -133,11 +134,11 @@ public class PlungerLauncherItemRenderer extends CustomRenderedItemModelRenderer
             }
         }
 
-        body.light(light).renderInto(ms.last(), buffer.getBuffer(RenderType.solid()));
-        joint.light(light).renderInto(ms.last(), buffer.getBuffer(RenderType.solid()));
+        body.light(light).renderInto(ms.last(), buffer.getBuffer(RenderTypes.solidMovingBlock()));
+        joint.light(light).renderInto(ms.last(), buffer.getBuffer(RenderTypes.solidMovingBlock()));
 
         ms.translate(0, 0, 3 / 16f);
-        spool.light(light).renderInto(ms.last(), buffer.getBuffer(RenderType.solid()));
+        spool.light(light).renderInto(ms.last(), buffer.getBuffer(RenderTypes.solidMovingBlock()));
         ms.popPose();
     }
 

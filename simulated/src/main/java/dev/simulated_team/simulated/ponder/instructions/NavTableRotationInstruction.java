@@ -29,7 +29,7 @@ public class NavTableRotationInstruction extends TickingInstruction {
         super.firstTick(scene);
         this.progress = 0;
 
-        final BlockEntity be = scene.getWorld().getBlockEntity(this.location);
+        final BlockEntity be = scene.getLevel().getBlockEntity(this.location);
 
         if (be instanceof final NavTableBlockEntity nbe) {
             this.initialAngle = nbe.lerpedAngleDegrees.getValue();
@@ -43,7 +43,7 @@ public class NavTableRotationInstruction extends TickingInstruction {
         this.progress++;
         final float lerpedValue = (float) this.progress / this.ticks;
 
-        final PonderLevel level = scene.getWorld();
+        final PonderLevel level = scene.getLevel();
         final BlockEntity be = level.getBlockEntity(this.location);
 
         if (be instanceof final NavTableBlockEntity nbe) {

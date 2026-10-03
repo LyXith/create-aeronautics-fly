@@ -6,7 +6,7 @@ import dev.ryanhcode.sable.sublevel.SubLevel;
 import dev.ryanhcode.sable.sublevel.plot.LevelPlot;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.ChunkPos;
@@ -19,7 +19,7 @@ import net.minecraft.world.phys.Vec3;
 public class EndSeaPreset extends SimulatedWorldPreset {
 	public static Vec3 PLAYER_SPAWN_POS = new Vec3(0, -30, 0);
 
-	public EndSeaPreset(final ResourceLocation id, final Component description) {
+	public EndSeaPreset(final Identifier id, final Component description) {
 		super(id, description);
 	}
 

@@ -10,7 +10,8 @@ import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -24,7 +25,7 @@ public class SteamVentRenderer extends SmartBlockEntityRenderer<SteamVentBlockEn
     protected void renderSafe(final SteamVentBlockEntity blockEntity, final float partialTicks, final PoseStack ms, final MultiBufferSource buffer, final int light, final int overlay) {
         super.renderSafe(blockEntity, partialTicks, ms, buffer, light, overlay);
 
-        final VertexConsumer cutoutConsumer = buffer.getBuffer(RenderType.cutoutMipped());
+        final VertexConsumer cutoutConsumer = buffer.getBuffer(RenderTypes.cutoutMovingBlock());
         final float signalStrength = Math.max(0, blockEntity.signalStrength / 15F);
 
         final BlockState state = blockEntity.getBlockState();
@@ -40,7 +41,7 @@ public class SteamVentRenderer extends SmartBlockEntityRenderer<SteamVentBlockEn
         if (alpha > 2) {
 
             final float position = renderHandler.getPosition(partialTicks);
-            final VertexConsumer translucentConsumer = buffer.getBuffer(RenderType.translucentMovingBlock());
+            final VertexConsumer translucentConsumer = buffer.getBuffer(RenderTypes.translucentMovingBlock());
             final SuperByteBuffer base = CachedBuffers.partial(AeroPartialModels.STEAM_VENT_BASE, state);
             final SuperByteBuffer jet = CachedBuffers.partial(AeroPartialModels.STEAM_VENT_JET, state);
 

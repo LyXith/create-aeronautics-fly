@@ -109,7 +109,7 @@ public abstract class ParticleMixin implements ParticleExtension {
     public abstract void tick();
 
     //#region stupid vanilla velocity
-    @ModifyConstant(method = "Lnet/minecraft/client/particle/Particle;<init>(Lnet/minecraft/client/multiplayer/ClientLevel;DDDDDD)V", constant = @Constant(ordinal = 13))
+    @ModifyConstant(method = "<init>(Lnet/minecraft/client/multiplayer/ClientLevel;DDDDDD)V", constant = @Constant(doubleValue = 0.1F))
     private double sable$removeUpwardsVelocity(final double originalBlockDamageDistanceConstant) {
         return 0.0;
     }

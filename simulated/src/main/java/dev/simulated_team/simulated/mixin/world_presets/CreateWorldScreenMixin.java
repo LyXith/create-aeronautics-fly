@@ -8,8 +8,8 @@ import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;
 import net.minecraft.client.gui.screens.worldselection.WorldCreationUiState;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.GameRules;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.dimension.end.EndDragonFight;
 import net.minecraft.world.level.levelgen.presets.WorldPreset;
 import net.minecraft.world.level.storage.WorldData;
@@ -41,7 +41,7 @@ public abstract class CreateWorldScreenMixin {
             return;
         }
 
-        final ResourceLocation location = key.get().location();
+        final Identifier location = key.get().identifier();
         final SimulatedWorldPreset simPreset = SimWorldPresets.PRESETS.get(location);
 
         if (simPreset != null) {
@@ -62,7 +62,7 @@ public abstract class CreateWorldScreenMixin {
             return;
         }
 
-        ((PrimaryLevelDataExtension) worldData).setPreset(key.get().location());
+        ((PrimaryLevelDataExtension) worldData).setPreset(key.get().identifier());
         if (holder.is(SimWorldPresets.END_SEA.id())) {
             ((PrimaryLevelDataExtension) worldData).setEndDragonFight(new EndDragonFight.Data(false, true, true, false, Optional.empty(), Optional.empty(), Optional.empty()));
         }

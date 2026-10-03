@@ -49,7 +49,7 @@ import com.zurrtum.create.client.ponder.foundation.PonderIndex;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
@@ -192,7 +192,7 @@ public class SimulatedClient {
             registerOptionalRenderStateRenderer(
                     register,
                     rendererType,
-                    ResourceLocation.fromNamespaceAndPath("brewinandchewin", "coaster")
+                    Identifier.fromNamespaceAndPath("brewinandchewin", "coaster")
             );
             registerSableImmediateRenderer(register, rendererType, SimBlockEntityTypes.PHYSICS_ASSEMBLER.get(),
                     (be, partialTick, poseStack, bufferSource, light, overlay) ->
@@ -261,7 +261,7 @@ public class SimulatedClient {
     private static void registerOptionalRenderStateRenderer(
             final Method register,
             final Class<?> rendererType,
-            final ResourceLocation blockEntityTypeId
+            final Identifier blockEntityTypeId
     ) throws ReflectiveOperationException {
         final BlockEntityType<?> blockEntityType = BuiltInRegistries.BLOCK_ENTITY_TYPE
                 .getOptional(blockEntityTypeId)

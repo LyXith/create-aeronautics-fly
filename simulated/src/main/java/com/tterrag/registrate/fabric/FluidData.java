@@ -5,12 +5,12 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandler;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
 import net.fabricmc.fabric.api.client.render.fluid.v1.SimpleFluidRenderHandler;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public record FluidData(String translationKey, int light) {
 
     public interface RenderHandlerFactory {
-        Object create(ResourceLocation stillTexture, ResourceLocation flowingTexture);
+        Object create(Identifier stillTexture, Identifier flowingTexture);
     }
 
     public static RenderHandlerFactory createDefaultHandler() {
@@ -20,7 +20,7 @@ public record FluidData(String translationKey, int light) {
         };
     }
 
-    public static  <T extends SimpleFlowableFluid> void registerRenderHandler(NonNullSupplier<RenderHandlerFactory> renderHandler, T entry, ResourceLocation stillTexture, ResourceLocation flowingTexture) {
+    public static  <T extends SimpleFlowableFluid> void registerRenderHandler(NonNullSupplier<RenderHandlerFactory> renderHandler, T entry, Identifier stillTexture, Identifier flowingTexture) {
         EnvExecutor.runWhenOn(EnvType.CLIENT, () -> () -> {
             final FluidRenderHandler handler = (FluidRenderHandler) renderHandler.get().create(stillTexture, flowingTexture);
             FluidRenderHandlerRegistry.INSTANCE.register(entry, handler);

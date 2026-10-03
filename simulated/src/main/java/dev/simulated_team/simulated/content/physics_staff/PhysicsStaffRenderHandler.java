@@ -110,7 +110,7 @@ public class PhysicsStaffRenderHandler {
             return;
         }
 
-        final Vec3 cameraPos = camera.getPosition();
+        final Vec3 cameraPos = camera.position();
 
         final Level level = player.level();
         renderAllLocks(bufferSource, ps, level, cameraPos);

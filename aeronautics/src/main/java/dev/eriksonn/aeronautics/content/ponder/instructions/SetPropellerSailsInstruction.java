@@ -21,7 +21,7 @@ public class SetPropellerSailsInstruction extends PonderInstruction {
 
     @Override
     public void tick(PonderScene scene) {
-        if(scene.getWorld().getBlockEntity(pos) instanceof PropellerBearingBlockEntity propeller)
+        if(scene.getLevel().getBlockEntity(pos) instanceof PropellerBearingBlockEntity propeller)
         {
             propeller.totalSailPower = sails;
         }

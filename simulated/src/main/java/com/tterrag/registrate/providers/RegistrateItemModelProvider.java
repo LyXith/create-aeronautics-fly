@@ -10,7 +10,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
@@ -31,7 +31,7 @@ public class RegistrateItemModelProvider extends ItemModelProvider implements Re
 
     private final AbstractRegistrate<?> parent;
     private final PackOutput.PathProvider itemDefinitions;
-    private final Map<ResourceLocation, ResourceLocation> customItemModels = new HashMap<>();
+    private final Map<Identifier, Identifier> customItemModels = new HashMap<>();
 
     public RegistrateItemModelProvider(AbstractRegistrate<?> parent, PackOutput packOutput, ExistingFileHelper existingFileHelper) {
         super(packOutput, parent.getModid(), existingFileHelper);
@@ -58,19 +58,19 @@ public class RegistrateItemModelProvider extends ItemModelProvider implements Re
      */
     private void registerFallbackModels() {
         for (Item item : BuiltInRegistries.ITEM) {
-            ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(item);
+            Identifier itemId = BuiltInRegistries.ITEM.getKey(item);
             if (!itemId.getNamespace().equals(parent.getModid())) {
                 continue;
             }
 
-            ResourceLocation modelId = ResourceLocation.fromNamespaceAndPath(
+            Identifier modelId = Identifier.fromNamespaceAndPath(
                     itemId.getNamespace(), "item/" + itemId.getPath());
             if (generatedModels.containsKey(modelId)) {
                 continue;
             }
 
             if (item instanceof BlockItem blockItem) {
-                ResourceLocation inventoryModel = ResourceLocation.fromNamespaceAndPath(
+                Identifier inventoryModel = Identifier.fromNamespaceAndPath(
                         itemId.getNamespace(), "block/" + itemId.getPath() + "/item");
                 Optional<String> variantModel = parent.getDataProvider(ProviderType.BLOCKSTATE)
                         .flatMap(provider -> provider.getExistingVariantBuilder(blockItem.getBlock())
@@ -81,7 +81,7 @@ public class RegistrateItemModelProvider extends ItemModelProvider implements Re
 
                 String parentModel = hasPackModel(inventoryModel)
                         ? inventoryModel.toString()
-                        : variantModel.orElseGet(() -> ResourceLocation.fromNamespaceAndPath(
+                        : variantModel.orElseGet(() -> Identifier.fromNamespaceAndPath(
                                 itemId.getNamespace(), "block/" + itemId.getPath()).toString());
                 withExistingParent(itemId.getPath(), parentModel);
             } else {
@@ -90,7 +90,7 @@ public class RegistrateItemModelProvider extends ItemModelProvider implements Re
         }
     }
 
-    private boolean hasPackModel(ResourceLocation modelId) {
+    private boolean hasPackModel(Identifier modelId) {
         String resourcePath = "assets/" + modelId.getNamespace() + "/models/"
                 + modelId.getPath() + ".json";
         return RegistrateItemModelProvider.class.getClassLoader().getResource(resourcePath) != null;
@@ -130,10 +130,10 @@ public class RegistrateItemModelProvider extends ItemModelProvider implements Re
                 .filter(modelId -> modelId.getPath().startsWith("item/"))
                 .filter(modelId -> modelId.getPath().indexOf('/', "item/".length()) < 0)
                 .forEach(modelId -> {
-                    ResourceLocation itemId = ResourceLocation.fromNamespaceAndPath(
+                    Identifier itemId = Identifier.fromNamespaceAndPath(
                             modelId.getNamespace(), modelId.getPath().substring("item/".length()));
                     JsonObject model = new JsonObject();
-                    ResourceLocation customModel = customItemModels.get(itemId);
+                    Identifier customModel = customItemModels.get(itemId);
                     model.addProperty("type", customModel == null ? "minecraft:model" : customModel.toString());
                     if (customModel == null) {
                         model.addProperty("model", modelId.toString());
@@ -151,7 +151,7 @@ public class RegistrateItemModelProvider extends ItemModelProvider implements Re
         return "Item models and client item definitions";
     }
 
-    public void customItemModel(String itemName, ResourceLocation modelType) {
+    public void customItemModel(String itemName, Identifier modelType) {
         customItemModels.put(modLoc(itemName), modelType);
     }
 
@@ -163,7 +163,7 @@ public class RegistrateItemModelProvider extends ItemModelProvider implements Re
         return BuiltInRegistries.ITEM.getKey(item.get().asItem()).getPath();
     }
 
-    public ResourceLocation itemTexture(NonNullSupplier<? extends ItemLike> item) {
+    public Identifier itemTexture(NonNullSupplier<? extends ItemLike> item) {
         return modLoc("item/" + name(item));
     }
 
@@ -172,18 +172,18 @@ public class RegistrateItemModelProvider extends ItemModelProvider implements Re
     }
 
     public ItemModelBuilder blockItem(NonNullSupplier<? extends ItemLike> block, String suffix) {
-        return withExistingParent(name(block), ResourceLocation.fromNamespaceAndPath(modid(block), "block/" + name(block) + suffix));
+        return withExistingParent(name(block), Identifier.fromNamespaceAndPath(modid(block), "block/" + name(block) + suffix));
     }
 
     public ItemModelBuilder blockWithInventoryModel(NonNullSupplier<? extends ItemLike> block) {
-        return withExistingParent(name(block), ResourceLocation.fromNamespaceAndPath(modid(block), "block/" + name(block) + "_inventory"));
+        return withExistingParent(name(block), Identifier.fromNamespaceAndPath(modid(block), "block/" + name(block) + "_inventory"));
     }
 
     public ItemModelBuilder blockSprite(NonNullSupplier<? extends ItemLike> block) {
         return blockSprite(block, modLoc("block/" + name(block)));
     }
 
-    public ItemModelBuilder blockSprite(NonNullSupplier<? extends ItemLike> block, ResourceLocation texture) {
+    public ItemModelBuilder blockSprite(NonNullSupplier<? extends ItemLike> block, Identifier texture) {
         return generated(() -> block.get().asItem(), texture);
     }
 
@@ -191,7 +191,7 @@ public class RegistrateItemModelProvider extends ItemModelProvider implements Re
         return generated(item, itemTexture(item));
     }
 
-    public ItemModelBuilder generated(NonNullSupplier<? extends ItemLike> item, ResourceLocation... layers) {
+    public ItemModelBuilder generated(NonNullSupplier<? extends ItemLike> item, Identifier... layers) {
         ItemModelBuilder ret = getBuilder(name(item)).parent(new ModelFile.UncheckedModelFile("item/generated"));
         for (int i = 0; i < layers.length; i++) {
             ret = ret.texture("layer" + i, layers[i]);
@@ -203,7 +203,7 @@ public class RegistrateItemModelProvider extends ItemModelProvider implements Re
         return handheld(item, itemTexture(item));
     }
 
-    public ItemModelBuilder handheld(NonNullSupplier<? extends ItemLike> item, ResourceLocation texture) {
+    public ItemModelBuilder handheld(NonNullSupplier<? extends ItemLike> item, Identifier texture) {
         return withExistingParent(name(item), "item/handheld").texture("layer0", texture);
     }
 }

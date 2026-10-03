@@ -5,7 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.ExtraCodecs;
 
 import java.util.Map;
@@ -17,11 +17,11 @@ import java.util.Optional;
  */
 public record PhysicsBlockPropertiesDefinition(ExtraCodecs.TagOrElementLocation selector,
                                                int priority,
-                                               Map<ResourceLocation, Object> properties,
-                                               Optional<Map<BlockStateConditionSet, Map<ResourceLocation, Object>>> overrides) {
+                                               Map<Identifier, Object> properties,
+                                               Optional<Map<BlockStateConditionSet, Map<Identifier, Object>>> overrides) {
 
-    public static final Codec<Map<ResourceLocation, Object>> PROPERTIES_CODEC =
-            Codec.dispatchedMap(ResourceLocation.CODEC, PhysicsBlockPropertyTypes::getPropertyCodec);
+    public static final Codec<Map<Identifier, Object>> PROPERTIES_CODEC =
+            Codec.dispatchedMap(Identifier.CODEC, PhysicsBlockPropertyTypes::getPropertyCodec);
 
     public static final Codec<PhysicsBlockPropertiesDefinition> CODEC =
             RecordCodecBuilder.create(i -> i.group(

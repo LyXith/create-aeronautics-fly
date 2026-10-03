@@ -42,7 +42,7 @@ public abstract class ChangePropellerRotateInstruction extends PonderInstruction
     public static class StopRotation extends ChangePropellerRotateInstruction {
         public StopRotation(PropellerRotateInstruction instruction, float duration) {
             super(instruction, (i,s) -> {
-                if (s.getWorld().getBlockEntity(i.pos) instanceof PropellerBearingBlockEntity bearing) {
+                if (s.getLevel().getBlockEntity(i.pos) instanceof PropellerBearingBlockEntity bearing) {
                     float angle = bearing.getInterpolatedAngle(0);
                     i.slowdownController = new BearingSlowdownController();
                     i.slowdownController.generate(duration, angle, i.currentSpeed, BearingSlowdownController.ContraptionSymmetry.QUARTER);

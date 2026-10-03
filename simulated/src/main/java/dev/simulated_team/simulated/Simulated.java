@@ -12,7 +12,7 @@ import dev.simulated_team.simulated.registrate.SimulatedRegistrate;
 import dev.simulated_team.simulated.service.SimModCompatibilityService;
 import dev.simulated_team.simulated.util.SimAssemblyHelper;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.slf4j.Logger;
 
 public final class Simulated {
@@ -54,8 +54,8 @@ public final class Simulated {
         return REGISTRATE.get();
     }
 
-    public static ResourceLocation path(final String path) {
-        return ResourceLocation.tryBuild(MOD_ID, path);
+    public static Identifier path(final String path) {
+        return Identifier.tryBuild(MOD_ID, path);
     }
 
 }

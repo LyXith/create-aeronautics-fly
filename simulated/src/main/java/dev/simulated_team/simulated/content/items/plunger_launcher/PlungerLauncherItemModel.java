@@ -11,7 +11,7 @@ import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.item.ItemModel;
@@ -20,7 +20,7 @@ import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.client.renderer.item.ItemStackRenderState.LayerRenderState;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
 import net.minecraft.client.resources.model.ModelBaker;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.ItemOwner;
 import net.minecraft.world.entity.player.Player;
@@ -28,16 +28,17 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
+import org.joml.Vector3fc;
 
 import java.util.Set;
 import java.util.function.Consumer;
 
 public final class PlungerLauncherItemModel implements ItemModel, SpecialModelRenderer<PlungerLauncherItemModel.RenderData> {
-    public static final ResourceLocation ID = Simulated.path("model/plunger_launcher");
-    private static final ResourceLocation ITEM = Simulated.path("item/plunger_launcher/item");
-    private static final ResourceLocation BODY = Simulated.path("item/plunger_launcher/plunger_tether");
-    private static final ResourceLocation JOINT = Simulated.path("item/plunger_launcher/spool_joint");
-    private static final ResourceLocation SPOOL = Simulated.path("item/plunger_launcher/tether_spool");
+    public static final Identifier ID = Simulated.path("model/plunger_launcher");
+    private static final Identifier ITEM = Simulated.path("item/plunger_launcher/item");
+    private static final Identifier BODY = Simulated.path("item/plunger_launcher/plunger_tether");
+    private static final Identifier JOINT = Simulated.path("item/plunger_launcher/spool_joint");
+    private static final Identifier SPOOL = Simulated.path("item/plunger_launcher/tether_spool");
 
     private final BakedItemModelPart item;
     private final BakedItemModelPart body;
@@ -217,7 +218,7 @@ public final class PlungerLauncherItemModel implements ItemModel, SpecialModelRe
     }
 
     @Override
-    public void getExtents(final Set<Vector3f> vertices) {
+    public void getExtents(final Consumer<Vector3fc> vertices) {
         throw new UnsupportedOperationException();
     }
 

@@ -36,7 +36,7 @@ import java.util.Collection;
 public abstract class CameraMixin implements CameraZoomExtension {
 
     @Shadow
-    private BlockGetter level;
+    private Level level;
     @Shadow
     private Vec3 position;
     @Shadow
@@ -62,7 +62,7 @@ public abstract class CameraMixin implements CameraZoomExtension {
     }
 
     @Inject(method = "setup", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Camera;setPosition(DDD)V", shift = At.Shift.AFTER))
-    private void sable$setup(final BlockGetter level, final Entity entity, final boolean detached, final boolean mirrored, final float partialTicks, final CallbackInfo ci) {
+    private void sable$setup(final Level level, final Entity entity, final boolean detached, final boolean mirrored, final float partialTicks, final CallbackInfo ci) {
         final Minecraft minecraft = Minecraft.getInstance();
 
         if (minecraft.options.getCameraType() == SableCameraTypes.SUB_LEVEL_VIEW || minecraft.options.getCameraType() == SableCameraTypes.SUB_LEVEL_VIEW_UNLOCKED) {

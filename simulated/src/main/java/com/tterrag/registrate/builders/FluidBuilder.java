@@ -31,10 +31,11 @@ import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry
 import net.fabricmc.fabric.api.client.render.fluid.v1.SimpleFluidRenderHandler;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributeHandler;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
@@ -65,9 +66,9 @@ public class FluidBuilder<T extends SimpleFlowableFluid, P> extends AbstractBuil
      * @param flowingTexture
      *            The texture to use for flowing fluids
      * @return A new {@link FluidBuilder} with reasonable default data generators.
-     * @see #create(AbstractRegistrate, Object, String, BuilderCallback, ResourceLocation, ResourceLocation, NonNullFunction)
+     * @see #create(AbstractRegistrate, Object, String, BuilderCallback, Identifier, Identifier, NonNullFunction)
      */
-    public static <P> FluidBuilder<SimpleFlowableFluid.Flowing, P> create(AbstractRegistrate<?> owner, P parent, String name, BuilderCallback callback, ResourceLocation stillTexture, ResourceLocation flowingTexture) {
+    public static <P> FluidBuilder<SimpleFlowableFluid.Flowing, P> create(AbstractRegistrate<?> owner, P parent, String name, BuilderCallback callback, Identifier stillTexture, Identifier flowingTexture) {
         return create(owner, parent, name, callback, stillTexture, flowingTexture, SimpleFlowableFluid.Flowing::new);
     }
 
@@ -102,7 +103,7 @@ public class FluidBuilder<T extends SimpleFlowableFluid, P> extends AbstractBuil
      *            A factory that creates the flowing fluid
      * @return A new {@link FluidBuilder} with reasonable default data generators.
      */
-    public static <T extends SimpleFlowableFluid, P> FluidBuilder<T, P> create(AbstractRegistrate<?> owner, P parent, String name, BuilderCallback callback, ResourceLocation stillTexture, ResourceLocation flowingTexture,
+    public static <T extends SimpleFlowableFluid, P> FluidBuilder<T, P> create(AbstractRegistrate<?> owner, P parent, String name, BuilderCallback callback, Identifier stillTexture, Identifier flowingTexture,
         NonNullFunction<SimpleFlowableFluid.Properties, T> fluidFactory) {
         FluidBuilder<T, P> ret = new FluidBuilder<>(owner, parent, name, callback, stillTexture, flowingTexture, fluidFactory)
             .defaultLang().defaultSource().defaultBlock().defaultBucket();
@@ -111,7 +112,7 @@ public class FluidBuilder<T extends SimpleFlowableFluid, P> extends AbstractBuil
 
     private final String sourceName, bucketName;
 
-    private final ResourceLocation stillTexture, flowingTexture;
+    private final Identifier stillTexture, flowingTexture;
     private final NonNullFunction<SimpleFlowableFluid.Properties, T> fluidFactory;
 
     @Nullable // has sane defaults
@@ -128,7 +129,7 @@ public class FluidBuilder<T extends SimpleFlowableFluid, P> extends AbstractBuil
     private NonNullSupplier<? extends SimpleFlowableFluid> source;
     private final List<TagKey<Fluid>> tags = new ArrayList<>();
 
-    public FluidBuilder(AbstractRegistrate<?> owner, P parent, String name, BuilderCallback callback, ResourceLocation stillTexture, ResourceLocation flowingTexture, NonNullFunction<SimpleFlowableFluid.Properties, T> fluidFactory) {
+    public FluidBuilder(AbstractRegistrate<?> owner, P parent, String name, BuilderCallback callback, Identifier stillTexture, Identifier flowingTexture, NonNullFunction<SimpleFlowableFluid.Properties, T> fluidFactory) {
         super(owner, parent, "flowing_" + name, callback, Registries.FLUID);
         this.sourceName = name;
         this.bucketName = name + "_bucket";
@@ -205,19 +206,19 @@ public class FluidBuilder<T extends SimpleFlowableFluid, P> extends AbstractBuil
         if (layer instanceof ChunkSectionLayer chunkLayer) {
             return chunkLayer;
         }
-        if (layer == RenderType.solid()) {
+        if (layer == RenderTypes.solidMovingBlock()) {
             return ChunkSectionLayer.SOLID;
         }
-        if (layer == RenderType.cutoutMipped()) {
-            return ChunkSectionLayer.CUTOUT_MIPPED;
-        }
-        if (layer == RenderType.cutout()) {
+        if (layer == RenderTypes.cutoutMovingBlock()) {
             return ChunkSectionLayer.CUTOUT;
         }
-        if (layer == RenderType.translucentMovingBlock()) {
+        if (layer == RenderTypes.cutoutMovingBlock()) {
+            return ChunkSectionLayer.CUTOUT;
+        }
+        if (layer == RenderTypes.translucentMovingBlock()) {
             return ChunkSectionLayer.TRANSLUCENT;
         }
-        if (layer == RenderType.tripwire()) {
+        if (layer == RenderTypes.tripwireMovingBlock()) {
             return ChunkSectionLayer.TRIPWIRE;
         }
         throw new IllegalArgumentException("Unsupported fluid render layer: " + layer);
@@ -362,7 +363,7 @@ public class FluidBuilder<T extends SimpleFlowableFluid, P> extends AbstractBuil
         }
         return getOwner().<I, FluidBuilder<T, P>>item(this, bucketName, p -> ((NonNullBiFunction<SimpleFlowableFluid, Item.Properties, ? extends I>) factory).apply(this.source.get(), p))
             .properties(p -> p.craftRemainder(Items.BUCKET).stacksTo(1))
-            .model((ctx, prov) -> prov.generated(ctx::getEntry, ResourceLocation.fromNamespaceAndPath(getOwner().getModid(), "item/" + bucketName)));
+            .model((ctx, prov) -> prov.generated(ctx::getEntry, Identifier.fromNamespaceAndPath(getOwner().getModid(), "item/" + bucketName)));
     }
 
     @Beta

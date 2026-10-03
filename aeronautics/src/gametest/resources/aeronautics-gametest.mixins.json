@@ -9,6 +9,7 @@
   "client": [
     "GameRendererAccessor",
     "LevelRendererAccessor",
+    "SkullRenderProbe",
     "PlungerLauncherItemModelProbe",
     "PlungerRopeRenderProbe",
     "PlungerWorldProjectionProbe"

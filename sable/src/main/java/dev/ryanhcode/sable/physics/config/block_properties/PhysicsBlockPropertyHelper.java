@@ -5,7 +5,7 @@ import dev.ryanhcode.sable.physics.chunk.VoxelNeighborhoodState;
 import dev.ryanhcode.sable.physics.config.FloatingBlockMaterialDataHandler;
 import dev.ryanhcode.sable.physics.floating_block.FloatingBlockMaterial;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -96,7 +96,7 @@ public class PhysicsBlockPropertyHelper {
      * @return The floating material of the block
      */
     public static FloatingBlockMaterial getFloatingMaterial(final BlockState state) {
-        final ResourceLocation location = ((BlockStateExtension) state).sable$getProperty(PhysicsBlockPropertyTypes.FLOATING_MATERIAL.get());
+        final Identifier location = ((BlockStateExtension) state).sable$getProperty(PhysicsBlockPropertyTypes.FLOATING_MATERIAL.get());
         if (location == null)
             return null;
         return FloatingBlockMaterialDataHandler.allMaterials.get(location);

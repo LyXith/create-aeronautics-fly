@@ -11,7 +11,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
@@ -36,8 +36,8 @@ public class CreativeModeInventoryScreenMixin {
 
 	@Inject(method = "getTooltipFromContainerItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/CreativeModeTabs;tabs()Ljava/util/List;"))
 	private void simulated$getTooltipFromContainerItem(final ItemStack stack, final CallbackInfoReturnable<List<Component>> cir, @Local(ordinal = 1) final List<Component> list1, @Local final int i) {
-		final ResourceLocation key = BuiltInRegistries.ITEM.getKey(stack.getItem());
-		final ResourceLocation id = SimulatedRegistrate.ITEM_TO_SECTION.get(key);
+		final Identifier key = BuiltInRegistries.ITEM.getKey(stack.getItem());
+		final Identifier id = SimulatedRegistrate.ITEM_TO_SECTION.get(key);
 		if(id != null) {
 			final SimulatedSection section = SimResourceManagers.SIMULATED_SECTION.get(id);
 			if(section != null) {

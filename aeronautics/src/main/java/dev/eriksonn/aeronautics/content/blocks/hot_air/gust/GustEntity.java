@@ -32,10 +32,11 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Quaterniond;
 import org.joml.Quaterniondc;
 import org.joml.Quaternionf;
+import org.joml.Quaternionfc;
 import org.joml.Vector3d;
 
 public class GustEntity extends Entity {
-    private static final EntityDataAccessor<Quaternionf> ORIENTATION = SynchedEntityData.defineId(GustEntity.class, EntityDataSerializers.QUATERNION);
+    private static final EntityDataAccessor<Quaternionfc> ORIENTATION = SynchedEntityData.defineId(GustEntity.class, EntityDataSerializers.QUATERNION);
     private final Quaterniond orientation = new Quaterniond();
     private boolean spawnedInitialBurst = false;
 

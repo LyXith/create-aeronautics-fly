@@ -9,13 +9,14 @@ import com.mojang.blaze3d.shaders.UniformType;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.zurrtum.create.client.AllSpecialTextures;
-import com.zurrtum.create.client.foundation.render.RenderTypes;
+import com.zurrtum.create.client.foundation.render.CreateRenderTypes;
 import dev.simulated_team.simulated.Simulated;
-import net.minecraft.client.renderer.RenderStateShard;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderSetup;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.Sheets;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public final class SimRenderTypes {
 
@@ -74,55 +75,42 @@ public final class SimRenderTypes {
     // RenderType.lightning() writes to the weather target, which has already been composited
     // by the time shader-pack-safe staff overlays are drawn.
     private static final RenderType STAFF_OVERLAY = create(
-            "simulated_staff_overlay", RenderPipelines.LIGHTNING, compositeState(null, false, false));
+            "simulated_staff_overlay", RenderPipelines.LIGHTNING);
     private static final RenderType STAFF_SELECTION_EDGE = create(
-            "simulated_staff_selection_edge", RenderPipelines.LIGHTNING,
-            compositeState(null, false, false));
-    private static final RenderType STAFF_SELECTION_FACE = create(
-            "simulated_staff_selection_face", RenderPipelines.ITEM_ENTITY_TRANSLUCENT_CULL,
-            RenderType.CompositeState.builder()
-                    .setTextureState(new RenderStateShard.TextureStateShard(
-                            AllSpecialTextures.CHECKERED.getLocation(), false))
-                    .setLightmapState(RenderStateShard.LIGHTMAP)
-                    .setOverlayState(RenderStateShard.OVERLAY)
-                    .createCompositeState(false));
+            "simulated_staff_selection_edge", RenderPipelines.LIGHTNING);
+    private static final RenderType STAFF_SELECTION_FACE = RenderType.create(
+            "simulated_staff_selection_face", RenderSetup.builder(RenderPipelines.ITEM_ENTITY_TRANSLUCENT_CULL)
+                    .withTexture("Sampler0", AllSpecialTextures.CHECKERED.getLocation())
+                    .useLightmap().useOverlay().createRenderSetup());
     private static final RenderType LASER = createSorted(
-            "simulated_laser", LASER_PIPELINE, compositeState(null, false, false));
+            "simulated_laser", LASER_PIPELINE);
     private static final RenderType LASER_LATE_ATTENUATION = create(
-            "simulated_laser_late_attenuation", LASER_LATE_ATTENUATION_PIPELINE,
-            compositeState(null, false, false));
+            "simulated_laser_late_attenuation", LASER_LATE_ATTENUATION_PIPELINE);
     private static final RenderType LASER_LATE = create(
-            "simulated_laser_late", LASER_LATE_PIPELINE, compositeState(null, false, false));
+            "simulated_laser_late", LASER_LATE_PIPELINE);
     private static final RenderType LASER_IRIS_COMPOSITE_ATTENUATION = create(
-            "simulated_laser_iris_composite_attenuation", LASER_IRIS_COMPOSITE_ATTENUATION_PIPELINE,
-            compositeState(null, false, false));
+            "simulated_laser_iris_composite_attenuation", LASER_IRIS_COMPOSITE_ATTENUATION_PIPELINE);
     private static final RenderType LASER_IRIS_COMPOSITE = create(
-            "simulated_laser_iris_composite", LASER_IRIS_COMPOSITE_PIPELINE,
-            compositeState(null, false, false));
+            "simulated_laser_iris_composite", LASER_IRIS_COMPOSITE_PIPELINE);
     private static final RenderType LASER_IRIS_GLOW = create(
-            "simulated_laser_iris_glow", LASER_IRIS_GLOW_PIPELINE,
-            compositeState(null, false, false));
-    private static final RenderType LENS = RenderType.cutout();
+            "simulated_laser_iris_glow", LASER_IRIS_GLOW_PIPELINE);
+    private static final RenderType LENS = net.minecraft.client.renderer.rendertype.RenderTypes.cutoutMovingBlock();
 
-    private static final RenderType LOCK = create(
-            "simulated_lock", LOCK_PIPELINE,
-            RenderType.CompositeState.builder()
-                    .setTextureState(new RenderStateShard.TextureStateShard(
-                            Simulated.path("textures/gui/lock.png"), false))
-                    .setLightmapState(RenderStateShard.LIGHTMAP)
-                    .createCompositeState(false));
+    private static final RenderType LOCK = RenderType.create(
+            "simulated_lock", RenderSetup.builder(LOCK_PIPELINE)
+                    .withTexture("Sampler0", Simulated.path("textures/gui/lock.png"))
+                    .useLightmap().createRenderSetup());
 
     // Iris cannot classify mod-defined terrain pipelines. A vanilla entity
     // pipeline keeps the standalone rope texture visible in shader passes.
-    private static final RenderType ROPE = RenderType.entityCutoutNoCull(
+    private static final RenderType ROPE = net.minecraft.client.renderer.rendertype.RenderTypes.entityCutoutNoCull(
             Simulated.path("textures/block/rope_particle.png"));
 
-    private static final RenderType BLOCK_TRANSLUCENT = create(
-            "simulated_block_translucent", BLOCK_TRANSLUCENT_PIPELINE,
-            RenderType.CompositeState.builder()
-                    .setTextureState(RenderStateShard.BLOCK_SHEET_MIPPED)
-                    .setLightmapState(RenderStateShard.LIGHTMAP)
-                    .createCompositeState(false));
+    private static final RenderType BLOCK_TRANSLUCENT = RenderType.create(
+            "simulated_block_translucent", RenderSetup.builder(BLOCK_TRANSLUCENT_PIPELINE)
+                    .withTexture("Sampler0", TextureAtlas.LOCATION_BLOCKS,
+                            net.minecraft.client.renderer.rendertype.RenderTypes.MOVING_BLOCK_SAMPLER)
+                    .useLightmap().createRenderSetup());
 
     /**
      * Shader-pack-safe layer for textured placement previews.
@@ -133,12 +121,11 @@ public final class SimRenderTypes {
      * by baked block models, preserves vertex color/alpha, and can still sample
      * the block atlas.</p>
      */
-    private static final RenderType GHOST_BLOCK = create(
-            "simulated_ghost_block", RenderPipelines.TRANSLUCENT_PARTICLE,
-            RenderType.CompositeState.builder()
-                    .setTextureState(RenderStateShard.BLOCK_SHEET_MIPPED)
-                    .setLightmapState(RenderStateShard.LIGHTMAP)
-                    .createCompositeState(false));
+    private static final RenderType GHOST_BLOCK = RenderType.create(
+            "simulated_ghost_block", RenderSetup.builder(RenderPipelines.TRANSLUCENT_PARTICLE)
+                    .withTexture("Sampler0", TextureAtlas.LOCATION_BLOCKS,
+                            net.minecraft.client.renderer.rendertype.RenderTypes.MOVING_BLOCK_SAMPLER)
+                    .useLightmap().createRenderSetup());
 
     private SimRenderTypes() {
     }
@@ -192,8 +179,8 @@ public final class SimRenderTypes {
                                                   final boolean translucent, final boolean sortOnUpload) {
         final RenderPipeline.Builder builder = RenderPipeline.builder()
                 .withLocation(Simulated.path("pipeline/" + name))
-                .withVertexShader("core/terrain")
-                .withFragmentShader("core/terrain")
+                .withVertexShader("core/block")
+                .withFragmentShader("core/block")
                 .withUniform("DynamicTransforms", UniformType.UNIFORM_BUFFER)
                 .withUniform("Projection", UniformType.UNIFORM_BUFFER)
                 .withUniform("Fog", UniformType.UNIFORM_BUFFER)
@@ -208,28 +195,13 @@ public final class SimRenderTypes {
         return builder.build();
     }
 
-    private static RenderType.CompositeState compositeState(final ResourceLocation texture,
-                                                            final boolean mipmap, final boolean lightmap) {
-        final RenderType.CompositeState.CompositeStateBuilder builder = RenderType.CompositeState.builder();
-        if (texture != null) {
-            builder.setTextureState(new RenderStateShard.TextureStateShard(texture, mipmap));
-        }
-        if (lightmap) {
-            builder.setLightmapState(RenderStateShard.LIGHTMAP);
-        }
-        return builder.createCompositeState(false);
+    private static RenderType create(final String name, final RenderPipeline pipeline) {
+        return RenderType.create(name, RenderSetup.builder(pipeline).createRenderSetup());
     }
 
-    private static RenderType create(final String name, final RenderPipeline pipeline,
-                                     final RenderType.CompositeState state) {
-        return RenderType.create(name, RenderType.TRANSIENT_BUFFER_SIZE, pipeline, state);
-    }
-
-    private static RenderType createSorted(final String name, final RenderPipeline pipeline,
-                                           final RenderType.CompositeState state) {
+    private static RenderType createSorted(final String name, final RenderPipeline pipeline) {
         // The original Veil render type sorts its translucent quads on upload.
-        return RenderType.create(name, RenderType.TRANSIENT_BUFFER_SIZE,
-                false, true, pipeline, state);
+        return RenderType.create(name, RenderSetup.builder(pipeline).sortOnUpload().createRenderSetup());
     }
 
     public static RenderType staffOverlay() {
@@ -289,18 +261,18 @@ public final class SimRenderTypes {
     }
 
     public static RenderType itemGlowingSolid(boolean shadersActive) {
-        return shadersActive ? Sheets.solidBlockSheet() : RenderTypes.itemGlowingSolid();
+        return shadersActive ? Sheets.solidBlockSheet() : CreateRenderTypes.itemGlowingSolid();
     }
 
     public static RenderType itemGlowingTranslucent(boolean shadersActive) {
-        return shadersActive ? Sheets.translucentItemSheet() : RenderTypes.itemGlowingTranslucent();
+        return shadersActive ? Sheets.translucentBlockItemSheet() : CreateRenderTypes.itemGlowingTranslucent();
     }
 
-    public static RenderType spring(final ResourceLocation texture) {
+    public static RenderType spring(final Identifier texture) {
         // Use a vanilla pipeline so Iris can map the render type into shader packs.
         // The old Veil spring shader is not available in the 1.21.10 Fabric port.
         // SpringRenderer emits a second, inward-facing copy of the mesh itself;
         // disabling culling would draw both copies on top of each other and z-fight.
-        return RenderType.entityCutout(texture);
+        return net.minecraft.client.renderer.rendertype.RenderTypes.entityCutout(texture);
     }
 }

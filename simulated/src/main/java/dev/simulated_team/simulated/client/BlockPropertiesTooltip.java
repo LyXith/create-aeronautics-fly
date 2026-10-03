@@ -17,7 +17,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -34,7 +34,7 @@ import java.util.Map;
 public class BlockPropertiesTooltip {
     public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat();
 
-    private static final Map<ResourceLocation, Entry> ENTRIES = new LinkedHashMap<>();
+    private static final Map<Identifier, Entry> ENTRIES = new LinkedHashMap<>();
 
     private static final Component NONE = Component.translatable("simulated.tooltip.mass.none").withStyle(ChatFormatting.GRAY);
     private static final Component SUPER_LIGHT = Component.translatable("simulated.tooltip.mass.super_light").withStyle(ChatFormatting.AQUA);
@@ -181,7 +181,7 @@ public class BlockPropertiesTooltip {
     }
 
     public static @Nullable Component getFloatingComponent(final BlockStateExtension properties, final BlockItem item, final boolean showNumbers) {
-        final ResourceLocation materialID = properties.sable$getProperty(PhysicsBlockPropertyTypes.FLOATING_MATERIAL.get());
+        final Identifier materialID = properties.sable$getProperty(PhysicsBlockPropertyTypes.FLOATING_MATERIAL.get());
         if (materialID == null) {
             return null;
         }

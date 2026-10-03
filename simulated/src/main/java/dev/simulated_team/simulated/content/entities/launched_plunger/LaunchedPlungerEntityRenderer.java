@@ -24,13 +24,14 @@ import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.culling.Frustum;
 import dev.simulated_team.simulated.compat.minecraft.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
@@ -216,7 +217,7 @@ public class LaunchedPlungerEntityRenderer extends EntityRenderer<LaunchedPlunge
         stack.scale(1.75f, 1.75f, 1.75f);
         stack.translate(0, 0, 2.5f / 16f);
 
-        final VertexConsumer vb = multiBufferSource.getBuffer(RenderType.solid());
+        final VertexConsumer vb = multiBufferSource.getBuffer(RenderTypes.solidMovingBlock());
         final SuperByteBuffer body = CachedBuffers.partial(SimPartialModels.LAUNCHED_PLUNGER_BODY, Blocks.AIR.defaultBlockState());
         final SuperByteBuffer spool = CachedBuffers.partial(SimPartialModels.LAUNCHED_PLUNGER_SPOOL, Blocks.AIR.defaultBlockState());
         final SuperByteBuffer joint = CachedBuffers.partial(SimPartialModels.LAUNCHED_PLUNGER_JOINT, Blocks.AIR.defaultBlockState());
@@ -275,7 +276,7 @@ public class LaunchedPlungerEntityRenderer extends EntityRenderer<LaunchedPlunge
     public static void renderRope(final List<Vec3> positions, final MultiBufferSource multiBufferSource, final BlockAndTintGetter level, final PoseStack poseStack) {
         final Vec3 first = positions.getFirst();
         final Vector3d origin = new Vector3d();
-        final Vec3 cameraPosition = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
+        final Vec3 cameraPosition = Minecraft.getInstance().gameRenderer.getMainCamera().position();
 
         final RenderType renderType = SimRenderTypes.rope();
         final VertexConsumer builder = multiBufferSource.getBuffer(renderType);
@@ -398,8 +399,8 @@ public class LaunchedPlungerEntityRenderer extends EntityRenderer<LaunchedPlunge
     }
 
     @Override
-    public ResourceLocation getTextureLocation(final LaunchedPlungerEntity entity) {
-        return ResourceLocation.withDefaultNamespace("missing");
+    public Identifier getTextureLocation(final LaunchedPlungerEntity entity) {
+        return Identifier.withDefaultNamespace("missing");
     }
 
     @Override

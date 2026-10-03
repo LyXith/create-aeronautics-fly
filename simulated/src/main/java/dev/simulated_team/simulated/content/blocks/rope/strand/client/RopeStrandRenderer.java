@@ -18,7 +18,8 @@ import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
@@ -43,7 +44,7 @@ public class RopeStrandRenderer {
 
         final SuperByteBuffer middle = CachedBuffers.partialFacing(SimPartialModels.ROPE, AllBlocks.ROPE.defaultBlockState(), Direction.NORTH);
         final SuperByteBuffer knot = CachedBuffers.partialFacing(SimPartialModels.ROPE_KNOT, AllBlocks.ROPE.defaultBlockState(), Direction.NORTH);
-        final VertexConsumer vb = buffer.getBuffer(RenderType.solid());
+        final VertexConsumer vb = buffer.getBuffer(RenderTypes.solidMovingBlock());
 
         final SubLevel subLevel = Sable.HELPER.getContaining(be);
         Pose3dc containingPose = null;
@@ -131,7 +132,7 @@ public class RopeStrandRenderer {
                 new Vector3d(rad, 0, -rad),
         };
 
-        final VertexConsumer linesVB = buffer.getBuffer(RenderType.lines());
+        final VertexConsumer linesVB = buffer.getBuffer(RenderTypes.lines());
         final Matrix4f pose = ps.last().pose();
 
         for (int i = 0; i < ropeRenderPoints.size() + 1; i++) {

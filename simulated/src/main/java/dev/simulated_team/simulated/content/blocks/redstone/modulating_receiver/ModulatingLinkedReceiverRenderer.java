@@ -10,7 +10,8 @@ import com.zurrtum.create.catnip.math.AngleHelper;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -59,7 +60,7 @@ public class ModulatingLinkedReceiverRenderer extends SmartBlockEntityRenderer<M
             superBuffer.rotateCentered(AngleHelper.rad(-90 - AngleHelper.verticalAngle(facing)), Direction.EAST);
 
             superBuffer.light(light);
-            superBuffer.renderInto(ms.last(), bufferSource.getBuffer(RenderType.solid()));
+            superBuffer.renderInto(ms.last(), bufferSource.getBuffer(RenderTypes.solidMovingBlock()));
         }
     }
 }

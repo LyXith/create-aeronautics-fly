@@ -9,7 +9,8 @@ import com.zurrtum.create.catnip.math.AngleHelper;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
@@ -27,7 +28,7 @@ public class DockingConnectorRenderer extends SafeBlockEntityRenderer<DockingCon
 
     @Override
     protected void renderSafe(final DockingConnectorBlockEntity be, final float partialTicks, final PoseStack ms, final MultiBufferSource bufferSource, final int light, final int overlay) {
-        final VertexConsumer vb = bufferSource.getBuffer(RenderType.cutout());
+        final VertexConsumer vb = bufferSource.getBuffer(RenderTypes.cutoutMovingBlock());
         final Direction direction = be.getBlockState()
                 .getValue(BlockStateProperties.FACING);
         final BlockState blockState = be.getBlockState();

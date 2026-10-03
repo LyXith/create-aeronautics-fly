@@ -32,7 +32,7 @@ public abstract class CameraMixin {
     private Vec3 position;
 
     @Shadow
-    private @org.jetbrains.annotations.Nullable BlockGetter level;
+    private @org.jetbrains.annotations.Nullable Level level;
 
     @Shadow public abstract Camera.NearPlane getNearPlane();
 
@@ -42,7 +42,8 @@ public abstract class CameraMixin {
             final BoundingBox3d bounds = new BoundingBox3d(this.position.x - 0.5, this.position.y - 0.5, this.position.z - 0.5,
                     this.position.x + 0.5, this.position.y + 0.5, this.position.z + 0.5);
 
-            if (!(this.level instanceof final Level level)) {
+            final Level level = this.level;
+            if (level == null) {
                 return;
             }
 

@@ -4,7 +4,7 @@ import dev.eriksonn.aeronautics.index.AeroRegistries;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.material.FluidState;
@@ -24,7 +24,7 @@ public class LevititeBlendTicker {
 		this.level = level;
 		this.pos = toDeserialize.read("pos", BlockPos.CODEC).orElse(BlockPos.ZERO);
 		this.context = AeroRegistries.LEVITITE_CRYSTAL_PROPAGATION_CONTEXT.asVanillaRegistry().getValue(
-				ResourceLocation.parse(toDeserialize.getStringOr("context", "aeronautics:standard")));
+				Identifier.parse(toDeserialize.getStringOr("context", "aeronautics:standard")));
 
 		this.deserialize(toDeserialize);
 	}
@@ -116,7 +116,7 @@ public class LevititeBlendTicker {
 		tag.putBoolean("requiresCatalyst", this.requiresCatalyst);
 
 		tag.store("pos", BlockPos.CODEC, this.getPos());
-		ResourceLocation resourceLocation = AeroRegistries.LEVITITE_CRYSTAL_PROPAGATION_CONTEXT.asVanillaRegistry().getKey(this.context);
+		Identifier resourceLocation = AeroRegistries.LEVITITE_CRYSTAL_PROPAGATION_CONTEXT.asVanillaRegistry().getKey(this.context);
 		tag.putString("context", resourceLocation.toString());
 
 		tag.putBoolean("isDormant", this.isDormant);

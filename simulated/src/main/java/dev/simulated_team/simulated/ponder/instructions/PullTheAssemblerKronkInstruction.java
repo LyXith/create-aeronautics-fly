@@ -24,7 +24,7 @@ public class PullTheAssemblerKronkInstruction extends PonderInstruction {
 
     @Override
     public void tick(final PonderScene scene) {
-        final PonderLevel world = scene.getWorld();
+        final PonderLevel world = scene.getLevel();
         if (world.getBlockEntity(this.assemblerPos) instanceof final PhysicsAssemblerBlockEntity be) {
             be.clientFlickLeverTo(this.isAssembling);
             if (this.instantaneous) {

@@ -22,7 +22,7 @@ public class GimbalSensorVisualRotationInstruction extends PonderInstruction {
 
     @Override
     public void tick(final PonderScene scene) {
-        final PonderLevel world = scene.getWorld();
+        final PonderLevel world = scene.getLevel();
         if (world.getBlockEntity(this.location) instanceof final GimbalSensorBlockEntity be) {
             be.updateVisualRotation = this.unlocked;
         }

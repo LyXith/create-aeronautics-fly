@@ -3,6 +3,7 @@ package dev.simulated_team.simulated.mixin.structure_template;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityProcessor;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
@@ -12,7 +13,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.Optional;
-import java.util.function.Function;
 
 /** Restores passenger entities when structures (including Ponder fixtures) are placed. */
 @Mixin(StructureTemplate.class)
@@ -34,7 +34,7 @@ public abstract class StructureTemplateMixin {
                 input,
                 level,
                 spawnReason,
-                Function.identity()
+                EntityProcessor.NOP
         ));
     }
 }

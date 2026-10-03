@@ -23,7 +23,7 @@ public class VanillaSubLevelRenderDispatcherMixin {
             final EndSeaPhysics physics = EndSeaPhysicsData.of(minecraft.level);
 
             if (onSubLevel && physics != null) {
-                final float y = (float) (minecraft.gameRenderer.getMainCamera().getPosition().y - physics.startY());
+                final float y = (float) (minecraft.gameRenderer.getMainCamera().position().y - physics.startY());
 
                 cameraY.set(y);
                 if (upload) {

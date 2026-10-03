@@ -6,7 +6,7 @@ import foundry.veil.api.CodecReloadListener;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.resources.FileToIdConverter;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
@@ -19,12 +19,12 @@ import java.util.Set;
 public class SimpleResourceManager<T> extends CodecReloadListener<T> {
 	private static final Registry REGISTRY = ServiceUtil.load(Registry.class);
 
-	private final Map<ResourceLocation, T> entries = new Object2ObjectOpenHashMap<>();
-	private final Map<T, ResourceLocation> toId = new Object2ObjectOpenHashMap<>();
+	private final Map<Identifier, T> entries = new Object2ObjectOpenHashMap<>();
+	private final Map<T, Identifier> toId = new Object2ObjectOpenHashMap<>();
 	private final List<T> sortedValues = new ObjectArrayList<>();
 	private boolean canSort = false;
 
-	public static <T> SimpleResourceManager<T> create(final Codec<T> codec, final ResourceLocation path) {
+	public static <T> SimpleResourceManager<T> create(final Codec<T> codec, final Identifier path) {
 		final SimpleResourceManager<T> manager = new SimpleResourceManager<>(codec, path.getNamespace() + "/" + path.getPath());
 		REGISTRY.registerListener(manager);
 		return manager;
@@ -39,15 +39,15 @@ public class SimpleResourceManager<T> extends CodecReloadListener<T> {
 		return this;
 	}
 
-	public T get(final ResourceLocation id) {
+	public T get(final Identifier id) {
 		return this.entries.get(id);
 	}
 
-	public ResourceLocation getId(final T t) {
+	public Identifier getId(final T t) {
 		return this.toId.get(t);
 	}
 
-	public Set<Map.Entry<ResourceLocation, T>> entrySet() {
+	public Set<Map.Entry<Identifier, T>> entrySet() {
 		return this.entries.entrySet();
 	}
 
@@ -60,7 +60,7 @@ public class SimpleResourceManager<T> extends CodecReloadListener<T> {
 	}
 
 	@Override
-	protected void apply(final Map<ResourceLocation, T> map, final ResourceManager manager, final ProfilerFiller profiler) {
+	protected void apply(final Map<Identifier, T> map, final ResourceManager manager, final ProfilerFiller profiler) {
         this.entries.clear();
         this.entries.putAll(map);
         this.toId.clear();

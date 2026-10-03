@@ -3,7 +3,7 @@ package dev.simulated_team.simulated.compat.create;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 
 import java.util.LinkedHashSet;
@@ -23,6 +23,16 @@ public final class RenderBridge {
 
         @Override
         public VertexConsumer setColor(final int red, final int green, final int blue, final int alpha) {
+            return this;
+        }
+
+        @Override
+        public VertexConsumer setColor(final int color) {
+            return this;
+        }
+
+        @Override
+        public VertexConsumer setLineWidth(final float lineWidth) {
             return this;
         }
 

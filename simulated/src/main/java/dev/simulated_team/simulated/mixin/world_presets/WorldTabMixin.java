@@ -28,7 +28,7 @@ public class WorldTabMixin {
 
 					if (preset != null && preset.unwrapKey().isPresent()) {
 						final ResourceKey<WorldPreset> key = preset.unwrapKey().get();
-						final SimulatedWorldPreset simPreset = SimWorldPresets.PRESETS.get(key.location());
+						final SimulatedWorldPreset simPreset = SimWorldPresets.PRESETS.get(key.identifier());
 
 						if(simPreset != null && simPreset.description() != null) {
 							cycleButton.setTooltip(Tooltip.create(simPreset.description()));

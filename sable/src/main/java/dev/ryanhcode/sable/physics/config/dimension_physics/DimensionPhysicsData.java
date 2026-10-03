@@ -5,7 +5,7 @@ import dev.ryanhcode.sable.companion.math.JOMLConversion;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
@@ -89,7 +89,7 @@ public class DimensionPhysicsData {
         public static final ReloadListener INSTANCE = new ReloadListener();
 
         public static final String NAME = "dimension_physics";
-        public static final ResourceLocation ID = Sable.sablePath(NAME);
+        public static final Identifier ID = Sable.sablePath(NAME);
 
         public ReloadListener() {
             super(DimensionPhysics.CODEC, FileToIdConverter.json(NAME));
@@ -108,10 +108,10 @@ public class DimensionPhysicsData {
         }
 
         @Override
-        protected void apply(final Map<ResourceLocation, DimensionPhysics> map, final ResourceManager resourceManager, final ProfilerFiller profiler) {
+        protected void apply(final Map<Identifier, DimensionPhysics> map, final ResourceManager resourceManager, final ProfilerFiller profiler) {
             DIMENSION_PHYSICS_DATA.clear();
 
-            for (final Map.Entry<ResourceLocation, DimensionPhysics> entry : map.entrySet()) {
+            for (final Map.Entry<Identifier, DimensionPhysics> entry : map.entrySet()) {
                 try {
                     final DimensionPhysics dimensionPhysics = entry.getValue();
                     final ResourceKey<Level> dimension = ResourceKey.create(Registries.DIMENSION, dimensionPhysics.dimension());

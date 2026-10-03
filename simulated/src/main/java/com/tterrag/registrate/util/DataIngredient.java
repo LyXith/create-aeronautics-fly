@@ -11,10 +11,10 @@ import com.tterrag.registrate.util.nullness.NonNullSupplier;
 
 import lombok.Getter;
 import net.minecraft.advancements.Criterion;
-import net.minecraft.advancements.critereon.InventoryChangeTrigger;
-import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.advancements.criterion.InventoryChangeTrigger;
+import net.minecraft.advancements.criterion.ItemPredicate;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -35,7 +35,7 @@ public final class DataIngredient {
     @Nullable
     private final Ingredient immediateIngredient;
     @Getter
-    private final ResourceLocation id;
+    private final Identifier id;
     private final Function<RegistrateRecipeProvider, Criterion<InventoryChangeTrigger.TriggerInstance>> criteriaFactory;
 
     private DataIngredient(Ingredient parent, ItemLike item) {
@@ -52,7 +52,7 @@ public final class DataIngredient {
         this.criteriaFactory = prov -> prov.has(tag);
     }
     
-    private DataIngredient(Ingredient parent, ResourceLocation id, ItemPredicate... predicates) {
+    private DataIngredient(Ingredient parent, Identifier id, ItemPredicate... predicates) {
         this.ingredientFactory = provider -> parent;
         this.immediateIngredient = parent;
         this.id = id;
@@ -90,7 +90,7 @@ public final class DataIngredient {
         return new DataIngredient(required);
     }
     
-    public static DataIngredient ingredient(Ingredient parent, ResourceLocation id, ItemPredicate... criteria) {
+    public static DataIngredient ingredient(Ingredient parent, Identifier id, ItemPredicate... criteria) {
         return new DataIngredient(parent, id, criteria);
     }
 

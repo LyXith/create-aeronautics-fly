@@ -9,7 +9,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import org.jetbrains.annotations.Nullable;
@@ -22,7 +22,7 @@ public class CFluidType {
     public final Fluid fluid;
     DataComponentMap data;
 
-    public CFluidType(final ResourceLocation type, @Nullable final DataComponentMap data) {
+    public CFluidType(final Identifier type, @Nullable final DataComponentMap data) {
         // Old Ponder structures can contain an empty or since-removed fluid id. Treat it as an
         // empty tank; allowing null here crashes Fabric's StorageView as soon as an adjacent
         // Create pipe asks whether the tank is empty.
@@ -68,7 +68,7 @@ public class CFluidType {
             }
         }
 
-        return new CFluidType(ResourceLocation.parse(tag.getStringOr("Fluid", "")), map);
+        return new CFluidType(Identifier.parse(tag.getStringOr("Fluid", "")), map);
     }
 
     @Override

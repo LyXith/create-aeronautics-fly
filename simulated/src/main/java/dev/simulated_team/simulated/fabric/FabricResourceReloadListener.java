@@ -1,18 +1,18 @@
 package dev.simulated_team.simulated.fabric;
 
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.PreparableReloadListener;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
 public record FabricResourceReloadListener(
-        ResourceLocation id,
+        Identifier id,
         PreparableReloadListener delegate
 ) implements IdentifiableResourceReloadListener {
     @Override
-    public ResourceLocation getFabricId() {
+    public Identifier getFabricId() {
         return this.id;
     }
 

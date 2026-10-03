@@ -16,7 +16,7 @@ import dev.simulated_team.simulated.util.SimMathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.item.ItemModel;
@@ -25,7 +25,7 @@ import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.client.renderer.item.ItemStackRenderState.LayerRenderState;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
 import net.minecraft.client.resources.model.ModelBaker;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.ItemOwner;
 import net.minecraft.world.entity.player.Player;
@@ -36,20 +36,21 @@ import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
+import org.joml.Vector3fc;
 
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
 
 public final class PhysicsStaffItemModel implements ItemModel, SpecialModelRenderer<PhysicsStaffItemModel.RenderData> {
-    public static final ResourceLocation ID = Simulated.path("model/creative_physics_staff");
-    private static final ResourceLocation ITEM = Simulated.path("item/creative_physics_staff/item");
-    private static final ResourceLocation CORE = Simulated.path("item/creative_physics_staff/core");
-    private static final ResourceLocation CORE_GLOW = Simulated.path("item/creative_physics_staff/core_glow");
-    private static final ResourceLocation RING = Simulated.path("item/creative_physics_staff/ring");
-    private static final ResourceLocation SIGMA = Simulated.path("item/creative_physics_staff/sigma");
-    private static final ResourceLocation INNER_CUBE = Simulated.path("item/creative_physics_staff/inner_cube");
-    private static final ResourceLocation OUTER_CUBE = Simulated.path("item/creative_physics_staff/outer_cube");
+    public static final Identifier ID = Simulated.path("model/creative_physics_staff");
+    private static final Identifier ITEM = Simulated.path("item/creative_physics_staff/item");
+    private static final Identifier CORE = Simulated.path("item/creative_physics_staff/core");
+    private static final Identifier CORE_GLOW = Simulated.path("item/creative_physics_staff/core_glow");
+    private static final Identifier RING = Simulated.path("item/creative_physics_staff/ring");
+    private static final Identifier SIGMA = Simulated.path("item/creative_physics_staff/sigma");
+    private static final Identifier INNER_CUBE = Simulated.path("item/creative_physics_staff/inner_cube");
+    private static final Identifier OUTER_CUBE = Simulated.path("item/creative_physics_staff/outer_cube");
 
     private final BakedItemModelPart item;
     private final BakedItemModelPart core;
@@ -289,7 +290,7 @@ public final class PhysicsStaffItemModel implements ItemModel, SpecialModelRende
     }
 
     @Override
-    public void getExtents(final Set<Vector3f> vertices) {
+    public void getExtents(final Consumer<Vector3fc> vertices) {
         throw new UnsupportedOperationException();
     }
 

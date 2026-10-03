@@ -8,7 +8,7 @@ import com.tterrag.registrate.providers.RegistrateItemTagsProvider;
 import com.tterrag.registrate.providers.RegistrateTagsProvider;
 import dev.eriksonn.aeronautics.Aeronautics;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -56,7 +56,7 @@ public class AeroTags {
 					.add(Blocks.CAMPFIRE, Blocks.MAGMA_BLOCK, Blocks.TORCH, Blocks.WALL_TORCH, AllBlocks.LIT_BLAZE_BURNER, Blocks.FIRE);
 			prov.tag(LEVITITE_ADJACENT_CATALYZER)
 					.add(Blocks.NETHERRACK)
-					.addTag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("c", "storage_blocks/coal")));
+					.addTag(TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath("c", "storage_blocks/coal")));
 
 			prov.tag(LEVITITE_SOUL_CATALYZER)
 					.add(Blocks.SOUL_CAMPFIRE, Blocks.SOUL_TORCH, Blocks.SOUL_WALL_TORCH, Blocks.SOUL_FIRE);
@@ -68,7 +68,7 @@ public class AeroTags {
 	public static class ItemTags {
 		public static final TagKey<Item> LEATHERS = AllTags.commonItemTag("leathers");
 		public static final TagKey<Item> ARMORS = AllTags.commonItemTag("armors");
-		public static final TagKey<Item> HEAD_ARMOR = TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("head_armor"));
+		public static final TagKey<Item> HEAD_ARMOR = TagKey.create(Registries.ITEM, Identifier.withDefaultNamespace("head_armor"));
 		public static final TagKey<Item> IRON_SHEET = AllTags.commonItemTag("plates/iron");
 		public static final TagKey<Item> GOLD_SHEET = AllTags.commonItemTag("plates/gold");
 		public static final TagKey<Item> MUSIC_DISCS = AllTags.commonItemTag("music_discs");

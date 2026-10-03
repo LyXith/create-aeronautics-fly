@@ -20,7 +20,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -78,7 +78,7 @@ public class SimItems {
                     .transform(CreativeTabItemTransforms.VisibilityType.INVISIBLE.applyItem())
                     .register();
 
-    static { REGISTRATE.addExtraItem(ResourceLocation.withDefaultNamespace("slime_ball")); }
+    static { REGISTRATE.addExtraItem(Identifier.withDefaultNamespace("slime_ball")); }
 
     public static final ItemEntry<HoneyGlueItem> HONEY_GLUE =
             REGISTRATE.item("honey_glue", HoneyGlueItem::new)

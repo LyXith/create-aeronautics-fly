@@ -10,7 +10,7 @@ import lombok.Value;
 import lombok.experimental.Delegate;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 /**
  * A context bean passed to data generator callbacks. Contains the entry that data is being created for, and some metadata about the entry.
@@ -27,9 +27,9 @@ public class DataGenContext<R, E extends R> implements NonNullSupplier<E> {
     @Delegate
     NonNullSupplier<E> entry;
     String name;
-    ResourceLocation id;
+    Identifier id;
 
-    public DataGenContext(final NonNullSupplier<E> entry, final String name, final ResourceLocation id) {
+    public DataGenContext(final NonNullSupplier<E> entry, final String name, final Identifier id) {
         this.entry = entry;
         this.name = name;
         this.id = id;
@@ -49,7 +49,7 @@ public class DataGenContext<R, E extends R> implements NonNullSupplier<E> {
         return name;
     }
 
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return id;
     }
 
@@ -60,6 +60,6 @@ public class DataGenContext<R, E extends R> implements NonNullSupplier<E> {
     
     public static <R, E extends R> DataGenContext<R, E> from(Builder<R, E, ?, ?> builder) {
         return new DataGenContext<R, E>(() -> builder.getOwner().<R, E>get(builder.getName(), builder.getRegistryKey()).get(), builder.getName(),
-                ResourceLocation.fromNamespaceAndPath(builder.getOwner().getModid(), builder.getName()));
+                Identifier.fromNamespaceAndPath(builder.getOwner().getModid(), builder.getName()));
     }
 }

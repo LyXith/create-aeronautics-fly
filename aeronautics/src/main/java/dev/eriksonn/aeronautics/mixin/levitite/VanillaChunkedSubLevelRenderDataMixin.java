@@ -7,7 +7,7 @@ import dev.eriksonn.aeronautics.content.blocks.levitite.LevititeShaderManager;
 import dev.eriksonn.aeronautics.index.client.AeroRenderTypes;
 import dev.ryanhcode.sable.sublevel.ClientSubLevel;
 import dev.ryanhcode.sable.sublevel.render.vanilla.VanillaChunkedSubLevelRenderData;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.ShaderInstance;
 import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Final;

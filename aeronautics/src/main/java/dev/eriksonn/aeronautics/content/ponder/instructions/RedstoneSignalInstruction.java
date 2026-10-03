@@ -29,7 +29,7 @@ public class RedstoneSignalInstruction extends WorldModifyInstruction {
 
 	@Override
 	protected void runModification(final Selection selection, final PonderScene scene) {
-		final PonderLevel level = scene.getWorld();
+		final PonderLevel level = scene.getLevel();
 		selection.forEach(pos -> {
 			if (!level.getBounds().isInside(pos)) {
 				return;

@@ -1,6 +1,6 @@
 package dev.ryanhcode.sable.platform.registry;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.function.Supplier;
 
@@ -11,10 +11,10 @@ import java.util.function.Supplier;
  */
 public final class SableRegistryObject<T> implements Supplier<T> {
 
-    private final ResourceLocation id;
+    private final Identifier id;
     private final T value;
 
-    SableRegistryObject(final ResourceLocation id, final T value) {
+    SableRegistryObject(final Identifier id, final T value) {
         this.id = id;
         this.value = value;
     }
@@ -24,7 +24,7 @@ public final class SableRegistryObject<T> implements Supplier<T> {
         return this.value;
     }
 
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return this.id;
     }
 }

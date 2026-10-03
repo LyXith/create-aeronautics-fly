@@ -2,16 +2,16 @@ package dev.simulated_team.simulated.content.entities.diagram.screen;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public record Greeble(ResourceLocation texture, List<TextureSlice> slices, int width, int height, float weight) {
+public record Greeble(Identifier texture, List<TextureSlice> slices, int width, int height, float weight) {
 	public static final Codec<Greeble> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			ResourceLocation.CODEC.fieldOf("texture").forGetter(g -> g.texture),
+			Identifier.CODEC.fieldOf("texture").forGetter(g -> g.texture),
 			TextureSlice.CODEC.listOf().fieldOf("slices").forGetter(g -> g.slices),
 			Codec.INT.fieldOf("width").forGetter(g -> g.width),
 			Codec.INT.fieldOf("height").forGetter(g -> g.height),

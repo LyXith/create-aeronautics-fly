@@ -16,10 +16,11 @@ import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
@@ -40,7 +41,7 @@ public class WheelMountRenderer extends KineticBlockEntityRenderer<WheelMountBlo
         renderRotatingBuffer(be, this.getRotatedModel(be, state), ms, buffer.getBuffer(type), light);
 
         FilteringRenderer.renderOnBlockEntity(be, partialTicks, ms, buffer, light, overlay);
-        final VertexConsumer vb = buffer.getBuffer(RenderType.cutoutMipped());
+        final VertexConsumer vb = buffer.getBuffer(RenderTypes.cutoutMovingBlock());
 
         final Direction direction = be.getBlockState()
                 .getValue(BlockStateProperties.HORIZONTAL_FACING)
@@ -121,7 +122,7 @@ public class WheelMountRenderer extends KineticBlockEntityRenderer<WheelMountBlo
             ms.mulPose(Axis.ZP.rotation((float) Math.toRadians(rotation.z)));
 
             if (tireLike.model().isPresent()) {
-                final ResourceLocation model = tireLike.model().get();
+                final Identifier model = tireLike.model().get();
                 final OffroadPartialModels.MountedTireModel tireModel = OffroadPartialModels.getTireModel(model);
                 if (tireModel != null) {
                     ms.translate(tireLike.offset().x, tireLike.offset().y, tireLike.offset().z);

@@ -49,9 +49,9 @@ public class PhysicsStaffServerHandler extends SavedData {
     private static final Codec<List<UUID>> LOCKS_CODEC = UUIDUtil.CODEC.listOf();
     private static final SavedDataType<PhysicsStaffServerHandler> TYPE = new SavedDataType<>(
             ID,
-            context -> new PhysicsStaffServerHandler(context.levelOrThrow()),
-            context -> LOCKS_CODEC.fieldOf(ID).codec().xmap(
-                    locks -> create(context.levelOrThrow(), locks),
+            PhysicsStaffServerHandler::new,
+            LOCKS_CODEC.fieldOf(ID).codec().xmap(
+                    locks -> create(null, locks),
                     handler -> List.copyOf(handler.locks.keySet())),
             null);
     private final Map<UUID, Lock> locks = new Object2ObjectOpenHashMap<>();

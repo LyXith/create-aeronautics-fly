@@ -5,7 +5,7 @@ import dev.simulated_team.simulated.content.items.plunger_launcher.PlungerLaunch
 import dev.simulated_team.simulated.content.physics_staff.PhysicsStaffItemModel;
 import net.minecraft.client.renderer.item.ItemModel;
 import net.minecraft.client.renderer.item.ItemModels;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public final class SimulatedItemModels {
     private SimulatedItemModels() {
@@ -16,7 +16,7 @@ public final class SimulatedItemModels {
         register(PlungerLauncherItemModel.ID, PlungerLauncherItemModel.Unbaked.CODEC);
     }
 
-    private static <T extends ItemModel.Unbaked> void register(final ResourceLocation id, final MapCodec<T> codec) {
+    private static <T extends ItemModel.Unbaked> void register(final Identifier id, final MapCodec<T> codec) {
         ItemModels.ID_MAPPER.put(id, codec);
     }
 }

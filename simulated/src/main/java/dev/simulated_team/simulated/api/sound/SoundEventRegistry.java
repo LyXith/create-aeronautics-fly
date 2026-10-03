@@ -5,7 +5,7 @@ import foundry.veil.platform.registry.RegistrationProvider;
 import foundry.veil.platform.registry.RegistryObject;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 
@@ -25,7 +25,7 @@ public class SoundEventRegistry {
 	}
 
 	public SimSoundEntry create(final String name, final SoundSource category, final UnaryOperator<DefinitionBuilder> operator) {
-		final ResourceLocation location = this.path(name);
+		final Identifier location = this.path(name);
 		this.definitions.put(name, operator.apply(new DefinitionBuilder(name)).build());
 		final RegistryObject<SoundEvent> registryObject = this.registry.register(name, () -> SoundEvent.createVariableRangeEvent(location));
 		return new SimSoundEntry(location, registryObject, category);
@@ -40,8 +40,8 @@ public class SoundEventRegistry {
 		return new SoundsProvider(this.modId, output, this.definitions);
 	}
 
-	private ResourceLocation path(final String path) {
-		return ResourceLocation.fromNamespaceAndPath(this.modId, path);
+	private Identifier path(final String path) {
+		return Identifier.fromNamespaceAndPath(this.modId, path);
 	}
 
 	public void provideLang(final BiConsumer<String, String> consumer) {
@@ -71,7 +71,7 @@ public class SoundEventRegistry {
 			return this.defaultSubtitle(subtitle, id);
 		}
 
-		public DefinitionBuilder addFileVariant(final ResourceLocation path, final UnaryOperator<SoundBuilder> operator) {
+		public DefinitionBuilder addFileVariant(final Identifier path, final UnaryOperator<SoundBuilder> operator) {
 			final SoundBuilder builder = SoundEventRegistry.this.new SoundBuilder(path);
 			operator.apply(builder);
 			this.sounds.add(builder.build());
@@ -136,7 +136,7 @@ public class SoundEventRegistry {
 	}
 
 	public class SoundBuilder {
-		private final ResourceLocation name;
+		private final Identifier name;
 		private float volume = 1.0f;
 		private float pitch = 1.0f;
 		private int weight = 1;
@@ -145,7 +145,7 @@ public class SoundEventRegistry {
 		private boolean preload = false;
 		private SoundFile.Type type = SoundFile.Type.FILE;
 
-		private SoundBuilder(final ResourceLocation name) {
+		private SoundBuilder(final Identifier name) {
 			this.name = name;
 		}
 

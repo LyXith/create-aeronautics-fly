@@ -18,7 +18,7 @@ import net.fabricmc.fabric.api.registry.CompostingChanceRegistry;
 import net.fabricmc.fabric.api.registry.FuelRegistryEvents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import org.jetbrains.annotations.Nullable;
 
@@ -268,7 +268,7 @@ public class ItemBuilder<T extends Item, P> extends AbstractBuilder<Item, T, P, 
         Item.Properties properties = this.initialProperties.get();
         properties = propertiesCallback.apply(properties);
         properties.setId(ResourceKey.create(Registries.ITEM,
-                ResourceLocation.fromNamespaceAndPath(getOwner().getModid(), getName())));
+                Identifier.fromNamespaceAndPath(getOwner().getModid(), getName())));
         return factory.apply(properties);
     }
 

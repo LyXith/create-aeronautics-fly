@@ -18,14 +18,14 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.joml.Matrix3x2fStack;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
 public class DiagramForceGroupToggle extends AbstractWidget {
-    private final ResourceLocation groupId;
+    private final Identifier groupId;
     private final ForceGroup group;
     private final DiagramScreen diagramScreen;
     private int forceCount;

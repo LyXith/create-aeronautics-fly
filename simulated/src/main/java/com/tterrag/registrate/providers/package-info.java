@@ -1,4 +1,4 @@
 //@javax.annotation.ParametersAreNonnullByDefault
-@net.minecraft.MethodsReturnNonnullByDefault
+@org.jspecify.annotations.NullMarked
 @com.tterrag.registrate.util.nullness.FieldsAreNonnullByDefault
 package com.tterrag.registrate.providers;

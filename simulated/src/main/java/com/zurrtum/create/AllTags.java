@@ -1,7 +1,7 @@
 package com.zurrtum.create;
 
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -13,7 +13,7 @@ public final class AllTags {
     }
 
     public static TagKey<Item> commonItemTag(String path) {
-        return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", path));
+        return TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("c", path));
     }
 
     public static final class TagRef<T> {
@@ -37,7 +37,7 @@ public final class AllTags {
         public static final TagRef<Block> FAN_TRANSPARENT = block("fan_transparent");
 
         private static TagRef<Block> block(String path) {
-            return new TagRef<>(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("create", path)));
+            return new TagRef<>(TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath("create", path)));
         }
     }
 
@@ -45,7 +45,7 @@ public final class AllTags {
         public static final TagRef<Item> CHAIN_RIDEABLE = item("chain_rideable");
 
         private static TagRef<Item> item(String path) {
-            return new TagRef<>(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("create", path)));
+            return new TagRef<>(TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("create", path)));
         }
     }
 }

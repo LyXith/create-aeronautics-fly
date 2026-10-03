@@ -30,7 +30,7 @@ import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 @Log4j2
 public class RegistrateAdvancementProvider implements RegistrateProvider, Consumer<AdvancementHolder> {
@@ -60,15 +60,15 @@ public class RegistrateAdvancementProvider implements RegistrateProvider, Consum
     }
 
     public MutableComponent title(String category, String name, String title) {
-        return owner.addLang("advancements", ResourceLocation.fromNamespaceAndPath(category, name), "title", title);
+        return owner.addLang("advancements", Identifier.fromNamespaceAndPath(category, name), "title", title);
     }
 
     public MutableComponent desc(String category, String name, String desc) {
-        return owner.addLang("advancements", ResourceLocation.fromNamespaceAndPath(category, name), "description", desc);
+        return owner.addLang("advancements", Identifier.fromNamespaceAndPath(category, name), "description", desc);
     }
 
     private @Nullable CachedOutput cache;
-    private Set<ResourceLocation> seenAdvancements = new HashSet<>();
+    private Set<Identifier> seenAdvancements = new HashSet<>();
 
     @Override
     public CompletableFuture<?> run(CachedOutput cache) {

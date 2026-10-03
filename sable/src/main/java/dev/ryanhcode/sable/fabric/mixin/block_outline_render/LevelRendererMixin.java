@@ -33,16 +33,16 @@ public abstract class LevelRendererMixin {
     @Nullable
     private ClientLevel level;
 
-    @WrapOperation(method = "renderBlockOutline", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/LevelRenderer;renderHitOutline(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;DDDLnet/minecraft/client/renderer/state/BlockOutlineRenderState;I)V"))
+    @WrapOperation(method = "renderBlockOutline", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/LevelRenderer;renderHitOutline(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;DDDLnet/minecraft/client/renderer/state/BlockOutlineRenderState;IF)V"))
     private void sable$renderHitOutline(final LevelRenderer instance, final PoseStack poseStack,
                                         final VertexConsumer consumer, final double camX, final double camY,
                                         final double camZ, final BlockOutlineRenderState outlineState,
-                                        final int color, final Operation<Void> original) {
+                                        final int color, final float lineWidth, final Operation<Void> original) {
         final BlockPos pos = outlineState.pos();
         final ClientSubLevel subLevel = (ClientSubLevel) Sable.HELPER.getContaining(this.level, pos);
 
         if (subLevel == null) {
-            original.call(instance, poseStack, consumer, camX, camY, camZ, outlineState, color);
+            original.call(instance, poseStack, consumer, camX, camY, camZ, outlineState, color, lineWidth);
             return;
         }
 
@@ -76,7 +76,8 @@ public abstract class LevelRendererMixin {
                 (double) pos.getY(),
                 (double) pos.getZ(),
                 outlineState,
-                color
+                color,
+                lineWidth
             );
         } finally {
             poseStack.popPose();

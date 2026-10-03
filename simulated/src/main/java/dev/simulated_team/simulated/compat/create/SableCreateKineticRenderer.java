@@ -17,7 +17,8 @@ import com.zurrtum.create.content.equipment.armor.BacktankBlockEntity;
 import com.zurrtum.create.content.kinetics.base.KineticBlockEntity;
 import com.zurrtum.create.content.kinetics.simpleRelays.BracketedKineticBlockEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -47,7 +48,7 @@ public final class SableCreateKineticRenderer {
         final BlockState state = kinetic.getBlockState();
         final Direction.Axis axis = KineticBlockEntityRenderer.getRotationAxisOf(kinetic);
         final Direction direction = Direction.fromAxisAndDirection(axis, Direction.AxisDirection.POSITIVE);
-        final VertexConsumer consumer = bufferSource.getBuffer(RenderType.solid());
+        final VertexConsumer consumer = bufferSource.getBuffer(RenderTypes.solidMovingBlock());
         final Color color = KineticBlockEntityRenderer.getColor(kinetic);
 
         if (state.is(AllBlocks.LARGE_COGWHEEL)) {
@@ -120,7 +121,7 @@ public final class SableCreateKineticRenderer {
         final BlockState state = backtank.getBlockState();
         final Direction.Axis axis = KineticBlockEntityRenderer.getRotationAxisOf(backtank);
         final Direction direction = Direction.fromAxisAndDirection(axis, Direction.AxisDirection.POSITIVE);
-        final VertexConsumer consumer = bufferSource.getBuffer(RenderType.solid());
+        final VertexConsumer consumer = bufferSource.getBuffer(RenderTypes.solidMovingBlock());
 
         renderRotating(
                 backtank,

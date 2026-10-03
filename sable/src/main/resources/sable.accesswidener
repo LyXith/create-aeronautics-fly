@@ -38,7 +38,7 @@ extendable method net/minecraft/server/level/GenerationChunkHolder rescheduleChu
 accessible method net/minecraft/server/level/ThreadedLevelLightEngine updateChunkStatus (Lnet/minecraft/world/level/ChunkPos;)V
 
 accessible field net/minecraft/client/renderer/block/BlockRenderDispatcher modelRenderer Lnet/minecraft/client/renderer/block/ModelBlockRenderer;
-accessible field net/minecraft/client/renderer/RenderStateShard name Ljava/lang/String;
+accessible field net/minecraft/client/renderer/rendertype/RenderType name Ljava/lang/String;
 
 # Assembly
 accessible method net/minecraft/world/entity/decoration/HangingEntity calculateSupportBox ()Lnet/minecraft/world/phys/AABB;
@@ -97,5 +97,5 @@ extendable method net/minecraft/world/entity/Entity getEyePosition (F)Lnet/minec
 extendable method net/minecraft/world/entity/Entity setRemoved (Lnet/minecraft/world/entity/Entity$RemovalReason;)V
 
 #Abstract hurting projectile accel
-accessible field net/minecraft/world/entity/projectile/AbstractHurtingProjectile accelerationPower D
+accessible field net/minecraft/world/entity/projectile/hurtingprojectile/AbstractHurtingProjectile accelerationPower D
 

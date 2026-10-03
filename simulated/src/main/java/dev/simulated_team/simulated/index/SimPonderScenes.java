@@ -10,7 +10,7 @@ import com.zurrtum.create.client.ponder.api.registration.PonderSceneRegistration
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
 
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SimPonderScenes {
-    public static void register(final PonderSceneRegistrationHelper<ResourceLocation> registry) {
+    public static void register(final PonderSceneRegistrationHelper<Identifier> registry) {
         final PonderSceneRegistrationHelper<ItemProviderEntry<?, ?>> helper = registry.withKeyFunction(ItemProviderEntry::getId);
 
         //PHYSICS
@@ -110,12 +110,12 @@ public class SimPonderScenes {
     private static ItemProviderEntry<Item, Item> vanillaItemProvider(final String id) {
         return new ItemProviderEntry<>(
                 Simulated.getRegistrate(),
-                io.github.fabricators_of_create.porting_lib.util.DeferredHolder.create(ResourceKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace(id)))
+                io.github.fabricators_of_create.porting_lib.util.DeferredHolder.create(ResourceKey.create(Registries.ITEM, Identifier.withDefaultNamespace(id)))
         );
     }
 
     private static ItemProviderEntry<Item, Item> itemProvider(final ItemLike itemLike) {
-        final ResourceLocation id = BuiltInRegistries.ITEM.getKey(itemLike.asItem());
+        final Identifier id = BuiltInRegistries.ITEM.getKey(itemLike.asItem());
         return new ItemProviderEntry<>(
                 Simulated.getRegistrate(),
                 io.github.fabricators_of_create.porting_lib.util.DeferredHolder.create(ResourceKey.create(Registries.ITEM, id))

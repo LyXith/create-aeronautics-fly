@@ -191,7 +191,7 @@ public class VanillaChunkedSubLevelRenderData implements SubLevelRenderData {
         }
 
         final ProfilerFiller profiler = net.minecraft.util.profiling.Profiler.get();
-        final Vector3d cameraPos = JOMLConversion.atCenterOf(camera.getBlockPosition()).sub(8, 8, 8);
+        final Vector3d cameraPos = JOMLConversion.atCenterOf(camera.blockPosition()).sub(8, 8, 8);
         this.subLevel.logicalPose().transformPositionInverse(cameraPos);
 
         for (final SectionRenderDispatcher.RenderSection renderSection : this.dirtyRenderSections) {

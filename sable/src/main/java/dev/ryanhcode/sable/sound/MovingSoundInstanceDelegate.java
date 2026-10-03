@@ -12,7 +12,7 @@ import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.client.resources.sounds.TickableSoundInstance;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.client.sounds.WeighedSoundEvents;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
@@ -79,8 +79,8 @@ public class MovingSoundInstanceDelegate implements SoundInstance, TickableSound
     }
 
     @Override
-    public @NotNull ResourceLocation getLocation() {
-        return this.instance.getLocation();
+    public @NotNull Identifier getIdentifier() {
+        return this.instance.getIdentifier();
     }
 
     @Override

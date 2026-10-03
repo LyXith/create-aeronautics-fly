@@ -9,7 +9,8 @@ import com.zurrtum.create.catnip.math.AngleHelper;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
@@ -38,7 +39,7 @@ public class PhysicsAssemblerRenderer extends SmartBlockEntityRenderer<PhysicsAs
     private static void renderHandle(final PhysicsAssemblerBlockEntity be, final float partialTicks, final PoseStack ms,
                                      final MultiBufferSource buffer, final int light) {
         final BlockState blockState = be.getBlockState();
-        final VertexConsumer vb = buffer.getBuffer(RenderType.solid());
+        final VertexConsumer vb = buffer.getBuffer(RenderTypes.solidMovingBlock());
 
         // Render handle
         final SuperByteBuffer handle = CachedBuffers.partial(SimPartialModels.ASSEMBLER_LEVER, blockState);

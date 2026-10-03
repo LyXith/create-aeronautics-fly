@@ -3,7 +3,7 @@ package dev.simulated_team.simulated.content.entities.honey_glue;
 import net.minecraft.client.renderer.culling.Frustum;
 import dev.simulated_team.simulated.compat.minecraft.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class HoneyGlueRenderer extends EntityRenderer<HoneyGlueEntity> {
 
@@ -12,8 +12,8 @@ public class HoneyGlueRenderer extends EntityRenderer<HoneyGlueEntity> {
 	}
 
 	@Override
-	public ResourceLocation getTextureLocation(final HoneyGlueEntity entity) {
-		return ResourceLocation.parse("");
+	public Identifier getTextureLocation(final HoneyGlueEntity entity) {
+		return Identifier.parse("");
 	}
 
 	@Override

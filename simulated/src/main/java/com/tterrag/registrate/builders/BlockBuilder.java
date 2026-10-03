@@ -16,11 +16,12 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.minecraft.client.color.block.BlockColor;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -143,19 +144,19 @@ public class BlockBuilder<T extends Block, P> extends AbstractBuilder<Block, T, 
         if (layer instanceof ChunkSectionLayer chunkLayer) {
             return chunkLayer;
         }
-        if (layer == RenderType.solid()) {
+        if (layer == RenderTypes.solidMovingBlock()) {
             return ChunkSectionLayer.SOLID;
         }
-        if (layer == RenderType.cutoutMipped()) {
-            return ChunkSectionLayer.CUTOUT_MIPPED;
-        }
-        if (layer == RenderType.cutout()) {
+        if (layer == RenderTypes.cutoutMovingBlock()) {
             return ChunkSectionLayer.CUTOUT;
         }
-        if (layer == RenderType.translucentMovingBlock()) {
+        if (layer == RenderTypes.cutoutMovingBlock()) {
+            return ChunkSectionLayer.CUTOUT;
+        }
+        if (layer == RenderTypes.translucentMovingBlock()) {
             return ChunkSectionLayer.TRANSLUCENT;
         }
-        if (layer == RenderType.tripwire()) {
+        if (layer == RenderTypes.tripwireMovingBlock()) {
             return ChunkSectionLayer.TRIPWIRE;
         }
         throw new IllegalArgumentException("Unsupported block render layer: " + layer);
@@ -365,7 +366,7 @@ public class BlockBuilder<T extends Block, P> extends AbstractBuilder<Block, T, 
         @NotNull BlockBehaviour.Properties properties = this.initialProperties.get();
         properties = propertiesCallback.apply(properties);
         properties.setId(ResourceKey.create(Registries.BLOCK,
-                ResourceLocation.fromNamespaceAndPath(getOwner().getModid(), getName())));
+                Identifier.fromNamespaceAndPath(getOwner().getModid(), getName())));
         return factory.apply(properties);
     }
 

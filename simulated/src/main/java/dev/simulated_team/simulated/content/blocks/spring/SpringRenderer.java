@@ -74,7 +74,7 @@ public class SpringRenderer extends SmartBlockEntityRenderer<SpringBlockEntity> 
         // The original shader used alpha as the strength of a red stress overlay.
         // Standard render pipelines use it as opacity, so keep the mesh opaque and
         // approximate the overlay with an RGB tint instead.
-        return ARGB.lerp(stressAlpha, 0xFFFFFFFF, SimColors.STRESSED_RED);
+        return ARGB.srgbLerp(stressAlpha, 0xFFFFFFFF, SimColors.STRESSED_RED);
     }
 
     @Override

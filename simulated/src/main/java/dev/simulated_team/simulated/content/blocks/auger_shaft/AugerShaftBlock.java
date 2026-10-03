@@ -19,8 +19,8 @@ import dev.simulated_team.simulated.index.SimSoundEvents;
 import com.zurrtum.create.catnip.placement.IPlacementHelper;
 import com.zurrtum.create.catnip.placement.PlacementHelpers;
 import com.zurrtum.create.catnip.placement.PlacementOffset;
-import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.Util;
+import org.jspecify.annotations.NullMarked;
+import net.minecraft.util.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.RegistryAccess;
@@ -266,7 +266,7 @@ public class AugerShaftBlock extends RotatedPillarKineticBlock implements IBE<Au
         }
     }
 
-    @MethodsReturnNonnullByDefault
+    @NullMarked
     private static class PlacementHelper extends PoleHelper<Direction.Axis> {
         private PlacementHelper() {
             super(state -> state.getBlock() instanceof AugerShaftBlock, state -> state.getValue(AXIS), AXIS);

@@ -2,11 +2,12 @@ package dev.simulated_team.simulated.multiloader.inventory;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
-public class ContainerSlot implements NBTSerializable {
+public class ContainerSlot implements NBTSerializable, SlotAccess {
 
     public static final ContainerSlot EMPTY = new ContainerSlot();
 
@@ -127,6 +128,20 @@ public class ContainerSlot implements NBTSerializable {
 
     public ItemStack getStack() {
         return this.stack;
+    }
+
+    @Override
+    public ItemStack get() {
+        return getStack();
+    }
+
+    @Override
+    public boolean set(final ItemStack stack) {
+        if (this.parent == null) {
+            return false;
+        }
+        setStack(stack);
+        return true;
     }
 
     public Item getType() {

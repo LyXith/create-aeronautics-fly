@@ -10,10 +10,10 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.Criterion;
-import net.minecraft.advancements.critereon.EnterBlockTrigger;
-import net.minecraft.advancements.critereon.InventoryChangeTrigger;
-import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.advancements.criterion.EnterBlockTrigger;
+import net.minecraft.advancements.criterion.InventoryChangeTrigger;
+import net.minecraft.advancements.criterion.ItemPredicate;
+import net.minecraft.advancements.criterion.MinMaxBounds;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -28,7 +28,7 @@ import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
 import net.minecraft.data.recipes.SingleItemRecipeBuilder;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.Item;
@@ -153,19 +153,19 @@ public class RegistrateRecipeProvider extends RecipeProvider.Runner implements R
         return EnvType.SERVER;
     }
 
-    public ResourceLocation safeId(ResourceLocation id) {
-        return ResourceLocation.fromNamespaceAndPath(owner.getModid(), safeName(id));
+    public Identifier safeId(Identifier id) {
+        return Identifier.fromNamespaceAndPath(owner.getModid(), safeName(id));
     }
 
-    public ResourceLocation safeId(DataIngredient source) {
+    public Identifier safeId(DataIngredient source) {
         return safeId(source.getId());
     }
 
-    public ResourceLocation safeId(ItemLike registryEntry) {
+    public Identifier safeId(ItemLike registryEntry) {
         return safeId(BuiltInRegistries.ITEM.getKey(registryEntry.asItem()));
     }
 
-    public ResourceKey<Recipe<?>> safeKey(ResourceLocation id) {
+    public ResourceKey<Recipe<?>> safeKey(Identifier id) {
         return ResourceKey.create(Registries.RECIPE, safeId(id));
     }
 
@@ -177,7 +177,7 @@ public class RegistrateRecipeProvider extends RecipeProvider.Runner implements R
         return safeKey(BuiltInRegistries.ITEM.getKey(registryEntry.asItem()));
     }
 
-    public String safeName(ResourceLocation id) {
+    public String safeName(Identifier id) {
         return id.getPath().replace('/', '_');
     }
 

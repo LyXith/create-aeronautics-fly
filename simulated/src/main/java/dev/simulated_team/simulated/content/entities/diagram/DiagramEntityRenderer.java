@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
 import dev.simulated_team.simulated.compat.minecraft.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Blocks;
 
 public class DiagramEntityRenderer extends EntityRenderer<DiagramEntity> {
@@ -38,7 +38,7 @@ public class DiagramEntityRenderer extends EntityRenderer<DiagramEntity> {
 	}
 
 	@Override
-	public ResourceLocation getTextureLocation(final DiagramEntity entity) {
+	public Identifier getTextureLocation(final DiagramEntity entity) {
 		return null;
 	}
 

@@ -55,7 +55,7 @@ public class LaserSensorInteractorBehaviour extends LaserBehaviour {
             return false;
         }
 
-        final BlockEntity be = this.getWorld().getBlockEntity(bhr.getBlockPos());
+        final BlockEntity be = this.getLevel().getBlockEntity(bhr.getBlockPos());
         if (be instanceof final LaserSensorBlockEntity lbe) {
             if (this.getProperFacing(be.getBlockState()) != bhr.getDirection() || !this.filter.test(lbe)) {
                 return false;

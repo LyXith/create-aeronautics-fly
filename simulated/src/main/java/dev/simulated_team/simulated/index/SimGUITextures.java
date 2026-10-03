@@ -7,7 +7,7 @@ import com.zurrtum.create.client.catnip.gui.element.ScreenElement;
 import com.zurrtum.create.catnip.theme.Color;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 public enum SimGUITextures implements ScreenElement {
@@ -73,7 +73,7 @@ public enum SimGUITextures implements ScreenElement {
     LINKED_TYPEWRITER_TRASH_CONFIRM_HOVER("linked_typewriter/linked_typewriter", 113, 127, 18, 18);
 
     @NotNull
-    public final ResourceLocation location;
+    public final Identifier location;
 
     public final int width, height;
     public final int startX, startY;
@@ -99,7 +99,7 @@ public enum SimGUITextures implements ScreenElement {
         this(namespace, location, startX, startY, width, height, 256, 256);
     }
 
-    SimGUITextures(final ResourceLocation location, final int startX, final int startY, final int width, final int height, final int texWidth, final int texHeight) {
+    SimGUITextures(final Identifier location, final int startX, final int startY, final int width, final int height, final int texWidth, final int texHeight) {
         this.location = location;
         this.width = width;
         this.height = height;
@@ -110,7 +110,7 @@ public enum SimGUITextures implements ScreenElement {
     }
 
     SimGUITextures(final String namespace, final String location, final int startX, final int startY, final int width, final int height, final int texWidth, final int texHeight) {
-        final ResourceLocation loc = ResourceLocation.tryBuild(namespace, "textures/gui/" + location + ".png");
+        final Identifier loc = Identifier.tryBuild(namespace, "textures/gui/" + location + ".png");
         assert loc != null; //location should never be null here, if it is, we messed up
 
         this.location = loc;

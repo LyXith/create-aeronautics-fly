@@ -7,7 +7,7 @@ import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.providers.RegistrateTagsProvider;
 import dev.simulated_team.simulated.Simulated;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
@@ -46,7 +46,7 @@ public class SimTags {
             return TagKey.create(Registries.BLOCK, Simulated.path(path));
         }
         private static TagKey<Block> create(final String namespace, final String path) {
-            return TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(namespace, path));
+            return TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(namespace, path));
         }
         protected static void addGenerators() {
             Simulated.getRegistrate().addDataGenerator(ProviderType.BLOCK_TAGS, Blocks::genBlockTags);
@@ -92,9 +92,9 @@ public class SimTags {
             final TagGen.CreateTagsProvider<Item> prov = new TagGen.CreateTagsProvider<>(provIn, Item::builtInRegistryHolder);
             prov.tag(ROTATE_WITH_NAV_ARROW)
                     .add(COMPASS, RECOVERY_COMPASS)
-                    .addOptional(ResourceLocation.fromNamespaceAndPath("naturescompass", "naturescompass"));
+                    .addOptional(Identifier.fromNamespaceAndPath("naturescompass", "naturescompass"));
             prov.tag(ROTATE_WITH_NAV_ARROW)
-                    .addOptional(ResourceLocation.fromNamespaceAndPath("explorerscompass", "explorerscompass"));
+                    .addOptional(Identifier.fromNamespaceAndPath("explorerscompass", "explorerscompass"));
             prov.tag(DESTROYS_ROPE)
                     .add(SHEARS)
                     .add(AllItems.WRENCH.asItem());

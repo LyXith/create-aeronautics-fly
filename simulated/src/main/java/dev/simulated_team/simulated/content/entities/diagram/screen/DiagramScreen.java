@@ -40,7 +40,7 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -288,17 +288,17 @@ public class DiagramScreen extends AbstractSimiScreen {
     }
 
     // this is horrid :(
-    private HashMap<ResourceLocation, Tuple<Greeble, ArrayList<Greeble.TextureSlice>>> genGreebleSet(final RandomSource random) {
-        final HashMap<ResourceLocation, Tuple<Greeble, ArrayList<Greeble.TextureSlice>>> greebleSet = new HashMap<>();
+    private HashMap<Identifier, Tuple<Greeble, ArrayList<Greeble.TextureSlice>>> genGreebleSet(final RandomSource random) {
+        final HashMap<Identifier, Tuple<Greeble, ArrayList<Greeble.TextureSlice>>> greebleSet = new HashMap<>();
 
-        for (final Map.Entry<ResourceLocation, Greeble> entry : SimResourceManagers.GREEBLE.entrySet()) {
+        for (final Map.Entry<Identifier, Greeble> entry : SimResourceManagers.GREEBLE.entrySet()) {
             greebleSet.put(entry.getKey(), new Tuple<>(entry.getValue(), entry.getValue().shuffled()));
         }
 
         return greebleSet;
     }
 
-    private ResourceLocation randomGreeble(final RandomSource random) {
+    private Identifier randomGreeble(final RandomSource random) {
         float weightSum = 0;
 
         for (final Greeble greeble : SimResourceManagers.GREEBLE.entries()) {
@@ -307,7 +307,7 @@ public class DiagramScreen extends AbstractSimiScreen {
 
         float weight = random.nextFloat() * weightSum;
 
-        for (final Map.Entry<ResourceLocation, Greeble> greeble : SimResourceManagers.GREEBLE.entrySet()) {
+        for (final Map.Entry<Identifier, Greeble> greeble : SimResourceManagers.GREEBLE.entrySet()) {
             weight -= greeble.getValue().weight();
 
             if (weight <= 0) {
@@ -320,7 +320,7 @@ public class DiagramScreen extends AbstractSimiScreen {
     private void addGreebles(final int diagramX, final int diagramY) {
         final RandomSource random = this.subLevel.getLevel().getRandom();
 
-        final HashMap<ResourceLocation, Tuple<Greeble, ArrayList<Greeble.TextureSlice>>> greebleSet = this.genGreebleSet(random);
+        final HashMap<Identifier, Tuple<Greeble, ArrayList<Greeble.TextureSlice>>> greebleSet = this.genGreebleSet(random);
         final List<AABB> placed = new ObjectArrayList<>();
 
         // Avoid top-left region (diagram buttons are placed there)
@@ -335,7 +335,7 @@ public class DiagramScreen extends AbstractSimiScreen {
         this.finalFbo.bindRead();
 
         for (int i = 0; i < greebles; i++) {
-            final ResourceLocation greebleID = this.randomGreeble(random);
+            final Identifier greebleID = this.randomGreeble(random);
             final Greeble greeble = SimResourceManagers.GREEBLE.get(greebleID);
             final ArrayList<Greeble.TextureSlice> slices = greebleSet.get(greebleID).getB();
             if (slices.isEmpty()) {
@@ -743,7 +743,7 @@ public class DiagramScreen extends AbstractSimiScreen {
         pose.pushMatrix();
         pose.translate(0, height);
         pose.scale(1, -1);
-        graphics.fill(RenderPipelines.GUI_TEXTURED, TextureSetup.singleTexture(fbo.getColorTextureAttachment(0).getTextureView()), 0, 0, width, height);
+        graphics.fill(RenderPipelines.GUI_TEXTURED, TextureSetup.singleTexture(fbo.getColorTextureAttachment(0).getTextureView(), com.mojang.blaze3d.systems.RenderSystem.getSamplerCache().getClampToEdge(com.mojang.blaze3d.textures.FilterMode.NEAREST)), 0, 0, width, height);
         pose.popMatrix();
     }
 
@@ -763,7 +763,7 @@ public class DiagramScreen extends AbstractSimiScreen {
 
             final Map<ForceGroup, List<ForceClusterFinder.Cluster>> clusters = new HashMap<>();
 
-            for (final ResourceLocation groupId : this.config.enabledForceGroups()) {
+            for (final Identifier groupId : this.config.enabledForceGroups()) {
                 final ForceGroup group = ForceGroups.REGISTRY.getValue(groupId);
                 assert group != null;
 
@@ -779,7 +779,7 @@ public class DiagramScreen extends AbstractSimiScreen {
                 }
             }
 
-            for (final ResourceLocation groupId : this.config.enabledForceGroups()) {
+            for (final Identifier groupId : this.config.enabledForceGroups()) {
                 final ForceGroup group = ForceGroups.REGISTRY.getValue(groupId);
                 assert group != null;
 
@@ -1039,7 +1039,7 @@ public class DiagramScreen extends AbstractSimiScreen {
 //        return true;
 //    }
 
-    public record GreebleRenderable(int x, int y, int width, int height, ResourceLocation texture,
+    public record GreebleRenderable(int x, int y, int width, int height, Identifier texture,
                                     Greeble.TextureSlice slice) implements Renderable {
         @Override
         public void render(final GuiGraphics guiGraphics, final int i, final int i1, final float v) {

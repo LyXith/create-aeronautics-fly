@@ -5,7 +5,7 @@ import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,21 +24,21 @@ public interface RegistrationProvider<T> {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private static <T> Registry<T> registry(final ResourceKey<? extends Registry<T>> resourceKey) {
-        final Registry<T> existing = (Registry<T>) BuiltInRegistries.REGISTRY.getValue(resourceKey.location());
+        final Registry<T> existing = (Registry<T>) BuiltInRegistries.REGISTRY.getValue(resourceKey.identifier());
         if (existing != null) {
             return existing;
         }
 
         final MappedRegistry<T> registry = new MappedRegistry<>(resourceKey, Lifecycle.stable());
-        Registry.register((Registry) BuiltInRegistries.REGISTRY, resourceKey.location(), registry);
+        Registry.register((Registry) BuiltInRegistries.REGISTRY, resourceKey.identifier(), registry);
         return registry;
     }
 
     default <I extends T> RegistryObject<I> register(final String name, final Supplier<? extends I> supplier) {
-        return this.register(ResourceLocation.fromNamespaceAndPath(this.getModId(), name), supplier);
+        return this.register(Identifier.fromNamespaceAndPath(this.getModId(), name), supplier);
     }
 
-    <I extends T> RegistryObject<I> register(ResourceLocation id, Supplier<? extends I> supplier);
+    <I extends T> RegistryObject<I> register(Identifier id, Supplier<? extends I> supplier);
 
     Collection<RegistryObject<T>> getEntries();
 
@@ -57,7 +57,7 @@ public interface RegistrationProvider<T> {
         }
 
         @Override
-        public <I extends T> RegistryObject<I> register(final ResourceLocation id, final Supplier<? extends I> supplier) {
+        public <I extends T> RegistryObject<I> register(final Identifier id, final Supplier<? extends I> supplier) {
             final I value = Registry.register(this.registry, id, supplier.get());
             final ResourceKey<I> key = ResourceKey.create((ResourceKey) this.registry.key(), id);
             final RegistryObject<I> object = new FabricRegistryObject<>(this.registry, key, value);

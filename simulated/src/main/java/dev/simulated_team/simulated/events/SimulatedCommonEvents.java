@@ -28,7 +28,7 @@ import dev.simulated_team.simulated.registrate.SimulatedRegistrate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -79,11 +79,11 @@ public class SimulatedCommonEvents {
     }
 
     public static void onPlayerLoggedIn(final Player player) {
-        for (final Map.Entry<ResourceLocation, SimulatedWorldPreset> entry : SimWorldPresets.PRESETS.entrySet()) {
+        for (final Map.Entry<Identifier, SimulatedWorldPreset> entry : SimWorldPresets.PRESETS.entrySet()) {
             final ServerLevel level = (ServerLevel) player.level();
 
             if (player instanceof final ServerPlayer serverPlayer) {
-                final ResourceLocation worldPreset = ((PrimaryLevelDataExtension) level.getServer().getWorldData()).getPreset();
+                final Identifier worldPreset = ((PrimaryLevelDataExtension) level.getServer().getWorldData()).getPreset();
 
                 if (entry.getValue().id().equals(worldPreset)) {
                     entry.getValue().onPlayerJoin(level, serverPlayer);
@@ -95,9 +95,9 @@ public class SimulatedCommonEvents {
     }
 
     public static void onChunkLoad(final LevelAccessor level, final ChunkAccess chunk, final boolean newChunk) {
-        for (final Map.Entry<ResourceLocation, SimulatedWorldPreset> entry : SimWorldPresets.PRESETS.entrySet()) {
+        for (final Map.Entry<Identifier, SimulatedWorldPreset> entry : SimWorldPresets.PRESETS.entrySet()) {
             if(level instanceof final ServerLevel serverLevel) {
-                final ResourceLocation worldPreset = ((PrimaryLevelDataExtension) serverLevel.getServer().getWorldData()).getPreset();
+                final Identifier worldPreset = ((PrimaryLevelDataExtension) serverLevel.getServer().getWorldData()).getPreset();
 
                 if(entry.getValue().id().equals(worldPreset)) {
                     entry.getValue().onChunkLoad(serverLevel, chunk, newChunk);
@@ -148,8 +148,8 @@ public class SimulatedCommonEvents {
     }
 
     public static void modifyDefaultComponents(final BiConsumer<ItemLike, Consumer<ComponentBuilder>> modify) {
-        final ResourceLocation basePunchStrengthId = Simulated.path("base_punch_strength");
-        final ResourceLocation basePunchCooldownId = Simulated.path("base_punch_cooldown");
+        final Identifier basePunchStrengthId = Simulated.path("base_punch_strength");
+        final Identifier basePunchCooldownId = Simulated.path("base_punch_cooldown");
 
         modify.accept(AllItems.EXTENDO_GRIP, builder -> {
             final AttributeModifier strengthModifier = new AttributeModifier(basePunchStrengthId, 10.0f, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);

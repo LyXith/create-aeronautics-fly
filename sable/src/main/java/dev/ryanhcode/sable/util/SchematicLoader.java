@@ -1,11 +1,11 @@
 package dev.ryanhcode.sable.util;
 
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.nbt.NbtIo;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.packs.resources.Resource;
@@ -23,10 +23,10 @@ import java.util.concurrent.CompletableFuture;
  */
 public class SchematicLoader {
 
-    public static @Nullable StructureTemplate loadSchematic(final ServerLevel level, final ResourceLocation location) {
+    public static @Nullable StructureTemplate loadSchematic(final ServerLevel level, final Identifier location) {
         final String namespace = location.getNamespace();
         final String path = "schematics/" + location.getPath() + ".nbt";
-        final ResourceLocation location1 = ResourceLocation.fromNamespaceAndPath(namespace, path);
+        final Identifier location1 = Identifier.fromNamespaceAndPath(namespace, path);
 
         final Optional<Resource> option = level.getServer().getResourceManager().getResource(location1);
         if (option.isEmpty()) {
@@ -45,7 +45,7 @@ public class SchematicLoader {
         }
     }
 
-    public static CompletableFuture<Set<ResourceLocation>> getSchematics(final MinecraftServer server) {
+    public static CompletableFuture<Set<Identifier>> getSchematics(final MinecraftServer server) {
         return CompletableFuture.supplyAsync(() -> server.getResourceManager().listResources("schematics", path -> path.getPath().endsWith(".nbt")).keySet(), Util.backgroundExecutor());
     }
 

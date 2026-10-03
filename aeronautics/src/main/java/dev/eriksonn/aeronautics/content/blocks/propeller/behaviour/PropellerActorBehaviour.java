@@ -143,14 +143,14 @@ public class PropellerActorBehaviour extends BlockEntityBehaviour implements IHa
         final BoundingBox3d aabb = new BoundingBox3d(min.x, min.y, min.z, max.x, max.y, max.z);
 
         STORED_TRANSFORMED_THRUST.set(this.thrustDirection);
-        final SubLevel subLevel = Sable.HELPER.getContaining(this.getWorld(), this.getPos());
+        final SubLevel subLevel = Sable.HELPER.getContaining(this.getLevel(), this.getPos());
         if (subLevel != null) {
             aabb.transform(subLevel.logicalPose(), aabb);
 
             subLevel.logicalPose().transformNormal(STORED_TRANSFORMED_THRUST);
         }
 
-        final List<Entity> entities = this.getWorld().getEntities(null, aabb.toMojang());
+        final List<Entity> entities = this.getLevel().getEntities(null, aabb.toMojang());
         if (!entities.isEmpty()) {
             for (final Entity entity : entities) {
                 if (entity instanceof AbstractContraptionEntity ||
@@ -203,7 +203,7 @@ public class PropellerActorBehaviour extends BlockEntityBehaviour implements IHa
                             CollisionContext.empty()
                     );
 
-                    if (this.getWorld().clip(ctx).getType() == HitResult.Type.MISS) {
+                    if (this.getLevel().clip(ctx).getType() == HitResult.Type.MISS) {
                         final float modifier = entity.isShiftKeyDown() ? 0.125f : 1;
                         // 0.55 is the acceleration required to keep living entities aloft,
                         // and this scaling causes those entities to float at the edge of the particle range at asymptotically high airflows
@@ -244,7 +244,7 @@ public class PropellerActorBehaviour extends BlockEntityBehaviour implements IHa
      * Spawn simple airflow particles
      */
     public void spawnParticles() {
-        if (!this.getWorld().isClientSide())
+        if (!this.getLevel().isClientSide())
             return;
         if (this.propellerLayers.isEmpty())
             return;
@@ -253,9 +253,9 @@ public class PropellerActorBehaviour extends BlockEntityBehaviour implements IHa
 
         final Vector3d mutSpeed = new Vector3d();
 
-        final RandomSource random = this.getWorld().getRandom();
+        final RandomSource random = this.getLevel().getRandom();
         int particleCount = this.getParticleCount();
-        final SubLevel subLevel = Sable.HELPER.getContaining(this.getWorld(), this.getPos());
+        final SubLevel subLevel = Sable.HELPER.getContaining(this.getLevel(), this.getPos());
         final Vector3d origin = new Vector3d(this.getPos().getX() + 0.5, this.getPos().getY() + 0.5, this.getPos().getZ() + 0.5);
         for (int i = 0; i < particleCount; i++) {
             this.particlePositionUpdater.accept(STORED_MUT_POS, random);
@@ -264,7 +264,7 @@ public class PropellerActorBehaviour extends BlockEntityBehaviour implements IHa
             STORED_MUT_POS.fma(positionNudge, this.thrustDirection);
             this.thrustDirection.mul(speed * Math.exp(-PropellerAirParticle.frictionScale * positionNudge), mutSpeed);
 
-            this.getWorld().addParticle(new PropellerAirParticleData(true, false),
+            this.getLevel().addParticle(new PropellerAirParticleData(true, false),
                     STORED_MUT_POS.x, STORED_MUT_POS.y, STORED_MUT_POS.z,
                     mutSpeed.x, mutSpeed.y, mutSpeed.z);
         }
@@ -285,7 +285,7 @@ public class PropellerActorBehaviour extends BlockEntityBehaviour implements IHa
     }
 
     private void createHitParticle(final SubLevel subLevel, final Vector3d origin, final Vector3d start, final Vector3d end) {
-        final BlockHitResult clip = this.getWorld().clip(new ClipContext(
+        final BlockHitResult clip = this.getLevel().clip(new ClipContext(
                 JOMLConversion.toMojang(start),
                 JOMLConversion.toMojang(end),
                 ClipContext.Block.COLLIDER,
@@ -296,8 +296,8 @@ public class PropellerActorBehaviour extends BlockEntityBehaviour implements IHa
         final Vec3 hitPos = clip.getLocation();
 
         if (clip.getType() != HitResult.Type.MISS && start.distanceSquared(hitPos.x, hitPos.y, hitPos.z) > 1) {
-            final BlockState hitState = this.getWorld().getBlockState(clip.getBlockPos());
-            final Fluid fluid = this.getWorld().getFluidState(clip.getBlockPos()).getType();
+            final BlockState hitState = this.getLevel().getBlockState(clip.getBlockPos());
+            final Fluid fluid = this.getLevel().getFluidState(clip.getBlockPos()).getType();
 
             globalThrust.set(this.thrustDirection);
             relativeDiff.set(origin);
@@ -306,7 +306,7 @@ public class PropellerActorBehaviour extends BlockEntityBehaviour implements IHa
                 subLevel.logicalPose().transformPosition(relativeDiff);
             }
             normal.set(clip.getDirection().getStepX(), clip.getDirection().getStepY(), clip.getDirection().getStepZ());
-            final SubLevel other = Sable.HELPER.getContaining(this.getWorld(), clip.getBlockPos());
+            final SubLevel other = Sable.HELPER.getContaining(this.getLevel(), clip.getBlockPos());
             if (other != null)
                 other.logicalPose().orientation().transform(normal);
 
@@ -322,18 +322,18 @@ public class PropellerActorBehaviour extends BlockEntityBehaviour implements IHa
             if (other != null)
                 other.logicalPose().orientation().transformInverse(particleVelocity);
 
-            this.getWorld().addParticle(ParticleTypes.DUST_PLUME, hitPos.x, hitPos.y, hitPos.z, particleVelocity.x, particleVelocity.y, particleVelocity.z);
+            this.getLevel().addParticle(ParticleTypes.DUST_PLUME, hitPos.x, hitPos.y, hitPos.z, particleVelocity.x, particleVelocity.y, particleVelocity.z);
             if (hitState.is(BlockTags.MINEABLE_WITH_SHOVEL)) {
-                this.getWorld().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, hitState), hitPos.x, hitPos.y, hitPos.z, particleVelocity.x, particleVelocity.y, particleVelocity.z);
+                this.getLevel().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, hitState), hitPos.x, hitPos.y, hitPos.z, particleVelocity.x, particleVelocity.y, particleVelocity.z);
             } else if (fluid.isSame(Fluids.WATER)) {
-                this.getWorld().addParticle(ParticleTypes.SPLASH, hitPos.x, hitPos.y, hitPos.z, 0, 0, 0);
-                if (this.getWorld().getRandom().nextDouble() < 0.2)
-                    this.getWorld().addParticle(ParticleTypes.BUBBLE, hitPos.x, hitPos.y, hitPos.z, 0, 0, 0);
+                this.getLevel().addParticle(ParticleTypes.SPLASH, hitPos.x, hitPos.y, hitPos.z, 0, 0, 0);
+                if (this.getLevel().getRandom().nextDouble() < 0.2)
+                    this.getLevel().addParticle(ParticleTypes.BUBBLE, hitPos.x, hitPos.y, hitPos.z, 0, 0, 0);
 
             } else if (fluid.isSame(Fluids.LAVA)) {
-                this.getWorld().addParticle(ParticleTypes.SMOKE, hitPos.x, hitPos.y, hitPos.z, 0, 0, 0);
-                if (this.getWorld().getRandom().nextDouble() < 0.2)
-                    this.getWorld().addParticle(ParticleTypes.LAVA, hitPos.x, hitPos.y, hitPos.z, 0, 0, 0);
+                this.getLevel().addParticle(ParticleTypes.SMOKE, hitPos.x, hitPos.y, hitPos.z, 0, 0, 0);
+                if (this.getLevel().getRandom().nextDouble() < 0.2)
+                    this.getLevel().addParticle(ParticleTypes.LAVA, hitPos.x, hitPos.y, hitPos.z, 0, 0, 0);
 
             }
         }
@@ -349,7 +349,7 @@ public class PropellerActorBehaviour extends BlockEntityBehaviour implements IHa
         if (this.particleSmoothing > 0)
             count = Math.log(count / this.particleSmoothing + 1) * this.particleSmoothing;
 
-        return Math.min((int) (count + this.getWorld().random.nextFloat()), this.maxParticleAmount);
+        return Math.min((int) (count + this.getLevel().random.nextFloat()), this.maxParticleAmount);
     }
 
     public void setThrustDirection(final Vector3dc thrustDirection) {
@@ -358,7 +358,7 @@ public class PropellerActorBehaviour extends BlockEntityBehaviour implements IHa
 
 
     private double getAirPressure() {
-        return DimensionPhysicsData.getAirPressure(this.getWorld(), Sable.HELPER.projectOutOfSubLevel(this.getWorld(), JOMLConversion.atCenterOf(this.getPos())));
+        return DimensionPhysicsData.getAirPressure(this.getLevel(), Sable.HELPER.projectOutOfSubLevel(this.getLevel(), JOMLConversion.atCenterOf(this.getPos())));
     }
 
     public void setParticleAmountUpdater(final Supplier<Double> supp) {

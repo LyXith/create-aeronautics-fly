@@ -3,7 +3,7 @@ package dev.eriksonn.aeronautics.mixin.render.sodium;
 import dev.eriksonn.aeronautics.index.client.AeroRenderTypes;
 import net.caffeinemc.mods.sodium.client.render.chunk.terrain.material.DefaultMaterials;
 import net.caffeinemc.mods.sodium.client.render.chunk.terrain.material.Material;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -18,7 +18,7 @@ public class DefaultMaterialsMixin {
     @Final
     public static Material SOLID;
 
-    @Inject(method = "forRenderLayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/RenderType;translucent()Lnet/minecraft/client/renderer/RenderType;"), cancellable = true)
+    @Inject(method = "forRenderLayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/rendertype/RenderType;translucent()Lnet/minecraft/client/renderer/rendertype/RenderType;"), cancellable = true)
     private static void aeronautics$injectMaterialMapping(final RenderType layer, final CallbackInfoReturnable<Material> cir) {
         if (layer == AeroRenderTypes.levitite()) {
             cir.setReturnValue(SOLID);

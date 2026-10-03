@@ -1,0 +1,11 @@
+{
+  "sources": [
+    {
+      "type": "filter",
+      "pattern": {
+        "namespace": "simulated",
+        "path": "item/(plungerlauncher|zapper_staff)"
+      }
+    }
+  ]
+}

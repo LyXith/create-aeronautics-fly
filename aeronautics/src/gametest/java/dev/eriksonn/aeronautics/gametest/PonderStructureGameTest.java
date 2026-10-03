@@ -10,7 +10,7 @@ import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.TagParser;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
@@ -55,12 +55,12 @@ public abstract class PonderStructureGameTest {
             final String ponderPath
     ) {
         try {
-            final ResourceLocation templateId = ResourceLocation.fromNamespaceAndPath(
+            final Identifier templateId = Identifier.fromNamespaceAndPath(
                     namespace,
                     "ponder/" + ponderPath
             );
 
-            final Map<ResourceLocation, Integer> expectedEntities = validateRawFixture(
+            final Map<Identifier, Integer> expectedEntities = validateRawFixture(
                     helper,
                     namespace,
                     ponderPath,
@@ -171,11 +171,11 @@ public abstract class PonderStructureGameTest {
         }
     }
 
-    private static Map<ResourceLocation, Integer> validateRawFixture(
+    private static Map<Identifier, Integer> validateRawFixture(
             final GameTestHelper helper,
             final String namespace,
             final String ponderPath,
-            final ResourceLocation templateId
+            final Identifier templateId
     ) {
         final String resourcePath = "/data/%s/structure/ponder/%s.nbt".formatted(namespace, ponderPath);
 
@@ -210,17 +210,17 @@ public abstract class PonderStructureGameTest {
         }
     }
 
-    private static Map<ResourceLocation, Integer> validateEntities(
+    private static Map<Identifier, Integer> validateEntities(
             final GameTestHelper helper,
-            final ResourceLocation templateId,
+            final Identifier templateId,
             final ListTag entities
     ) {
-        final Map<ResourceLocation, Integer> expectedTypes = new TreeMap<>();
+        final Map<Identifier, Integer> expectedTypes = new TreeMap<>();
 
         for (int index = 0; index < entities.size(); index++) {
             final CompoundTag entityData = entities.getCompoundOrEmpty(index).getCompoundOrEmpty("nbt");
             final String entityName = entityData.getStringOr("id", "");
-            final ResourceLocation entityId = ResourceLocation.tryParse(entityName);
+            final Identifier entityId = Identifier.tryParse(entityName);
 
             if (entityId == null || !BuiltInRegistries.ENTITY_TYPE.containsKey(entityId)) {
                 throw helper.assertionException(
@@ -267,13 +267,13 @@ public abstract class PonderStructureGameTest {
 
     private static void validatePalette(
             final GameTestHelper helper,
-            final ResourceLocation templateId,
+            final Identifier templateId,
             final ListTag palette
     ) {
         for (int index = 0; index < palette.size(); index++) {
             final CompoundTag serializedState = palette.getCompoundOrEmpty(index);
             final String blockName = serializedState.getStringOr("Name", "");
-            final ResourceLocation blockId = ResourceLocation.tryParse(blockName);
+            final Identifier blockId = Identifier.tryParse(blockName);
 
             if (blockId == null || !BuiltInRegistries.BLOCK.containsKey(blockId)) {
                 throw helper.assertionException(
@@ -314,7 +314,7 @@ public abstract class PonderStructureGameTest {
 
     private static BlockState assertBlockState(
             final GameTestHelper helper,
-            final ResourceLocation templateId,
+            final Identifier templateId,
             final StructureTemplate.StructureBlockInfo expected,
             final RuntimeStateOverride runtimeOverride
     ) {
@@ -355,7 +355,7 @@ public abstract class PonderStructureGameTest {
 
     private static void assertBlockEntityData(
             final GameTestHelper helper,
-            final ResourceLocation templateId,
+            final Identifier templateId,
             final StructureTemplate.StructureBlockInfo expected,
             final BlockState expectedPlacedState
     ) {
@@ -372,7 +372,7 @@ public abstract class PonderStructureGameTest {
             );
         }
 
-        final ResourceLocation expectedTypeId = ResourceLocation.tryParse(expectedType);
+        final Identifier expectedTypeId = Identifier.tryParse(expectedType);
         if (expectedTypeId == null || !BuiltInRegistries.BLOCK_ENTITY_TYPE.containsKey(expectedTypeId)) {
             throw helper.assertionException(
                     expected.pos(),
@@ -435,7 +435,7 @@ public abstract class PonderStructureGameTest {
             );
         }
 
-        final ResourceLocation actualType = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(actual.getType());
+        final Identifier actualType = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(actual.getType());
         if (!expectedTypeId.equals(actualType)) {
             throw helper.assertionException(
                     expected.pos(),
@@ -449,7 +449,7 @@ public abstract class PonderStructureGameTest {
 
     private static Map<BlockPos, RuntimeStateOverride> runtimeOverrides(
             final GameTestHelper helper,
-            final ResourceLocation templateId,
+            final Identifier templateId,
             final Map<BlockPos, StructureTemplate.StructureBlockInfo> expectedBlocks
     ) {
         final ListTag serializedOverrides = RUNTIME_OVERRIDES.getListOrEmpty(templateId.toString());
@@ -526,10 +526,10 @@ public abstract class PonderStructureGameTest {
 
     private static void assertEntities(
             final GameTestHelper helper,
-            final ResourceLocation templateId,
-            final Map<ResourceLocation, Integer> expectedEntities
+            final Identifier templateId,
+            final Map<Identifier, Integer> expectedEntities
     ) {
-        for (final Map.Entry<ResourceLocation, Integer> expected : expectedEntities.entrySet()) {
+        for (final Map.Entry<Identifier, Integer> expected : expectedEntities.entrySet()) {
             final EntityType<?> entityType = BuiltInRegistries.ENTITY_TYPE.getValue(expected.getKey());
             final int actualCount = helper.getEntities(entityType).size();
 
