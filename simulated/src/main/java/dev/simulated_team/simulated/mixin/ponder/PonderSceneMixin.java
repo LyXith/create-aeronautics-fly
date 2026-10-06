@@ -6,7 +6,6 @@ import com.zurrtum.create.catnip.animation.LerpedFloat;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import com.zurrtum.create.client.ponder.foundation.PonderScene;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.SubmitNodeStorage;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
@@ -105,11 +104,13 @@ public class PonderSceneMixin implements PonderSceneExtension {
     //todo: pr this to ponder
     @Shadow
     private PonderScene.SceneTransform transform;
+    // 26.3: renderScene 的形参里已经没有 SubmitNodeStorage（只剩 SubmitNodeCollector），
+    // @Redirect 处理器的捕获参数必须逐个对齐目标方法形参，多一个就会被判定为签名非法。
     @Redirect(remap = false, method = "renderScene", at = @At(value = "INVOKE",
             target = "Lcom/zurrtum/create/client/ponder/foundation/PonderScene$SceneCamera;set(FF)V"))
     public void onCameraSet(final PonderScene.SceneCamera instance, final float xRotation, final float yRotation,
                             final Minecraft minecraft, final SubmitNodeCollector buffer,
-                            final SubmitNodeStorage queue, final PoseStack poseStack, final float partialTicks) {
+                            final PoseStack poseStack, final float partialTicks) {
         instance.set(-this.transform.xRotation.getValue(partialTicks),
                 this.transform.yRotation.getValue(partialTicks) + 180);
     }
