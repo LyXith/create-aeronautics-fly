@@ -24,11 +24,11 @@ public class SubLevelAABBOutline extends AABBOutline {
     }
 
     @Override
-    public void render(final Minecraft minecraft, final PoseStack poseStack, final SubmitNodeCollector buffer,
+    public void submit(final Minecraft minecraft, final PoseStack poseStack, final SubmitNodeCollector buffer,
                        final Vec3 camera, final float partialTick) {
         final ClientSubLevel subLevel = Sable.HELPER.getContainingClient(this.bb.getCenter());
         if (subLevel == null) {
-            super.render(minecraft, poseStack, buffer, camera, partialTick);
+            super.submit(minecraft, poseStack, buffer, camera, partialTick);
             return;
         }
 
@@ -48,7 +48,7 @@ public class SubLevelAABBOutline extends AABBOutline {
         );
         poseStack.scale((float) scale.x(), (float) scale.y(), (float) scale.z());
 
-        super.render(minecraft, poseStack, buffer, localCamera, partialTick);
+        super.submit(minecraft, poseStack, buffer, localCamera, partialTick);
         poseStack.popPose();
     }
 }

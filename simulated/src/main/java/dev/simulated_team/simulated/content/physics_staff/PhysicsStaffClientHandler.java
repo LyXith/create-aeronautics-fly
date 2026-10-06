@@ -358,8 +358,6 @@ public class PhysicsStaffClientHandler {
 
     public void onRender(final PoseStack ms, final SubmitNodeCollector worldBuffer) {
         final boolean shadersActive = OptionalShaderMods.isShaderPackActive();
-        final SubmitNodeCollector legacyBuffer = shadersActive ? null : DefaultSuperRenderTypeBuffer.getInstance();
-        final VertexConsumer shaderBuffer = shadersActive ? worldBuffer.getBuffer(SimRenderTypes.staffOverlay()) : null;
         final float pt = AnimationTickHolder.getPartialTicks();
         final Minecraft client = Minecraft.getInstance();
         final Camera mainCamera = client.gameRenderer.mainCamera();
@@ -399,16 +397,12 @@ public class PhysicsStaffClientHandler {
                 interpolatedBeamEnd = subLevel.renderPose(pt).transformPosition(interpolatedBeamEnd);
 
                 if (shadersActive) {
-                    beam.renderShaderSafe(focusPos, interpolatedBeamEnd, ms, shaderBuffer, camera, pt);
+                    beam.renderShaderSafe(focusPos, interpolatedBeamEnd, ms, worldBuffer, camera, pt);
                 } else {
-                    beam.render(focusPos, interpolatedBeamEnd, ms, legacyBuffer, camera, pt);
+                    beam.render(focusPos, interpolatedBeamEnd, ms, worldBuffer, camera, pt);
                 }
             }
         });
-
-        if (!shadersActive) {
-            legacyBuffer.draw();
-        }
     }
 
     public void updateBeam(final Level level, final UUID uuid, final Vec3 start, final Vec3 end) {
@@ -532,23 +526,25 @@ public class PhysicsStaffClientHandler {
             for (int i = 1; i < this.nodes.size(); i++) {
                 final Vec3 offset = this.nodes.get(i).previousPosition.lerp(this.nodes.get(i).position, pt);
                 final Vec3 currentPos = start.add(relative.scale(i / (float) this.nodes.size()).add(offset.scale(this.currentNodeRadius)));
-                this.line.set(lastPos, currentPos).render(Minecraft.getInstance(), ms, buffer, camera, pt);
+                this.line.set(lastPos, currentPos).submit(Minecraft.getInstance(), ms, buffer, camera, pt);
                 lastPos = currentPos;
             }
         }
 
-        private void renderShaderSafe(final Vec3 start, final Vec3 end, final PoseStack ms, final VertexConsumer buffer, final Vec3 camera, final float pt) {
+        private void renderShaderSafe(final Vec3 start, final Vec3 end, final PoseStack ms, final SubmitNodeCollector buffer, final Vec3 camera, final float pt) {
             final Vec3 relative = end.subtract(start);
             this.length = relative.length();
 
-            Vec3 lastPos = start;
-            for (int i = 1; i < this.nodes.size(); i++) {
-                final Vec3 offset = this.nodes.get(i).previousPosition.lerp(this.nodes.get(i).position, pt);
-                final Vec3 currentPos = start.add(relative.scale(i / (float) this.nodes.size()).add(offset.scale(this.currentNodeRadius)));
-                PhysicsStaffOverlayRenderer.bufferRibbon(
-                        ms.last(), buffer, lastPos, currentPos, camera, LINE_WIDTH, 0xffffffff);
-                lastPos = currentPos;
-            }
+            buffer.submitCustomGeometry(ms, SimRenderTypes.staffOverlay(), (pose, vb) -> {
+                Vec3 lastPos = start;
+                for (int i = 1; i < this.nodes.size(); i++) {
+                    final Vec3 offset = this.nodes.get(i).previousPosition.lerp(this.nodes.get(i).position, pt);
+                    final Vec3 currentPos = start.add(relative.scale(i / (float) this.nodes.size()).add(offset.scale(this.currentNodeRadius)));
+                    PhysicsStaffOverlayRenderer.bufferRibbon(
+                            pose, vb, lastPos, currentPos, camera, LINE_WIDTH, 0xffffffff);
+                    lastPos = currentPos;
+                }
+            });
         }
 
         private static class BeamNode {
