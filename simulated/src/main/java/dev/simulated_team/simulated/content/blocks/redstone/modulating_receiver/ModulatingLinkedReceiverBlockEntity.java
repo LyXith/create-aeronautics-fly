@@ -9,7 +9,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
-import net.minecraft.util.Tuple;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -74,7 +74,7 @@ public class ModulatingLinkedReceiverBlockEntity extends AbstractLinkedReceiverB
     }
 
     @Override
-    public Tuple<Integer, Double> getSignalFromLink(final Vec3 relativePosition, final int transmittedStrength) {
+    public Pair<Integer, Double> getSignalFromLink(final Vec3 relativePosition, final int transmittedStrength) {
         final double distance = relativePosition.length();
 
         if (this.distanceToClosest > distance) {
@@ -82,14 +82,14 @@ public class ModulatingLinkedReceiverBlockEntity extends AbstractLinkedReceiverB
         }
 
         if (distance > this.maxRange) {
-            return new Tuple<>(0, 0.0);
+            return Pair.of(0, 0.0);
         }
 
         if (this.minRange == this.maxRange) {
-            return new Tuple<>(transmittedStrength, distance);
+            return Pair.of(transmittedStrength, distance);
         } else {
             final double strengthScalar = Math.clamp((distance - this.maxRange) / (this.minRange - this.maxRange), 0, 1);
-            return new Tuple<>((int) Math.ceil(strengthScalar * transmittedStrength), distance);
+            return Pair.of((int) Math.ceil(strengthScalar * transmittedStrength), distance);
         }
     }
 

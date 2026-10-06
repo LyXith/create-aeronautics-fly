@@ -528,7 +528,7 @@ public class SensorScenes {
 
         scene.overlay().showFilterSlotInput(sensorFilterPos, Direction.UP, 45);
 
-        final ItemStack dye = new ItemStack(Items.RED_DYE);
+        final ItemStack dye = new ItemStack(Items.DYE.red());
 
         scene.overlay().showControls(sensorFilterPos, Pointing.DOWN, 40).withItem(dye);
 

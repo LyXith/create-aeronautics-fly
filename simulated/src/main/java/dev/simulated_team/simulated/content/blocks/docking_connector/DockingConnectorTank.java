@@ -3,7 +3,7 @@ package dev.simulated_team.simulated.content.blocks.docking_connector;
 import dev.simulated_team.simulated.multiloader.tanks.CFluidType;
 import dev.simulated_team.simulated.multiloader.tanks.SingleTank;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.Tuple;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
@@ -66,9 +66,9 @@ public class DockingConnectorTank extends SingleTank {
     }
 
     @Override
-    public Tuple<CFluidType, Long> createSnapshot() {
+    public Pair<CFluidType, Long> createSnapshot() {
         if (this.inserting && this.canInteract()) {
-            return new Tuple<>(this.connectedTank.type, this.connectedTank.amount);
+            return Pair.of(this.connectedTank.type, this.connectedTank.amount);
         } else {
             return super.createSnapshot();
         }

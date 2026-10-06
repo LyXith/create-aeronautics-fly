@@ -236,7 +236,7 @@ public class DockingConnectorScenes {
         effects.indicateRedstone(new BlockPos(10,3,5));
         scene.idle(10);
         overlay.showText(80)
-                .pointAt(new Vec3.atCenterOf(BlockPos(9,3,5)))
+                .pointAt(Vec3.atCenterOf(BlockPos(9,3,5)))
                 .attachKeyFrame()
                 .placeNearTarget()
                 .text("Redstone Comparators can be used to read the Docking progress");

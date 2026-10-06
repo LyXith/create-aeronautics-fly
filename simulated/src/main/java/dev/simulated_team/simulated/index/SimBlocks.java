@@ -232,7 +232,7 @@ public class SimBlocks {
             createHandle(color, HandleBlock.Variant.DYED)
                 .recipe((c, p) -> p.shapeless(RecipeCategory.MISC, c.get(), 1)
                         .requires(IRON_HANDLE)
-                        .requires(DyeItem.byColor(color))
+                        .requires(Items.DYE.pick(color))
                         .unlockedBy("has_ingredient", RegistrateRecipeProvider.has(IRON_HANDLE))
                         .group("handle_variants")
                         .save(p))

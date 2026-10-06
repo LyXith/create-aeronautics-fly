@@ -44,7 +44,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.util.Tuple;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 import org.joml.*;
@@ -286,11 +286,11 @@ public class DiagramScreen extends AbstractSimiScreen {
     }
 
     // this is horrid :(
-    private HashMap<Identifier, Tuple<Greeble, ArrayList<Greeble.TextureSlice>>> genGreebleSet(final RandomSource random) {
-        final HashMap<Identifier, Tuple<Greeble, ArrayList<Greeble.TextureSlice>>> greebleSet = new HashMap<>();
+    private HashMap<Identifier, Pair<Greeble, ArrayList<Greeble.TextureSlice>>> genGreebleSet(final RandomSource random) {
+        final HashMap<Identifier, Pair<Greeble, ArrayList<Greeble.TextureSlice>>> greebleSet = new HashMap<>();
 
         for (final Map.Entry<Identifier, Greeble> entry : SimResourceManagers.GREEBLE.entrySet()) {
-            greebleSet.put(entry.getKey(), new Tuple<>(entry.getValue(), entry.getValue().shuffled()));
+            greebleSet.put(entry.getKey(), Pair.of(entry.getValue(), entry.getValue().shuffled()));
         }
 
         return greebleSet;
@@ -318,7 +318,7 @@ public class DiagramScreen extends AbstractSimiScreen {
     private void addGreebles(final int diagramX, final int diagramY) {
         final RandomSource random = this.subLevel.getLevel().getRandom();
 
-        final HashMap<Identifier, Tuple<Greeble, ArrayList<Greeble.TextureSlice>>> greebleSet = this.genGreebleSet(random);
+        final HashMap<Identifier, Pair<Greeble, ArrayList<Greeble.TextureSlice>>> greebleSet = this.genGreebleSet(random);
         final List<AABB> placed = new ObjectArrayList<>();
 
         // Avoid top-left region (diagram buttons are placed there)
@@ -333,7 +333,7 @@ public class DiagramScreen extends AbstractSimiScreen {
         for (int i = 0; i < greebles; i++) {
             final Identifier greebleID = this.randomGreeble(random);
             final Greeble greeble = SimResourceManagers.GREEBLE.get(greebleID);
-            final ArrayList<Greeble.TextureSlice> slices = greebleSet.get(greebleID).getB();
+            final ArrayList<Greeble.TextureSlice> slices = greebleSet.get(greebleID).getSecond();
             if (slices.isEmpty()) {
                 continue;
             }

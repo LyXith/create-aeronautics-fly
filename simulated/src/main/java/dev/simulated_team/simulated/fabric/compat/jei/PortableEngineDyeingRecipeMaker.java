@@ -1,4 +1,6 @@
 package dev.simulated_team.simulated.fabric.compat.jei;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.Item;
 
 import dev.simulated_team.simulated.Simulated;
 import dev.simulated_team.simulated.index.SimBlocks;
@@ -34,7 +36,7 @@ public final class PortableEngineDyeingRecipeMaker {
 
     private static RecipeHolder<CraftingRecipe> createRecipe(
             final DyeColor color, final Ingredient redEngine) {
-        final DyeItem dye = DyeItem.byColor(color);
+        final Item dye = Items.DYE.pick(color);
         final ItemStack output = SimBlocks.PORTABLE_ENGINES.get(color)
                 .asItem()
                 .getDefaultInstance();

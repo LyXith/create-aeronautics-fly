@@ -651,7 +651,7 @@ public class SymmetricSailScenes {
         scene.rotateCameraY(-30);
         scene.idle(10);
         scene.overlay().showControls(util.vector().blockSurface(util.grid().at(2, 3, 1), Direction.NORTH), Pointing.RIGHT, 30)
-                .withItem(new ItemStack(Items.BLUE_DYE));
+                .withItem(new ItemStack(Items.DYE.blue()));
         scene.idle(7);
         scene.world().setBlock(util.grid().at(2, 3, 3), SimBlocks.DYED_SYMMETRIC_SAILS.get(DyeColor.BLUE)
                 .defaultBlockState()
@@ -665,7 +665,7 @@ public class SymmetricSailScenes {
                 .placeNearTarget();
         scene.idle(20);
         scene.overlay().showControls(util.vector().blockSurface(util.grid().at(2, 3, 1), Direction.NORTH), Pointing.RIGHT, 30)
-                .withItem(new ItemStack(Items.BLUE_DYE));
+                .withItem(new ItemStack(Items.DYE.blue()));
         scene.idle(7);
         scene.world().replaceBlocks(util.select().fromTo(2, 2, 3, 2, 4, 3), SimBlocks.DYED_SYMMETRIC_SAILS.get(DyeColor.BLUE)
                 .defaultBlockState()

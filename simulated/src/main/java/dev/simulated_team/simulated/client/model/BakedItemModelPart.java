@@ -3,7 +3,7 @@ package dev.simulated_team.simulated.client.model;
 import com.google.common.base.Suppliers;
 import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.client.resources.model.sprite.TextureSlots;
-import net.minecraft.client.renderer.item.BlockModelWrapper;
+import net.minecraft.client.renderer.item.CuboidItemModelWrapper;
 import net.minecraft.client.renderer.item.ModelRenderProperties;
 import net.minecraft.client.renderer.block.dispatch.BlockModelRotation;
 import net.minecraft.client.resources.model.ModelBaker;
@@ -26,7 +26,7 @@ public record BakedItemModelPart(
         return new BakedItemModelPart(
                 quads,
                 ModelRenderProperties.fromResolvedModel(baker, model, textures),
-                Suppliers.memoize(() -> BlockModelWrapper.computeExtents(quads))
+                Suppliers.memoize(() -> CuboidItemModelWrapper.computeExtents(quads))
         );
     }
 }

@@ -11,7 +11,7 @@ import com.zurrtum.create.client.catnip.animation.AnimationTickHolder;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.util.Mth;
-import net.minecraft.util.Tuple;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3d;
@@ -29,10 +29,10 @@ public class AltitudeSensorMovementBehaviour extends MovementBehaviour {
 
         // temporaryData <- (previousVisualHeight, visualHeight)
         final float yPos = (float) Sable.HELPER.projectOutOfSubLevel(context.world, JOMLConversion.toJOML(context.position)).y;
-        if (context.temporaryData instanceof final Tuple<?, ?> heights) {
-            context.temporaryData = new Tuple<>(heights.getB(), yPos);
+        if (context.temporaryData instanceof final Pair<?, ?> heights) {
+            context.temporaryData = Pair.of(heights.getSecond(), yPos);
         } else {
-            context.temporaryData = new Tuple<>(yPos, yPos);
+            context.temporaryData = Pair.of(yPos, yPos);
         }
     }
 
@@ -41,8 +41,8 @@ public class AltitudeSensorMovementBehaviour extends MovementBehaviour {
         final float highSignal = context.blockEntityData.getFloatOr("high_signal", 0);
 
         final float visualHeight;
-        if (context.temporaryData instanceof final Tuple<?, ?> heights) {
-            visualHeight = ((float) heights.getA()) * (1 - AnimationTickHolder.getPartialTicks()) + (float) heights.getB() * AnimationTickHolder.getPartialTicks();
+        if (context.temporaryData instanceof final Pair<?, ?> heights) {
+            visualHeight = ((float) heights.getFirst()) * (1 - AnimationTickHolder.getPartialTicks()) + (float) heights.getSecond() * AnimationTickHolder.getPartialTicks();
         } else {
             final Vector3d pos = context.position != null ? JOMLConversion.toJOML(context.position) : new Vector3d();
             visualHeight = (float) Sable.HELPER.projectOutOfSubLevel(context.world, pos).y;

@@ -2,7 +2,7 @@ package dev.simulated_team.simulated.multiloader.tanks;
 
 import dev.simulated_team.simulated.service.SimFluidService;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.Tuple;
+import com.mojang.datafixers.util.Pair;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -104,8 +104,8 @@ public class SingleTank {
     /**
      * @return Type and amount of fluid to be snapshotted for fabrics fluid API
      */
-    public Tuple<CFluidType, Long> createSnapshot() {
-        return new Tuple<>(this.type, this.amount);
+    public Pair<CFluidType, Long> createSnapshot() {
+        return Pair.of(this.type, this.amount);
     }
 
     /**
