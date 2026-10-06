@@ -9,7 +9,11 @@ import dev.simulated_team.simulated.events.SimulatedCommonClientEvents;
 import dev.simulated_team.simulated.fabric.service.FabricSimpleResourceManagerRegistryService;
 import dev.simulated_team.simulated.index.SimKeys;
 import dev.simulated_team.simulated.index.SimSpriteShifts;
+import foundry.veil.api.client.render.VeilRenderSystem;
+import foundry.veil.api.client.render.post.PostPipelineSpec;
 import foundry.veil.api.network.VeilPacketManager;
+import com.mojang.renderpearl.api.pipeline.BlendFactor;
+import com.mojang.renderpearl.api.pipeline.BlendFunction;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
@@ -25,6 +29,30 @@ import net.minecraft.server.packs.PackType;
 import net.minecraft.world.InteractionResult;
 
 public final class SimulatedFabricClient implements ClientModInitializer {
+
+    /**
+     * Replaces Veil's {@code assets/simulated/pinwheel/post/diagram.json} descriptor.
+     * The GLSL moved to {@code assets/simulated/shaders/post/diagram.{vsh,fsh}}; the
+     * framebuffer wiring that JSON used to carry now lives here.
+     *
+     * <p>Must run before the first resource reload so the pipeline is registered for
+     * compilation along with Minecraft's own.
+     */
+    private static void registerClientPostEffects() {
+        VeilRenderSystem.renderer().getPostProcessingManager().register(new PostPipelineSpec(
+                Simulated.path("diagram"),
+                Simulated.path("diagram"),
+                Simulated.path("diagram_final"),
+                "DiffuseSampler0",
+                "DiffuseDepthSampler",
+                java.util.List.of("DiagramConfig"),
+                java.util.Map.of(
+                        "Palette", Simulated.path("textures/effects/diagram_palette.png"),
+                        "Dither", Simulated.path("textures/effects/dither.png")),
+                // The pass writes the whole target; the GUI blit applies the alpha later.
+                new BlendFunction(BlendFactor.ONE, BlendFactor.ZERO, BlendFactor.ONE, BlendFactor.ZERO)));
+    }
+
     @Override
     public void onInitializeClient() {
         VeilPacketManager.registerClientReceivers();
@@ -33,6 +61,7 @@ public final class SimulatedFabricClient implements ClientModInitializer {
         SimKeys.registerTo(KeyBindingHelper::registerKeyBinding);
 
         SimulatedClient.init();
+        registerClientPostEffects();
 
         ClientTickEvents.START_CLIENT_TICK.register(SimulatedCommonClientEvents::preClientTick);
         ClientTickEvents.END_CLIENT_TICK.register(SimulatedCommonClientEvents::postClientTick);

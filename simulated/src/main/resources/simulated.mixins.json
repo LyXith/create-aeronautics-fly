@@ -91,6 +91,7 @@
     "structure_template.StructureTemplateMixin",
     "torsion_spring.ComparatorBlockMixin",
     "torsion_spring.MechanicalBearingBlockEntityMixin",
+    "world_presets.EnderDragonFightMixin",
     "world_presets.PrimaryLevelDataMixin"
   ],
   "injectors": {

@@ -8,27 +8,36 @@ import dev.ryanhcode.sable.companion.math.BoundingBox3d;
 import dev.ryanhcode.sable.sublevel.ClientSubLevel;
 import dev.ryanhcode.sable.sublevel.SubLevel;
 import dev.ryanhcode.sable.sublevel.render.SubLevelRenderData;
-import foundry.veil.api.client.render.VeilRenderSystem;
+import foundry.veil.api.client.render.VeilLevelPerspectiveRenderer;
 import foundry.veil.api.client.render.framebuffer.AdvancedFbo;
 import foundry.veil.impl.client.render.perspective.LevelPerspectiveCamera;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.LevelRenderer;
-import net.minecraft.util.LightCoordsUtil;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.PerspectiveProjectionMatrixBuffer;
-import net.minecraft.client.renderer.block.BlockRenderDispatcher;
+import net.minecraft.client.renderer.ProjectionMatrixBuffer;
+import net.minecraft.client.renderer.SubmitNodeStorage;
+import net.minecraft.client.renderer.block.BlockModelRenderState;
+import net.minecraft.client.renderer.block.BlockModelResolver;
+import net.minecraft.client.renderer.block.model.BlockDisplayContext;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.world.level.block.state.BlockState;
 import org.joml.*;
 
 import java.util.Collection;
 
+/**
+ * Renders a chain of sub-levels into an off-screen target for the diagram screen.
+ *
+ * <p>26.3 port: the old {@code MultiBufferSource} + {@code BlockRenderDispatcher}
+ * pair is gone. Models are now registered on a {@link SubmitNodeStorage}, which
+ * {@link AdvancedFbo.Pass} feeds through the vanilla feature dispatcher and executes
+ * in a {@code RenderPass} bound to the target's attachments.
+ */
 public class SimpleSubLevelGroupRenderer {
     private static final LevelPerspectiveCamera CAMERA = new LevelPerspectiveCamera();
-    private static final PerspectiveProjectionMatrixBuffer PROJECTION = new PerspectiveProjectionMatrixBuffer("Simulated diagram projection");
+    private static final ProjectionMatrixBuffer PROJECTION = new ProjectionMatrixBuffer("Simulated diagram projection");
     private static final Matrix4f TRANSFORM = new Matrix4f();
     public static boolean RENDERING_SIMPLE = false;
 
@@ -71,18 +80,7 @@ public class SimpleSubLevelGroupRenderer {
     }
 
     public static void renderGroup(final ClientLevel level, final Collection<ClientSubLevel> subLevels, final AdvancedFbo fbo, final Matrix4f modelView, final Matrix4f projectionMat, final Vector3d cameraPosition, final Quaternionf orientation, final float partialTicks, final boolean renderPlayers) {
-        // Finish anything previously being rendered for safety
-        final MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
-        bufferSource.endBatch();
-
-        if (subLevels.isEmpty()) {
-            AdvancedFbo.unbind();
-            return;
-        }
-
         final Minecraft minecraft = Minecraft.getInstance();
-        final LightCoordsUtil lightTexture = minecraft.gameRenderer.lightTexture();
-        final BlockRenderDispatcher blockRenderer = minecraft.getBlockRenderer();
 
         CAMERA.setup(cameraPosition, null, minecraft.level, orientation, 0f);
 
@@ -90,6 +88,8 @@ public class SimpleSubLevelGroupRenderer {
         poseStack.rotate(TRANSFORM.set(modelView));
         poseStack.rotate(CAMERA.rotation());
 
+        // The feature dispatcher snapshots these while preparing the frame, so both
+        // must be in place before the pass draws (not merely before it submits).
         RenderSystem.backupProjectionMatrix();
         RenderSystem.setProjectionMatrix(PROJECTION.getBuffer(projectionMat), ProjectionType.ORTHOGRAPHIC);
 
@@ -98,12 +98,19 @@ public class SimpleSubLevelGroupRenderer {
         matrix4fstack.identity();
         matrix4fstack.mul(poseStack.last().pose());
 
-        final AdvancedFbo drawFbo = VeilRenderSystem.renderer().getDynamicBufferManger().getDynamicFbo(fbo);
-        drawFbo.bind(true);
+        RENDERING_SIMPLE = true;
+        VeilLevelPerspectiveRenderer.setRenderingPerspective(true);
+        try (AdvancedFbo.Pass pass = fbo.begin(true)) {
+            // An empty chain still clears the target: the diagram must not keep stale
+            // geometry from the previous frame.
+            if (subLevels.isEmpty()) {
+                return;
+            }
 
-        try {
-
-            SimpleSubLevelGroupRenderer.RENDERING_SIMPLE = true;
+            final SubmitNodeStorage submits = pass.collector();
+            final BlockModelResolver modelResolver = new BlockModelResolver(minecraft.getModelManager());
+            final BlockModelRenderState modelState = new BlockModelRenderState();
+            final BlockDisplayContext displayContext = BlockDisplayContext.create();
 
             for (final ClientSubLevel renderedSubLevel : subLevels) {
                 final SubLevelRenderData renderData = renderedSubLevel.getRenderData();
@@ -119,23 +126,28 @@ public class SimpleSubLevelGroupRenderer {
                         continue;
                     }
 
+                    // Resolves the baked model and the chunk layer it belongs to; 26.3
+                    // derives that from the model at bake time, so there is no
+                    // ItemBlockRenderTypes lookup to port.
+                    modelResolver.update(modelState, blockState, displayContext);
+
                     blockPoseStack.pushPose();
                     blockPoseStack.translate(blockPos.getX(), blockPos.getY(), blockPos.getZ());
-                    blockRenderer.renderSingleBlock(blockState, blockPoseStack, bufferSource, LightCoordsUtil.FULL_BRIGHT, OverlayTexture.NO_OVERLAY);
+                    modelState.submit(blockPoseStack, submits,
+                            LightCoordsUtil.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, 0);
                     blockPoseStack.popPose();
                 }
             }
-
-            bufferSource.endBatch();
-            SimpleSubLevelGroupRenderer.RENDERING_SIMPLE = false;
         } finally {
-            SimpleSubLevelGroupRenderer.RENDERING_SIMPLE = false;
+            RENDERING_SIMPLE = false;
+            VeilLevelPerspectiveRenderer.setRenderingPerspective(false);
 
             matrix4fstack.popMatrix();
             RenderSystem.restoreProjectionMatrix();
-            AdvancedFbo.unbind();
 
-            lightTexture.updateLightTexture(partialTicks);
+            // The lightmap is no longer mutated by this pass: 26.3 renders it from
+            // LightmapRenderState once per frame in GameRenderer, and every block here
+            // is submitted at FULL_BRIGHT, so nothing needs restoring.
         }
     }
 }

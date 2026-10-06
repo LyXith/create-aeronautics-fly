@@ -2,7 +2,7 @@ package dev.simulated_team.simulated.compat.create;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import org.slf4j.Logger;
@@ -13,6 +13,11 @@ import java.lang.reflect.Proxy;
 /**
  * Registers explicitly selected legacy block-entity renderers with Sable
  * without creating a compile-time dependency on Sable's newer client API.
+ *
+ * <p>The callback hands the renderer a {@link SubmitNodeCollector}, the 26.3
+ * replacement for the 1.21 {@code MultiBufferSource}; legacy renderers that still
+ * draw through a {@code MultiBufferSource} are adapted through
+ * {@link RenderBridge} so their geometry reaches the submit-node pass.</p>
  */
 public final class SableSubLevelRendererCompat {
     private SableSubLevelRendererCompat() {
@@ -44,7 +49,7 @@ public final class SableSubLevelRendererCompat {
                                 (BlockEntity) args[0],
                                 (float) args[1],
                                 (PoseStack) args[2],
-                                (MultiBufferSource) args[3],
+                                (SubmitNodeCollector) args[3],
                                 (int) args[4],
                                 (int) args[5]
                         );
@@ -57,14 +62,15 @@ public final class SableSubLevelRendererCompat {
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     private static void renderRegisteredLegacyRenderer(final BlockEntity blockEntity, final float partialTick,
-                                                       final PoseStack poseStack, final MultiBufferSource bufferSource,
+                                                       final PoseStack poseStack, final SubmitNodeCollector collector,
                                                        final int light, final int overlay) {
         final Object registeredRenderer = Minecraft.getInstance()
                 .getBlockEntityRenderDispatcher()
                 .getRenderer(blockEntity);
         if (registeredRenderer instanceof final SmartBlockEntityRenderer<?> renderer) {
-            ((SmartBlockEntityRenderer) renderer).renderExplicitlyInSubLevel(
-                    blockEntity, partialTick, poseStack, bufferSource, light, overlay);
+            RenderBridge.submit(poseStack, collector, (legacyPose, buffers) ->
+                    ((SmartBlockEntityRenderer) renderer).renderExplicitlyInSubLevel(
+                            blockEntity, partialTick, legacyPose, buffers, light, overlay));
         }
     }
 }

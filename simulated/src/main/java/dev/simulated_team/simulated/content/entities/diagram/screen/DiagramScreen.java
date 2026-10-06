@@ -55,8 +55,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.lwjgl.opengl.GL11.*;
-
 public class DiagramScreen extends AbstractSimiScreen {
     public static int UPDATE_REQUEST_INTERVAL = 10;
 
@@ -332,8 +330,6 @@ public class DiagramScreen extends AbstractSimiScreen {
         final int padding = 10;
         final int greebles = 8;
 
-        this.finalFbo.bindRead();
-
         for (int i = 0; i < greebles; i++) {
             final Identifier greebleID = this.randomGreeble(random);
             final Greeble greeble = SimResourceManagers.GREEBLE.get(greebleID);
@@ -362,11 +358,13 @@ public class DiagramScreen extends AbstractSimiScreen {
             placed.add(box);
             this.addRenderableOnly(new GreebleRenderable(x + diagramX, y + diagramY, greeble.width(), greeble.height(), greeble.texture(), slice));
         }
-
-        AdvancedFbo.unbind();
     }
 
     private boolean aabbInFramebuffer(final AABB aabb) {
+        if (this.finalFbo == null) {
+            return false;
+        }
+
         final int minX = (int) aabb.minX;
         final int minY = (int) (DIAGRAM_TEXTURE.height - aabb.minY);
         final int maxX = (int) aabb.maxX;
@@ -376,8 +374,14 @@ public class DiagramScreen extends AbstractSimiScreen {
         final int height = Math.abs(maxY - minY);
 
         final int length = width * height;
+        if (length <= 0) {
+            return false;
+        }
+
         final int[] buffer = new int[length];
-        glReadPixels(minX, minY - height, width, height, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+        if (!this.finalFbo.readPixels(minX, minY - height, width, height, buffer)) {
+            return false;
+        }
 
         for (int i = 0; i < length; i++) {
             final int color = buffer[i] >> 24;
@@ -430,9 +434,6 @@ public class DiagramScreen extends AbstractSimiScreen {
     }
 
     public static void draw(final SubLevel subLevel, final float partialTicks, final Quaternionf localOrientation, final Matrix4f projMatrix, final Vector3d cameraPos, final float inWidth, final float inHeight, final AdvancedFbo fbo, final AdvancedFbo outlineFbo, final AdvancedFbo finalFbo, final float paletteOffset, final float fadeScale, final int lineColor, final int lineShadowColor) {
-        fbo.bind(true);
-        fbo.clear();
-
         final Pose3dc renderPose = ((ClientSubLevel) subLevel).renderPose(partialTicks);
         final Quaternionf orientation = new Quaternionf(renderPose.orientation()).conjugate();
         orientation.premul(localOrientation.conjugate(new Quaternionf()));

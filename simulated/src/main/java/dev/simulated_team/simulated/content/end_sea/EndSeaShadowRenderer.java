@@ -1,18 +1,18 @@
 package dev.simulated_team.simulated.content.end_sea;
 
 import dev.simulated_team.simulated.content.blocks.void_anchor.VoidAnchorBlockEntity;
-import foundry.veil.api.client.render.MatrixStack;
-import foundry.veil.api.event.VeilRenderLevelStageEvent;
-import net.minecraft.client.Camera;
-import net.minecraft.client.DeltaTracker;
-import net.minecraft.client.renderer.LevelRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.culling.Frustum;
-import org.joml.Matrix4fc;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-/** Compatibility no-op for the unavailable end-sea shadow pipeline. */
+/**
+ * Compatibility switch for the end-sea shadow pipeline.
+ *
+ * <p>The shadow map itself was driven by Veil's {@code VeilRenderLevelStageEvent} bus
+ * ({@code renderShadowMap}), which no longer exists in 26.3. The event bus was replaced
+ * by Fabric's {@code LevelRenderEvents}; the stage callback had no callers and no
+ * framebuffer to render into, so it was dropped with the Veil event rather than left
+ * behind as a stub. Everything below is the part of this API that other code still queries.
+ */
 public final class EndSeaShadowRenderer {
     public static final float SHADOW_VOLUME_RADIUS = 128f;
     private static final Vector3dc ORIGIN = new Vector3d();
@@ -37,11 +37,5 @@ public final class EndSeaShadowRenderer {
     }
 
     public static void addVoidAnchor(VoidAnchorBlockEntity anchor) {
-    }
-
-    public static void renderShadowMap(VeilRenderLevelStageEvent.Stage stage, LevelRenderer levelRenderer,
-                                       MultiBufferSource.BufferSource bufferSource, MatrixStack poseStack,
-                                       Matrix4fc frustumMatrix, Matrix4fc projectionMatrix, int renderTick,
-                                       DeltaTracker deltaTracker, Camera camera, Frustum frustum) {
     }
 }

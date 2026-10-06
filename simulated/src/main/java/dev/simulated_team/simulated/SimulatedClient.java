@@ -15,6 +15,7 @@ import dev.simulated_team.simulated.compat.create.LegacyItemTooltips;
 import dev.simulated_team.simulated.compat.create.LegacyKineticTooltipBehaviour;
 import dev.simulated_team.simulated.compat.create.LegacyScrollValueClientBehaviour;
 import dev.simulated_team.simulated.compat.create.LegacyTooltipBehaviour;
+import dev.simulated_team.simulated.compat.create.RenderBridge;
 import dev.simulated_team.simulated.compat.create.SableCreateBlockEntityRenderer;
 import dev.simulated_team.simulated.compat.create.SableCreateKineticRenderer;
 import dev.simulated_team.simulated.compat.create.SmartBlockEntityRenderer;
@@ -47,7 +48,7 @@ import dev.simulated_team.simulated.index.ponder.SimPonderPlugin;
 import com.zurrtum.create.client.catnip.render.SuperByteBufferCache;
 import com.zurrtum.create.client.ponder.foundation.PonderIndex;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -195,20 +196,20 @@ public class SimulatedClient {
                     Identifier.fromNamespaceAndPath("brewinandchewin", "coaster")
             );
             registerSableImmediateRenderer(register, rendererType, SimBlockEntityTypes.PHYSICS_ASSEMBLER.get(),
-                    (be, partialTick, poseStack, bufferSource, light, overlay) ->
+                    (be, partialTick, poseStack, collector, light, overlay) ->
                             PhysicsAssemblerRenderer.renderInSubLevel(
                                     (dev.simulated_team.simulated.content.blocks.physics_assembler.PhysicsAssemblerBlockEntity) be,
-                                    partialTick, poseStack, bufferSource, light, overlay));
+                                    partialTick, poseStack, collector, light, overlay));
             registerSableImmediateRenderer(register, rendererType, SimBlockEntityTypes.SPRING.get(),
-                    (be, partialTick, poseStack, bufferSource, light, overlay) ->
+                    (be, partialTick, poseStack, collector, light, overlay) ->
                             SpringRenderer.renderInSubLevel(
                                     (dev.simulated_team.simulated.content.blocks.spring.SpringBlockEntity) be,
-                                    partialTick, poseStack, bufferSource, light, overlay));
+                                    partialTick, poseStack, collector, light, overlay));
             registerSableImmediateRenderer(register, rendererType, SimBlockEntityTypes.GIMBAL_SENSOR.get(),
-                    (be, partialTick, poseStack, bufferSource, light, overlay) ->
+                    (be, partialTick, poseStack, collector, light, overlay) ->
                             GimbalSensorRenderer.renderInSubLevel(
                                     (dev.simulated_team.simulated.content.blocks.gimbal_sensor.GimbalSensorBlockEntity) be,
-                                    partialTick, poseStack, bufferSource, light, overlay));
+                                    partialTick, poseStack, collector, light, overlay));
 
             // Explicit compatibility list: do not opt unrelated block entities
             // into the immediate renderer automatically.
@@ -219,23 +220,23 @@ public class SimulatedClient {
             registerLegacySubLevelRenderer(register, rendererType, SimBlockEntityTypes.VELOCITY_SENSOR.get());
             registerLegacySubLevelRenderer(register, rendererType, SimBlockEntityTypes.NAMEPLATE.get());
             registerSableImmediateRenderer(register, rendererType, SimBlockEntityTypes.PORTABLE_ENGINE.get(),
-                    (be, partialTick, poseStack, bufferSource, light, overlay) -> {
+                    (be, partialTick, poseStack, collector, light, overlay) -> {
                         if (be.getBlockState().is(SimBlocks.RED_PORTABLE_ENGINE.get())) {
-                            renderRegisteredLegacyRenderer(be, partialTick, poseStack, bufferSource, light, overlay);
+                            renderRegisteredLegacyRenderer(be, partialTick, poseStack, collector, light, overlay);
                         }
                     });
             registerSableImmediateRenderer(register, rendererType, SimBlockEntityTypes.AUGER_SHAFT.get(),
-                    (be, partialTick, poseStack, bufferSource, light, overlay) -> {
+                    (be, partialTick, poseStack, collector, light, overlay) -> {
                         if (be.getBlockState().is(SimBlocks.AUGER_COG.get())) {
-                            renderRegisteredLegacyRenderer(be, partialTick, poseStack, bufferSource, light, overlay);
+                            renderRegisteredLegacyRenderer(be, partialTick, poseStack, collector, light, overlay);
                         }
                     });
             registerLegacySubLevelRenderer(register, rendererType, SimBlockEntityTypes.TORSION_SPRING.get());
             registerSableImmediateRenderer(register, rendererType, SimBlockEntityTypes.DIRECTIONAL_GEARSHIFT.get(),
-                    (be, partialTick, poseStack, bufferSource, light, overlay) ->
+                    (be, partialTick, poseStack, collector, light, overlay) ->
                             DirectionalGearshiftRenderer.renderInSubLevel(
                                     (dev.simulated_team.simulated.content.blocks.directional_gearshift.DirectionalGearshiftBlockEntity) be,
-                                    partialTick, poseStack, bufferSource, light, overlay));
+                                    partialTick, poseStack, collector, light, overlay));
             registerLegacySubLevelRenderer(register, rendererType, SimBlockEntityTypes.ROPE_WINCH.get());
             registerLegacySubLevelRenderer(register, rendererType, SimBlockEntityTypes.ROPE_CONNECTOR.get());
             registerLegacySubLevelRenderer(register, rendererType, SimBlockEntityTypes.SWIVEL_BEARING.get());
@@ -249,10 +250,10 @@ public class SimulatedClient {
                     SableCreateBlockEntityRenderer::render);
             registerLegacySubLevelRenderer(register, rendererType, SimBlockEntityTypes.REDSTONE_ACCUMULATOR.get());
             registerSableImmediateRenderer(register, rendererType, SimBlockEntityTypes.REDSTONE_INDUCTOR.get(),
-                    (be, partialTick, poseStack, bufferSource, light, overlay) ->
+                    (be, partialTick, poseStack, collector, light, overlay) ->
                             RedstoneInductorRenderer.renderInSubLevel(
                                     (dev.simulated_team.simulated.content.blocks.redstone.redstone_inductor.RedstoneInductorBlockEntity) be,
-                                    partialTick, poseStack, bufferSource, light, overlay));
+                                    partialTick, poseStack, collector, light, overlay));
         } catch (final ReflectiveOperationException e) {
             Simulated.LOGGER.debug("Sable immediate block-entity renderer hook is unavailable", e);
         }
@@ -311,7 +312,7 @@ public class SimulatedClient {
                                 (BlockEntity) args[0],
                                 (float) args[1],
                                 (PoseStack) args[2],
-                                (MultiBufferSource) args[3],
+                                (SubmitNodeCollector) args[3],
                                 (int) args[4],
                                 (int) args[5]
                         );
@@ -324,21 +325,25 @@ public class SimulatedClient {
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     private static void renderRegisteredLegacyRenderer(final BlockEntity blockEntity, final float partialTick,
-                                                       final PoseStack poseStack, final MultiBufferSource bufferSource,
+                                                       final PoseStack poseStack, final SubmitNodeCollector collector,
                                                        final int light, final int overlay) {
         final Object registeredRenderer = Minecraft.getInstance()
                 .getBlockEntityRenderDispatcher()
                 .getRenderer(blockEntity);
         if (registeredRenderer instanceof final SmartBlockEntityRenderer<?> renderer) {
-            ((SmartBlockEntityRenderer) renderer).renderExplicitlyInSubLevel(
-                    blockEntity, partialTick, poseStack, bufferSource, light, overlay);
+            // Legacy renderers still draw through a MultiBufferSource; RenderBridge
+            // discovers the render layers they ask for and submits each one through
+            // the 26.3 submit-node path so nothing is dropped.
+            RenderBridge.submit(poseStack, collector, (legacyPose, buffers) ->
+                    ((SmartBlockEntityRenderer) renderer).renderExplicitlyInSubLevel(
+                            blockEntity, partialTick, legacyPose, buffers, light, overlay));
         }
     }
 
     @FunctionalInterface
     private interface SableImmediateRenderer {
         void render(BlockEntity blockEntity, float partialTick, PoseStack poseStack,
-                    MultiBufferSource bufferSource, int light, int overlay);
+                    SubmitNodeCollector collector, int light, int overlay);
     }
 
     private static void registerBlockEntityBehaviours() {
