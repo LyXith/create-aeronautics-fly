@@ -295,8 +295,14 @@ public final class SimRenderTypes {
     public static RenderType spring(final Identifier texture) {
         // Use a vanilla pipeline so Iris can map the render type into shader packs.
         // The old Veil spring shader is not available in the 1.21.10 Fabric port.
-        // SpringRenderer emits a second, inward-facing copy of the mesh itself;
-        // disabling culling would draw both copies on top of each other and z-fight.
-        return net.minecraft.client.renderer.rendertype.RenderTypes.entityCutout(texture);
+        //
+        // SpringRenderer emits a second, inward-facing copy of the mesh at exactly the
+        // same positions, only with reversed winding. The two passes are therefore only
+        // distinguishable by back-face culling: front-facing from outside comes from pass
+        // one, front-facing from inside comes from pass two. 26.3 splits this into two
+        // pipelines and RenderTypes.entityCutout() is the *unculled* one (it calls
+        // withCull(false)), so both copies land in the same depth buffer and z-fight.
+        // entityCutoutCull() has the identical RenderSetup but keeps the default culling.
+        return net.minecraft.client.renderer.rendertype.RenderTypes.entityCutoutCull(texture);
     }
 }

@@ -69,6 +69,18 @@ public class MergingGlueBlockEntity extends SmartBlockEntity implements BlockEnt
         super.tick();
 
         final boolean serverSide = !this.level.isClientSide();
+
+        // The merge animation state (orientations, lerp targets, endRotation) is intentionally
+        // not persisted: it only lives for DURATION + WAIT_ASSEMBLE ticks and is meaningless once
+        // the level has been reloaded, because the sub-level poses it was captured against are gone.
+        // A glue saved mid-merge therefore comes back as a controller without any controlling
+        // values, and must abort instead of disassembling with a null rotation (which used to
+        // NPE every tick and make the world unloadable).
+        if (serverSide && this.isController && !this.hasControllingValues && this.endRotation == null) {
+            this.breakGlue();
+            return;
+        }
+
         if (serverSide && this.isController && this.ageTicks > DURATION + WAIT_ASSEMBLE) {
 
             final SubLevel subLevel = Sable.HELPER.getContaining(this);
