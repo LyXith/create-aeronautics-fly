@@ -1,13 +1,16 @@
 #version 330
+#extension GL_ARB_separate_shader_objects : require
 
-#moj_import <minecraft:dynamictransforms.glsl>
-#moj_import <minecraft:fog.glsl>
+// 26.3: 同 laser.vsh —— #include + layout(location = ...)。
+// 片元输入的 location 必须与顶点着色器输出严格一致。
+#include <minecraft:dynamictransforms.glsl>
+#include <minecraft:fog.glsl>
 
-in float vertexDistance;
-in vec2 lengthData;
-in vec4 vertexColor;
+layout(location = 0) in float vertexDistance;
+layout(location = 1) in vec2 lengthData;
+layout(location = 2) in vec4 vertexColor;
 
-out vec4 fragColor;
+layout(location = 0) out vec4 fragColor;
 
 void main() {
     float endTaper = (lengthData.x - 1.0) / (lengthData.y - 1.0);

@@ -6,35 +6,37 @@ import dev.simulated_team.simulated.content.blocks.throttle_lever.ThrottleLeverB
 import dev.simulated_team.simulated.content.blocks.throttle_lever.ThrottleLeverClientGripHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(GameRenderer.class)
+/**
+ * 26.3: 准星拾取从 GameRenderer.pick(float) 移到了 Minecraft.pick(float)，
+ * 所以 mixin 的宿主也跟着换到 Minecraft（player / hitResult 都是它的公开字段）。
+ */
+@Mixin(Minecraft.class)
 public class GameRendererMixin {
 
     @Shadow
-    @Final
-    private Minecraft minecraft;
+    public LocalPlayer player;
+
+    @Shadow
+    public HitResult hitResult;
 
     @Inject(method = "pick(F)V", at = @At("TAIL"))
     private void simulated$pickThrottleLever(final float partialTicks, final CallbackInfo ci) {
-        if (this.minecraft == null) return;
-
-        final LocalPlayer player = this.minecraft.player;
+        final LocalPlayer player = this.player;
         if (player == null) return;
 
         final Vec3 eyePos = Sable.HELPER.getEyePositionInterpolated(player, partialTicks);
 
-        final HitResult mcHitResult = this.minecraft.hitResult;
+        final HitResult mcHitResult = this.hitResult;
         double minDistance = mcHitResult != null && mcHitResult.getType() != HitResult.Type.MISS ? Sable.HELPER.distanceSquaredWithSubLevels(player.level(), eyePos, mcHitResult.getLocation()) : Double.MAX_VALUE;
 
         for (final ThrottleLeverBlockEntity lever : ThrottleLeverClientGripHandler.getNearbyThrottleLevers()) {
@@ -45,7 +47,7 @@ public class GameRendererMixin {
             if (hitResultDistance != null) {
                 if (hitResultDistance < minDistance) {
                     minDistance = hitResultDistance;
-                    this.minecraft.hitResult = new BlockHitResult(Vec3.atCenterOf(lever.getBlockPos()), Direction.UP, lever.getBlockPos(), false);
+                    this.hitResult = new BlockHitResult(Vec3.atCenterOf(lever.getBlockPos()), Direction.UP, lever.getBlockPos(), false);
                 }
             }
 

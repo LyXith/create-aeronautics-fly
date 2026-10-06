@@ -60,10 +60,15 @@ public final class SimRenderTypes {
     private static final RenderPipeline BLOCK_TRANSLUCENT_PIPELINE = terrainPipeline(
             "block_translucent", DefaultVertexFormat.BLOCK, true, true);
 
+    // 26.3: core/rendertype_text_see_through 不复存在，see-through 文本现在是 core/text
+    // 加 shader define IS_SEE_THROUGH（原版 RenderPipelines.TEXT_SEE_THROUGH 就是
+    // TEXT_SNIPPET + 这个宏）。管线没有声明 SAMPLER2，所以 IS_SEE_THROUGH 下不再读光照
+    // 贴图是安全的；顶点格式里的 UV2 只是无人消费的多余属性，绑定时按名字匹配。
     private static final RenderPipeline LOCK_PIPELINE = RenderPipeline.builder()
             .withLocation(Simulated.path("pipeline/lock"))
-            .withVertexShader("core/rendertype_text_see_through")
-            .withFragmentShader("core/rendertype_text_see_through")
+            .withVertexShader("core/text")
+            .withFragmentShader("core/text")
+            .withShaderDefine("IS_SEE_THROUGH")
             .withBindGroupLayout(BindGroupLayouts.DYNAMIC_TRANSFORMS)
             .withBindGroupLayout(BindGroupLayouts.PROJECTION)
             .withBindGroupLayout(BindGroupLayouts.SAMPLER0)

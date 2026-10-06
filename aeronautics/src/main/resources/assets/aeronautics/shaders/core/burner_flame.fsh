@@ -1,15 +1,18 @@
 #version 330
+#extension GL_ARB_separate_shader_objects : require
 
-#moj_import <minecraft:dynamictransforms.glsl>
-#moj_import <minecraft:fog.glsl>
+// 26.3: 同 burner_flame.vsh —— #include + layout(location = ...)。
+// 片元输入的 location / 插值限定符必须与顶点着色器输出严格一致。
+#include <minecraft:dynamictransforms.glsl>
+#include <minecraft:fog.glsl>
 
 uniform sampler2D Sampler0;
 
-in float vertexDistance;
-in vec2 texCoord0;
-flat in vec3 flameData;
+layout(location = 0) in float vertexDistance;
+layout(location = 1) in vec2 texCoord0;
+layout(location = 2) flat in vec3 flameData;
 
-out vec4 fragColor;
+layout(location = 0) out vec4 fragColor;
 
 const float FLAME_ANIMATION_PERIOD = 10.0 / 3.0;
 const float RESOLUTION = 32.0;

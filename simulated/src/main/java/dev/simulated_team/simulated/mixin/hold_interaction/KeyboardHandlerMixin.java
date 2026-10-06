@@ -17,7 +17,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class KeyboardHandlerMixin {
     @Shadow @Final private Minecraft minecraft;
 
-    @Inject(method = "keyPress", at = @At(value = "FIELD", target = "Lnet/minecraft/client/Minecraft;screen:Lnet/minecraft/client/gui/screens/Screen;", ordinal = 0, opcode = 180/*GETFIELD*/), cancellable = true)
+    // 26.3: Minecraft 没有 screen 字段了，当前屏幕改为 minecraft.gui.screen() 读取。
+    // keyPress 里第一次出现该调用即原来读取 screen 的位置。
+    @Inject(method = "keyPress", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/client/gui/Gui;screen()Lnet/minecraft/client/gui/screens/Screen;", ordinal = 0),
+            cancellable = true)
     private void simulated$preOnPress(final long windowPointer, final int action, final KeyEvent event, final CallbackInfo ci) {
         if (this.minecraft.gui.screen() == null) {
             if (SimDistUtil.getClientPlayer() != null && !SimDistUtil.getClientPlayer().isSpectator()) {

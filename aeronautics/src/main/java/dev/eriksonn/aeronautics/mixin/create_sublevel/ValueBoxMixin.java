@@ -30,8 +30,9 @@ public abstract class ValueBoxMixin {
     @Unique
     private final Quaternionf aeronautics$orientationStorage = new Quaternionf();
 
+    // 26.3: ValueBox.render(...) 已改名/改写为 submit(Minecraft, PoseStack, SubmitNodeCollector, Vec3, float)
     @WrapOperation(
-            method = "render",
+            method = "submit",
             at = @At(
                     value = "INVOKE",
                     target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(DDD)V",

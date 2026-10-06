@@ -44,8 +44,11 @@ public class MouseHandlerMixin {
         SimulatedCommonClientEvents.onAfterMouseInput(button.button(), button.modifiers(), action);
     }
 
+    // 26.3: onScroll 不再调用 Minecraft.getOverlay()，改为 minecraft.gui.overlay()。
+    // 注入点仍然落在 deltaX(slot 10) / deltaY(slot 12) 算好之后，
+    // 所以 @Local(ordinal = 3/4)（double 局部变量按槽位排序：3,5,8,10,12）语义不变。
     @Inject(method = "onScroll",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;getOverlay()Lnet/minecraft/client/gui/screens/Overlay;", ordinal = 0),
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;overlay()Lnet/minecraft/client/gui/screens/Overlay;", ordinal = 0),
             cancellable = true)
     private void simulated$preOnScroll(final long l, final double d, final double e, final CallbackInfo ci, @Local(ordinal = 3) final double deltaX, @Local(ordinal = 4) final double deltaY) {
         if (SimDistUtil.getClientPlayer() != null && !SimDistUtil.getClientPlayer().isSpectator()) {

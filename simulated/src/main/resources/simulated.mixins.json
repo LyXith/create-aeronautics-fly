@@ -35,6 +35,7 @@
     "ponder.PonderSceneMixin",
     "ponder.PonderSceneTransformMixin",
     "ponder.TextWindowElementMixin",
+    "ponder.PonderShadowRenderStateMixin",
     "ponder.PonderUIMixin",
     "ponder.WorldSectionElementImplMixin",
     "quiet_use.MultiPlayerGameModeMixin",

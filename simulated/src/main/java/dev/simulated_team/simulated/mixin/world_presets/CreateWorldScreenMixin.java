@@ -1,17 +1,17 @@
 package dev.simulated_team.simulated.mixin.world_presets;
 
-import com.llamalad7.mixinextras.sugar.Local;
 import dev.simulated_team.simulated.content.worldgen.SimulatedWorldPreset;
 import dev.simulated_team.simulated.index.SimWorldPresets;
 import dev.simulated_team.simulated.mixin_interface.PrimaryLevelDataExtension;
 import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;
 import net.minecraft.client.gui.screens.worldselection.WorldCreationUiState;
 import net.minecraft.core.Holder;
+import net.minecraft.core.LayeredRegistryAccess;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.levelgen.presets.WorldPreset;
-import net.minecraft.world.level.storage.WorldData;
+import net.minecraft.world.level.storage.LevelDataAndDimensions;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -49,8 +49,14 @@ public abstract class CreateWorldScreenMixin {
         }
     }
 
+    // 26.3: createNewWorld 不再有 WorldData 局部变量 —— LevelData 已经被收进第二个参数
+    // LevelDataAndDimensions.WorldDataAndGenSettings（里面就是 new PrimaryLevelData(...)）。
+    // 所以这里改用目标方法的形参取数据，而不是 @Local 抓局部变量。
     @Inject(method = "createNewWorld", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;createWorldOpenFlows()Lnet/minecraft/client/gui/screens/worldselection/WorldOpenFlows;", shift = At.Shift.BEFORE))
-    private void simulated$createNewWorld2(final CallbackInfoReturnable<Boolean> cir, @Local final WorldData worldData) {
+    private void simulated$createNewWorld2(final LayeredRegistryAccess<?> finalLayers,
+                                           final LevelDataAndDimensions.WorldDataAndGenSettings worldDataAndGenSettings,
+                                           final Optional<GameRules> gameRules,
+                                           final CallbackInfoReturnable<Boolean> cir) {
         final Holder<WorldPreset> holder = this.uiState.getWorldType().preset();
         if (holder == null) {
             return;
@@ -61,6 +67,6 @@ public abstract class CreateWorldScreenMixin {
             return;
         }
 
-        ((PrimaryLevelDataExtension) worldData).setPreset(key.get().identifier());
+        ((PrimaryLevelDataExtension) worldDataAndGenSettings.data()).setPreset(key.get().identifier());
     }
 }
