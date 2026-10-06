@@ -1,0 +1,7 @@
+{
+  "pack": {
+    "pack_format": 121,
+    "supported_formats": { "min_inclusive": 1, "max_inclusive": 9999 },
+    "description": "Mixin regression test kit (MC 26.3 port)"
+  }
+}

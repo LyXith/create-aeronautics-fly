@@ -20,12 +20,16 @@ public final class PostProcessingManager {
     private final PostPipeline.Context context = new PostPipeline.Context();
 
     /**
-     * Registers an effect. The pipeline (and its GLSL) is built lazily the first time
-     * the effect is looked up, so this may be called before resources are loaded.
+     * Registers an effect.
+     *
+     * <p>The {@link PostPipeline} is built here rather than on first lookup: its constructor
+     * is what calls {@link net.minecraft.client.renderer.RenderPipelines#register}, and
+     * {@code ShaderManager} only compiles the pipelines known to it at the first resource
+     * reload. Deferring past that point leaves the pipeline permanently uncompiled.
      */
     public void register(final PostPipelineSpec spec) {
         this.specs.put(spec.location(), spec);
-        this.pipelines.remove(spec.location());
+        this.pipelines.put(spec.location(), new PostPipeline(spec));
     }
 
     /**

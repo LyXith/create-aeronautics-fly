@@ -23,6 +23,18 @@ import net.minecraft.resources.Identifier;
 
 public final class SimRenderTypes {
 
+    /**
+     * Forces this class's static initializers to run.
+     *
+     * <p>{@link net.minecraft.client.renderer.RenderPipelines#register} only inserts into a
+     * map, and {@code ShaderManager} reads that map exactly once — during the first resource
+     * reload. A pipeline registered afterwards is never handed to the compiler, so
+     * {@code PipelineCache} has no entry for it and every draw using it is dropped silently.
+     * Call this from the client entrypoint, before that reload happens.
+     */
+    public static void init() {
+    }
+
     // Split translucent laser composition into two commutative operations.
     // This keeps intersecting colors stable when camera-based quad order flips.
     private static final BlendFunction LASER_ATTENUATION_BLEND = new BlendFunction(
@@ -58,13 +70,13 @@ public final class SimRenderTypes {
             irisLaserGlowPipeline("laser_iris_glow");
 
     private static final RenderPipeline BLOCK_TRANSLUCENT_PIPELINE = terrainPipeline(
-            "block_translucent", DefaultVertexFormat.BLOCK, true, true);
+            "block_translucent", DefaultVertexFormat.BLOCK, true);
 
     // 26.3: core/rendertype_text_see_through 不复存在，see-through 文本现在是 core/text
     // 加 shader define IS_SEE_THROUGH（原版 RenderPipelines.TEXT_SEE_THROUGH 就是
     // TEXT_SNIPPET + 这个宏）。管线没有声明 SAMPLER2，所以 IS_SEE_THROUGH 下不再读光照
     // 贴图是安全的；顶点格式里的 UV2 只是无人消费的多余属性，绑定时按名字匹配。
-    private static final RenderPipeline LOCK_PIPELINE = RenderPipeline.builder()
+    private static final RenderPipeline LOCK_PIPELINE = RenderPipelines.register(RenderPipeline.builder()
             .withLocation(Simulated.path("pipeline/lock"))
             .withVertexShader("core/text")
             .withFragmentShader("core/text")
@@ -78,7 +90,7 @@ public final class SimRenderTypes {
             .withDepthStencilState(new DepthStencilState(CompareOp.ALWAYS_PASS, false))
             .withVertexBinding(0, DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP)
             .withPrimitiveTopology(PrimitiveTopology.QUADS)
-            .build();
+            .build());
 
     // Reuse the vanilla shader-compatible lightning pipeline, but draw to the main target.
     // RenderType.lightning() writes to the weather target, which has already been composited
@@ -118,7 +130,8 @@ public final class SimRenderTypes {
     private static final RenderType BLOCK_TRANSLUCENT = RenderType.create(
             "simulated_block_translucent", RenderSetup.builder(BLOCK_TRANSLUCENT_PIPELINE)
                     .withTexture("Sampler0", TextureAtlas.LOCATION_BLOCKS)
-                    .useLightmap().createRenderSetup());
+                    // Translucent terrain quads must be back-to-front before upload.
+                    .useLightmap().sortOnUpload().createRenderSetup());
 
     /**
      * Shader-pack-safe layer for textured placement previews.
@@ -186,7 +199,7 @@ public final class SimRenderTypes {
     }
 
     private static RenderPipeline terrainPipeline(final String name, final VertexFormat format,
-                                                  final boolean translucent, final boolean sortOnUpload) {
+                                                  final boolean translucent) {
         final RenderPipeline.Builder builder = RenderPipeline.builder()
                 .withLocation(Simulated.path("pipeline/" + name))
                 .withVertexShader("core/block")
@@ -203,7 +216,7 @@ public final class SimRenderTypes {
             builder.withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
                     .withDepthStencilState(new DepthStencilState(CompareOp.LESS_THAN, false));
         }
-        return builder.build();
+        return RenderPipelines.register(builder.build());
     }
 
     private static RenderType create(final String name, final RenderPipeline pipeline) {

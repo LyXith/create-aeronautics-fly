@@ -40,6 +40,7 @@ import dev.simulated_team.simulated.content.items.plunger_launcher.PlungerLaunch
 import dev.simulated_team.simulated.content.physics_staff.PhysicsStaffClientHandler;
 import dev.simulated_team.simulated.client.model.SimulatedItemModels;
 import dev.simulated_team.simulated.index.SimPartialModels;
+import dev.simulated_team.simulated.index.SimRenderTypes;
 import dev.simulated_team.simulated.index.SimBlocks;
 import dev.simulated_team.simulated.index.SimBlockEntityTypes;
 import dev.simulated_team.simulated.index.SimResourceManagers;
@@ -63,6 +64,8 @@ public class SimulatedClient {
 	public static final MergingGlueItemHandler MERGING_GLUE_ITEM_HANDLER = new MergingGlueItemHandler();
 
     public static void init() {
+        // Register every custom RenderPipeline before Minecraft's first shader reload.
+        SimRenderTypes.init();
         SimulatedItemModels.register();
         LegacyKineticTooltipBehaviour.installBridge();
         registerBlockEntityBehaviours();
