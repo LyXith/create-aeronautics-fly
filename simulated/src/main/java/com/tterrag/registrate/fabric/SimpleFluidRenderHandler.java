@@ -21,17 +21,28 @@ public class SimpleFluidRenderHandler implements FluidRenderHandler {
     private final Identifier flowingTexture;
     private final Identifier tintedTexture;
     private final int tint;
+    private final boolean translucent;
 
     public SimpleFluidRenderHandler(final Identifier stillTexture, final Identifier flowingTexture) {
-        this(stillTexture, flowingTexture, flowingTexture, -1);
+        this(stillTexture, flowingTexture, flowingTexture, -1, false);
     }
 
     public SimpleFluidRenderHandler(final Identifier stillTexture, final Identifier flowingTexture,
                                     final Identifier tintedTexture, final int tint) {
+        this(stillTexture, flowingTexture, tintedTexture, tint, false);
+    }
+
+    public SimpleFluidRenderHandler(final Identifier stillTexture, final Identifier flowingTexture,
+                                    final Identifier tintedTexture, final int tint, final boolean translucent) {
         this.stillTexture = stillTexture;
         this.flowingTexture = flowingTexture;
         this.tintedTexture = tintedTexture;
         this.tint = tint;
+        this.translucent = translucent;
+    }
+
+    public boolean isTranslucent() {
+        return this.translucent;
     }
 
     public Identifier getStillTexture() {
@@ -56,9 +67,9 @@ public class SimpleFluidRenderHandler implements FluidRenderHandler {
     public FluidModel.Unbaked createFluidModel() {
         final BlockTintSource tintSource = BlockTintSources.constant(this.tint < 0 ? 0xFFFFFF : this.tint);
         return new FluidModel.Unbaked(
-                new Material(this.stillTexture),
-                new Material(this.flowingTexture),
-                new Material(this.tintedTexture),
+                new Material(this.stillTexture, this.translucent),
+                new Material(this.flowingTexture, this.translucent),
+                new Material(this.tintedTexture, this.translucent),
                 tintSource);
     }
 

@@ -14,8 +14,11 @@ import com.tterrag.registrate.util.nullness.NonNullFunction;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import com.tterrag.registrate.util.nullness.NonNullUnaryOperator;
 import io.github.fabricators_of_create.porting_lib.util.DeferredHolder;
-import net.fabricmc.fabric.api.registry.CompostingChanceRegistry;
-import net.fabricmc.fabric.api.registry.FuelRegistryEvents;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.component.Compostable;
+import net.minecraft.world.item.component.CookingFuel;
+import net.minecraft.world.level.storage.loot.providers.number.floats.ResolvableFloat;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ResolvableInt;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
@@ -238,8 +241,10 @@ public class ItemBuilder<T extends Item, P> extends AbstractBuilder<Item, T, P, 
      * @param tick time in ticks for this item to burn in furnace.
      */
     public ItemBuilder<T, P> burnTime(int tick) {
-        onRegister(item -> FuelRegistryEvents.BUILD.register((builder, context) -> builder.add(item, tick)));
-        return this;
+        // 26.3 中 Fabric 的 FuelRegistryEvents 已被移除，熔炉燃料改为物品数据组件
+        // minecraft:cooking_fuel（见 AbstractFurnaceBlockEntity）。
+        return properties(props -> props.component(DataComponents.COOKING_FUEL,
+                new CookingFuel(new ResolvableInt.Constant(tick), new ResolvableFloat.Constant(1.0F))));
     }
 
     /**
@@ -247,8 +252,11 @@ public class ItemBuilder<T extends Item, P> extends AbstractBuilder<Item, T, P, 
      * @param chance chance for composter to increase one level when composting this item.
      */
     public ItemBuilder<T, P> compostable(float chance) {
-        CompostingChanceRegistry.INSTANCE.add(get().get(), chance);
-        return this;
+        // 26.3 中 Fabric 的 CompostingChanceRegistry 已被移除，堆肥改为物品数据组件
+        // minecraft:compostable，语义为「一次投入填满的层数」（0..7 层）。
+        final int layers = Math.max(0, Math.min(7, Math.round(chance * 7.0F)));
+        return properties(props -> props.component(DataComponents.COMPOSTABLE,
+                new Compostable(new ResolvableInt.Constant(layers))));
     }
 
     /**

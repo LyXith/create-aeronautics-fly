@@ -13,9 +13,9 @@ import com.tterrag.registrate.util.nullness.*;
 import io.github.fabricators_of_create.porting_lib.models.generators.BlockStateProvider;
 import io.github.fabricators_of_create.porting_lib.util.DeferredHolder;
 import net.fabricmc.api.EnvType;
-import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
-import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
-import net.minecraft.client.color.block.BlockColor;
+import net.fabricmc.fabric.api.client.rendering.v1.BlockColorRegistry;
+import com.tterrag.registrate.util.SimRenderLayers;
+import net.minecraft.client.color.block.BlockTintSource;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
@@ -83,7 +83,7 @@ public class BlockBuilder<T extends Block, P> extends AbstractBuilder<Block, T, 
     private NonNullFunction<BlockBehaviour.Properties, BlockBehaviour.Properties> propertiesCallback = NonNullUnaryOperator.identity();
     private Supplier<Supplier<?>> renderLayer;
     @Nullable
-    private NonNullSupplier<Supplier<BlockColor>> colorHandler;
+    private NonNullSupplier<Supplier<BlockTintSource>> colorHandler;
 
     protected BlockBuilder(AbstractRegistrate<?> owner, P parent, String name, BuilderCallback callback, NonNullFunction<BlockBehaviour.Properties, T> factory, NonNullSupplier<BlockBehaviour.Properties> initialProperties) {
         super(owner, parent, name, callback, Registries.BLOCK);
@@ -136,30 +136,10 @@ public class BlockBuilder<T extends Block, P> extends AbstractBuilder<Block, T, 
     }
 
     protected void registerLayers(T entry) {
-        EnvExecutor.runWhenOn(EnvType.CLIENT, () -> () ->
-                BlockRenderLayerMap.putBlock(entry, toChunkSectionLayer(renderLayer.get().get())));
-    }
-
-    private static ChunkSectionLayer toChunkSectionLayer(Object layer) {
-        if (layer instanceof ChunkSectionLayer chunkLayer) {
-            return chunkLayer;
-        }
-        if (layer == RenderTypes.solidMovingBlock()) {
-            return ChunkSectionLayer.SOLID;
-        }
-        if (layer == RenderTypes.cutoutMovingBlock()) {
-            return ChunkSectionLayer.CUTOUT;
-        }
-        if (layer == RenderTypes.cutoutMovingBlock()) {
-            return ChunkSectionLayer.CUTOUT;
-        }
-        if (layer == RenderTypes.translucentMovingBlock()) {
-            return ChunkSectionLayer.TRANSLUCENT;
-        }
-        if (layer == RenderTypes.tripwireMovingBlock()) {
-            return ChunkSectionLayer.TRIPWIRE;
-        }
-        throw new IllegalArgumentException("Unsupported block render layer: " + layer);
+        // 26.3 起 Fabric 移除了 BlockRenderLayerMap：区块渲染层由方块模型的纹理透明度推导。
+        // 请求 TRANSLUCENT 的方块，其模型必须声明 force_translucent —— 这里把 layer 交给
+        // RegistrateBlockstateProvider，在数据生成阶段写进模型 JSON。
+        SimRenderLayers.register(entry, renderLayer);
     }
 
     /**
@@ -245,14 +225,14 @@ public class BlockBuilder<T extends Block, P> extends AbstractBuilder<Block, T, 
     }
     
     /**
-     * Register a block color handler for this block. The {@link BlockColor} instance can be shared across many blocks.
+     * Register a block color handler for this block. The {@link BlockTintSource} instance can be shared across many blocks.
      * 
      * @param colorHandler
      *            The color handler to register for this block
      * @return this {@link BlockBuilder}
      */
     // TODO it might be worthwhile to abstract this more and add the capability to automatically copy to the item
-    public BlockBuilder<T, P> color(NonNullSupplier<Supplier<BlockColor>> colorHandler) {
+    public BlockBuilder<T, P> color(NonNullSupplier<Supplier<BlockTintSource>> colorHandler) {
         if (this.colorHandler == null) {
             EnvExecutor.runWhenOn(EnvType.CLIENT, () -> this::registerBlockColor);
         }
@@ -262,7 +242,7 @@ public class BlockBuilder<T extends Block, P> extends AbstractBuilder<Block, T, 
     
     protected void registerBlockColor() {
         onRegister(entry -> {
-            ColorProviderRegistry.BLOCK.register(colorHandler.get().get(), entry);
+            BlockColorRegistry.register(java.util.List.of(colorHandler.get().get()), entry);
         });
     }
 

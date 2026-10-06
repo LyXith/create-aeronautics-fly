@@ -26,12 +26,11 @@ import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import io.github.fabricators_of_create.porting_lib.util.DeferredHolder;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
+import com.tterrag.registrate.util.SimRenderLayers;
 import com.tterrag.registrate.fabric.SimpleFluidRenderHandler;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributeHandler;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
 import net.minecraft.client.renderer.rendertype.RenderType;
-import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -123,6 +122,7 @@ public class FluidBuilder<T extends SimpleFlowableFluid, P> extends AbstractBuil
     private NonNullConsumer<SimpleFlowableFluid.Properties> fluidProperties;
     
     private @Nullable Supplier<Supplier<?>> layer = null;
+    private @Nullable ChunkSectionLayer chunkSectionLayer = null;
 
     @Nullable
     private NonNullSupplier<? extends SimpleFlowableFluid> source;
@@ -197,30 +197,11 @@ public class FluidBuilder<T extends SimpleFlowableFluid, P> extends AbstractBuil
     }
 
     protected void registerRenderType(T entry) {
-        EnvExecutor.runWhenOn(EnvType.CLIENT, () -> () ->
-                BlockRenderLayerMap.putFluids(toChunkSectionLayer(layer.get().get()), entry, entry.getSource()));
-    }
-
-    private static ChunkSectionLayer toChunkSectionLayer(Object layer) {
-        if (layer instanceof ChunkSectionLayer chunkLayer) {
-            return chunkLayer;
-        }
-        if (layer == RenderTypes.solidMovingBlock()) {
-            return ChunkSectionLayer.SOLID;
-        }
-        if (layer == RenderTypes.cutoutMovingBlock()) {
-            return ChunkSectionLayer.CUTOUT;
-        }
-        if (layer == RenderTypes.cutoutMovingBlock()) {
-            return ChunkSectionLayer.CUTOUT;
-        }
-        if (layer == RenderTypes.translucentMovingBlock()) {
-            return ChunkSectionLayer.TRANSLUCENT;
-        }
-        if (layer == RenderTypes.tripwireMovingBlock()) {
-            return ChunkSectionLayer.TRIPWIRE;
-        }
-        throw new IllegalArgumentException("Unsupported fluid render layer: " + layer);
+        // 26.3 起 Fabric 移除了 BlockRenderLayerMap：流体的区块渲染层由 FluidModel.Unbaked 里
+        // Material 的 force_translucent / 纹理 alpha 决定，见 registerDefaultRenderer。
+        EnvExecutor.runWhenOn(EnvType.CLIENT, () -> () -> {
+            this.chunkSectionLayer = SimRenderLayers.toChunkSectionLayer(this.layer.get().get());
+        });
     }
 
     /**
@@ -425,7 +406,11 @@ public class FluidBuilder<T extends SimpleFlowableFluid, P> extends AbstractBuil
 
     @Environment(EnvType.CLIENT)
     protected void registerDefaultRenderer(T flowing) {
-        new SimpleFluidRenderHandler(stillTexture, flowingTexture).register(getSource(), flowing);
+        // 流体的 ChunkSectionLayer 由 FluidModel.Unbaked 的 Material.forceTranslucent 决定
+        final boolean translucent = this.layer != null
+                && SimRenderLayers.toChunkSectionLayer(this.layer.get().get()) == ChunkSectionLayer.TRANSLUCENT;
+        new SimpleFluidRenderHandler(stillTexture, flowingTexture, flowingTexture, -1, translucent)
+                .register(getSource(), flowing);
     }
 
     /**

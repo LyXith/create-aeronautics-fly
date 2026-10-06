@@ -1,6 +1,10 @@
 package com.tterrag.registrate.providers;
 
 import com.tterrag.registrate.AbstractRegistrate;
+import com.tterrag.registrate.util.SimRenderLayers;
+
+import io.github.fabricators_of_create.porting_lib.models.generators.ModelBuilder;
+import net.minecraft.core.registries.BuiltInRegistries;
 
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.level.block.Block;
@@ -25,6 +29,24 @@ public class RegistrateBlockstateProvider extends BlockStateProvider implements 
     @Override
     public EnvType getSide() {
         return EnvType.CLIENT;
+    }
+
+    /**
+     * 26.3 中区块渲染层由模型纹理的透明度推导（{@code FaceBakery#computeMaterialTransparency}）。
+     * 当 {@link com.tterrag.registrate.builders.BlockBuilder#addLayer} 请求了半透明渲染层时，
+     * 这里把默认的 {@code cube_all} 模型生成为带 {@code force_translucent} 的版本。
+     */
+    @Override
+    public void simpleBlock(final Block block) {
+        if (SimRenderLayers.requiresForceTranslucent(block)) {
+            final String name = BuiltInRegistries.BLOCK.getKey(block).getPath();
+            final ModelBuilder model = models().withExistingParent("block/" + name, "block/cube_all")
+                    .texture("all", blockTexture(block));
+            model.forceTranslucent("all");
+            super.simpleBlock(block, model);
+            return;
+        }
+        super.simpleBlock(block);
     }
 
     @Override

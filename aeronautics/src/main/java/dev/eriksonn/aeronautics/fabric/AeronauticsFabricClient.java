@@ -10,9 +10,7 @@ import foundry.veil.api.network.VeilPacketManager;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import com.tterrag.registrate.fabric.SimpleFluidRenderHandler;
-import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
-import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.resources.Identifier;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -28,20 +26,15 @@ public final class AeronauticsFabricClient implements ClientModInitializer {
         VeilPacketManager.registerClientReceivers();
         FabricAeroParticleTypes.registerFactories();
 
+        // 26.3 起 Fabric 移除了 BlockRenderLayerMap：区块渲染层由模型纹理透明度推导。
+        //  - 流体：FluidModel.Unbaked 的 Material.forceTranslucent（此处设为半透明）
+        //  - 方块：模型 JSON 中的 force_translucent（见 assets/aeronautics/models/block/levitite*.json）
+        //  - 纹理带 alpha 的方块自动落入 ChunkSectionLayer.CUTOUT（如 adjustable_burner）
         final SimpleFluidRenderHandler fluidRenderer = new SimpleFluidRenderHandler(
-                LEVITITE_BLEND_STILL, LEVITITE_BLEND_FLOW);
-        FluidRenderHandlerRegistry.INSTANCE.register(
-                FabricAeroFluids.LEVITITE_BLEND.getSource(),
-                FabricAeroFluids.LEVITITE_BLEND.get(),
-                fluidRenderer);
-        BlockRenderLayerMap.putFluids(ChunkSectionLayer.TRANSLUCENT,
+                LEVITITE_BLEND_STILL, LEVITITE_BLEND_FLOW, LEVITITE_BLEND_FLOW, -1, true);
+        fluidRenderer.register(
                 FabricAeroFluids.LEVITITE_BLEND.getSource(),
                 FabricAeroFluids.LEVITITE_BLEND.get());
-        BlockRenderLayerMap.putBlocks(ChunkSectionLayer.TRANSLUCENT,
-                AeroBlocks.LEVITITE.get(), AeroBlocks.PEARLESCENT_LEVITITE.get());
-        BlockRenderLayerMap.putBlock(
-                AeroBlocks.HOT_AIR_BURNER.get(),
-                ChunkSectionLayer.CUTOUT);
 
         AeronauticsClient.init();
 
