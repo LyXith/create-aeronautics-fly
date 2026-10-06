@@ -1,5 +1,7 @@
 package dev.simulated_team.simulated.content.blocks.throttle_lever;
 
+import com.zurrtum.create.client.flywheel.lib.transform.Affine;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.zurrtum.create.content.redstone.analogLever.AnalogLeverBlock;
@@ -117,7 +119,7 @@ public class ThrottleLeverRenderer extends SafeBlockEntityRenderer<ThrottleLever
         ms.popPose();
     }
 
-    private <T extends TransformStack<T>> TransformStack<T> transformHandleExternal(final TransformStack<T> buffer, final float angle, final AttachFace face) {
+    private <T extends Affine<T>> T transformHandleExternal(final T buffer, final float angle, final AttachFace face) {
         return buffer
                 .translate(1 / 2f, 3 / 16f, 1 / 2f)
                 .rotateX(angle)
@@ -125,7 +127,7 @@ public class ThrottleLeverRenderer extends SafeBlockEntityRenderer<ThrottleLever
                 .rotateCentered(face == AttachFace.WALL ? (float) Math.PI : 0.0f, Direction.UP);
     }
 
-    private static  <T extends TransformStack<T>> TransformStack<T> transform(final TransformStack<T> buffer, final BlockState leverState) {
+    private static <T extends Affine<T>> T transform(final T buffer, final BlockState leverState) {
         final AttachFace attached = leverState.getValue(AnalogLeverBlock.FACE);
         final Direction facing = leverState.getValue(AnalogLeverBlock.FACING);
 

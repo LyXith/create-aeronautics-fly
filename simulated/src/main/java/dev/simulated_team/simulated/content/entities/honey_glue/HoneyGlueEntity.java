@@ -158,7 +158,7 @@ public class HoneyGlueEntity extends Entity implements SpecialEntityItemRequirem
                                         .add(normal3.scale(max3 * o2));
 
                                 serverLevel.sendParticles(
-                                        new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(Blocks.HONEY_BLOCK)), v.x,
+                                        new ItemParticleOption(ParticleTypes.ITEM, Blocks.HONEY_BLOCK.asItem()), v.x,
                                         v.y, v.z, 1, 0, 0, 0, 0);
 
                             }
@@ -285,7 +285,7 @@ public class HoneyGlueEntity extends Entity implements SpecialEntityItemRequirem
     }
 
     @Override
-    public InteractionResult interact(final Player player, final InteractionHand hand) {
+    public InteractionResult interact(final Player player, final InteractionHand hand, final Vec3 interactionLocation) {
         return InteractionResult.PASS;
     }
 

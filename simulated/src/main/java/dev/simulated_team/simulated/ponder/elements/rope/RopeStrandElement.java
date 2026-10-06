@@ -85,8 +85,6 @@ public class RopeStrandElement extends AnimatedSceneElementBase implements Anima
                               final ItemModelResolver itemModelManager,
                               final PonderLevel world,
                               final SubmitNodeCollector buffer,
-                              final SubmitNodeCollector queue,
-                              final Camera camera,
                               final CameraRenderState cameraRenderState,
                               final PoseStack ps,
                               final float fade,

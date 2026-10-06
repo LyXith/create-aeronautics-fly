@@ -43,6 +43,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Fluid;
+import io.github.fabricators_of_create.porting_lib.models.generators.ModelBuilder;
 
 public class FluidBuilder<T extends SimpleFlowableFluid, P> extends AbstractBuilder<Fluid, T, P, FluidBuilder<T, P>> {
 
@@ -279,8 +280,13 @@ public class FluidBuilder<T extends SimpleFlowableFluid, P> extends AbstractBuil
                 // default impl will try to get it from the fluid's block, thus causing a loop.
                 // if you want to do this, override getLuminance in FluidVariantAttributeHandler
                 //.properties(p -> p.lightLevel(blockState -> fluidType.get().getLightLevel()))
-            .blockstate((ctx, prov) -> prov.simpleBlock(ctx.getEntry(), prov.models().getBuilder(sourceName)
-                .texture("particle", stillTexture)));
+            .blockstate((ctx, prov) -> {
+                // 26.3：ModelBuilder#texture 的返回类型是 <T extends ModelBuilder>，
+                // 直接内联会同时匹配 simpleBlock 的 ModelFile / Function 重载，
+                // 先落到具体类型再做重载解析。
+                final ModelBuilder particle = prov.models().getBuilder(sourceName).texture("particle", stillTexture);
+                prov.simpleBlock(ctx.getEntry(), particle);
+            });
     }
 
     @SuppressWarnings("unchecked")

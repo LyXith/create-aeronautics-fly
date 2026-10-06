@@ -85,7 +85,7 @@ public class PonderLocalizationMixin {
 
     @Unique
     private static boolean simulated$isMissing(final String key) {
-        return !PonderIndex.editingModeActive() && !I18n.exists(key);
+        return !PonderIndex.editingModeActive() && !net.minecraft.locale.Language.getInstance().has(key);
     }
 
     @Unique

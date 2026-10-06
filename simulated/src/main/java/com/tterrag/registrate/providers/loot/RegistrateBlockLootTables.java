@@ -29,11 +29,13 @@ import java.util.stream.Collectors;
 public class RegistrateBlockLootTables extends FabricBlockLootSubProvider implements RegistrateLootTables {
     private final AbstractRegistrate<?> parent;
     private final Consumer<RegistrateBlockLootTables> callback;
+    private final HolderLookup.Provider registries;
 
     public RegistrateBlockLootTables(HolderLookup.Provider provider, AbstractRegistrate<?> parent, Consumer<RegistrateBlockLootTables> callback, FabricPackOutput output) {
         super(output, CompletableFuture.completedFuture(provider));
         this.parent = parent;
         this.callback = callback;
+        this.registries = provider;
     }
 
     @Override
@@ -160,7 +162,7 @@ public class RegistrateBlockLootTables extends FabricBlockLootSubProvider implem
     /** Generated override to expose protected method: {@link BlockLootSubProvider#createMultifaceBlockDrops} */
     @Override
     @Generated(value = "com.tterrag.registrate.test.meta.UpdateBlockLootTables", date = "Tue, 18 Jun 2024 17:52:52 GMT")
-    public LootTable.Builder createMultifaceBlockDrops(Block p_249088_, LootItemCondition.Builder p_251535_) { return super.createMultifaceBlockDrops(p_249088_, p_251535_); }
+    public LootTable.Builder createMultifaceBlockDrops(Block p_249088_, Holder<LootItemCondition> p_251535_) { return super.createMultifaceBlockDrops(p_249088_, p_251535_); }
 
     /** Generated override to expose protected method: {@link BlockLootSubProvider#createLeavesDrops} */
     @Override

@@ -1,6 +1,5 @@
 package dev.simulated_team.simulated.client;
 
-import com.zurrtum.create.client.AllKeys;
 import com.zurrtum.create.content.equipment.goggles.GogglesItem;
 import dev.ryanhcode.sable.mixinterface.block_properties.BlockStateExtension;
 import dev.ryanhcode.sable.physics.config.FloatingBlockMaterialDataHandler;
@@ -64,7 +63,7 @@ public class BlockPropertiesTooltip {
             return condition.allows();
         }
 
-        return condition.test(AllKeys.isKeyDown(InputConstants.KEY_LEFT_SHIFT), GogglesItem.isWearingGoggles(player));
+        return condition.test(InputConstants.isKeyDown(InputConstants.KEY_LSHIFT), GogglesItem.isWearingGoggles(player));
     }
 
     public static void register(final SimulatedRegistrate registrate, final String name, final TooltipFunction tooltipFunction, final float priority) {

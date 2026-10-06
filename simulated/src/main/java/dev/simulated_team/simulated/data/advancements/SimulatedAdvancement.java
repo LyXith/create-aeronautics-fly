@@ -233,7 +233,7 @@ public class SimulatedAdvancement {
         }
 
         public Builder whenBlockPlaced(final Block block) {
-            return this.externalTrigger(ItemUsedOnLocationTrigger.TriggerInstance.placedBlock(block));
+            return this.externalTrigger(ItemUsedOnLocationTrigger.TriggerInstance.placedBlock(BuiltInRegistries.BLOCK, block));
         }
 
         public Builder whenIconCollected() {
@@ -245,7 +245,7 @@ public class SimulatedAdvancement {
             return this.deferredExternalTrigger(() -> {
                 Item item = this.icon.get().getItem();
                 if (item instanceof final BlockItem blockItem) {
-                    return ItemUsedOnLocationTrigger.TriggerInstance.placedBlock(blockItem.getBlock());
+                    return ItemUsedOnLocationTrigger.TriggerInstance.placedBlock(BuiltInRegistries.BLOCK, blockItem.getBlock());
                 }
                 return InventoryChangeTrigger.TriggerInstance.hasItems(item);
             });

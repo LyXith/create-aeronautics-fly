@@ -38,7 +38,7 @@ public class AugerShaftRenderer extends KineticBlockEntityRenderer<AugerShaftBlo
             for (int i = 0; i < 2; i++) {
                 final SuperByteBuffer redstone = CachedBuffers.partialFacing(be.flowDirection == (i == 1 ? facing.getOpposite() : facing) && be.getSpeed() != 0 ? SimPartialModels.AUGER_REDSTONE_ON : SimPartialModels.AUGER_REDSTONE_OFF, state, facing);
 
-                TransformStack.of(redstone.getTransforms())
+                redstone
                         .center()
                         .rotateToFace(facing)
                         .rotate(Axis.XN.rotationDegrees((facing.getAxis().isHorizontal() ? 90 : 0) + i * 180))
@@ -58,14 +58,14 @@ public class AugerShaftRenderer extends KineticBlockEntityRenderer<AugerShaftBlo
         final Direction facing = Direction.get(Direction.AxisDirection.POSITIVE, state.getValue(AugerShaftBlock.AXIS));
         return CachedBuffers.partialDirectional(
                 SimPartialModels.AUGER_COG, state,
-                facing, () -> {
+                facing, ignored -> {
                     final PoseStack poseStack = new PoseStack();
                     TransformStack.of(poseStack)
                             .center()
                             .rotateToFace(facing)
                             .rotate(Axis.XN.rotationDegrees(90))
                             .uncenter();
-                    return poseStack;
+                    return poseStack.last();
                 });
     }
 

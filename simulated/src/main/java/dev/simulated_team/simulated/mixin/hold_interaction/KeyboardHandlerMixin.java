@@ -21,7 +21,7 @@ public class KeyboardHandlerMixin {
     private void simulated$preOnPress(final long windowPointer, final int action, final KeyEvent event, final CallbackInfo ci) {
         if (this.minecraft.gui.screen() == null) {
             if (SimDistUtil.getClientPlayer() != null && !SimDistUtil.getClientPlayer().isSpectator()) {
-                final InteractCallback.Result status = SimulatedCommonClientEvents.onBeforeMouseInput(InteractCallback.Input.key(event.key(), event.scancode()), event.modifiers(), action);
+                final InteractCallback.Result status = SimulatedCommonClientEvents.onBeforeMouseInput(InteractCallback.Input.key(event.key(), event.keycode()), event.modifiers(), action);
                 if (status.cancelled()) {
                     ci.cancel();
                 }
@@ -31,6 +31,6 @@ public class KeyboardHandlerMixin {
 
     @Inject(method = "keyPress", at = @At("TAIL"))
     private void simulated$postOnPress(final long windowPointer, final int action, final KeyEvent event, final CallbackInfo ci) {
-        SimulatedCommonClientEvents.onAfterKeyPress(event.key(), event.scancode(), action, event.modifiers());
+        SimulatedCommonClientEvents.onAfterKeyPress(event.key(), event.keycode(), action, event.modifiers());
     }
 }

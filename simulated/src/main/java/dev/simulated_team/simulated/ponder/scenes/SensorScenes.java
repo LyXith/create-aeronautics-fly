@@ -53,6 +53,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.Optional;
 import java.util.function.UnaryOperator;
+import net.minecraft.world.item.DyeColor;
 
 public class SensorScenes {
 
@@ -1441,7 +1442,7 @@ public class SensorScenes {
                     loopingPlatform2, new Vec3(0, 0, -20), 200, SmoothMovementUtils.quadraticRiseOut()));
             for (int i = 0; i < 3; i++) {
                 scene.world().setBlock(new BlockPos(1 + i, 0, 42),
-                        (i == 1 ? Blocks.WHITE_CONCRETE : Blocks.SNOW_BLOCK).defaultBlockState(), false);
+                        (i == 1 ? Blocks.CONCRETE.pick(DyeColor.WHITE) : Blocks.SNOW_BLOCK).defaultBlockState(), false);
             }
 
             final ParrotElement dangerParrot = ExpandedParrotElement.create(new Vec3(2.5, 1, 26.5), ParrotPose.DancePose::new);

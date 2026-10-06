@@ -85,7 +85,7 @@ public class SimpleSubLevelGroupRenderer {
         CAMERA.setup(cameraPosition, null, minecraft.level, orientation, 0f);
 
         final PoseStack poseStack = new PoseStack();
-        poseStack.rotate(TRANSFORM.set(modelView));
+        poseStack.mulPose(TRANSFORM.set(modelView));
         poseStack.rotate(CAMERA.rotation());
 
         // The feature dispatcher snapshots these while preparing the frame, so both
@@ -116,7 +116,7 @@ public class SimpleSubLevelGroupRenderer {
                 final SubLevelRenderData renderData = renderedSubLevel.getRenderData();
                 final Vector3d chunkOffset = renderData.getChunkOffset();
                 final PoseStack blockPoseStack = new PoseStack();
-                blockPoseStack.rotate(renderData.getTransformation(cameraPosition.x, cameraPosition.y, cameraPosition.z));
+                blockPoseStack.mulPose(renderData.getTransformation(cameraPosition.x, cameraPosition.y, cameraPosition.z));
                 blockPoseStack.translate(chunkOffset.x, chunkOffset.y, chunkOffset.z);
 
                 final var bounds = renderedSubLevel.getPlot().getBoundingBox();

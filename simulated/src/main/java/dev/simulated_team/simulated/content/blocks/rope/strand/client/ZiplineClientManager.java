@@ -310,7 +310,7 @@ public class ZiplineClientManager implements InteractCallback {
     public static void embark(final UUID rope) {
         final Minecraft mc = Minecraft.getInstance();
         final Component component = Component.translatable("mount.onboard", mc.options.keyShift.getTranslatedKeyMessage());
-        mc.gui.setOverlayMessage(component, false);
+        mc.gui.hud.setOverlayMessage(component, false);
         mc.getSoundManager()
                 .play(SimpleSoundInstance.forUI(SoundEvents.WOOL_HIT, 1f, 0.5f));
         ridingRope = rope;

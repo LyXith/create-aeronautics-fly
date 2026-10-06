@@ -58,7 +58,7 @@ public final class SimulatedFabricClient implements ClientModInitializer {
         VeilPacketManager.registerClientReceivers();
         FabricSimParticleTypes.registerFactories();
         SimSpriteShifts.init();
-        SimKeys.registerTo(KeyBindingHelper::registerKeyBinding);
+        SimKeys.registerTo(KeyMappingHelper::registerKeyMapping);
 
         SimulatedClient.init();
         registerClientPostEffects();
@@ -73,7 +73,7 @@ public final class SimulatedFabricClient implements ClientModInitializer {
             LateLaserRenderQueue.finishWorldFrameCollection();
             IrisLaserRenderQueue.finishWorldFrameCollection();
             PhysicsStaffRenderHandler.renderSelectionBox(
-                    context.consumers(), context.matrices(), Minecraft.getInstance().gameRenderer.mainCamera());
+                    context.submitNodeCollector(), context.poseStack(), Minecraft.getInstance().gameRenderer.mainCamera());
         });
         HudElementRegistry.attachElementAfter(VanillaHudElements.HOTBAR, Simulated.path("interaction_overlay"),
                 (graphics, tickCounter) -> SimulatedCommonClientEvents.renderOverlays(

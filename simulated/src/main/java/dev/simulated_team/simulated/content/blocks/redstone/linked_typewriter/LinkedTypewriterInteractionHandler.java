@@ -222,7 +222,7 @@ public class LinkedTypewriterInteractionHandler {
 
             linkedControllerItems = emptyData;
         } else {
-            linkedControllerItems = new ObjectArrayList<>(linkedControllerData.stream().toList());
+            linkedControllerItems = new ObjectArrayList<>(linkedControllerData.itemCopies().toList());
 
             while (linkedControllerItems.size() < 12) {
                 linkedControllerItems.add(ItemStack.EMPTY);

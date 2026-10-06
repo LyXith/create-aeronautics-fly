@@ -1,5 +1,7 @@
 package dev.simulated_team.simulated.content.entities.launched_plunger;
 
+import net.minecraft.util.LightCoordsUtil;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -314,8 +316,8 @@ public class LaunchedPlungerEntityRenderer extends EntityRenderer<LaunchedPlunge
                 NEXT_ORIENTATION.set(ORIENTATION);
             }
 
-            final int lightStart = LevelRenderer.getLightColor(level, LIGHT_POS.set(x + cameraPosition.x, y + cameraPosition.y, z + cameraPosition.z));
-            final int lightEnd = LevelRenderer.getLightColor(level, LIGHT_POS.set(nextX + cameraPosition.x, nextY + cameraPosition.y, nextZ + cameraPosition.z));
+            final int lightStart = LightCoordsUtil.getLightCoords(level, LIGHT_POS.set(x + cameraPosition.x, y + cameraPosition.y, z + cameraPosition.z));
+            final int lightEnd = LightCoordsUtil.getLightCoords(level, LIGHT_POS.set(nextX + cameraPosition.x, nextY + cameraPosition.y, nextZ + cameraPosition.z));
 
             final double length = Math.sqrt((nextX - x) * (nextX - x) + (nextY - y) * (nextY - y) + (nextZ - z) * (nextZ - z));
             nextV = v + (float) (length * (17 / 16f));
@@ -404,7 +406,7 @@ public class LaunchedPlungerEntityRenderer extends EntityRenderer<LaunchedPlunge
     }
 
     @Override
-    public boolean shouldRender(final LaunchedPlungerEntity entity, final Frustum frustum, final double d, final double e, final double f) {
+    public boolean shouldRender(final LaunchedPlungerEntity entity, final Frustum frustum, final double d, final double e, final double f, final float partialTick) {
         return true;
     }
 }

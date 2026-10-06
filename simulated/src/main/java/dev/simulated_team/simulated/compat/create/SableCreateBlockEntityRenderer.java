@@ -80,12 +80,6 @@ public final class SableCreateBlockEntityRenderer {
             // Sable samples light around the transformed physical block. Keep
             // that result instead of the plot-space light extracted by vanilla.
             renderState.lightCoords = light;
-            if (renderState
-                    instanceof final EncasedFanRenderer.EncasedFanRenderState fanState) {
-                fanState.lightBehind = light;
-                fanState.lightInFront = light;
-            }
-
             // An empty burner has no dynamic blaze geometry. Create's renderer
             // leaves a freshly allocated state empty in that case.
             if (renderState
@@ -105,7 +99,6 @@ public final class SableCreateBlockEntityRenderer {
     ) {
         final CameraRenderState state = new CameraRenderState();
         state.pos = localCameraPosition;
-        state.entityPos = localCameraPosition;
         state.blockPos = BlockPos.containing(localCameraPosition);
         state.initialized = camera.isInitialized();
         state.orientation = new Quaternionf(renderPose.orientation())

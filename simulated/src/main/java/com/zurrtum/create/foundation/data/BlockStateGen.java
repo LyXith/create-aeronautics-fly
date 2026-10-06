@@ -42,10 +42,11 @@ public final class BlockStateGen {
                     ? AssetLookup.partialBaseModel(ctx, prov)
                     : state -> prov.models().getExistingFile(prov.modLoc("block/" + ctx.getName()));
 
-            prov.getVariantBuilder(ctx.getEntry()).forAllStates(state -> ConfiguredModel.builder()
-                    .modelFile(model.apply(state))
-                    .rotationY(state.getValue(BlockStateProperties.HORIZONTAL_AXIS) == Direction.Axis.X ? 90 : 0)
-                    .build());
+            prov.getVariantBuilder(ctx.getEntry()).forAllStates(state -> new ConfiguredModel[]{
+                    ConfiguredModel.builder()
+                            .modelFile(model.apply(state))
+                            .rotationY(state.getValue(BlockStateProperties.HORIZONTAL_AXIS) == Direction.Axis.X ? 90 : 0)
+                            .build()});
         };
     }
 

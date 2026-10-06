@@ -33,6 +33,7 @@ import org.joml.Vector3dc;
 import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.UUID;
+import net.minecraft.resources.Identifier;
 
 public class LodestoneTrackingMap extends SavedData {
 
@@ -41,7 +42,7 @@ public class LodestoneTrackingMap extends SavedData {
 	private static final Codec<List<LodestoneInformation>> INFORMATION_CODEC = LodestoneInformation.CODEC.listOf();
 	private static SavedDataType<LodestoneTrackingMap> type(final ServerLevel level) {
 		return new SavedDataType<>(
-			FILE_ID,
+			Identifier.fromNamespaceAndPath("simulated", "lodestone_tracker"),
 			() -> new LodestoneTrackingMap(level),
 			INFORMATION_CODEC.fieldOf("TrackerInformation").codec().xmap(
 					information -> load(level, information),

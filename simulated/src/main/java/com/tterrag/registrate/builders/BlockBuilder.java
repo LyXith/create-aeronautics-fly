@@ -139,7 +139,7 @@ public class BlockBuilder<T extends Block, P> extends AbstractBuilder<Block, T, 
         // 26.3 起 Fabric 移除了 BlockRenderLayerMap：区块渲染层由方块模型的纹理透明度推导。
         // 请求 TRANSLUCENT 的方块，其模型必须声明 force_translucent —— 这里把 layer 交给
         // RegistrateBlockstateProvider，在数据生成阶段写进模型 JSON。
-        SimRenderLayers.register(entry, renderLayer);
+        SimRenderLayers.register(entry, NonNullSupplier.of(renderLayer));
     }
 
     /**

@@ -135,7 +135,6 @@ public class HandleBlock extends AbstractDirectionalAxisBlock implements IBE<Han
         return HandleBlockEntity.class;
     }
 
-    @Override
     public @Nullable DyeColor getColor() {
         return this.color;
     }

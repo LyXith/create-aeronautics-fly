@@ -14,6 +14,6 @@ import java.util.List;
 public class ArmorStandItemMixin {
     @WrapOperation(method = "useOn", at = @At(value = "INVOKE", target = "Ljava/util/List;isEmpty()Z"))
     private boolean ignoreGlues(final List<Entity> instance, final Operation<Boolean> original) {
-        return instance.stream().filter(e -> !e.getType().is(SimTags.Misc.ARMOR_STAND_IGNORE)).toList().isEmpty();
+        return instance.stream().filter(e -> !e.getType().builtInRegistryHolder().is(SimTags.Misc.ARMOR_STAND_IGNORE)).toList().isEmpty();
     }
 }

@@ -37,6 +37,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.BlastingRecipe;
 import net.minecraft.world.item.crafting.CampfireCookingRecipe;
@@ -114,6 +115,17 @@ public class RegistrateRecipeProvider extends FabricRecipeProvider implements Re
         private RecipeOutput recipeOutput() {
             return this.output;
         }
+    }
+
+    /**
+     * 26.3 的 {@link net.minecraft.data.recipes.RecipeOutput} 继承了 Fabric 的
+     * {@code FabricRecipeOutput}，其 {@code getRecipeIdentifier} 是 public；而
+     * {@link FabricRecipeProvider} 自己的同名实现仍是 protected，因此这里必须
+     * 重新拓宽可见性才能实现该接口。
+     */
+    @Override
+    public Identifier getRecipeIdentifier(final Identifier identifier) {
+        return super.getRecipeIdentifier(identifier);
     }
 
     private Delegate delegate() {
@@ -217,10 +229,10 @@ public class RegistrateRecipeProvider extends FabricRecipeProvider implements Re
 
     private static final ImmutableMap<RecipeSerializer<? extends AbstractCookingRecipe>, String> COOKING_TYPE_NAMES =
             ImmutableMap.<RecipeSerializer<? extends AbstractCookingRecipe>, String>builder()
-                    .put(RecipeSerializer.SMELTING_RECIPE, "smelting")
-                    .put(RecipeSerializer.BLASTING_RECIPE, "blasting")
-                    .put(RecipeSerializer.SMOKING_RECIPE, "smoking")
-                    .put(RecipeSerializer.CAMPFIRE_COOKING_RECIPE, "campfire")
+                    .put(SmeltingRecipe.SERIALIZER, "smelting")
+                    .put(BlastingRecipe.SERIALIZER, "blasting")
+                    .put(SmokingRecipe.SERIALIZER, "smoking")
+                    .put(CampfireCookingRecipe.SERIALIZER, "campfire")
                     .build();
 
     public <T extends ItemLike, S extends AbstractCookingRecipe> void cooking(
@@ -258,7 +270,7 @@ public class RegistrateRecipeProvider extends FabricRecipeProvider implements Re
 
     public <T extends ItemLike> void smelting(DataIngredient source, RecipeCategory category,
                                                Supplier<? extends T> result, float experience, int cookingTime) {
-        cooking(source, category, result, experience, cookingTime, RecipeSerializer.SMELTING_RECIPE, SmeltingRecipe::new);
+        cooking(source, category, result, experience, cookingTime, SmeltingRecipe.SERIALIZER, SmeltingRecipe::new);
     }
 
     public <T extends ItemLike> void blasting(DataIngredient source, RecipeCategory category,
@@ -268,7 +280,7 @@ public class RegistrateRecipeProvider extends FabricRecipeProvider implements Re
 
     public <T extends ItemLike> void blasting(DataIngredient source, RecipeCategory category,
                                                Supplier<? extends T> result, float experience, int cookingTime) {
-        cooking(source, category, result, experience, cookingTime, RecipeSerializer.BLASTING_RECIPE, BlastingRecipe::new);
+        cooking(source, category, result, experience, cookingTime, BlastingRecipe.SERIALIZER, BlastingRecipe::new);
     }
 
     public <T extends ItemLike> void smoking(DataIngredient source, RecipeCategory category,
@@ -278,7 +290,7 @@ public class RegistrateRecipeProvider extends FabricRecipeProvider implements Re
 
     public <T extends ItemLike> void smoking(DataIngredient source, RecipeCategory category,
                                               Supplier<? extends T> result, float experience, int cookingTime) {
-        cooking(source, category, result, experience, cookingTime, RecipeSerializer.SMOKING_RECIPE, SmokingRecipe::new);
+        cooking(source, category, result, experience, cookingTime, SmokingRecipe.SERIALIZER, SmokingRecipe::new);
     }
 
     public <T extends ItemLike> void campfire(DataIngredient source, RecipeCategory category,
@@ -288,7 +300,7 @@ public class RegistrateRecipeProvider extends FabricRecipeProvider implements Re
 
     public <T extends ItemLike> void campfire(DataIngredient source, RecipeCategory category,
                                                Supplier<? extends T> result, float experience, int cookingTime) {
-        cooking(source, category, result, experience, cookingTime, RecipeSerializer.CAMPFIRE_COOKING_RECIPE,
+        cooking(source, category, result, experience, cookingTime, CampfireCookingRecipe.SERIALIZER,
                 CampfireCookingRecipe::new);
     }
 
@@ -436,7 +448,7 @@ public class RegistrateRecipeProvider extends FabricRecipeProvider implements Re
     }
 
     public ShapelessRecipeBuilder shapeless(RecipeCategory category, ItemStack result) {
-        return delegate().shapeless(category, result);
+        return delegate().shapeless(category, ItemStackTemplate.fromStack(result));
     }
 
     public ShapelessRecipeBuilder shapeless(RecipeCategory category, ItemLike result) {

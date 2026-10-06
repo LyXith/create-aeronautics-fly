@@ -14,11 +14,12 @@ public class SteeringWheelGenerator extends SpecialBlockStateGen {
     @Override
     public <T extends Block> void generate(final DataGenContext<Block, T> ctx,
                                            final RegistrateBlockstateProvider prov) {
-        prov.getVariantBuilder(ctx.getEntry()).forAllStates(state -> ConfiguredModel.builder()
-                .modelFile(getModel(ctx, prov, state))
-                .rotationX(Math.floorMod(getXRotation(state), 360))
-                .rotationY(Math.floorMod(getYRotation(state), 360))
-                .build());
+        prov.getVariantBuilder(ctx.getEntry()).forAllStates(state -> new ConfiguredModel[]{
+                ConfiguredModel.builder()
+                        .modelFile(getModel(ctx, prov, state))
+                        .rotationX(Math.floorMod(getXRotation(state), 360))
+                        .rotationY(Math.floorMod(getYRotation(state), 360))
+                        .build()});
     }
 
     @Override

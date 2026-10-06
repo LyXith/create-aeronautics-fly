@@ -101,7 +101,7 @@ public class KeyEditorScreen {
         final int clipBottom = this.topPos() + KEY_MENU.height - 35;
         graphics.enableScissor(this.leftPos() + 7, clipTop, this.leftPos() + 231, clipBottom);
         for (int index = 0; index < this.entries.size(); index++) {
-            this.entries.get(index).renderBackground(graphics, index);
+            this.entries.get(index).extractBackground(graphics, index);
         }
         graphics.disableScissor();
 

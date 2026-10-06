@@ -2,7 +2,6 @@ package dev.simulated_team.simulated.compat.minecraft;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.SubmitNodeCollector;
-import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
@@ -59,8 +58,8 @@ public abstract class EntityRenderer<T extends Entity>
     public abstract Identifier getTextureLocation(T entity);
 
     @Override
-    public boolean shouldRender(final T entity, final Frustum frustum, final double x, final double y, final double z) {
-        return super.shouldRender(entity, frustum, x, y, z);
+    public boolean shouldRender(final T entity, final Frustum frustum, final double x, final double y, final double z, final float partialTick) {
+        return super.shouldRender(entity, frustum, x, y, z, partialTick);
     }
 
     public static class RenderState<T extends Entity> extends EntityRenderState {

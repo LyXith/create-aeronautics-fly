@@ -49,11 +49,17 @@ public class MultiPartBlockStateBuilder implements IGeneratedBlockState {
             return this;
         }
 
+        @SafeVarargs
+        public final <T extends Comparable<T>> PartBuilder condition(final Property<T> property, final T... values) {
+            return this;
+        }
+
         public <T extends Comparable<T>> PartBuilder condition(final Property<T> property, final String value) {
             return this;
         }
 
-        public PartBuilder end() {
+        /** 26.3 版 porting-lib 的 chain 以 {@code end()} 收尾回到多重方块状态构建器。 */
+        public MultiPartBlockStateBuilder end() {
             return this.parent;
         }
 

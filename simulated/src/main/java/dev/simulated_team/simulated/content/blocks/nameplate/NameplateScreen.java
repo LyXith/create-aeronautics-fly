@@ -91,10 +91,10 @@ public class NameplateScreen extends Screen {
 
     @Override
     public void extractRenderState(GuiGraphicsExtractor graphics, final int mouseX, final int mouseY, final float partialTick) {
-        this.renderBackground(graphics, mouseX, mouseY, partialTick);
-        graphics.drawCenteredString(this.font, this.title, this.width / 2, 40, 0xFFFFFF);
+        this.extractBackground(graphics, mouseX, mouseY, partialTick);
+        graphics.centeredText(this.font, this.title, this.width / 2, 40, 0xFFFFFF);
         this.renderNameplate(graphics);
-        super.render(graphics, mouseX, mouseY, partialTick);
+        super.extractRenderState(graphics, mouseX, mouseY, partialTick);
     }
 
     private void renderNameplate(final GuiGraphicsExtractor graphics) {

@@ -28,7 +28,7 @@ public class RedstoneAccumulatorRenderer extends SmartBlockEntityRenderer<Redsto
         final Direction facing = be.getBlockState().getValue(RedstoneAccumulatorBlock.FACING);
         render.light(light);
         render.translate(0.5, 0, 0.5);
-        render.rotateYDegrees(AngleHelper.horizontalAngle(facing)).pushPose();
+        render.rotateYDegrees(AngleHelper.horizontalAngle(facing));
         render.submit(ms, buffer);
     }
 

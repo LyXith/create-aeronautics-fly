@@ -1,55 +1,36 @@
 package com.tterrag.registrate.providers.loot;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import com.tterrag.registrate.AbstractRegistrate;
 
 import lombok.Getter;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.SimpleFabricLootTableSubProvider;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricEntityLootSubProvider;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.resources.ResourceKey;
-import org.jetbrains.annotations.NotNull;
 
-import net.minecraft.resources.Identifier;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.LootTable.Builder;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-
-public class RegistrateEntityLootTables extends SimpleFabricLootTableSubProvider implements RegistrateLootTables {
+public class RegistrateEntityLootTables extends FabricEntityLootSubProvider implements RegistrateLootTables {
 
     private final AbstractRegistrate<?> parent;
     @Getter
     private final HolderLookup.Provider provider;
     private final Consumer<RegistrateEntityLootTables> callback;
 
-    private final Map<ResourceKey<LootTable>, Builder> entries = new HashMap<>();
-
     public RegistrateEntityLootTables(HolderLookup.Provider provider, AbstractRegistrate<?> parent, Consumer<RegistrateEntityLootTables> callback, FabricPackOutput output) {
-        super(output, CompletableFuture.supplyAsync(() -> provider), LootContextParamSets.ENTITY);
+        super(output, CompletableFuture.completedFuture(provider));
         this.parent = parent;
         this.provider = provider;
         this.callback = callback;
     }
 
     @Override
-    public void generate(@NotNull BiConsumer<ResourceKey<LootTable>, Builder> consumer) {
+    public void generate() {
         callback.accept(this);
-        entries.forEach(consumer);
     }
 
-    public void add(EntityType<?> type, LootTable.Builder table) {
-        type.getDefaultLootTable().ifPresent(id -> entries.put(id, table));
+    @Override
+    public String getName() {
+        return "Registrate Entity Loot Tables";
     }
-
-    public void add(ResourceKey<LootTable> id, LootTable.Builder table) {
-        entries.put(id, table);
-    }
-
 }

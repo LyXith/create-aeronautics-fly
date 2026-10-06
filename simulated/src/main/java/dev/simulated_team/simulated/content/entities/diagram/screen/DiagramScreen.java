@@ -618,7 +618,7 @@ public class DiagramScreen extends AbstractSimiScreen {
         ps.popMatrix();
 
         for (final DiagramForceGroupToggle widget : this.forceToggleWidgets) {
-            widget.render(graphics, mouseX, mouseY, partialTicks);
+            widget.extractRenderState(graphics, mouseX, mouseY, partialTicks);
         }
 
         // Render diagram
@@ -707,10 +707,10 @@ public class DiagramScreen extends AbstractSimiScreen {
             final int color = valid ? 0x90ffffff : 0x90ffaaaa;
 
             graphics.fill((int) startX, (int) startY, (int) endX, (int) endY, fillColor);
-            graphics.hLine((int) startX, (int) endX, (int) startY, color);
-            graphics.hLine((int) startX, (int) endX, (int) endY, color);
-            graphics.vLine((int) startX, (int) startY, (int) endY, color);
-            graphics.vLine((int) endX, (int) startY, (int) endY, color);
+            graphics.horizontalLine((int) startX, (int) endX, (int) startY, color);
+            graphics.horizontalLine((int) startX, (int) endX, (int) endY, color);
+            graphics.verticalLine((int) startX, (int) startY, (int) endY, color);
+            graphics.verticalLine((int) endX, (int) startY, (int) endY, color);
 
             ps.popMatrix();
         }
@@ -739,12 +739,27 @@ public class DiagramScreen extends AbstractSimiScreen {
         return dest;
     }
 
+    /**
+     * Draws a hover tooltip for the diagram overlays.
+     *
+     * <p>26.3 no longer exposes {@code Screen#renderTooltip}; Create keeps the
+     * equivalent helper in {@link RemovedGuiUtils}.</p>
+     */
+    public static void renderTooltip(final GuiGraphicsExtractor graphics, final int x, final int y,
+                                     final List<? extends FormattedText> lines) {
+        RemovedGuiUtils.drawHoveringText(graphics, lines, x, y,
+                RemovedGuiUtils.DEFAULT_BACKGROUND_COLOR,
+                RemovedGuiUtils.DEFAULT_BORDER_COLOR_START,
+                RemovedGuiUtils.DEFAULT_BORDER_COLOR_END,
+                Minecraft.getInstance().font);
+    }
+
     public static void renderFBO(final GuiGraphicsExtractor graphics, final AdvancedFbo fbo, final int width, final int height) {
         final Matrix3x2fStack pose = graphics.pose();
         pose.pushMatrix();
         pose.translate(0, height);
         pose.scale(1, -1);
-        graphics.fill(RenderPipelines.GUI_TEXTURED, TextureSetup.singleTexture(fbo.getColorTextureAttachment(0).getTextureView(), com.mojang.blaze3d.systems.RenderSystem.getSamplerCache().getClampToEdge(com.mojang.blaze3d.textures.FilterMode.NEAREST)), 0, 0, width, height);
+        graphics.fill(RenderPipelines.GUI_TEXTURED, TextureSetup.singleTexture(fbo.getColorTextureAttachment(0).getTextureView(), com.mojang.blaze3d.systems.RenderSystem.getSamplerCache().getClampToEdge(com.mojang.renderpearl.api.textures.FilterMode.NEAREST)), 0, 0, width, height);
         pose.popMatrix();
     }
 

@@ -34,15 +34,18 @@ public abstract class EntityMixin {
 
     @Shadow public abstract Vec3 getPosition(float partialTicks);
 
-    @Redirect(method = "move", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Block;updateEntityMovementAfterFallOn(Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/world/entity/Entity;)V"))
-    private void updateEntityMovementAfterFallOn(final Block instance, final BlockGetter pLevel, final Entity entity) {
-
-        if (entity instanceof final ItemEntity item && item.getItem().is(SimItems.SPRING.get())) {
-            entity.setDeltaMovement(entity.getDeltaMovement().multiply(1, -1, 1));
+    // 26.3 把 Block#updateEntityMovementAfterFallOn 合并进了碰撞回弹流程：
+    // Entity#restituteMovementAfterCollisions 计算完碰撞后的速度后统一 setDeltaMovement。
+    // 因此这里改为重定向那次 setDeltaMovement —— 只有贴地（onGround）时才反转 Y，
+    // 与原先「落地时被调用一次」的语义保持一致。
+    @Redirect(method = "restituteMovementAfterCollisions", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;setDeltaMovement(Lnet/minecraft/world/phys/Vec3;)V"))
+    private void simulated$bounceSpringItem(final Entity instance, final Vec3 velocity) {
+        if (instance.onGround() && instance instanceof final ItemEntity item && item.getItem().is(SimItems.SPRING.get())) {
+            instance.setDeltaMovement(instance.getDeltaMovement().multiply(1, -1, 1));
             return;
         }
 
-        instance.updateEntityMovementAfterFallOn(pLevel, entity);
+        instance.setDeltaMovement(velocity);
     }
 
     @Inject(method = "checkFallDamage", at = @At(value = "HEAD"))

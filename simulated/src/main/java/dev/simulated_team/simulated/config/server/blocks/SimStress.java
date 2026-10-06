@@ -37,7 +37,7 @@ public class SimStress extends CStress {
         };
     }
 
-    public static <B extends Block, P> NonNullUnaryOperator<BlockBuilder<B, P>> setCapacity(final double value) {
+    public static <B extends Block, P> NonNullUnaryOperator<BlockBuilder<B, P>> setBlockCapacity(final double value) {
         return (builder) -> {
             assertFromSimulated(builder);
             DEFAULT_CAPACITIES.put(Simulated.path(builder.getName()), value);

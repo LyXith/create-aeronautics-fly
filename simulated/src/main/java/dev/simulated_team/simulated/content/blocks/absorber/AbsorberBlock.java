@@ -33,6 +33,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.item.ItemStackTemplate;
 
 public class AbsorberBlock extends HorizontalDirectionalBlock implements IBE<AbsorberBlockEntity>, IWrenchable {
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
@@ -74,7 +75,7 @@ public class AbsorberBlock extends HorizontalDirectionalBlock implements IBE<Abs
 
             if (level instanceof final ServerLevel serverLevel) {
                 final Vec3 mouthPos = Vec3.atCenterOf(pos).add(Vec3.atLowerCornerOf(state.getValue(FACING).getUnitVec3i()).scale(0.5));
-                serverLevel.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, stack), mouthPos.x, mouthPos.y, mouthPos.z, 5, 0, 0.1, 0, 0.01);
+                serverLevel.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, ItemStackTemplate.fromStack(stack)), mouthPos.x, mouthPos.y, mouthPos.z, 5, 0, 0.1, 0, 0.01);
             }
 
             stack.consume(1, player);

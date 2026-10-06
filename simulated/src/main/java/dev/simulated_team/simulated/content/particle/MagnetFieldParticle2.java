@@ -1,5 +1,7 @@
 package dev.simulated_team.simulated.content.particle;
 
+import net.minecraft.util.LightCoordsUtil;
+
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -118,7 +120,7 @@ public class MagnetFieldParticle2 extends SimpleAnimatedParticle {
 
     public int getLightColor(final float partialTick) {
         final BlockPos blockpos = new BlockPos((int) this.x, (int) this.y, (int) this.z);
-        return this.level.isLoaded(blockpos) ? LevelRenderer.getLightColor(this.level, blockpos) : 0;
+        return this.level.isLoaded(blockpos) ? LightCoordsUtil.getLightCoords(this.level, blockpos) : 0;
     }
 
     private void selectSprite(final int index) {

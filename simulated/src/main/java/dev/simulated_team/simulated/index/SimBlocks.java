@@ -271,7 +271,7 @@ public class SimBlocks {
                     .tag(BlockTags.MINEABLE_WITH_PICKAXE)
                     .tag(BlockTags.MINEABLE_WITH_AXE)
                     .transform(SimStress.setImpact(16.0))
-                    .transform(SimStress.setCapacity(8.0))
+                    .transform(SimStress.setBlockCapacity(8.0))
                     .recipe((c, p) -> p.shaped(RecipeCategory.MISC, c.get(), 1)
                             .pattern("A")
                             .pattern("S")
@@ -378,7 +378,7 @@ public class SimBlocks {
                                 .texture("0", p.modLoc("block/portable_engine/" + colorName))
                                 .texture("particle", p.modLoc("block/portable_engine/" + colorName))
                         ))
-                .transform(SimStress.setCapacity(64.0))
+                .transform(SimStress.setBlockCapacity(64.0))
                 .onRegister(block -> BlockStressValues.setGeneratorSpeed(block, 32))
                 .transform(SimDisplayRegistrations.displaySource(SimDisplaySources.PORTABLE_ENGINE_DISPLAY))
                 .tag(BlockTags.MINEABLE_WITH_PICKAXE);
@@ -582,11 +582,12 @@ public class SimBlocks {
                         final String suffix = state.getValue(AnalogTransmissionBlock.POWERED) ? "_on" : "";
                         final Identifier path = Simulated.path("block/" + c.getName() + "/block" + suffix);
                         final Direction.Axis axis = state.getValue(AnalogTransmissionBlock.AXIS);
-                        return ConfiguredModel.builder()
-                                .modelFile(p.models().getExistingFile(path))
-                                .rotationX(axis == Direction.Axis.Y ? 0 : 90)
-                                .rotationY(axis == Direction.Axis.X ? 90 : 0)
-                                .build();
+                        return new ConfiguredModel[]{
+                                ConfiguredModel.builder()
+                                        .modelFile(p.models().getExistingFile(path))
+                                        .rotationX(axis == Direction.Axis.Y ? 0 : 90)
+                                        .rotationY(axis == Direction.Axis.X ? 90 : 0)
+                                        .build()};
                     }))
                     .tag(AllTags.AllBlockTags.SAFE_NBT.tag)
                     .tag(BlockTags.MINEABLE_WITH_PICKAXE)
@@ -609,7 +610,7 @@ public class SimBlocks {
                     .transform(axeOrPickaxe())
                     .blockstate(new SteeringWheelGenerator()::generate)
                     .onRegister(ItemUseOverrides::addBlock)
-                    .transform(SimStress.setCapacity(16.0))
+                    .transform(SimStress.setBlockCapacity(16.0))
                     .onRegister(block -> BlockStressValues.setGeneratorSpeed(block, SteeringWheelBlockEntity.RPM))
                     .tag(SimTags.Blocks.LIGHT)
                     .tag(AllTags.AllBlockTags.SAFE_NBT.tag)
@@ -793,12 +794,12 @@ public class SimBlocks {
                                     (state) -> p.models().getExistingFile(Simulated.path("block/symmetric_sail/block"))))
                     .recipe((c, p) -> {
                         p.shapeless(RecipeCategory.MISC, c.get(), 2)
-                                .requires(AllBlocks.SAIL)
-                                .requires(AllBlocks.SAIL)
-                                .unlockedBy("has_ingredient", RegistrateRecipeProvider.has(AllBlocks.SAIL))
+                                .requires(AllBlocks.SAIL.white())
+                                .requires(AllBlocks.SAIL.white())
+                                .unlockedBy("has_ingredient", RegistrateRecipeProvider.has(AllBlocks.SAIL.white()))
                                 .save(p);
 
-                        p.shapeless(RecipeCategory.MISC, AllBlocks.SAIL, 1)
+                        p.shapeless(RecipeCategory.MISC, AllBlocks.SAIL.white(), 1)
                                 .requires(c.get().asItem())
                                 .unlockedBy("has_ingredient", RegistrateRecipeProvider.has(c.get()))
                                 .save(p);

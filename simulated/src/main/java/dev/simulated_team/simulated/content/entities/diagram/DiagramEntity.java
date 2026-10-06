@@ -402,7 +402,7 @@ public class DiagramEntity extends HangingEntity implements ISyncPersistentData,
     }
 
     @Override
-    public InteractionResult interactAt(final Player player, final Vec3 vec, final InteractionHand hand) {
+    public InteractionResult interact(final Player player, final InteractionHand hand, final Vec3 vec) {
 
         if (this.level().isClientSide()) {
             final SubLevel subLevel = Sable.HELPER.getContaining(this);

@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 import java.util.Optional;
+import net.minecraft.core.component.TypedDataComponent;
 
 /**
  * An info wrapper that holds an item type, and its associated component data. Primarly used for Simulated's multiloader inventory structure. <p>
@@ -38,8 +39,14 @@ public record ItemInfoWrapper(Item type, DataComponentPatch patchMap) {
     public static @NotNull ItemStack generateFromInfo(final ItemInfoWrapper info) {
         final ItemStack newStack = info.type().getDefaultInstance();
         final DataComponentPatch.Builder builder = DataComponentPatch.builder();
-        for (final Map.Entry<DataComponentType<?>, Optional<?>> set : info.patchMap().entrySet()) {
-            setDataComponent(set.getKey(), set.getValue(), builder);
+        // 26.3 的 DataComponentPatch 不再暴露 entrySet()：split() 会把它拆成
+        // 「本补丁写入的组件」与「本补丁删除的组件」两部分。
+        final DataComponentPatch.SplitResult split = info.patchMap().split();
+        for (final DataComponentType<?> removed : split.removed()) {
+            builder.remove(removed);
+        }
+        for (final TypedDataComponent<?> component : split.added()) {
+            setDataComponent(component.type(), Optional.of(component.value()), builder);
         }
         newStack.applyComponents(builder.build());
         return newStack;

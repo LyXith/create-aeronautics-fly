@@ -1,5 +1,7 @@
 package dev.simulated_team.simulated.content.blocks.steering_wheel;
 
+import java.util.ArrayList;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.zurrtum.create.client.AllPartialModels;
 import dev.simulated_team.simulated.compat.create.KineticBlockEntityRenderer;
@@ -81,12 +83,12 @@ public class SteeringWheelRenderer extends KineticBlockEntityRenderer<SteeringWh
     private SuperByteBuffer getWheelModel(final SteeringWheelBlockEntity be) {
         final ModelKey key = new ModelKey(be.material);
         return SuperByteBufferCache.getInstance().get(STEERING_WHEEL, key, () -> {
-            final SimpleModelWrapper model = generateModel(SimPartialModels.STEERING_WHEEL.get(), be.material);
-            return SuperBufferFactory.getInstance().createForBlock(model, Blocks.AIR.defaultBlockState(), new PoseStack());
+            final BlockStateModel model = generateModel(SimPartialModels.STEERING_WHEEL.get(), be.material);
+            return SuperBufferFactory.getInstance().createForBlock(model, Blocks.AIR.defaultBlockState(), new PoseStack().last());
         });
     }
 
-    public static SimpleModelWrapper generateModel(final SimpleModelWrapper template, final BlockState planksBlockState) {
+    public static BlockStateModel generateModel(final BlockStateModel template, final BlockState planksBlockState) {
         final Block planksBlock = planksBlockState.getBlock();
         final Identifier id = RegisteredObjectsHelper.getKeyOrThrow(planksBlock);
         final String wood = plankStateToWoodName(planksBlockState);
@@ -121,27 +123,29 @@ public class SteeringWheelRenderer extends KineticBlockEntityRenderer<SteeringWh
 
     private static TextureAtlasSprite getSpriteOnSide(final BlockState state, final Direction side) {
         final BlockStateModel model = Minecraft.getInstance()
-                .getBlockRenderer()
-                .getBlockModel(state);
+                .getModelManager()
+                .getBlockStateModelSet()
+                .get(state);
         if (model == null)
             return null;
         final RandomSource random = RandomSource.create();
         random.setSeed(42L);
-        final List<BlockStateModelPart> parts = model.collectParts(random);
+        final List<BlockStateModelPart> parts = new ArrayList<>();
+        model.collectParts(random, parts);
         for (final BlockStateModelPart part : parts) {
             final List<BakedQuad> quads = part.getQuads(side);
             if (!quads.isEmpty()) {
-                return quads.getFirst().sprite();
+                return quads.getFirst().materialInfo().sprite();
             }
         }
         random.setSeed(42L);
         for (final BlockStateModelPart part : parts) {
             for (final BakedQuad quad : part.getQuads(null)) {
                 if (quad.direction() == side) {
-                    return quad.sprite();
+                    return quad.materialInfo().sprite();
                 }
             }
         }
-        return model.particleIcon();
+        return model.particleMaterial().sprite();
     }
 }

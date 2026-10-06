@@ -1,5 +1,7 @@
 package dev.simulated_team.simulated.content.blocks.rope.strand.client;
 
+import net.minecraft.util.LightCoordsUtil;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.zurrtum.create.AllBlocks;
@@ -89,7 +91,7 @@ public class RopeStrandRenderer {
                 ps.rotate(orientation);
                 ps.translate(-0.5, -0.5, -0.5);
                 final BlockPos pos = BlockPos.containing(globalRenderPos.x, globalRenderPos.y, globalRenderPos.z);
-                final int worldLight = LevelRenderer.getLightColor(level, pos);
+                final int worldLight = LightCoordsUtil.getLightCoords(level, pos);
 
                 if (i > 1) {
                     knot.light(worldLight)

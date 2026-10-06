@@ -83,7 +83,7 @@ public final class SimRenderTypes {
     private static final RenderType STAFF_SELECTION_EDGE = create(
             "simulated_staff_selection_edge", RenderPipelines.LIGHTNING);
     private static final RenderType STAFF_SELECTION_FACE = RenderType.create(
-            "simulated_staff_selection_face", RenderSetup.builder(RenderPipelines.ITEM_ENTITY_TRANSLUCENT_CULL)
+            "simulated_staff_selection_face", RenderSetup.builder(RenderPipelines.ENTITY_TRANSLUCENT_CULL)
                     .withTexture("Sampler0", AllSpecialTextures.CHECKERED.getLocation())
                     .useLightmap().useOverlay().createRenderSetup());
     private static final RenderType LASER = createSorted(
@@ -107,13 +107,12 @@ public final class SimRenderTypes {
 
     // Iris cannot classify mod-defined terrain pipelines. A vanilla entity
     // pipeline keeps the standalone rope texture visible in shader passes.
-    private static final RenderType ROPE = net.minecraft.client.renderer.rendertype.RenderTypes.entityCutoutNoCull(
-            Simulated.path("textures/block/rope_particle.png"));
+    private static final RenderType ROPE = net.minecraft.client.renderer.rendertype.RenderTypes.entityCutout(
+            Simulated.path("textures/block/rope_particle.png"), false);
 
     private static final RenderType BLOCK_TRANSLUCENT = RenderType.create(
             "simulated_block_translucent", RenderSetup.builder(BLOCK_TRANSLUCENT_PIPELINE)
-                    .withTexture("Sampler0", TextureAtlas.LOCATION_BLOCKS,
-                            net.minecraft.client.renderer.rendertype.RenderTypes.MOVING_BLOCK_SAMPLER)
+                    .withTexture("Sampler0", TextureAtlas.LOCATION_BLOCKS)
                     .useLightmap().createRenderSetup());
 
     /**
@@ -127,8 +126,7 @@ public final class SimRenderTypes {
      */
     private static final RenderType GHOST_BLOCK = RenderType.create(
             "simulated_ghost_block", RenderSetup.builder(RenderPipelines.TRANSLUCENT_PARTICLE)
-                    .withTexture("Sampler0", TextureAtlas.LOCATION_BLOCKS,
-                            net.minecraft.client.renderer.rendertype.RenderTypes.MOVING_BLOCK_SAMPLER)
+                    .withTexture("Sampler0", TextureAtlas.LOCATION_BLOCKS)
                     .useLightmap().createRenderSetup());
 
     private SimRenderTypes() {

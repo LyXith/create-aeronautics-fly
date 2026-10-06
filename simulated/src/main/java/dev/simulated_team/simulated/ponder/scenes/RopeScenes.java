@@ -23,6 +23,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.item.DyeColor;
 
 public class RopeScenes {
     public static void ropeIntro(final SceneBuilder builder, final SceneBuildingUtil util) {
@@ -173,7 +174,7 @@ public class RopeScenes {
         scene.idle(5);
 
         for (int i = 0; i < 8; i++) {
-            scene.addInstruction(new OffsetBreakParticlesInstruction(AABB.ofSize(vector.of(1.6 + ((double) i / 3),1.5 + ((double) i / 3.5),5.5), 0.5, 0.5,0.5), Blocks.BROWN_WOOL.defaultBlockState()));
+            scene.addInstruction(new OffsetBreakParticlesInstruction(AABB.ofSize(vector.of(1.6 + ((double) i / 3),1.5 + ((double) i / 3.5),5.5), 0.5, 0.5,0.5), Blocks.WOOL.pick(DyeColor.BROWN).defaultBlockState()));
         }
         scene.addInstruction(new RemoveRopeStrandInstruction(initialRope, scene));
         scene.world().modifyBlockEntity(winch, RopeWinchBlockEntity.class, be -> be.getRopeHolder().renderAttached = false);

@@ -15,8 +15,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 
 public final class PortableEngineDyeingRecipe extends CustomRecipe {
-    public PortableEngineDyeingRecipe(final CraftingBookCategory category) {
-        super(category);
+    public PortableEngineDyeingRecipe() {
+        super();
     }
 
     @Override
@@ -45,7 +45,7 @@ public final class PortableEngineDyeingRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(final CraftingInput input, final HolderLookup.Provider registries) {
+    public ItemStack assemble(final CraftingInput input) {
         ItemStack engine = ItemStack.EMPTY;
         DyeColor color = DyeColor.RED;
 

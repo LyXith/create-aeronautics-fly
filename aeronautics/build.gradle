@@ -21,7 +21,7 @@ dependencies {
     // Runtime dependencies which are not nested in the four-in-one distribution.
     // Loom's production tasks put these alongside the packaged JAR as real mods.
     productionRuntimeMods "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
-    productionRuntimeMods "maven.modrinth:create-fly:${create_fly_version}"
+    productionRuntimeMods "com.github.LyXith:create-fly-fly:${create_fly_version}"
     productionRuntimeMods "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${forgeconfigapiport_version}"
     productionRuntimeMods "teamreborn:energy:${energy_version}"
 }

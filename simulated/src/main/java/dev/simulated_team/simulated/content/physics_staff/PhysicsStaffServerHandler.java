@@ -43,12 +43,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
+import net.minecraft.resources.Identifier;
 
 public class PhysicsStaffServerHandler extends SavedData {
     public static final String ID = "simulated_physics_staff_lock_data";
     private static final Codec<List<UUID>> LOCKS_CODEC = UUIDUtil.CODEC.listOf();
     private static final SavedDataType<PhysicsStaffServerHandler> TYPE = new SavedDataType<>(
-            ID,
+            Identifier.fromNamespaceAndPath("simulated", "physics_staff_lock_data"),
             PhysicsStaffServerHandler::new,
             LOCKS_CODEC.fieldOf(ID).codec().xmap(
                     locks -> create(null, locks),

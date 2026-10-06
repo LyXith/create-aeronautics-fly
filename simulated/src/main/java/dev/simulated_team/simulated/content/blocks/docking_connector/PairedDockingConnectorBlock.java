@@ -21,6 +21,8 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 
 public class PairedDockingConnectorBlock extends DirectionalBlock {
 
@@ -91,7 +93,7 @@ public class PairedDockingConnectorBlock extends DirectionalBlock {
     }
 
     @Override
-    public void playerDestroy(final @NotNull Level level, final @NotNull Player player, final @NotNull BlockPos pos, final @NotNull BlockState state, @Nullable final BlockEntity blockEntity, final @NotNull ItemStack tool) {
+    public void playerDestroy(final @NotNull ServerLevel level, final @NotNull ServerPlayer player, final @NotNull BlockPos pos, final @NotNull BlockState state, @Nullable final BlockEntity blockEntity, final @NotNull ItemStack tool) {
         super.playerDestroy(level, player, pos, Blocks.AIR.defaultBlockState(), blockEntity, tool);
     }
 

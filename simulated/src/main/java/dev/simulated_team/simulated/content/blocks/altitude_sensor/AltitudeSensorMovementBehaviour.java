@@ -1,5 +1,7 @@
 package dev.simulated_team.simulated.content.blocks.altitude_sensor;
 
+import net.minecraft.util.LightCoordsUtil;
+
 import com.zurrtum.create.api.behaviour.movement.MovementBehaviour;
 import com.zurrtum.create.content.contraptions.behaviour.MovementContext;
 import com.zurrtum.create.content.contraptions.render.ContraptionMatrices;
@@ -52,6 +54,6 @@ public class AltitudeSensorMovementBehaviour extends MovementBehaviour {
         final float y = (float) Mth.map(context.position.y, level.getMinY(), level.getMinY() + level.getHeight(), 0.0f, 1.0f);
         final float value = Mth.clampedMap(y, 0.0f, 1.0f, lowSignal, highSignal);
 
-        AltitudeSensorRenderer.render(context.state, 1000, value, visualHeight, matrices.getViewProjection(), matrices.getModel(), matrices.getWorld(), buffer, LevelRenderer.getLightColor(renderWorld, context.localPos));
+        AltitudeSensorRenderer.render(context.state, 1000, value, visualHeight, matrices.getViewProjection(), matrices.getModel(), matrices.getWorld(), buffer, LightCoordsUtil.getLightCoords(renderWorld, context.localPos));
     }
 }

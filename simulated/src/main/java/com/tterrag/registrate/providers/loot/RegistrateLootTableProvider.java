@@ -10,28 +10,39 @@ import com.tterrag.registrate.providers.RegistrateProvider;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
-
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricLootTableSubProvider;
+import net.fabricmc.fabric.impl.datagen.loot.FabricLootTableProviderImpl;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.CachedOutput;
-import net.minecraft.data.loot.LootTableProvider;
-import net.minecraft.data.loot.LootTableSubProvider;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.util.context.ContextKeySet;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.LootTable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-public class RegistrateLootTableProvider extends LootTableProvider implements RegistrateProvider {
+/**
+ * Registrate 的战利品表回调门面，构建在 26.3 + Fabric 的数据生成管线之上。
+ *
+ * <p>1.21 时代的 {@code LootTableProvider#run(CachedOutput)} 已被移除：vanilla 的
+ * {@link net.minecraft.data.loot.LootTableProvider} 现在只是一个
+ * {@link net.minecraft.core.registries.SingleRegistryBootstrap}，不再实现
+ * {@link net.minecraft.data.DataProvider}。Fabric 保留了可写盘的入口
+ * {@link FabricLootTableProviderImpl#run}，按 {@link ContextKeySet} 逐个运行
+ * {@link FabricLootTableSubProvider}，Registrate 这里就是把每个 {@link LootType}
+ * 对应的子表生成器接进该入口。</p>
+ */
+public class RegistrateLootTableProvider implements RegistrateProvider {
 
     public interface LootType<T extends RegistrateLootTables> {
 
-        static LootType<RegistrateBlockLootTables> BLOCK = register("block", LootContextParamSets.BLOCK, RegistrateBlockLootTables::new);
-        static LootType<RegistrateEntityLootTables> ENTITY = register("entity", LootContextParamSets.ENTITY, RegistrateEntityLootTables::new);
+        LootType<RegistrateBlockLootTables> BLOCK = register("block", net.minecraft.world.level.storage.loot.parameters.LootContextParamSets.BLOCK, RegistrateBlockLootTables::new);
+        LootType<RegistrateEntityLootTables> ENTITY = register("entity", net.minecraft.world.level.storage.loot.parameters.LootContextParamSets.ENTITY, RegistrateEntityLootTables::new);
 
         T getLootCreator(HolderLookup.Provider provider, AbstractRegistrate<?> parent, Consumer<T> callback, FabricPackOutput output);
         ContextKeySet getLootSet();
@@ -58,29 +69,18 @@ public class RegistrateLootTableProvider extends LootTableProvider implements Re
     private final AbstractRegistrate<?> parent;
 
     private final Multimap<LootType<?>, Consumer<? super RegistrateLootTables>> specialLootActions = HashMultimap.create();
-    private final Multimap<ContextKeySet, Consumer<BiConsumer<ResourceKey<LootTable>, LootTable.Builder>>> lootActions = HashMultimap.create();
-    private final List<SubProviderEntry> subProviders;
     private final FabricPackOutput output;
-
-    private CompletableFuture<HolderLookup.Provider> provider;
+    private final CompletableFuture<HolderLookup.Provider> registriesFuture;
 
     public RegistrateLootTableProvider(AbstractRegistrate<?> parent, FabricPackOutput output,
                                        CompletableFuture<HolderLookup.Provider> provider) {
-        this(parent, output, provider, new ArrayList<>());
-    }
-
-    private RegistrateLootTableProvider(AbstractRegistrate<?> parent, FabricPackOutput output,
-                                        CompletableFuture<HolderLookup.Provider> provider,
-                                        List<SubProviderEntry> subProviders) {
-        super(output, Set.of(), subProviders, provider);
         this.parent = parent;
         this.output = output;
-        this.provider = provider;
-        this.subProviders = subProviders;
+        this.registriesFuture = provider;
     }
 
-    public HolderLookup.Provider getProvider(){
-        return provider.getNow(null);
+    public HolderLookup.Provider getProvider() {
+        return registriesFuture.join();
     }
 
     public <T> Holder<T> resolve(ResourceKey<T> key) {
@@ -97,31 +97,32 @@ public class RegistrateLootTableProvider extends LootTableProvider implements Re
         this.specialLootActions.put(type, (Consumer<RegistrateLootTables>) action);
     }
 
-    public void addLootAction(ContextKeySet set, Consumer<BiConsumer<ResourceKey<LootTable>, LootTable.Builder>> action) {
-        this.lootActions.put(set, action);
+    public List<LootType<?>> getLootTypes() {
+        return ImmutableList.copyOf(LOOT_TYPES.values());
     }
 
-    private LootTableSubProvider getLootCreator(HolderLookup. Provider provider, AbstractRegistrate<?> parent, LootType<?> type, FabricPackOutput output) {
-        RegistrateLootTables creator = type.getLootCreator(provider, parent, cons -> specialLootActions.get(type).forEach(c -> c.accept(cons)), output);
-        return creator;
-    }
-
-    public List<LootTableProvider.SubProviderEntry> getTables(FabricPackOutput output) {
-        parent.genData(ProviderType.LOOT, this);
-        ImmutableList.Builder<LootTableProvider.SubProviderEntry> builder = ImmutableList.builder();
-        for (LootType<?> type : LOOT_TYPES.values()) {
-            builder.add(new SubProviderEntry(provider -> getLootCreator(provider, parent, type, output), type.getLootSet()));
-        }
-        for (ContextKeySet set : List.of(LootContextParamSets.BLOCK, LootContextParamSets.ENTITY)) {
-            builder.add(new SubProviderEntry((provider) -> callback -> lootActions.get(set).forEach(a -> a.accept(callback)), set));
-        }
-        return builder.build();
+    @SuppressWarnings("unchecked")
+    private FabricLootTableSubProvider createSubProvider(HolderLookup.Provider registries, LootType<?> type) {
+        return (FabricLootTableSubProvider) type.getLootCreator(registries, parent,
+                callback -> specialLootActions.get(type).forEach(action -> action.accept(callback)), output);
     }
 
     @Override
     public CompletableFuture<?> run(CachedOutput cache) {
-        subProviders.clear();
-        subProviders.addAll(getTables(output));
-        return super.run(cache);
+        parent.genData(ProviderType.LOOT, this);
+
+        return registriesFuture.thenCompose(registries -> {
+            final List<CompletableFuture<?>> futures = new ArrayList<>();
+            for (final LootType<?> type : LOOT_TYPES.values()) {
+                final FabricLootTableSubProvider subProvider = createSubProvider(registries, type);
+                futures.add(FabricLootTableProviderImpl.run(cache, subProvider, type.getLootSet(), output, registriesFuture));
+            }
+            return CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new));
+        });
+    }
+
+    @Override
+    public String getName() {
+        return "Registrate Loot Tables";
     }
 }

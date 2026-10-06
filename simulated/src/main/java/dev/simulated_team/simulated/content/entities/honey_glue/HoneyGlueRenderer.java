@@ -17,7 +17,7 @@ public class HoneyGlueRenderer extends EntityRenderer<HoneyGlueEntity> {
 	}
 
 	@Override
-	public boolean shouldRender(final HoneyGlueEntity entity, final Frustum frustum, final double x, final double y, final double z) {
+	public boolean shouldRender(final HoneyGlueEntity entity, final Frustum frustum, final double x, final double y, final double z, final float partialTick) {
 		return false;
 	}
 

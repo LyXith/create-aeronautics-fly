@@ -96,7 +96,7 @@ public class LaserBehaviour extends BlockEntityBehaviour {
                     .expandTowards(end.subtract(start));
 
             // ProjectileUtil.getEntityHitResult()'s location is the feet position instead of the actual clip position
-            final EntityHitResult wrongHitResult = ProjectileUtil.getEntityHitResult(level, null, start, end, checkingBB, (e) -> !e.getType().is(SimTags.Misc.LASER_BLACKLIST) && !e.isSpectator(), 0.1f);
+            final EntityHitResult wrongHitResult = ProjectileUtil.getEntityHitResult(level, null, start, end, checkingBB, (e) -> !e.getType().builtInRegistryHolder().is(SimTags.Misc.LASER_BLACKLIST) && !e.isSpectator(), 0.1f);
             if (wrongHitResult != null) {
                 // slightly less wrong :p
                 // todo probably some better math maybe

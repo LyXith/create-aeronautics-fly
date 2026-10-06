@@ -835,7 +835,7 @@ public class KineticScenes {
 
         scene.idle(20);
 
-        final ElementLink<ParrotElement> birb = scene.special().createBirb(steeringWheelPos.north().getBottomCenter().subtract(0, 2, 0.25), ParrotPose.FacePointOfInterestPose::new);
+        final ElementLink<ParrotElement> birb = scene.special().createBirb(Vec3.atBottomCenterOf(steeringWheelPos.north()).subtract(0, 2, 0.25), ParrotPose.FacePointOfInterestPose::new);
 
         scene.idle(4);
 

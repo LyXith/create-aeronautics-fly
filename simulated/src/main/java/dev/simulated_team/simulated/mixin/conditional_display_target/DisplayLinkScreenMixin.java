@@ -1,5 +1,7 @@
 package dev.simulated_team.simulated.mixin.conditional_display_target;
 
+import net.minecraft.network.chat.TextColor;
+
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -26,7 +28,7 @@ public class DisplayLinkScreenMixin {
     private Component simulated$displayConditionalError(final DisplayTarget instance, final int line, final Operation<Component> original, @Local(name = "level") final ClientLevel level) {
         final DisplayLinkContext context = new DisplayLinkContext(level, this.blockEntity);
         if (instance instanceof final ConditionalDisplayTarget cdt && !cdt.allowsWriting(context)) {
-            this.targetLineLabel.colored(ChatFormatting.GRAY.getColor());
+            this.targetLineLabel.colored(TextColor.GRAY.getValue());
             return cdt.getErrorMessage(context);
         }
         return original.call(instance, line);

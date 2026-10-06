@@ -77,7 +77,7 @@ public class LaunchedPlungerEntity extends ThrowableProjectile {
     private boolean addedToPlungerHandler = false;
     private PhysicsConstraintHandle constraint;
 
-    private static final ProjectileDeflection DEFLECTION = (projectile, entity, randomSource) -> {
+    private static final ProjectileDeflection DEFLECTION = (projectile, entity, randomSource, sourcePosition) -> {
         Vec3 target = Vec3.ZERO;
         if (entity instanceof LaunchedPlungerEntity launchedPlungerEntity) {
             target = launchedPlungerEntity.getData(TARGET_POS);

@@ -77,7 +77,7 @@ public class DockingConnectorScenes {
                 .text("Docking Connectors can create rigid connections in pairs");
         scene.idle(70);
         world.toggleRedstonePower(select.fromTo(connector1.below().north(),connector1));
-        effects.indicateRedstone(new BlockPos(connector1.below().north()));
+        effects.indicateRedstone(connector1.below().north());
         scene.idle(15);
         world.toggleRedstonePower(select.fromTo(connector2,connector2.west()));
         effects.indicateRedstone(new BlockPos(3,3,8));
@@ -236,7 +236,7 @@ public class DockingConnectorScenes {
         effects.indicateRedstone(new BlockPos(10,3,5));
         scene.idle(10);
         overlay.showText(80)
-                .pointAt(Vec3.atCenterOf(BlockPos(9,3,5)))
+                .pointAt(Vec3.atCenterOf(new BlockPos(9, 3, 5)))
                 .attachKeyFrame()
                 .placeNearTarget()
                 .text("Redstone Comparators can be used to read the Docking progress");

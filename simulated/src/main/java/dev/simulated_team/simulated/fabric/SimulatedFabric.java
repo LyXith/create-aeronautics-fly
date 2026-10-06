@@ -57,11 +57,11 @@ public final class SimulatedFabric implements ModInitializer {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
                 SimCommand.register(dispatcher, registryAccess));
 
-        ServerChunkEvents.CHUNK_LOAD.register((level, chunk) ->
-                SimulatedCommonEvents.onChunkLoad(level, chunk, false));
-        ServerChunkEvents.CHUNK_GENERATE.register((level, chunk) ->
-                SimulatedCommonEvents.onChunkLoad(level, chunk, true));
-        ServerTickEvents.END_WORLD_TICK.register(SimulatedCommonEvents::onServerTickEnd);
+        // 26.3 的 CHUNK_LOAD 已经带上了 newChunk 标记（生成出的区块为 true、
+        // 从磁盘读回的为 false），等价于旧版 CHUNK_LOAD + CHUNK_GENERATE 的组合，
+        // 再注册 CHUNK_GENERATE 会导致重复触发。
+        ServerChunkEvents.CHUNK_LOAD.register(SimulatedCommonEvents::onChunkLoad);
+        ServerTickEvents.END_LEVEL_TICK.register(SimulatedCommonEvents::onServerTickEnd);
         ServerLifecycleEvents.SERVER_STARTED.register(server ->
                 FabricSimItemService.setServer(server));
         ServerLifecycleEvents.SERVER_STOPPED.register(server -> {

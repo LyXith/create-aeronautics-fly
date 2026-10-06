@@ -871,7 +871,7 @@ public abstract class AbstractRegistrate<S extends AbstractRegistrate<S>> {
 
     @Beta
     public <R> ResourceKey<Registry<R>> makeRegistry(String name) {
-        FabricRegistryBuilder<R, MappedRegistry<R>> builder = FabricRegistryBuilder.createSimple(
+        FabricRegistryBuilder<R, MappedRegistry<R>> builder = FabricRegistryBuilder.create(
                 ResourceKey.createRegistryKey(Identifier.fromNamespaceAndPath(getModid(), name))
         );
         return makeRegistry(builder);
@@ -880,7 +880,7 @@ public abstract class AbstractRegistrate<S extends AbstractRegistrate<S>> {
     @Beta
     public <R> ResourceKey<Registry<R>> makeRegistry(String name, RegistryAttribute... attributes) {
         FabricRegistryBuilder<R, MappedRegistry<R>> builder = FabricRegistryBuilder
-                .createSimple(ResourceKey.createRegistryKey(Identifier.fromNamespaceAndPath(getModid(), name)));
+                .create(ResourceKey.createRegistryKey(Identifier.fromNamespaceAndPath(getModid(), name)));
         for (RegistryAttribute attribute : attributes) {
             builder.attribute(attribute);
         }

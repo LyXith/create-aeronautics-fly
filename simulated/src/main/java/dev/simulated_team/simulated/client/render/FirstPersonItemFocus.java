@@ -39,9 +39,23 @@ public final class FirstPersonItemFocus {
         final Camera camera = minecraft.gameRenderer.mainCamera();
         camera.rotation().transformInverse(this.capturedPosition);
         // The hand pass has its own lens; the configured world FOV does not apply to it.
-        this.capturedProjection.set(minecraft.gameRenderer.getProjectionMatrix(
-                minecraft.gameRenderer.getFov(camera, partialTicks, false)));
+        this.capturedProjection.set(worldProjection(camera));
         this.cameraRelativeWorldSpace = false;
+    }
+
+    /**
+     * Rebuilds the camera's perspective matrix.
+     *
+     * <p>26.3 keeps the live projection in an uploadable
+     * {@link net.minecraft.client.renderer.Projection} GPU buffer instead of a
+     * readable {@code Matrix4f}, so the matrix is recovered from the camera's
+     * view-rotation / view-rotation-projection pair.</p>
+     */
+    private static Matrix4f worldProjection(final Camera camera) {
+        final Matrix4f viewRotationProjection = new Matrix4f(
+                camera.getViewRotationProjectionMatrix(new Matrix4f()));
+        final Matrix4f viewRotation = new Matrix4f(camera.getViewRotationMatrix(new Matrix4f()));
+        return viewRotationProjection.mul(viewRotation.invert(new Matrix4f()));
     }
 
     /** Records the current world lens, including view bobbing and other camera effects. */
@@ -83,7 +97,7 @@ public final class FirstPersonItemFocus {
         final Vector4f projectedPoint = new Vector4f(
                 (float) focusPoint.x, (float) focusPoint.y, (float) focusPoint.z, 1.0f);
         final Matrix4f actualProjection = hasWorldProjection ? WORLD_PROJECTION
-                : gameRenderer.getProjectionMatrix(gameRenderer.getFov(camera, partialTicks, true));
+                : worldProjection(camera);
         // Match the hand's clip-space position using the world projection, then return
         // to world orientation. Uniformly scaling by FOV cannot change screen position.
         this.capturedProjection.transform(projectedPoint);

@@ -52,7 +52,9 @@ public class LinkedTypewriterScreen extends AbstractSimiContainerScreen<LinkedTy
 
     public LinkedTypewriterScreen(final LinkedTypewriterMenuCommon menu, final Inventory inventory,
                                   final Component title) {
-        super(menu, inventory, title);
+        super(menu, inventory, title,
+                SimGUITextures.LINKED_TYPEWRITER_MAIN.width,
+                SimGUITextures.LINKED_TYPEWRITER_MAIN.height);
         this.clientBe = menu.contentHolder;
         if (this.clientBe != null) {
             this.newEntries.addAll(this.clientBe.getTypewriterEntries().getKeyMap());
@@ -64,7 +66,6 @@ public class LinkedTypewriterScreen extends AbstractSimiContainerScreen<LinkedTy
     @Override
     protected void init() {
         this.background = SimGUITextures.LINKED_TYPEWRITER_MAIN;
-        this.setWindowSize(this.background.width, this.background.height);
         super.init();
 
         this.rows.clear();
@@ -163,10 +164,10 @@ public class LinkedTypewriterScreen extends AbstractSimiContainerScreen<LinkedTy
     }
 
     @Override
-    protected void extractContents(GuiGraphicsExtractor graphics, final float partialTick,
-                            final int mouseX, final int mouseY) {
+    public void extractContents(final GuiGraphicsExtractor graphics, final int mouseX, final int mouseY,
+                                final float partialTick) {
         if (this.keyEditor.isActive()) {
-            this.keyEditor.renderBackground(graphics, partialTick);
+            this.keyEditor.extractBackground(graphics, partialTick);
         } else {
             this.background.render(graphics, this.leftPos, this.topPos);
             graphics.text(
@@ -182,7 +183,7 @@ public class LinkedTypewriterScreen extends AbstractSimiContainerScreen<LinkedTy
             }
         }
 
-        this.modifier.renderBackground(graphics);
+        this.modifier.extractBackground(graphics);
     }
 
     private void renderTypewriter(final GuiGraphicsExtractor graphics) {
@@ -335,8 +336,8 @@ public class LinkedTypewriterScreen extends AbstractSimiContainerScreen<LinkedTy
         second.addKey(key, InputConstants.KEY_I, null);
         second.addKey(key, InputConstants.KEY_O, null);
         second.addKey(key, InputConstants.KEY_P, null);
-        second.addKey(key, InputConstants.KEY_LEFT_BRACKET, null);
-        second.addKey(key, InputConstants.KEY_RIGHT_BRACKET, null);
+        second.addKey(key, InputConstants.KEY_LBRACKET, null);
+        second.addKey(key, InputConstants.KEY_RBRACKET, null);
         second.addKey(key + 6, InputConstants.KEY_BACKSLASH, null);
         second.addKey(key, InputConstants.KEY_PAGEUP, null);
 
@@ -355,7 +356,7 @@ public class LinkedTypewriterScreen extends AbstractSimiContainerScreen<LinkedTy
         third.addKey(key + 14, InputConstants.KEY_RETURN, null);
         third.addKey(key, InputConstants.KEY_PAGEDOWN, null);
 
-        fourth.addKey(key + 18, InputConstants.KEY_LEFT_SHIFT, null);
+        fourth.addKey(key + 18, InputConstants.KEY_LSHIFT, null);
         fourth.addKey(key, InputConstants.KEY_Z, null);
         fourth.addKey(key, InputConstants.KEY_X, null);
         fourth.addKey(key, InputConstants.KEY_C, null);
@@ -366,17 +367,17 @@ public class LinkedTypewriterScreen extends AbstractSimiContainerScreen<LinkedTy
         fourth.addKey(key, InputConstants.KEY_COMMA, null);
         fourth.addKey(key, InputConstants.KEY_PERIOD, null);
         fourth.addKey(key, InputConstants.KEY_SLASH, null);
-        fourth.addKey(key + 8, InputConstants.KEY_RIGHT_SHIFT, null);
+        fourth.addKey(key + 8, InputConstants.KEY_RSHIFT, null);
         fourth.addKey(key, InputConstants.KEY_UP, SimIcons.KEY_ARROW_UP);
         fourth.addKey(key, InputConstants.KEY_END, null);
 
-        fifth.addKey(key + 4, InputConstants.KEY_LEFT_CONTROL, null);
-        fifth.addKey(key, InputConstants.KEY_LEFT_SUPER, null);
-        fifth.addKey(key, InputConstants.KEY_LEFT_ALT, null);
+        fifth.addKey(key + 4, InputConstants.KEY_LCONTROL, null);
+        fifth.addKey(key, InputConstants.KEY_LGUI, null);
+        fifth.addKey(key, InputConstants.KEY_LALT, null);
         fifth.addKey(key + 74, InputConstants.KEY_SPACE, null);
-        fifth.addKey(key, InputConstants.KEY_RIGHT_ALT, null);
+        fifth.addKey(key, InputConstants.KEY_RALT, null);
         fifth.addKey(key, InputConstants.KEY_RGUI, null);
-        fifth.addKey(key + 4, InputConstants.KEY_RIGHT_CONTROL, null);
+        fifth.addKey(key + 4, InputConstants.KEY_RCONTROL, null);
         fifth.addKey(key, InputConstants.KEY_LEFT, SimIcons.KEY_ARROW_LEFT);
         fifth.addKey(key, InputConstants.KEY_DOWN, SimIcons.KEY_ARROW_DOWN);
         fifth.addKey(key, InputConstants.KEY_RIGHT, SimIcons.KEY_ARROW_RIGHT);

@@ -83,9 +83,7 @@ public class ClientHandleHandler extends BlockHoldInteraction {
 
         // force constant swinging for "animation" in first person
         if (!minecraft.gameRenderer.mainCamera().isDetached()) {
-            player.swingTime = 0;
-            player.swinging = true;
-            player.swingingArm = InteractionHand.MAIN_HAND;
+            player.swing(InteractionHand.MAIN_HAND, SwingAnimation.DEFAULT, true);
         }
 
         if (player.isFallFlying()) {

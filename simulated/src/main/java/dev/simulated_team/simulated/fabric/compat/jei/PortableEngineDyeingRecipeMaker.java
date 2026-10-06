@@ -19,6 +19,7 @@ import net.minecraft.world.item.crafting.ShapelessRecipe;
 
 import java.util.Arrays;
 import java.util.List;
+import net.minecraft.world.item.ItemStackTemplate;
 
 public final class PortableEngineDyeingRecipeMaker {
 
@@ -45,9 +46,9 @@ public final class PortableEngineDyeingRecipeMaker {
         final ResourceKey<Recipe<?>> recipeKey =
                 ResourceKey.create(Registries.RECIPE, id);
         final CraftingRecipe recipe = new ShapelessRecipe(
-                GROUP,
-                CraftingBookCategory.MISC,
-                output,
+                new Recipe.CommonInfo(true),
+                new CraftingRecipe.CraftingBookInfo(CraftingBookCategory.MISC, GROUP),
+                ItemStackTemplate.fromStack(output),
                 List.of(redEngine, Ingredient.of(dye)));
 
         return new RecipeHolder<>(recipeKey, recipe);

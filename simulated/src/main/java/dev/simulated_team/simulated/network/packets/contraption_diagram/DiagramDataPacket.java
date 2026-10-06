@@ -32,7 +32,7 @@ public record DiagramDataPacket(Map<ForceGroup, List<QueuedForceGroup.PointForce
 
     private static void handle(final DiagramDataPacket packet) {
         final Minecraft minecraft = Minecraft.getInstance();
-        final Screen screen = minecraft.screen;
+        final Screen screen = minecraft.gui.screen();
 
         if (screen instanceof final DiagramScreen diagramScreen) {
             diagramScreen.updateData(packet);

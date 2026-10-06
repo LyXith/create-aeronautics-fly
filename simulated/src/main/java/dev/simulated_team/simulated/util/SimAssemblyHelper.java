@@ -85,7 +85,7 @@ public class SimAssemblyHelper {
         // move glue
         final PersistentEntitySectionManager<Entity> manager = ((ServerLevel) toDisassemble.getLevel()).entityManager;
         for (final PlotChunkHolder chunk : toDisassemble.getPlot().getLoadedChunks()) {
-            final Stream<EntitySection<Entity>> sections = manager.sectionStorage.getExistingSectionsInChunk(chunk.getPos().toLong());
+            final Stream<EntitySection<Entity>> sections = manager.sectionStorage.getExistingSectionsInChunk(chunk.getPos().pack());
 
             for (final EntitySection<Entity> section : sections.toList()) {
                 final List<Entity> entities = section.getEntities().toList();

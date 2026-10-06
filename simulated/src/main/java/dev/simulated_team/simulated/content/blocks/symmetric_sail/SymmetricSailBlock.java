@@ -164,9 +164,9 @@ public class SymmetricSailBlock extends RotatedPillarBlock implements IWrenchabl
     }
 
     @Override
-    public void updateEntityMovementAfterFallOn(final BlockGetter level, final Entity entity) {
+    public void bounceOn(final Level level, final BlockState state, final BlockPos pos, final Entity entity, final double fallDistance) {
         if (entity.isSuppressingBounce()) {
-            super.updateEntityMovementAfterFallOn(level, entity);
+            super.bounceOn(level, state, pos, entity, fallDistance);
         } else {
             this.bounce(entity);
         }

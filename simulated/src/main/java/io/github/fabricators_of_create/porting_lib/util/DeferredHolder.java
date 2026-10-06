@@ -17,7 +17,13 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-public class DeferredHolder<R, T extends R> implements Holder<R>, Supplier<T> {
+/**
+ * 26.3 起 {@link Holder} 被声明为 sealed，只允许 {@code Holder$Direct} 与
+ * {@code Holder$Reference} 两个实现，因此这里不再自己实现 Holder，而是直接继承
+ * {@link Holder.Reference}（stand-alone、未绑定）：键在构造时确定，值在首次
+ * {@link #value()} 时从 {@link BuiltInRegistries} 解析。
+ */
+public class DeferredHolder<R, T extends R> extends Holder.Reference<R> implements Supplier<T> {
     public static <R, T extends R> DeferredHolder<R, T> create(
             final ResourceKey<? extends Registry<R>> registryKey, final Identifier valueName) {
         return create(ResourceKey.create(registryKey, valueName));
@@ -37,8 +43,20 @@ public class DeferredHolder<R, T extends R> implements Holder<R>, Supplier<T> {
     private Holder<R> holder;
 
     protected DeferredHolder(final ResourceKey<R> key) {
+        super(Holder.Reference.Type.STAND_ALONE, ownerFor(key), key, null);
         this.key = Objects.requireNonNull(key);
         bind(false);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <R> HolderOwner<R> ownerFor(final ResourceKey<R> key) {
+        final Registry<R> registry = (Registry<R>) BuiltInRegistries.REGISTRY.getValue(key.registry());
+        if (registry != null) {
+            return registry;
+        }
+        // 注册表尚未建立（自定义注册表）时，这个 holder 不参与序列化，
+        // 因此用一个允许序列化的空 HolderOwner 占位。
+        return new HolderOwner<R>() {};
     }
 
     @Override
@@ -138,6 +156,18 @@ public class DeferredHolder<R, T extends R> implements Holder<R>, Supplier<T> {
     @Override
     public Kind kind() {
         return Kind.REFERENCE;
+    }
+
+    @Override
+    public boolean areComponentsBound() {
+        bind(false);
+        return holder != null && holder.areComponentsBound();
+    }
+
+    @Override
+    public net.minecraft.core.component.DataComponentMap components() {
+        bind(false);
+        return holder != null ? holder.components() : net.minecraft.core.component.DataComponentMap.EMPTY;
     }
 
     @Override

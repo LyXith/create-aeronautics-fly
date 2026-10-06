@@ -14,12 +14,12 @@ public class SimEntityDataSerializers {
             return new StreamCodec<>() {
                 @Override
                 public Vec3 decode(final RegistryFriendlyByteBuf object) {
-                    return object.readVec3();
+                    return Vec3.STREAM_CODEC.decode(object);
                 }
 
                 @Override
                 public void encode(final RegistryFriendlyByteBuf object, final Vec3 object2) {
-                    object.writeVec3(object2);
+                    Vec3.STREAM_CODEC.encode(object, object2);
                 }
             };
         }

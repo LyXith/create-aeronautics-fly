@@ -30,11 +30,12 @@ public final class FabricSimBlockStateService implements SimBlockStateService {
                 throw new IllegalArgumentException("Model getter must return a ModelFile");
             }
             final SimBlockStateGen.XYHolder rotation = rotationGetter.apply(state);
-            return ConfiguredModel.builder()
-                    .modelFile(model)
-                    .rotationX(rotation.xRot())
-                    .rotationY(rotation.yRot())
-                    .build();
+            return new ConfiguredModel[]{
+                    ConfiguredModel.builder()
+                            .modelFile(model)
+                            .rotationX(rotation.xRot())
+                            .rotationY(rotation.yRot())
+                            .build()};
         });
     }
 
@@ -60,11 +61,12 @@ public final class FabricSimBlockStateService implements SimBlockStateService {
             if (!(value instanceof final ModelFile model)) {
                 throw new IllegalArgumentException("Model function must return a ModelFile");
             }
-            return ConfiguredModel.builder()
-                    .modelFile(model)
-                    .rotationX(xRotation)
-                    .rotationY(yRotation)
-                    .build();
+            return new ConfiguredModel[]{
+                    ConfiguredModel.builder()
+                            .modelFile(model)
+                            .rotationX(xRotation)
+                            .rotationY(yRotation)
+                            .build()};
         });
     }
 }
