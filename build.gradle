@@ -1,6 +1,6 @@
 plugins {
     id 'base'
-    id 'net.fabricmc.fabric-loom-remap' version "${loom_version}" apply false
+    id 'net.fabricmc.fabric-loom' version "${loom_version}" apply false
 }
 
 group = 'dev.simulated_team'
@@ -18,6 +18,8 @@ allprojects {
         maven { url = 'https://raw.githubusercontent.com/Fuzss/modresources/main/maven/' }
         maven { url = 'https://maven.blamejared.com/' }
         maven { url = 'https://oss.zurrtum.com' }
+        // Create-Fly 由 GitHub 仓库（LyXith/create-fly-fly）经 JitPack 构建
+        maven { url = 'https://jitpack.io' }
 
         exclusiveContent {
             forRepository {
@@ -41,12 +43,11 @@ def configureModProject(Project project, String modName) {
     project.description = modProps.description
 }
 
-configureModProject(project(':sable'), 'sable')
 configureModProject(project(':simulated'), 'simulated')
 configureModProject(project(':offroad'), 'offroad')
 configureModProject(project(':aeronautics'), 'aeronautics')
 
-def bundledModuleNames = ['sable', 'simulated', 'offroad']
+def bundledModuleNames = ['simulated', 'offroad']
 def aeronauticsMetadata = project(':aeronautics').layout.buildDirectory.file('resources/main/fabric.mod.json')
 def bundledMetadata = layout.buildDirectory.file('generated/4in1/fabric.mod.json')
 
@@ -79,7 +80,7 @@ tasks.register('build4In1Jar', Jar) {
     group = 'build'
     description = 'Builds one Fabric JAR containing Sable, Simulated, Offroad, and Aeronautics.'
     dependsOn generate4In1Metadata
-    dependsOn ':sable:remapJar', ':simulated:remapJar', ':offroad:remapJar', ':aeronautics:remapJar'
+    dependsOn ':simulated:jar', ':offroad:jar', ':aeronautics:jar'
 
     archiveFileName = "create-aeronautics-4in1-fabric-${minecraft_version}-${mod_version}.jar"
     destinationDirectory = layout.buildDirectory.dir('libs')
@@ -88,7 +89,7 @@ tasks.register('build4In1Jar', Jar) {
     reproducibleFileOrder = true
 
     from({
-        zipTree(project(':aeronautics').tasks.named('remapJar').get().archiveFile.get().asFile)
+        zipTree(project(':aeronautics').tasks.named('jar').get().archiveFile.get().asFile)
     }) {
         exclude 'fabric.mod.json'
         exclude 'META-INF/*.SF', 'META-INF/*.RSA', 'META-INF/*.DSA'
@@ -97,7 +98,7 @@ tasks.register('build4In1Jar', Jar) {
 
     bundledModuleNames.each { moduleName ->
         from({
-            project(":${moduleName}").tasks.named('remapJar').get().archiveFile.get().asFile
+            project(":${moduleName}").tasks.named('jar').get().archiveFile.get().asFile
         }) {
             into 'META-INF/jars'
             rename { "${moduleName}.jar" }

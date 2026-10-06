@@ -1,6 +1,6 @@
 plugins {
     id 'java-library'
-    id 'net.fabricmc.fabric-loom-remap'
+    id 'net.fabricmc.fabric-loom'
 }
 
 import net.fabricmc.loom.task.prod.ClientProductionRunTask
@@ -15,9 +15,8 @@ configurations.configureEach {
 }
 
 dependencies {
-    implementation project(path: ':sable', configuration: 'namedElements')
-    implementation project(path: ':simulated', configuration: 'namedElements')
-    implementation project(path: ':offroad', configuration: 'namedElements')
+    implementation project(path: ':simulated')
+    implementation project(path: ':offroad')
 
     // Runtime dependencies which are not nested in the four-in-one distribution.
     // Loom's production tasks put these alongside the packaged JAR as real mods.
@@ -120,9 +119,9 @@ def entityCullingGametestLibraries = files(
 dependencies {
     // Exercise the renderer stack used by the distribution in rendered-client coverage.
     if (project.findProperty('vanillaClientGameTest') != 'true') {
-        add('modGametestRuntimeOnly', "maven.modrinth:sodium:${sodium_version}")
-        add('modGametestRuntimeOnly', "maven.modrinth:iris:${iris_version}")
-        add('modGametestRuntimeOnly', "maven.modrinth:entityculling:${entityculling_version}")
-        add('modGametestRuntimeOnly', entityCullingGametestLibraries)
+        add('gametestRuntimeOnly', "maven.modrinth:sodium:${sodium_version}")
+        add('gametestRuntimeOnly', "maven.modrinth:iris:${iris_version}")
+        add('gametestRuntimeOnly', "maven.modrinth:entityculling:${entityculling_version}")
+        add('gametestRuntimeOnly', entityCullingGametestLibraries)
     }
 }
