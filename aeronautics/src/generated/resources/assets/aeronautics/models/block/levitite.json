@@ -2,8 +2,8 @@
   "parent": "minecraft:block/cube_all",
   "textures": {
     "all": {
-      "sprite": "aeronautics:block/levitite",
-      "force_translucent": true
+      "force_translucent": true,
+      "sprite": "aeronautics:block/levitite"
     }
   }
 }

@@ -8,6 +8,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.data.tags.TagAppender;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import java.util.function.Function;
@@ -16,9 +17,17 @@ public final class TagGen {
     private TagGen() {
     }
 
-    public static <T extends Block, P> NonNullFunction<BlockBuilder<T, P>, BlockBuilder<T, P>> axeOnly() { return b -> b; }
-    public static <T extends Block, P> NonNullFunction<BlockBuilder<T, P>, BlockBuilder<T, P>> pickaxeOnly() { return b -> b; }
-    public static <T extends Block, P> NonNullFunction<BlockBuilder<T, P>, BlockBuilder<T, P>> axeOrPickaxe() { return b -> b; }
+    public static <T extends Block, P> NonNullFunction<BlockBuilder<T, P>, BlockBuilder<T, P>> axeOnly() {
+        return b -> b.tag(BlockTags.MINEABLE_WITH_AXE);
+    }
+
+    public static <T extends Block, P> NonNullFunction<BlockBuilder<T, P>, BlockBuilder<T, P>> pickaxeOnly() {
+        return b -> b.tag(BlockTags.MINEABLE_WITH_PICKAXE);
+    }
+
+    public static <T extends Block, P> NonNullFunction<BlockBuilder<T, P>, BlockBuilder<T, P>> axeOrPickaxe() {
+        return b -> b.tag(BlockTags.MINEABLE_WITH_AXE, BlockTags.MINEABLE_WITH_PICKAXE);
+    }
 
     public static class CreateTagsProvider<T> {
         private final RegistrateTagsProvider<T> provider;

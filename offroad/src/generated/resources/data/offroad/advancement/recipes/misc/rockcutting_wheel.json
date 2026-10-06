@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "offroad:rockcutting_wheel"
+        "recipes": "offroad:rockcutting_wheel"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

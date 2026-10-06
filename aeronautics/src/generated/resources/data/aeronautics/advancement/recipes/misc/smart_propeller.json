@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "aeronautics:smart_propeller"
+        "recipes": "aeronautics:smart_propeller"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

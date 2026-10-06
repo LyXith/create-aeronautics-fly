@@ -1,18 +1,16 @@
 {
-    "type":  "minecraft:crafting_shaped",
-    "category":  "misc",
-    "key":  {
-                "A":  "#minecraft:wooden_slabs",
-                "B":  "create:brass_casing",
-                "S":  "create:iron_sheet"
-            },
-    "pattern":  [
-                    " A ",
-                    " S ",
-                    " B "
-                ],
-    "result":  {
-                   "count":  1,
-                   "id":  "aeronautics:propeller_bearing"
-               }
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "A": "#minecraft:wooden_slabs",
+    "B": "create:brass_casing",
+    "S": "create:iron_sheet"
+  },
+  "pattern": [
+    " A ",
+    " S ",
+    " B "
+  ],
+  "result": {
+    "id": "aeronautics:propeller_bearing"
+  }
 }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "aeronautics:cyan_envelope"
+        "recipes": "aeronautics:cyan_envelope"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -1,18 +1,16 @@
 {
-    "type":  "minecraft:crafting_shaped",
-    "category":  "misc",
-    "key":  {
-                "C":  "#minecraft:wooden_slabs",
-                "P":  "create:propeller",
-                "S":  "create:shaft"
-            },
-    "pattern":  [
-                    "P",
-                    "C",
-                    "S"
-                ],
-    "result":  {
-                   "count":  1,
-                   "id":  "aeronautics:andesite_propeller"
-               }
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": "#minecraft:wooden_slabs",
+    "P": "create:propeller",
+    "S": "create:shaft"
+  },
+  "pattern": [
+    "P",
+    "C",
+    "S"
+  ],
+  "result": {
+    "id": "aeronautics:andesite_propeller"
+  }
 }

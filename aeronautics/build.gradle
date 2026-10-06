@@ -8,6 +8,19 @@ import net.fabricmc.loom.task.prod.ServerProductionRunTask
 
 apply from: rootProject.file('gradle/fabric-module.gradle')
 
+loom {
+    runs {
+        datagen {
+            inherit client
+            name = 'Aeronautics Fabric Data Generation'
+            runDir = 'runs/datagen'
+            vmArg '-Dfabric-api.datagen'
+            vmArg "-Dfabric-api.datagen.output-dir=${file('src/generated/resources').absolutePath}"
+            vmArg '-Dfabric-api.datagen.modid=aeronautics'
+        }
+    }
+}
+
 configurations.configureEach {
     resolutionStrategy.capabilitiesResolution.withCapability('org.lz4:lz4-java') {
         select('at.yawk.lz4:lz4-java:1.11.0')

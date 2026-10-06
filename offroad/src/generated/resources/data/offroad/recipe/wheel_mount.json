@@ -1,18 +1,16 @@
 {
-    "type":  "minecraft:crafting_shaped",
-    "category":  "misc",
-    "key":  {
-                "C":  "create:andesite_casing",
-                "P":  "create:iron_sheet",
-                "S":  "simulated:spring"
-            },
-    "pattern":  [
-                    "C",
-                    "S",
-                    "P"
-                ],
-    "result":  {
-                   "count":  1,
-                   "id":  "offroad:wheel_mount"
-               }
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": "create:andesite_casing",
+    "P": "create:iron_sheet",
+    "S": "simulated:spring"
+  },
+  "pattern": [
+    "C",
+    "S",
+    "P"
+  ],
+  "result": {
+    "id": "offroad:wheel_mount"
+  }
 }

@@ -44,6 +44,7 @@ public abstract class LevelRendererMixin {
                                                 final GpuBufferSlice fogBuffer,
                                                 final Vector4f fogColor,
                                                 final boolean renderSky,
+                                                final boolean consistentDepthRequired,
                                                 final CallbackInfo ci) {
         IrisBurnerFlameRenderQueue.drawAfterShaderComposite(this.submitNodeStorage);
     }

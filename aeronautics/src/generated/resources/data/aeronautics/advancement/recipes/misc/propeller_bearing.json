@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "aeronautics:propeller_bearing"
+        "recipes": "aeronautics:propeller_bearing"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

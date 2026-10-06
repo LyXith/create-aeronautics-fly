@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "aeronautics:adjustable_burner"
+        "recipes": "aeronautics:adjustable_burner"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

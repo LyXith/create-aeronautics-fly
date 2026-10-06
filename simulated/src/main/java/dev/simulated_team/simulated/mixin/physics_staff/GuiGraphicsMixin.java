@@ -25,7 +25,7 @@ public abstract class GuiGraphicsMixin {
 
     @Shadow public abstract void disableScissor();
 
-    @WrapMethod(method = "renderItem(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;III)V")
+    @WrapMethod(method = "item(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;III)V")
     private void simulated$renderPhysicsStaff(final LivingEntity entity,
                                               final Level level,
                                               final ItemStack stack,

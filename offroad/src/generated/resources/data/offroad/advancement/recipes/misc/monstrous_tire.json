@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "offroad:monstrous_tire"
+        "recipes": "offroad:monstrous_tire"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

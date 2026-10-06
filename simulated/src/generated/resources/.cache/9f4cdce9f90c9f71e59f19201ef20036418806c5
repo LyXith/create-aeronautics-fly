@@ -401,8 +401,8 @@ cb380718fb0684ce126d66673a4236c95492b9c5 assets/simulated/models/item/yellow_han
 c510b946463b0806fad6bf6a2d9429c562d0bbe0 data/create/tags/block/non_movable.json
 1674b3d5f528913c2e3332c2518e0e1f96ad87a0 data/create/tags/block/safe_nbt.json
 ac1afbf9798f80a0e863969c37d02fc765cbdd2b data/create/tags/block/windmill_sails.json
-75617e8a83f6e84c24e91a1adb96fceacc54130f data/minecraft/tags/block/mineable/axe.json
-b504f54b3e3f9dbc777ebe270ea7361147695176 data/minecraft/tags/block/mineable/pickaxe.json
+6e338ffc084b485b54c7d3a38f1ab777dec90782 data/minecraft/tags/block/mineable/axe.json
+e986c8626ffccc910165f91ae888df5ed7ebbcf6 data/minecraft/tags/block/mineable/pickaxe.json
 ed40c7afce811d9aa9eb7aaafaad621e24fe4755 data/minecraft/tags/item/enchantable/armor.json
 5596ff42dae8a4ae8c3cbaacb9b9802b2aabc016 data/minecraft/tags/item/enchantable/durability.json
 1f47b4d1af005c9ac44979e621595d5bd89930c3 data/sable/tags/block/diode.json

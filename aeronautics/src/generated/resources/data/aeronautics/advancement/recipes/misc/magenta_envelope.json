@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "aeronautics:magenta_envelope"
+        "recipes": "aeronautics:magenta_envelope"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

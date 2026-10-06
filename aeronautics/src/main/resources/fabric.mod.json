@@ -9,7 +9,8 @@
   "environment": "*",
   "entrypoints": {
     "main": ["dev.eriksonn.aeronautics.fabric.AeronauticsFabric"],
-    "client": ["dev.eriksonn.aeronautics.fabric.AeronauticsFabricClient"]
+    "client": ["dev.eriksonn.aeronautics.fabric.AeronauticsFabricClient"],
+    "fabric-datagen": ["dev.eriksonn.aeronautics.fabric.data.AeronauticsDataGenerator"]
   },
   "mixins": ["aeronautics.mixins.json", "aeronautics-fabric.mixins.json"],
   "depends": {

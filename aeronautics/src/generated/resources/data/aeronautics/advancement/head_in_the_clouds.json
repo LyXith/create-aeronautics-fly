@@ -12,7 +12,6 @@
       "translate": "advancement.aeronautics.head_in_the_clouds.desc"
     },
     "icon": {
-      "count": 1,
       "id": "aeronautics:adjustable_burner"
     },
     "title": {

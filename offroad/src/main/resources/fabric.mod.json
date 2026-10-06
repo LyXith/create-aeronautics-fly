@@ -9,7 +9,8 @@
   "environment": "*",
   "entrypoints": {
     "main": ["dev.ryanhcode.offroad.fabric.OffroadFabric"],
-    "client": ["dev.ryanhcode.offroad.fabric.OffroadFabricClient"]
+    "client": ["dev.ryanhcode.offroad.fabric.OffroadFabricClient"],
+    "fabric-datagen": ["dev.ryanhcode.offroad.fabric.data.OffroadDataGenerator"]
   },
   "mixins": ["offroad.mixins.json", "offroad-fabric.mixins.json"],
   "depends": {

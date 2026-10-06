@@ -1,18 +1,16 @@
 {
-    "type":  "minecraft:crafting_shaped",
-    "category":  "misc",
-    "key":  {
-                "C":  "create:crushing_wheel",
-                "G":  "create:industrial_iron_block",
-                "S":  "create:iron_sheet"
-            },
-    "pattern":  [
-                    "C",
-                    "G",
-                    "S"
-                ],
-    "result":  {
-                   "count":  1,
-                   "id":  "offroad:rockcutting_wheel"
-               }
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": "create:crushing_wheel",
+    "G": "create:industrial_iron_block",
+    "S": "create:iron_sheet"
+  },
+  "pattern": [
+    "C",
+    "G",
+    "S"
+  ],
+  "result": {
+    "id": "offroad:rockcutting_wheel"
+  }
 }

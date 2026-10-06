@@ -36,7 +36,9 @@ public class OffroadTags {
         private static void genBlockTags(final RegistrateTagsProvider<Block> provIn) {
             final TagGen.CreateTagsProvider<Block> prov = new TagGen.CreateTagsProvider<>(provIn, Block::builtInRegistryHolder);
             prov.tag(BOREHEAD_EFFECTIVE)
-                    .addTag(create("c", "ores"));
+                    // 外部命名空间的 tag 不在这次 datagen 生成的 builder 里，
+                    // Fabric 的 TagsProvider 校验只放行 "本 run 生成的 tag"，只能按可选引用写。
+                    .addOptionalTag(create("c", "ores"));
             prov.tag(BOREHEAD_SUPER_EFFECTIVE)
                     .add(net.minecraft.world.level.block.Blocks.ANCIENT_DEBRIS);
         }

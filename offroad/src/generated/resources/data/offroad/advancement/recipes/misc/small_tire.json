@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "offroad:small_tire"
+        "recipes": "offroad:small_tire"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

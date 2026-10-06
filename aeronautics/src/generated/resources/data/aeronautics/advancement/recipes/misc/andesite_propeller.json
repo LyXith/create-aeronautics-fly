@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "aeronautics:andesite_propeller"
+        "recipes": "aeronautics:andesite_propeller"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -9,8 +9,7 @@
     "borehead_collision.BoreheadContraptionEntityMixin"
   ],
   "client": [
-    "client.multimining_destruction_progress.LevelRenderMixin",
-    "client.multimining_destruction_progress.ClientLevelAccessor"
+    "client.multimining_destruction_progress.ClientLevelMixin"
   ],
   "server": [],
   "injectors": {

@@ -43,8 +43,10 @@ public class AeroTags {
 			prov.tag(AIRTIGHT)
 					.addTag(ENVELOPE);
 			// me when i HATE method chaining grrr
+			// 外部命名空间的 tag 不在这次 datagen 生成的 builder 里，
+			// Fabric 的 TagsProvider 校验只放行 "本 run 生成的 tag"，只能按可选引用写。
 			prov.tag(AIRTIGHT)
-					.addTag(net.minecraft.tags.BlockTags.WOOL);
+					.addOptionalTag(net.minecraft.tags.BlockTags.WOOL);
 
 			prov.tag(DAMPENS_VIBRATIONS)
 							.addTag(ENVELOPE);
@@ -56,12 +58,13 @@ public class AeroTags {
 					.add(Blocks.CAMPFIRE, Blocks.MAGMA_BLOCK, Blocks.TORCH, Blocks.WALL_TORCH, AllBlocks.LIT_BLAZE_BURNER, Blocks.FIRE);
 			prov.tag(LEVITITE_ADJACENT_CATALYZER)
 					.add(Blocks.NETHERRACK)
-					.addTag(TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath("c", "storage_blocks/coal")));
+					// 外部命名空间 → 可选引用，理由同上
+					.addOptionalTag(TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath("c", "storage_blocks/coal")));
 
 			prov.tag(LEVITITE_SOUL_CATALYZER)
 					.add(Blocks.SOUL_CAMPFIRE, Blocks.SOUL_TORCH, Blocks.SOUL_WALL_TORCH, Blocks.SOUL_FIRE);
 			prov.tag(LEVITITE_ADJACENT_SOUL_CATALYZER)
-					.addTag(net.minecraft.tags.BlockTags.SOUL_FIRE_BASE_BLOCKS);
+					.addOptionalTag(net.minecraft.tags.BlockTags.SOUL_FIRE_BASE_BLOCKS);
 		}
 	}
 

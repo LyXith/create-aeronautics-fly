@@ -8,7 +8,7 @@ apply from: rootProject.file('gradle/fabric-module.gradle')
 loom {
     runs {
         datagen {
-            inherit server
+            inherit client
             name = 'Simulated Fabric Data Generation'
             runDir = 'runs/datagen'
             vmArg '-Dfabric-api.datagen'

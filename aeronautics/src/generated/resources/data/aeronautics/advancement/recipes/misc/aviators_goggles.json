@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "aeronautics:aviators_goggles"
+        "recipes": "aeronautics:aviators_goggles"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

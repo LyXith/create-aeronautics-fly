@@ -368,6 +368,10 @@ public class AeroBlocks {
                     () -> SoundEvents.AMETHYST_BLOCK_FALL)))
             .tag(net.minecraft.tags.BlockTags.MINEABLE_WITH_PICKAXE, AeroTags.BlockTags.LEVITITE)
             .tag(SableTags.ALWAYS_CHUNK_RENDERING)
+            // 26.3 的区块渲染层由模型纹理透明度推导，不再有运行时注册；
+            // 这里声明半透明，RegistrateBlockstateProvider#simpleBlock 才会生成带
+            // force_translucent 的 cube_all 模型（否则该模型根本不会被生成）。
+            .addLayer(() -> net.minecraft.client.renderer.rendertype.RenderTypes::translucentMovingBlock)
             .item(BlockItem::new)
             .tag(AeroTags.ItemTags.LEVITITE)
             .properties(p -> p.component(AeroDataComponents.LEVITATING, Levitating.LEVITITE))
@@ -388,6 +392,8 @@ public class AeroBlocks {
                             () -> SoundEvents.AMETHYST_BLOCK_FALL)))
                     .tag(net.minecraft.tags.BlockTags.MINEABLE_WITH_PICKAXE, AeroTags.BlockTags.LEVITITE)
                     .tag(SableTags.ALWAYS_CHUNK_RENDERING)
+                    // 同 LEVITITE：声明半透明才会生成带 force_translucent 的模型
+                    .addLayer(() -> net.minecraft.client.renderer.rendertype.RenderTypes::translucentMovingBlock)
                     .item(BlockItem::new)
                     .tag(AeroTags.ItemTags.LEVITITE)
                     .properties(p -> p.component(AeroDataComponents.LEVITATING, Levitating.PEARLESCENT_LEVITITE))

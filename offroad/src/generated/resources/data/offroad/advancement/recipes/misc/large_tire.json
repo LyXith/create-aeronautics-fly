@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "offroad:large_tire"
+        "recipes": "offroad:large_tire"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

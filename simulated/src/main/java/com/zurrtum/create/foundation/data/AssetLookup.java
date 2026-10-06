@@ -22,7 +22,11 @@ public final class AssetLookup {
         return state -> prov.models().getExistingFile(prov.modLoc("block/" + ctx.getName() + "/block" + (state.getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.POWERED) ? "_powered" : "")));
     }
 
+    /**
+     * 物品自己的 partial 模型：物品模型继承 {@code item/<name>/item}
+     * （真值见 {@code assets/offroad/models/item/small_tire.json}）。
+     */
     public static <T extends Item> NonNullBiConsumer<DataGenContext<Item, T>, RegistrateItemModelProvider> itemModelWithPartials() {
-        return (ctx, prov) -> { };
+        return (ctx, prov) -> prov.withExistingParent(ctx.getName(), prov.modLoc("item/" + ctx.getName() + "/item"));
     }
 }

@@ -1,26 +1,34 @@
 package dev.ryanhcode.offroad.mixin.client.multimining_destruction_progress;
 
 import com.google.common.collect.Sets;
-import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import dev.ryanhcode.offroad.handlers.client.MultiMiningBlockDestructionProgress;
 import dev.ryanhcode.offroad.handlers.client.MultiMiningClientHandler;
-import dev.ryanhcode.offroad.mixin_interface.level_renderer.MultiMiningDestructionExtension;
+import dev.ryanhcode.offroad.mixin_interface.client_level.MultiMiningDestructionExtension;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.BlockDestructionProgress;
+import net.minecraft.world.level.LevelAccessor;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Map;
 import java.util.SortedSet;
 
-@Mixin(LevelRenderer.class)
-public abstract class LevelRenderMixin implements MultiMiningDestructionExtension {
+/**
+ * 26.3 把方块破坏进度从 {@code LevelRenderer} 整个搬进了 {@link ClientLevel}：
+ * {@link ClientLevel#destroyBlockProgress(int, BlockPos, int)} 直接维护 {@code destroyingBlocks} /
+ * {@code destructionProgress}，渲染端由 {@code LevelExtractor} 从 {@link ClientLevel#destructionProgress()}
+ * 读取，{@code LevelRenderer} 上已经不再保留这两张表。因此多重挖掘的进度只能挂在 {@link ClientLevel} 上。
+ */
+@Mixin(ClientLevel.class)
+public abstract class ClientLevelMixin implements MultiMiningDestructionExtension {
 
     @Shadow
     @Final
@@ -30,27 +38,19 @@ public abstract class LevelRenderMixin implements MultiMiningDestructionExtensio
     @Final
     private Long2ObjectMap<SortedSet<BlockDestructionProgress>> destructionProgress;
 
-    @Shadow
-    private int ticks;
-
-    @Shadow
-    protected abstract void removeProgress(BlockDestructionProgress progress);
-
     /**
-     * we need to manually handle this as our multimining progress does not have a tree set associated with it. It's just a holder for other progresses...
+     * vanilla 的实现直接 {@code destructionProgress.get(pos).remove(block)}，而多重挖掘的 holder 只是「容器」，
+     * 自身并不在 {@code destructionProgress} 中，走 vanilla 路径会 NPE。这里改为清理 holder 持有的全部真实进度。
      */
-    @WrapMethod(method = "removeProgress")
-    private void offroad$handleMultiMiningProgressRemoval(final BlockDestructionProgress progress, final Operation<Void> original) {
+    @Inject(method = "removeProgress", at = @At("HEAD"), cancellable = true)
+    private void offroad$removeMultiMiningProgresses(final BlockDestructionProgress progress, final CallbackInfo ci) {
         if (progress instanceof final MultiMiningBlockDestructionProgress mmProgress) {
-            if (!mmProgress.otherProgresses.isEmpty()) {
-                for (final BlockDestructionProgress innerProgress : mmProgress.otherProgresses.values()) {
-                    original.call(innerProgress);
-                }
-
-                mmProgress.otherProgresses.clear();
+            for (final BlockDestructionProgress inner : mmProgress.otherProgresses.values()) {
+                this.offroad$removeProgress(inner);
             }
-        } else {
-            original.call(progress);
+
+            mmProgress.otherProgresses.clear();
+            ci.cancel();
         }
     }
 
@@ -89,7 +89,7 @@ public abstract class LevelRenderMixin implements MultiMiningDestructionExtensio
             });
 
             // update our timer to make sure we keep voided appropriately
-            mmProgress.updateTick(this.ticks);
+            mmProgress.updateTick(((LevelAccessor) (Object) this).getGameTime());
         }
     }
 

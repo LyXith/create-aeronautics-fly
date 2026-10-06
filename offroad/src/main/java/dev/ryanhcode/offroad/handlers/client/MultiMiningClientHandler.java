@@ -3,13 +3,11 @@ package dev.ryanhcode.offroad.handlers.client;
 import com.zurrtum.create.content.kinetics.base.BlockBreakingKineticBlockEntity;
 import dev.simulated_team.simulated.compat.create.CommonLevelAttached;
 import dev.ryanhcode.offroad.handlers.MultiminingDataTickResult;
-import dev.ryanhcode.offroad.mixin.client.multimining_destruction_progress.ClientLevelAccessor;
-import dev.ryanhcode.offroad.mixin_interface.level_renderer.MultiMiningDestructionExtension;
+import dev.ryanhcode.offroad.mixin_interface.client_level.MultiMiningDestructionExtension;
 import dev.ryanhcode.sable.util.LevelAccelerator;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import com.zurrtum.create.client.ponder.api.level.PonderLevel;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -100,8 +98,7 @@ public class MultiMiningClientHandler {
     }
 
     private void bulkUpdateDestructionProgress(final Level level) {
-        final LevelRenderer levelRenderer = ((ClientLevelAccessor) level).getLevelRenderer();
-        ((MultiMiningDestructionExtension) levelRenderer).offroad$manuallyAddMultiDestructionProgress(this.breakingID, this.dirtyData);
+        ((MultiMiningDestructionExtension) level).offroad$manuallyAddMultiDestructionProgress(this.breakingID, this.dirtyData);
     }
 
     public static class ClientBlockBreakingData {

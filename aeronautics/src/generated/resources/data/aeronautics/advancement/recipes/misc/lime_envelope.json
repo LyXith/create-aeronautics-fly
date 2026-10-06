@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "aeronautics:lime_envelope"
+        "recipes": "aeronautics:lime_envelope"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
