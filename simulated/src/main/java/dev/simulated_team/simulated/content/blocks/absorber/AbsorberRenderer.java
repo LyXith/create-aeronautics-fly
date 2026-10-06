@@ -26,7 +26,6 @@ public class AbsorberRenderer extends SmartBlockEntityRenderer<AbsorberBlockEnti
     protected void renderSafe(final AbsorberBlockEntity be, final float partialTicks, final PoseStack ms, final SubmitNodeCollector buffer, final int light, final int overlay) {
         super.renderSafe(be, partialTicks, ms, buffer, light, overlay);
         final Level level = SableDistUtil.getClientLevel();
-        final VertexConsumer vb = buffer.getBuffer(RenderTypes.cutoutMovingBlock());
 
         final BlockState blockState = be.getBlockState();
 
@@ -63,11 +62,11 @@ public class AbsorberRenderer extends SmartBlockEntityRenderer<AbsorberBlockEnti
 
         sponge.translate(0,0.25,0);
         sponge.scale(1,1-pos*movementDistance/9,1);
-        sponge.light(light).renderInto(ms.last(),vb);
+        sponge.light(light).submit(ms, buffer);
         final Matrix4f rotationMatrix = new Matrix4f();
-        this.apply(CachedBuffers.partial(SimPartialModels.ABSORBER_HAT,blockState),ms,light,vb,yRot,totalMovement,rotationMatrix);
+        this.apply(CachedBuffers.partial(SimPartialModels.ABSORBER_HAT,blockState),ms,light,buffer,yRot,totalMovement,rotationMatrix);
         totalMovement/=2;
-        this.apply(CachedBuffers.partial(SimPartialModels.ABSORBER_PIVOT,blockState),ms,light,vb,yRot,totalMovement,rotationMatrix);
+        this.apply(CachedBuffers.partial(SimPartialModels.ABSORBER_PIVOT,blockState),ms,light,buffer,yRot,totalMovement,rotationMatrix);
 
         float height = totalMovement+0.5f/16; //height from base to pivot
         final float length = 13.8f/32f; //distance from pivot to endpoint of arm
@@ -80,19 +79,19 @@ public class AbsorberRenderer extends SmartBlockEntityRenderer<AbsorberBlockEnti
         rotationMatrix.m11(width);
         rotationMatrix.m12(-height);
 
-        this.apply(CachedBuffers.partial(SimPartialModels.ABSORBER_ARM,blockState),ms,light,vb,yRot,totalMovement,rotationMatrix);
+        this.apply(CachedBuffers.partial(SimPartialModels.ABSORBER_ARM,blockState),ms,light,buffer,yRot,totalMovement,rotationMatrix);
         rotationMatrix.m21(-height);
         rotationMatrix.m12(height);
         rotationMatrix.m00(0.98f);
-        this.apply(CachedBuffers.partial(SimPartialModels.ABSORBER_ARM,blockState),ms,light,vb,yRot,totalMovement,rotationMatrix);
+        this.apply(CachedBuffers.partial(SimPartialModels.ABSORBER_ARM,blockState),ms,light,buffer,yRot,totalMovement,rotationMatrix);
     }
-    void apply(final SuperByteBuffer buffer, final PoseStack ms, final int light, final VertexConsumer vb, final float yRot, final float offset, final Matrix4f rotationMatrix)
+    void apply(final SuperByteBuffer buffer, final PoseStack ms, final int light, final SubmitNodeCollector vb, final float yRot, final float offset, final Matrix4f rotationMatrix)
     {
 
         buffer.translate(0.5,0.25+offset,0.5);
         final Matrix4f r = new Matrix4f().rotate(yRot,0,1,0);
         buffer.rotate(r.mul(rotationMatrix));
         buffer.translate(-0.5,0,-0.5);
-        buffer.light(light).renderInto(ms.last(),vb);
+        buffer.light(light).submit(ms, vb);
     }
 }

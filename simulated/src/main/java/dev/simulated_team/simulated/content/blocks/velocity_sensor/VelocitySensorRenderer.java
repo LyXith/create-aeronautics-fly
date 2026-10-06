@@ -22,7 +22,6 @@ public class VelocitySensorRenderer extends SafeBlockEntityRenderer<VelocitySens
 
     @Override
     protected void renderSafe(final VelocitySensorBlockEntity be, final float partialTicks, final PoseStack ms, final SubmitNodeCollector buffer, final int light, final int overlay) {
-        final VertexConsumer vb = buffer.getBuffer(RenderTypes.cutoutMovingBlock());
 
         final BlockState state  = be.getBlockState();
         final SuperByteBuffer diode = CachedBuffers.partial(SimPartialModels.VELOCITY_SENSOR_DIODE, state);
@@ -42,14 +41,14 @@ public class VelocitySensorRenderer extends SafeBlockEntityRenderer<VelocitySens
         final int color = SimColors.redstone(signalStrength);
 
         this.transform(diode, state);
-        diode.light(light).color(front ? color : SimColors.REDSTONE_OFF).renderInto(ms.last(), vb);
+        diode.light(light).color(front ? color : SimColors.REDSTONE_OFF).submit(RenderTypes.cutoutMovingBlock(), ms, buffer);
 
         this.transform(diode, state);
         diode.rotateCenteredDegrees(180, Direction.Axis.Y);
-        diode.light(light).color(front ? SimColors.REDSTONE_OFF : color).renderInto(ms.last(), vb);
+        diode.light(light).color(front ? SimColors.REDSTONE_OFF : color).submit(RenderTypes.cutoutMovingBlock(), ms, buffer);
 
         this.transform(fan.rotateCentered(be.getFanAngle(partialTicks), AbstractDirectionalAxisBlock.getDirectionOfAxis(state)), state);
-        fan.light(light).renderInto(ms.last(), vb);
+        fan.light(light).submit(RenderTypes.cutoutMovingBlock(), ms, buffer);
     }
 
     private void transform(final SuperByteBuffer diode, final BlockState state) {

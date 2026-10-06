@@ -70,7 +70,6 @@ public class RopeWinchRenderer extends SafeBlockEntityRenderer<RopeWinchBlockEnt
 
     protected void renderComponents(final RopeWinchBlockEntity be, final float partialTicks, final PoseStack ms, final SubmitNodeCollector buffer, final int light, final int overlay) {
         ms.pushPose();
-        final VertexConsumer vb = buffer.getBuffer(RenderTypes.solidMovingBlock());
 
         final BlockState state = be.getBlockState();
         final SuperByteBuffer shaft = CachedBuffers.partial(SimPartialModels.ROPE_WINCH_SHAFT, state);
@@ -79,7 +78,7 @@ public class RopeWinchRenderer extends SafeBlockEntityRenderer<RopeWinchBlockEnt
         final Direction.Axis axis = KineticBlockEntityRenderer.getRotationAxisOf(be);
         final float angle = KineticBlockEntityRenderer.getAngleForBe(be, be.getBlockPos(), axis);
         KineticBlockEntityRenderer.kineticRotationTransform(shaft, be, axis, angle, light);
-        transform(shaft, state, true).renderInto(ms.last(), vb);
+        transform(shaft, state, true).submit(RenderTypes.solidMovingBlock(), ms, buffer);
 
         if (be.getRopeHolder().isAttached() || (be.isVirtual() && be.getRopeHolder().renderAttached)) {
             ropeCoil.light(light);
@@ -97,7 +96,7 @@ public class RopeWinchRenderer extends SafeBlockEntityRenderer<RopeWinchBlockEnt
             ropeCoil.shiftUVScrolling(coilShift,
                     AbstractPulleyRenderer.getCoilVScroll(coilShift, be.clientAngle.getValue(partialTicks), speed));
 
-            transform(ropeCoil, state, true).renderInto(ms.last(), vb);
+            transform(ropeCoil, state, true).submit(RenderTypes.solidMovingBlock(), ms, buffer);
         }
         ms.popPose();
         RopeStrandRenderer.render(be, be.getRopeHolder(), partialTicks, ms, buffer);

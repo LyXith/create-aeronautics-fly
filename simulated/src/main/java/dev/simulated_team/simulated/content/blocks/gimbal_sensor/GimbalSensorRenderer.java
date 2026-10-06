@@ -48,7 +48,6 @@ public class GimbalSensorRenderer extends SafeBlockEntityRenderer<GimbalSensorBl
 
     private static void renderAnimatedParts(final GimbalSensorBlockEntity be, final float partialTicks,
                                             final PoseStack ms, final SubmitNodeCollector buffer, final int light) {
-        final VertexConsumer vb = buffer.getBuffer(RenderTypes.cutoutMovingBlock());
         final Quaternionf Q = be.getBaseQuaternion();
 
         // Render Redstone Indicators
@@ -72,17 +71,17 @@ public class GimbalSensorRenderer extends SafeBlockEntityRenderer<GimbalSensorBl
 
         ms.popPose();
         be.applyPrimaryQuaternion(Q, partialTicks);
-        apply(SimPartialModels.GIMBAL_SENSOR_GIMBAL, be, Q, light, ms, vb);
+        apply(SimPartialModels.GIMBAL_SENSOR_GIMBAL, be, Q, light, ms, buffer);
         be.applySecondaryQuaternion(Q, partialTicks);
-        apply(SimPartialModels.GIMBAL_SENSOR_COMPASS, be, Q, light, ms, vb);
+        apply(SimPartialModels.GIMBAL_SENSOR_COMPASS, be, Q, light, ms, buffer);
         be.applyCompassQuaternion(Q, partialTicks);
-        apply(SimPartialModels.GIMBAL_SENSOR_NEEDLE, be, Q, light, ms, vb);
+        apply(SimPartialModels.GIMBAL_SENSOR_NEEDLE, be, Q, light, ms, buffer);
     }
 
-    private static void apply(final PartialModel model, final GimbalSensorBlockEntity te, final Quaternionf Q, final int light, final PoseStack ms, final VertexConsumer vb) {
+    private static void apply(final PartialModel model, final GimbalSensorBlockEntity te, final Quaternionf Q, final int light, final PoseStack ms, final SubmitNodeCollector vb) {
         final SuperByteBuffer buf = CachedBuffers.partial(model, te.getBlockState());
         buf.rotateCentered(Q);
         buf.translate(0.5, 0.5, 0.5);
-        buf.light(light).renderInto(ms.last(), vb);
+        buf.light(light).submit(ms, vb);
     }
 }

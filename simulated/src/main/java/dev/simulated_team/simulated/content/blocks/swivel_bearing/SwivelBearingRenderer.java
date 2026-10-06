@@ -39,10 +39,9 @@ public class SwivelBearingRenderer extends KineticBlockEntityRenderer<SwivelBear
                 getAngleForBe(be.getExtraKinetics(), be.getBlockPos(), axis),
                 light);
 
-        final VertexConsumer vb = buffer.getBuffer(RenderTypes.solidMovingBlock());
-        cogwheel.renderInto(ms.last(), vb);
+        cogwheel.submit(ms, buffer);
         if (!be.isAssembled()) {
-            renderRotatingBuffer(be, CachedBuffers.partialFacing(SimPartialModels.SHAFT_SIXTEENTH, state, state.getValue(SwivelBearingBlock.FACING)), ms, vb, light);
+            renderRotatingBuffer(be, CachedBuffers.partialFacing(SimPartialModels.SHAFT_SIXTEENTH, state, state.getValue(SwivelBearingBlock.FACING)), ms, buffer, light);
         }
     }
 

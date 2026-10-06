@@ -217,13 +217,12 @@ public class LaunchedPlungerEntityRenderer extends EntityRenderer<LaunchedPlunge
         stack.scale(1.75f, 1.75f, 1.75f);
         stack.translate(0, 0, 2.5f / 16f);
 
-        final VertexConsumer vb = multiBufferSource.getBuffer(RenderTypes.solidMovingBlock());
         final SuperByteBuffer body = CachedBuffers.partial(SimPartialModels.LAUNCHED_PLUNGER_BODY, Blocks.AIR.defaultBlockState());
         final SuperByteBuffer spool = CachedBuffers.partial(SimPartialModels.LAUNCHED_PLUNGER_SPOOL, Blocks.AIR.defaultBlockState());
         final SuperByteBuffer joint = CachedBuffers.partial(SimPartialModels.LAUNCHED_PLUNGER_JOINT, Blocks.AIR.defaultBlockState());
 
         stack.rotateZDegrees(90f);
-        body.light(light).renderInto(poseStack.last(), vb);
+        body.light(light).submit(RenderTypes.solidMovingBlock(), poseStack, multiBufferSource);
 
         FACE_NORMAL.set(selfNormal.x, selfNormal.y, selfNormal.z);
         SELF.set(pos.x, pos.y, pos.z);
@@ -241,10 +240,10 @@ public class LaunchedPlungerEntityRenderer extends EntityRenderer<LaunchedPlunge
 
         poseStack.pushPose();
         stack.rotateZDegrees((float) Math.toDegrees(angle));
-        joint.light(light).renderInto(poseStack.last(), vb);
+        joint.light(light).submit(RenderTypes.solidMovingBlock(), poseStack, multiBufferSource);
         stack.translate(0, 0, 3f / 16f);
         stack.rotateXDegrees((float) distanceIncludingSublevels * 90f * 2.6f);
-        spool.light(light).renderInto(poseStack.last(), vb);
+        spool.light(light).submit(RenderTypes.solidMovingBlock(), poseStack, multiBufferSource);
         poseStack.popPose();
 
         poseStack.popPose();

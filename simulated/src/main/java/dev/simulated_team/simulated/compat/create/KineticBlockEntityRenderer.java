@@ -1,13 +1,11 @@
 package dev.simulated_team.simulated.compat.create;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
 import com.zurrtum.create.content.kinetics.base.KineticBlockEntity;
 import com.zurrtum.create.client.flywheel.api.visualization.VisualizationManager;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -27,8 +25,7 @@ public class KineticBlockEntityRenderer<T extends KineticBlockEntity> extends Sm
     protected void renderSafe(final T blockEntity, final float partialTicks, final PoseStack poseStack,
                               final net.minecraft.client.renderer.SubmitNodeCollector bufferSource, final int light, final int overlay) {
         final BlockState state = getRenderedBlockState(blockEntity);
-        renderRotatingBuffer(blockEntity, getRotatedModel(blockEntity, state), poseStack,
-                bufferSource.getBuffer(ItemBlockRenderTypes.getMovingBlockRenderType(state)), light);
+        renderRotatingBuffer(blockEntity, getRotatedModel(blockEntity, state), poseStack, bufferSource, light);
     }
 
     protected SuperByteBuffer getRotatedModel(final T blockEntity, final BlockState state) {
@@ -39,15 +36,11 @@ public class KineticBlockEntityRenderer<T extends KineticBlockEntity> extends Sm
         return blockEntity.getBlockState();
     }
 
-    protected RenderType getRenderType(final T blockEntity, final BlockState state) {
-        return ItemBlockRenderTypes.getMovingBlockRenderType(state);
-    }
-
     protected void renderRotatingBuffer(final T blockEntity, final SuperByteBuffer buffer, final PoseStack poseStack,
-                                        final VertexConsumer consumer, final int light) {
+                                        final SubmitNodeCollector collector, final int light) {
         kineticRotationTransform(buffer, blockEntity, getRotationAxisOf(blockEntity),
                 getAngleForBe(blockEntity, blockEntity.getBlockPos(), getRotationAxisOf(blockEntity)), light)
-                .renderInto(poseStack.last(), consumer);
+                .submit(poseStack, collector);
     }
 
     public static Direction.Axis getRotationAxisOf(final KineticBlockEntity blockEntity) {
@@ -72,9 +65,9 @@ public class KineticBlockEntityRenderer<T extends KineticBlockEntity> extends Sm
     }
 
     public static void renderRotatingKineticBlock(final KineticBlockEntity blockEntity, final BlockState state,
-                                                  final PoseStack poseStack, final VertexConsumer consumer, final int light) {
+                                                  final PoseStack poseStack, final SubmitNodeCollector collector, final int light) {
         kineticRotationTransform(CachedBuffers.block(com.zurrtum.create.client.content.kinetics.base.KineticBlockEntityRenderer.KINETIC_BLOCK, state),
                 blockEntity, getRotationAxisOf(blockEntity), getAngleForBe(blockEntity, blockEntity.getBlockPos(), getRotationAxisOf(blockEntity)), light)
-                .renderInto(poseStack.last(), consumer);
+                .submit(poseStack, collector);
     }
 }

@@ -66,7 +66,6 @@ public class ThrottleLeverRenderer extends SafeBlockEntityRenderer<ThrottleLever
         }
 
         if (isRenderingInSubLevel() || !VisualizationManager.supportsVisualization(be.getLevel())) {
-            final VertexConsumer vb = bufferSource.getBuffer(RenderTypes.cutoutMovingBlock());
 
             final SuperByteBuffer handle = CachedBuffers.partial(SimPartialModels.THROTTLE_LEVER_HANDLE, leverState);
             final SuperByteBuffer button = CachedBuffers.partial(SimPartialModels.THROTTLE_LEVER_BUTTON, leverState);
@@ -84,18 +83,18 @@ public class ThrottleLeverRenderer extends SafeBlockEntityRenderer<ThrottleLever
             this.transformHandleExternal(handle, angle, face);
             handle
                     .light(light)
-                    .renderInto(ms.last(), vb);
+                    .submit(RenderTypes.cutoutMovingBlock(), ms, bufferSource);
 
             this.transformHandleExternal(button, angle, face)
                     .translate(0, 14 / 16f, 8 / 16f)
                     .rotateXDegrees((float) buttonAngle)
                     .translateBack(0, 14 / 16f, 8 / 16f)
                     .light(light)
-                    .renderInto(ms.last(), vb);
+                    .submit(RenderTypes.cutoutMovingBlock(), ms, bufferSource);
 
             diode.light(light)
                     .color(color)
-                    .renderInto(ms.last(), vb);
+                    .submit(RenderTypes.cutoutMovingBlock(), ms, bufferSource);
         }
 
         final Minecraft minecraft = Minecraft.getInstance();

@@ -37,10 +37,9 @@ public class PortableEngineRenderer extends KineticBlockEntityRenderer<PortableE
                               final int light, final int overlay) {
         final BlockState state = this.getRenderedBlockState(be);
         final RenderType type = RenderTypes.solidMovingBlock();
-        renderRotatingBuffer(be, this.getRotatedModel(be, state), ms, buffer.getBuffer(type), light);
+        renderRotatingBuffer(be, this.getRotatedModel(be, state), ms, buffer, light);
 
         FilteringRenderer.renderOnBlockEntity(be, partialTicks, ms, buffer, light, overlay);
-        final VertexConsumer cutout = buffer.getBuffer(RenderTypes.cutoutMovingBlock());
 
         final Direction direction = be.getBlockState()
                 .getValue(BlockStateProperties.HORIZONTAL_FACING);
@@ -51,24 +50,22 @@ public class PortableEngineRenderer extends KineticBlockEntityRenderer<PortableE
         final float visualStrength = be.visualStrength.getValue(partialTicks);
 
         final boolean lit = blockState.getValue(RedstoneTorchBlock.LIT);
-        this.renderHatch(be, partialTicks, ms, light, blockState, direction, cutout, 255, engineParts, !lit, false);
-        this.renderPipes(be, partialTicks, ms, light, blockState, direction, cutout, 255, engineParts, false);
+        this.renderHatch(be, partialTicks, ms, light, blockState, direction, buffer, 255, engineParts, !lit, false);
+        this.renderPipes(be, partialTicks, ms, light, blockState, direction, buffer, 255, engineParts, false);
 
         final float hatchOpenProgress = 1.0f - getHatchOpenProgress(be, partialTicks);
         if (visualStrength > 0) {
-            final VertexConsumer translucent = buffer.getBuffer(RenderTypes.solidMovingBlock());
             engineParts = be.isSuperHeated() ? SimPartialModels.ENGINE_PARTS_SUPERHEATED : SimPartialModels.ENGINE_PARTS_HEATED;
 
-            this.renderPipes(be, partialTicks, ms, LightCoordsUtil.FULL_BRIGHT, blockState, direction, translucent, (int) (visualStrength * 255), engineParts, true);
+            this.renderPipes(be, partialTicks, ms, LightCoordsUtil.FULL_BRIGHT, blockState, direction, buffer, (int) (visualStrength * 255), engineParts, true);
         }
 
         if (lit) {
-            final VertexConsumer translucent = buffer.getBuffer(RenderTypes.solidMovingBlock());
-            this.renderHatch(be, partialTicks, ms, LightCoordsUtil.FULL_BRIGHT, blockState, direction, translucent, (int) (hatchOpenProgress * 255), engineParts, lit, true);
+            this.renderHatch(be, partialTicks, ms, LightCoordsUtil.FULL_BRIGHT, blockState, direction, buffer, (int) (hatchOpenProgress * 255), engineParts, lit, true);
         }
     }
 
-    private void renderHatch(final PortableEngineBlockEntity be, final float partialTicks, final PoseStack ms, final int light, final BlockState blockState, final Direction direction, final VertexConsumer consumer, final int alpha, final SimPartialModels.EngineParts parts, final boolean renderInner, boolean lit) {
+    private void renderHatch(final PortableEngineBlockEntity be, final float partialTicks, final PoseStack ms, final int light, final BlockState blockState, final Direction direction, final SubmitNodeCollector consumer, final int alpha, final SimPartialModels.EngineParts parts, final boolean renderInner, boolean lit) {
         if (be.isVirtual()) lit = false;
 
         final double hatchPivotY = 4.9f / 16.0f;
@@ -84,25 +81,25 @@ public class PortableEngineRenderer extends KineticBlockEntityRenderer<PortableE
                 .translate(-0.0f, -hatchPivotY, -hatchPivotZ)
                 .light(light)
                 .color(255, 255, 255, alpha)
-                .renderInto(ms.last(), consumer);
+                .submit(ms, consumer);
 
         final SuperByteBuffer hatchTop = this.rotateToFacing(CachedBuffers.partial(parts.hatchTop, blockState), direction);
         if (lit) hatchTop.disableDiffuse();
         hatchTop
                 .light(light)
                 .color(255, 255, 255, alpha)
-                .renderInto(ms.last(), consumer);
+                .submit(ms, consumer);
 
         if (renderInner) {
             final SuperByteBuffer mouth = this.rotateToFacing(CachedBuffers.partial(parts.mouth, blockState), direction.getOpposite());
             if (lit) mouth.disableDiffuse();
             mouth
                     .light(light)
-                    .renderInto(ms.last(), consumer);
+                    .submit(ms, consumer);
         }
     }
 
-    private void renderPipes(final PortableEngineBlockEntity be, final float partialTicks, final PoseStack ms, final int light, final BlockState blockState, final Direction direction, final VertexConsumer consumer, final int alpha, final SimPartialModels.EngineParts parts, boolean lit) {
+    private void renderPipes(final PortableEngineBlockEntity be, final float partialTicks, final PoseStack ms, final int light, final BlockState blockState, final Direction direction, final SubmitNodeCollector consumer, final int alpha, final SimPartialModels.EngineParts parts, boolean lit) {
         final float renderTime = AnimationTickHolder.getRenderTime(be.getLevel()) / 20;
 
         final double pulseTime = renderTime * 7.0;
@@ -131,7 +128,7 @@ public class PortableEngineRenderer extends KineticBlockEntityRenderer<PortableE
                 .translateBack(pipeCenterRight)
                 .light(light)
                 .color(255, 255, 255, alpha)
-                .renderInto(ms.last(), consumer);
+                .submit(ms, consumer);
 
         final SuperByteBuffer outletRight = this.rotateToFacing(CachedBuffers.partial(parts.outletRight, blockState), direction);
         if (lit) outletRight.disableDiffuse();
@@ -144,7 +141,7 @@ public class PortableEngineRenderer extends KineticBlockEntityRenderer<PortableE
                 .translateBack(outletRotationPointRight)
                 .light(light)
                 .color(255, 255, 255, alpha)
-                .renderInto(ms.last(), consumer);
+                .submit(ms, consumer);
 
         final SuperByteBuffer pipeLeft = this.rotateToFacing(CachedBuffers.partial(parts.pipeLeft, blockState), direction);
         if (lit) pipeLeft.disableDiffuse();
@@ -154,7 +151,7 @@ public class PortableEngineRenderer extends KineticBlockEntityRenderer<PortableE
                 .translateBack(pipeCenterLeft)
                 .light(light)
                 .color(255, 255, 255, alpha)
-                .renderInto(ms.last(), consumer);
+                .submit(ms, consumer);
 
         final SuperByteBuffer outletLeft = this.rotateToFacing(CachedBuffers.partial(parts.outletLeft, blockState), direction);
         if (lit) outletLeft.disableDiffuse();
@@ -167,7 +164,7 @@ public class PortableEngineRenderer extends KineticBlockEntityRenderer<PortableE
                 .translateBack(outletRotationPointLeft)
                 .light(light)
                 .color(255, 255, 255, alpha)
-                .renderInto(ms.last(), consumer);
+                .submit(ms, consumer);
     }
 
     @Override

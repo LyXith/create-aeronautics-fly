@@ -36,7 +36,6 @@ public class AltitudeSensorRenderer extends SmartBlockEntityRenderer<AltitudeSen
     public static void render(final BlockState blockState, final int tickCount, final float dialValue, final float visualHeight,
                               final PoseStack poseStack, final PoseStack contraptionPose, final Matrix4f worldLight, final SubmitNodeCollector bufferSource, final int light) {
         final Level level = SableDistUtil.getClientLevel();
-        final VertexConsumer vb = bufferSource.getBuffer(RenderTypes.cutoutMovingBlock());
         final SuperByteBuffer indicator = CachedBuffers.partial(SimPartialModels.ALTITUDE_SENSOR_INDICATOR, blockState);
 
         PartialModel box = SimPartialModels.ALTITUDE_SENSOR_LINEAR_CASE;
@@ -91,9 +90,9 @@ public class AltitudeSensorRenderer extends SmartBlockEntityRenderer<AltitudeSen
         final int color = SimColors.redstone(dialValue);
         indicator.color(color);
 
-        face.renderInto(poseStack.last(), vb);
-        dialBuffer.renderInto(poseStack.last(), vb);
-        indicator.renderInto(poseStack.last(), vb);
+        face.submit(RenderTypes.cutoutMovingBlock(), poseStack, bufferSource);
+        dialBuffer.submit(RenderTypes.cutoutMovingBlock(), poseStack, bufferSource);
+        indicator.submit(RenderTypes.cutoutMovingBlock(), poseStack, bufferSource);
     }
 
     @Override

@@ -28,7 +28,6 @@ public class DockingConnectorRenderer extends SafeBlockEntityRenderer<DockingCon
 
     @Override
     protected void renderSafe(final DockingConnectorBlockEntity be, final float partialTicks, final PoseStack ms, final SubmitNodeCollector bufferSource, final int light, final int overlay) {
-        final VertexConsumer vb = bufferSource.getBuffer(RenderTypes.cutoutMovingBlock());
         final Direction direction = be.getBlockState()
                 .getValue(BlockStateProperties.FACING);
         final BlockState blockState = be.getBlockState();
@@ -44,8 +43,8 @@ public class DockingConnectorRenderer extends SafeBlockEntityRenderer<DockingCon
         rotateToFaceCentered(ms, direction);
         piston1.translate(0, extension * 0.5, 0);
         piston2.translate(0, extension, 0);
-        piston1.light(light).renderInto(ms.last(), vb);
-        piston2.light(light).renderInto(ms.last(), vb);
+        piston1.light(light).submit(RenderTypes.cutoutMovingBlock(), ms, bufferSource);
+        piston2.light(light).submit(RenderTypes.cutoutMovingBlock(), ms, bufferSource);
 
         final Vector2f footAnchor = new Vector2f();
         final Vector2f sidePistonTopAnchor = new Vector2f();
@@ -80,9 +79,9 @@ public class DockingConnectorRenderer extends SafeBlockEntityRenderer<DockingCon
             sidePiston1.mulPose(rotationMatrix);
             sidePiston2.mulPose(rotationMatrix);
 
-            sidePiston1.light(light).renderInto(ms.last(), vb);
-            sidePiston2.light(light).renderInto(ms.last(), vb);
-            foot.light(light).renderInto(ms.last(), vb);
+            sidePiston1.light(light).submit(RenderTypes.cutoutMovingBlock(), ms, bufferSource);
+            sidePiston2.light(light).submit(RenderTypes.cutoutMovingBlock(), ms, bufferSource);
+            foot.light(light).submit(RenderTypes.cutoutMovingBlock(), ms, bufferSource);
             ms.popPose();
         }
 

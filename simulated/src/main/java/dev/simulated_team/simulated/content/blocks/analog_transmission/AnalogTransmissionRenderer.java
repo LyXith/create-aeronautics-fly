@@ -41,8 +41,7 @@ public class AnalogTransmissionRenderer extends KineticBlockEntityRenderer<Analo
 
         cogwheel.submit(ms, buffer);
 
-        final VertexConsumer vb = buffer.getBuffer(RenderTypes.solidMovingBlock());
-        KineticBlockEntityRenderer.renderRotatingKineticBlock(be, shaft(getRotationAxisOf(be)), ms, vb, light);
+        KineticBlockEntityRenderer.renderRotatingKineticBlock(be, shaft(getRotationAxisOf(be)), ms, buffer, light);
     }
 
     @Override

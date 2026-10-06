@@ -62,7 +62,6 @@ public class DirectionalGearshiftRenderer extends SplitShaftRenderer {
         final Direction direction = blockState.getValue(DirectionalGearshiftBlock.FACING);
         final boolean vertical = axis.isVertical() || (direction.getAxis().isVertical() && !blockState.getValue(DirectionalGearshiftBlock.AXIS_ALONG_FIRST_COORDINATE));
 
-        final VertexConsumer consumer = bufferSource.getBuffer(RenderTypes.solidMovingBlock());
         final SuperByteBuffer barrel = CachedBuffers.partial(SimPartialModels.DIRECTIONAL_GEARSHIFT_CENTER, blockState);
 
         final SuperByteBuffer barrelShaftA = CachedBuffers.partial(SimPartialModels.DIRECTIONAL_GEARSHIFT_BARREL_SHAFT, blockState);
@@ -73,7 +72,7 @@ public class DirectionalGearshiftRenderer extends SplitShaftRenderer {
         }
         barrelShaftA.rotateZCentered((float) Math.PI);
         barrelShaftA.rotateYCentered(shaftAngle);
-        barrelShaftA.light(light).renderInto(ms.last(), consumer);
+        barrelShaftA.light(light).submit(RenderTypes.solidMovingBlock(), ms, bufferSource);
 
         final SuperByteBuffer barrelShaftB = CachedBuffers.partial(SimPartialModels.DIRECTIONAL_GEARSHIFT_BARREL_SHAFT, blockState);
         kineticRotationTransform(barrelShaftB, be, axis, angle, light);
@@ -82,7 +81,7 @@ public class DirectionalGearshiftRenderer extends SplitShaftRenderer {
             barrelShaftB.rotateZCenteredDegrees(90);
         }
         barrelShaftB.rotateYCentered(shaftAngle);
-        barrelShaftB.light(light).renderInto(ms.last(), consumer);
+        barrelShaftB.light(light).submit(RenderTypes.solidMovingBlock(), ms, bufferSource);
 
         kineticRotationTransform(barrel, be, axis, angle, light);
         barrel.center().rotateToFace(direction).uncenter();
@@ -91,7 +90,7 @@ public class DirectionalGearshiftRenderer extends SplitShaftRenderer {
             barrel.rotateZCenteredDegrees(90);
         }
 
-        barrel.light(light).renderInto(ms.last(), consumer);
+        barrel.light(light).submit(RenderTypes.solidMovingBlock(), ms, bufferSource);
 
     }
 

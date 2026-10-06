@@ -93,7 +93,6 @@ public class RopeStrandElement extends AnimatedSceneElementBase implements Anima
                               final float pt) {
         final SuperByteBuffer middle = CachedBuffers.partialFacing(SimPartialModels.ROPE, AllBlocks.ROPE.defaultBlockState(), Direction.NORTH);
         final SuperByteBuffer knot = CachedBuffers.partialFacing(SimPartialModels.ROPE_KNOT, AllBlocks.ROPE.defaultBlockState(), Direction.NORTH);
-        final VertexConsumer vb = buffer.getBuffer(RenderTypes.solidMovingBlock());
         final PonderRopePose currentPose = new PonderRopePose();
         currentPose.set(this.lastPose);
         currentPose.lerp(this.pose, pt);
@@ -138,20 +137,20 @@ public class RopeStrandElement extends AnimatedSceneElementBase implements Anima
             final int worldLight = 15;
 
             knot.light(worldLight)
-                    .renderInto(ps.last(), vb);
+                    .submit(RenderTypes.solidMovingBlock(), ps, buffer);
 
             ps.pushPose();
             ps.translate(0.0, 0.5, 0.0);
             ps.scale(1.0f, (float) length, 1.0f);
 
             middle.light(worldLight)
-                    .renderInto(ps.last(), vb);
+                    .submit(RenderTypes.solidMovingBlock(), ps, buffer);
             ps.popPose();
 
             if(renderPoint1 == renderPoints.getLast()) {
                 ps.translate(0, length, 0);
                 knot.light(worldLight)
-                        .renderInto(ps.last(), vb);
+                        .submit(RenderTypes.solidMovingBlock(), ps, buffer);
             }
 
             ps.popPose();

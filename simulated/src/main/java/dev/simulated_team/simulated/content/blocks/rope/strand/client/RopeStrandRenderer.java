@@ -44,7 +44,6 @@ public class RopeStrandRenderer {
 
         final SuperByteBuffer middle = CachedBuffers.partialFacing(SimPartialModels.ROPE, AllBlocks.ROPE.defaultBlockState(), Direction.NORTH);
         final SuperByteBuffer knot = CachedBuffers.partialFacing(SimPartialModels.ROPE_KNOT, AllBlocks.ROPE.defaultBlockState(), Direction.NORTH);
-        final VertexConsumer vb = buffer.getBuffer(RenderTypes.solidMovingBlock());
 
         final SubLevel subLevel = Sable.HELPER.getContaining(be);
         Pose3dc containingPose = null;
@@ -94,13 +93,13 @@ public class RopeStrandRenderer {
 
                 if (i > 1) {
                     knot.light(worldLight)
-                            .renderInto(ps.last(), vb);
+                            .submit(RenderTypes.solidMovingBlock(), ps, buffer);
                 }
                 ps.translate(0.0, 0.5, 0.0);
                 ps.scale(1.0f, (float) length, 1.0f);
 
                 middle.light(worldLight)
-                        .renderInto(ps.last(), vb);
+                        .submit(RenderTypes.solidMovingBlock(), ps, buffer);
                 ps.popPose();
             }
             ps.popPose();

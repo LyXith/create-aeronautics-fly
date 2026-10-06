@@ -64,7 +64,6 @@ public class LinkedTypewriterRenderer extends SmartBlockEntityRenderer<LinkedTyp
                               int light, final int overlay) {
         super.renderSafe(be, partialTicks, ms, buffer, light, overlay);
 
-        final VertexConsumer vb = buffer.getBuffer(RenderTypes.cutoutMovingBlock());
         final BlockState blockState = be.getBlockState();
         final Direction facing = blockState.getValue(BlockStateProperties.HORIZONTAL_FACING);
 
@@ -87,7 +86,7 @@ public class LinkedTypewriterRenderer extends SmartBlockEntityRenderer<LinkedTyp
         ps.rotateY(180);
         float carriageAnimation = (float) Math.pow(carriagePos, 3);
         ps.translate(carriageAnimation * 0.375 + -3 * s, 3 * s, s);
-        CachedBufferer.partial(CSimPartialModels.LINKED_TYPEWRITER_CARRIAGE, blockState).light(light).renderInto(ms.last(), vb);
+        CachedBufferer.partial(CSimPartialModels.LINKED_TYPEWRITER_CARRIAGE, blockState).light(light).submit(ms, vb);
         ms.popPose();
          */
 
@@ -102,7 +101,7 @@ public class LinkedTypewriterRenderer extends SmartBlockEntityRenderer<LinkedTyp
         ps.pushPose();
         for (int i = 0; i < 6; i++) {
             ps.translate(2 * s, 0.0, 0.0);
-            renderKey(ms, vb, light, pt, blockState, be, b, index++, false);
+            renderKey(ms, buffer, light, pt, blockState, be, b, index++, false);
         }
         ms.popPose();
 
@@ -111,20 +110,20 @@ public class LinkedTypewriterRenderer extends SmartBlockEntityRenderer<LinkedTyp
         ps.pushPose();
         for (int i = 0; i < 7; i++) {
             ps.translate(2 * s, 0.0, 0.0);
-            renderKey(ms, vb, light, pt, blockState, be, b, index++, false);
+            renderKey(ms, buffer, light, pt, blockState, be, b, index++, false);
         }
         ms.popPose();
 
         // Space Bar
         ps.translate(8 * s, -s, 2 * s);
         ps.pushPose();
-        renderKey(ms, vb, light, pt, blockState, be, b, index, true);
+        renderKey(ms, buffer, light, pt, blockState, be, b, index, true);
         ms.popPose();
 
         ms.popPose();
     }
 
-    protected static void renderKey(final PoseStack ms, final VertexConsumer vb, final int light, final float pt, final BlockState blockState, final LinkedTypewriterBlockEntity be, final float b, final int index, final boolean isSpacebar) {
+    protected static void renderKey(final PoseStack ms, final SubmitNodeCollector vb, final int light, final float pt, final BlockState blockState, final LinkedTypewriterBlockEntity be, final float b, final int index, final boolean isSpacebar) {
         ms.pushPose();
 
         float depression = 0;
@@ -135,9 +134,9 @@ public class LinkedTypewriterRenderer extends SmartBlockEntityRenderer<LinkedTyp
         ms.translate(0.0F, depression, 0.0F);
 
         if (!isSpacebar) {
-            CachedBuffers.partial(SimPartialModels.LINKED_TYPEWRITER_KEY, blockState).light(light).renderInto(ms.last(), vb);
+            CachedBuffers.partial(SimPartialModels.LINKED_TYPEWRITER_KEY, blockState).light(light).submit(ms, vb);
         } else {
-            CachedBuffers.partial(SimPartialModels.LINKED_TYPEWRITER_KEY_SPACEBAR, blockState).light(light).renderInto(ms.last(), vb);
+            CachedBuffers.partial(SimPartialModels.LINKED_TYPEWRITER_KEY_SPACEBAR, blockState).light(light).submit(ms, vb);
         }
 
         ms.popPose();

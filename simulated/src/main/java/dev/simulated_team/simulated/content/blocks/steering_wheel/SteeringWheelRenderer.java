@@ -60,7 +60,7 @@ public class SteeringWheelRenderer extends KineticBlockEntityRenderer<SteeringWh
                     AllPartialModels.SHAFT_HALF,
                     be.getBlockState(),
                     floor ? Direction.DOWN : Direction.UP
-            ), ms, buffer.getBuffer(type), light);
+            ), ms, buffer, light);
         }
 
         final SuperByteBuffer model = this.getWheelModel(be);

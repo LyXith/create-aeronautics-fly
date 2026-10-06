@@ -48,7 +48,6 @@ public final class SableCreateKineticRenderer {
         final BlockState state = kinetic.getBlockState();
         final Direction.Axis axis = KineticBlockEntityRenderer.getRotationAxisOf(kinetic);
         final Direction direction = Direction.fromAxisAndDirection(axis, Direction.AxisDirection.POSITIVE);
-        final VertexConsumer consumer = bufferSource.getBuffer(RenderTypes.solidMovingBlock());
         final Color color = KineticBlockEntityRenderer.getColor(kinetic);
 
         if (state.is(AllBlocks.LARGE_COGWHEEL)) {
@@ -101,7 +100,7 @@ public final class SableCreateKineticRenderer {
                 direction,
                 color,
                 poseStack,
-                consumer,
+                bufferSource,
                 light
         );
     }
@@ -121,7 +120,6 @@ public final class SableCreateKineticRenderer {
         final BlockState state = backtank.getBlockState();
         final Direction.Axis axis = KineticBlockEntityRenderer.getRotationAxisOf(backtank);
         final Direction direction = Direction.fromAxisAndDirection(axis, Direction.AxisDirection.POSITIVE);
-        final VertexConsumer consumer = bufferSource.getBuffer(RenderTypes.solidMovingBlock());
 
         renderRotating(
                 backtank,
@@ -134,7 +132,7 @@ public final class SableCreateKineticRenderer {
                 direction,
                 KineticBlockEntityRenderer.getColor(backtank),
                 poseStack,
-                consumer,
+                bufferSource,
                 light
         );
 
@@ -158,7 +156,7 @@ public final class SableCreateKineticRenderer {
                 .rotate(cogRotation, Direction.EAST)
                 .translate(0, -0.40625F, -0.6875F);
         cogs.light(light)
-                .renderInto(poseStack.last(), consumer);
+                .submit(poseStack, bufferSource);
     }
 
     private static void renderRotating(
@@ -174,6 +172,6 @@ public final class SableCreateKineticRenderer {
         model.light(light)
                 .rotateCentered(angle, direction)
                 .color(color)
-                .renderInto(poseStack.last(), consumer);
+                .submit(poseStack, bufferSource);
     }
 }
