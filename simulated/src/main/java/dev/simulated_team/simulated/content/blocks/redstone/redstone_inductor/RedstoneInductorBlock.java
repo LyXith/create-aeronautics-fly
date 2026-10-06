@@ -1,6 +1,5 @@
 package dev.simulated_team.simulated.content.blocks.redstone.redstone_inductor;
 
-import com.mojang.serialization.MapCodec;
 import com.zurrtum.create.AllItems;
 import com.zurrtum.create.content.redstone.diodes.AbstractDiodeBlock;
 import com.zurrtum.create.foundation.block.IBE;
@@ -34,7 +33,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.joml.Vector3f;
 
 public class RedstoneInductorBlock extends AbstractDiodeBlock implements IBE<RedstoneInductorBlockEntity>, CommonRedstoneBlock {
-    public static final MapCodec<RedstoneInductorBlock> CODEC = simpleCodec(RedstoneInductorBlock::new);
     public static final BooleanProperty INVERTED = BooleanProperty.create("inverted");
 
     public RedstoneInductorBlock(final Properties builder) {
@@ -42,11 +40,6 @@ public class RedstoneInductorBlock extends AbstractDiodeBlock implements IBE<Red
         this.registerDefaultState(this.defaultBlockState()
                 .setValue(INVERTED, false)
                 .setValue(POWERED, false));
-    }
-
-    @Override
-    protected MapCodec<? extends DiodeBlock> codec() {
-        return CODEC;
     }
 
     @Override

@@ -1,6 +1,5 @@
 package dev.simulated_team.simulated.content.blocks.absorber;
 
-import com.mojang.serialization.MapCodec;
 import com.zurrtum.create.content.equipment.wrench.IWrenchable;
 import com.zurrtum.create.foundation.block.IBE;
 import dev.simulated_team.simulated.index.SimBlockShapes;
@@ -39,16 +38,10 @@ public class AbsorberBlock extends HorizontalDirectionalBlock implements IBE<Abs
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
     public static final BooleanProperty WET = BooleanProperty.create("wet");
     public static final net.minecraft.world.level.block.state.properties.Property<Direction> HORIZONTAL_FACING = BlockStateProperties.HORIZONTAL_FACING;
-    public static final MapCodec<AbsorberBlock> CODEC = simpleCodec(AbsorberBlock::new);
 
     public AbsorberBlock(final Properties properties) {
         super(properties);
         this.registerDefaultState(this.defaultBlockState().setValue(POWERED, false).setValue(WET,false));
-    }
-
-    @Override
-    protected MapCodec<? extends HorizontalDirectionalBlock> codec() {
-        return CODEC;
     }
 
     @Override

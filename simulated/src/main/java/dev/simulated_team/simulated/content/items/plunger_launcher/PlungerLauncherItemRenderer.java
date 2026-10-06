@@ -20,7 +20,7 @@ import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.util.Mth;
@@ -81,7 +81,7 @@ public class PlungerLauncherItemRenderer extends CustomRenderedItemModelRenderer
     }
 
     @Override
-    protected void render(final ItemStack stack, final CustomRenderedItemModel model, final PartialItemModelRenderer renderer, final ItemDisplayContext transformType, final PoseStack ms, final MultiBufferSource buffer, final int light, final int overlay) {
+    protected void render(final ItemStack stack, final CustomRenderedItemModel model, final PartialItemModelRenderer renderer, final ItemDisplayContext transformType, final PoseStack ms, final SubmitNodeCollector buffer, final int light, final int overlay) {
         ms.scale(0.8f, 0.8f, 0.8f);
         ms.translate(0, 0, 0.15f);
         renderer.render(model.getOriginalModel(), light);
@@ -109,7 +109,7 @@ public class PlungerLauncherItemRenderer extends CustomRenderedItemModelRenderer
         }
     }
 
-    private void renderPlunger(final PoseStack ms, final MultiBufferSource buffer, final int light, final boolean first) {
+    private void renderPlunger(final PoseStack ms, final SubmitNodeCollector buffer, final int light, final boolean first) {
         ms.pushPose();
         final SuperByteBuffer body = CachedBuffers.partial(SimPartialModels.LAUNCHED_PLUNGER_BODY, Blocks.AIR.defaultBlockState());
         final SuperByteBuffer spool = CachedBuffers.partial(SimPartialModels.LAUNCHED_PLUNGER_SPOOL, Blocks.AIR.defaultBlockState());
@@ -134,11 +134,11 @@ public class PlungerLauncherItemRenderer extends CustomRenderedItemModelRenderer
             }
         }
 
-        body.light(light).renderInto(ms.last(), buffer.getBuffer(RenderTypes.solidMovingBlock()));
-        joint.light(light).renderInto(ms.last(), buffer.getBuffer(RenderTypes.solidMovingBlock()));
+        body.light(light).submit(ms, buffer);
+        joint.light(light).submit(ms, buffer);
 
         ms.translate(0, 0, 3 / 16f);
-        spool.light(light).renderInto(ms.last(), buffer.getBuffer(RenderTypes.solidMovingBlock()));
+        spool.light(light).submit(ms, buffer);
         ms.popPose();
     }
 

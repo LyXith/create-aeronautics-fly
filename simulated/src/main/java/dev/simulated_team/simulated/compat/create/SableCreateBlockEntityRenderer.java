@@ -23,7 +23,7 @@ import org.joml.Quaternionf;
  * piece, such as chain conveyors, belts, depots, blaze burners, and compatible
  * third-party block entities.
  *
- * <p>26.3 port: the submission target used to be a {@code MultiBufferSource}, which
+ * <p>26.3 port: the submission target used to be a {@code SubmitNodeCollector}, which
  * required an intermediate collector that re-implemented (and in several cases
  * silently discarded) Minecraft's own submission API. Minecraft 26.3 hands renderers a
  * {@link SubmitNodeCollector} directly, so the adapter is gone and every piece a

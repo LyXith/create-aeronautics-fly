@@ -10,7 +10,7 @@ import dev.simulated_team.simulated.index.SimPartialModels;
 import com.zurrtum.create.catnip.math.AngleHelper;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -36,7 +36,7 @@ public class RopeConnectorRenderer extends SafeBlockEntityRenderer<RopeConnector
     }
 
     @Override
-    protected void renderSafe(final RopeConnectorBlockEntity be, final float partialTicks, final PoseStack ms, final MultiBufferSource buffer, final int light, final int overlay) {
+    protected void renderSafe(final RopeConnectorBlockEntity be, final float partialTicks, final PoseStack ms, final SubmitNodeCollector buffer, final int light, final int overlay) {
         RopeStrandRenderer.render(be, be.getRopeHolder(), partialTicks, ms, buffer);
 
         final RopeStrandHolderBehavior holder = be.getRopeHolder();
@@ -66,6 +66,6 @@ public class RopeConnectorRenderer extends SafeBlockEntityRenderer<RopeConnector
         knotBuffer.rotateCentered((float) ((zRotLast) / 180 * Math.PI), Direction.SOUTH);
 
         knotBuffer.rotateCentered((float) (Math.PI / 2.0), Direction.UP);
-        knotBuffer.renderInto(ms.last(), buffer.getBuffer(RenderTypes.solidMovingBlock()));
+        knotBuffer.submit(ms, buffer);
     }
 }

@@ -11,7 +11,7 @@ import com.zurrtum.create.catnip.math.AngleHelper;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
 import net.minecraft.util.LightCoordsUtil;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -33,7 +33,7 @@ public class PortableEngineRenderer extends KineticBlockEntityRenderer<PortableE
     }
 
     @Override
-    protected void renderSafe(final PortableEngineBlockEntity be, final float partialTicks, final PoseStack ms, final MultiBufferSource buffer,
+    protected void renderSafe(final PortableEngineBlockEntity be, final float partialTicks, final PoseStack ms, final SubmitNodeCollector buffer,
                               final int light, final int overlay) {
         final BlockState state = this.getRenderedBlockState(be);
         final RenderType type = RenderTypes.solidMovingBlock();

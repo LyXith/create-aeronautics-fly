@@ -9,7 +9,7 @@ import dev.ryanhcode.sable.api.SubLevelHelper;
 import dev.ryanhcode.sable.companion.math.JOMLConversion;
 import com.zurrtum.create.client.catnip.animation.AnimationTickHolder;
 import net.minecraft.client.renderer.LevelRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.util.Mth;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.world.level.Level;
@@ -36,7 +36,7 @@ public class AltitudeSensorMovementBehaviour extends MovementBehaviour {
         }
     }
 
-    public void renderInContraption(final MovementContext context, final VirtualRenderWorld renderWorld, final ContraptionMatrices matrices, final MultiBufferSource buffer) {
+    public void renderInContraption(final MovementContext context, final VirtualRenderWorld renderWorld, final ContraptionMatrices matrices, final SubmitNodeCollector buffer) {
         final float lowSignal = context.blockEntityData.getFloatOr("low_signal", 0);
         final float highSignal = context.blockEntityData.getFloatOr("high_signal", 0);
 

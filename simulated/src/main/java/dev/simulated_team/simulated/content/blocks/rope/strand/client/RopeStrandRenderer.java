@@ -17,7 +17,7 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.LevelRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.core.BlockPos;
@@ -35,7 +35,7 @@ import java.util.Objects;
 public class RopeStrandRenderer {
     public record RopeRenderPoint(Quaternionf orientation, Vector3d position) { }
 
-    public static void render(final SmartBlockEntity be, final RopeStrandHolderBehavior ropeHolder, final float partialTick, final PoseStack ps, final MultiBufferSource buffer) {
+    public static void render(final SmartBlockEntity be, final RopeStrandHolderBehavior ropeHolder, final float partialTick, final PoseStack ps, final SubmitNodeCollector buffer) {
 
         final Level level = be.getLevel();
         assert level != null;
@@ -120,7 +120,7 @@ public class RopeStrandRenderer {
         }
     }
 
-    private static void renderOutline(final PoseStack ps, final MultiBufferSource buffer, final float rad, final ObjectArrayList<RopeRenderPoint> ropeRenderPoints, final BlockPos ownerPos) {
+    private static void renderOutline(final PoseStack ps, final SubmitNodeCollector buffer, final float rad, final ObjectArrayList<RopeRenderPoint> ropeRenderPoints, final BlockPos ownerPos) {
         final Vector3d previousCorner = new Vector3d();
         final Vector3d currentCorner = new Vector3d();
         final Vector3d cornerDiff = new Vector3d();

@@ -8,7 +8,7 @@ import dev.simulated_team.simulated.index.SimPartialModels;
 import com.zurrtum.create.catnip.math.AngleHelper;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -23,7 +23,7 @@ public class AbsorberRenderer extends SmartBlockEntityRenderer<AbsorberBlockEnti
         super(context);
     }
     @Override
-    protected void renderSafe(final AbsorberBlockEntity be, final float partialTicks, final PoseStack ms, final MultiBufferSource buffer, final int light, final int overlay) {
+    protected void renderSafe(final AbsorberBlockEntity be, final float partialTicks, final PoseStack ms, final SubmitNodeCollector buffer, final int light, final int overlay) {
         super.renderSafe(be, partialTicks, ms, buffer, light, overlay);
         final Level level = SableDistUtil.getClientLevel();
         final VertexConsumer vb = buffer.getBuffer(RenderTypes.cutoutMovingBlock());

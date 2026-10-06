@@ -1,6 +1,5 @@
 package dev.simulated_team.simulated.content.blocks.redstone.directional_receiver;
 
-import com.mojang.serialization.MapCodec;
 import com.zurrtum.create.api.contraption.BlockMovementChecks;
 import com.zurrtum.create.content.equipment.wrench.IWrenchable;
 import com.zurrtum.create.foundation.block.IBE;
@@ -30,7 +29,6 @@ import org.jetbrains.annotations.Nullable;
 
 
 public class DirectionalLinkedReceiverBlock extends WrenchableDirectionalBlock implements IBE<DirectionalLinkedReceiverBlockEntity>, IWrenchable, CommonRedstoneBlock {
-    public static final MapCodec<ModulatingLinkedReceiverBlock> CODEC = simpleCodec(ModulatingLinkedReceiverBlock::new);
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 
     static {
@@ -50,11 +48,6 @@ public class DirectionalLinkedReceiverBlock extends WrenchableDirectionalBlock i
     public DirectionalLinkedReceiverBlock(final Properties properties) {
         super(properties);
         this.registerDefaultState(this.defaultBlockState().setValue(POWERED, false));
-    }
-
-    @Override
-    protected MapCodec<? extends DirectionalBlock> codec() {
-        return CODEC;
     }
 
     @Override

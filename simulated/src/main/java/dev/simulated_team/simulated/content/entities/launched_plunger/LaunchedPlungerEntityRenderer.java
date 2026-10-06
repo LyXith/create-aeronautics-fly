@@ -22,7 +22,7 @@ import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.LevelRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
@@ -76,7 +76,7 @@ public class LaunchedPlungerEntityRenderer extends EntityRenderer<LaunchedPlunge
     }
 
     @Override
-    public void render(final LaunchedPlungerEntity entity, final float f, final float pt, final PoseStack poseStack, final MultiBufferSource multiBufferSource, final int light) {
+    public void render(final LaunchedPlungerEntity entity, final float f, final float pt, final PoseStack poseStack, final SubmitNodeCollector multiBufferSource, final int light) {
         super.render(entity, f, pt, poseStack, multiBufferSource, light);
 
         // render to sublevel and invert rotate rope to be accurate
@@ -273,7 +273,7 @@ public class LaunchedPlungerEntityRenderer extends EntityRenderer<LaunchedPlunge
                 .add(handDirection.scale(0.325D * (rightHand ? 1.0D : -1.0D)));
     }
 
-    public static void renderRope(final List<Vec3> positions, final MultiBufferSource multiBufferSource, final BlockAndTintGetter level, final PoseStack poseStack) {
+    public static void renderRope(final List<Vec3> positions, final SubmitNodeCollector multiBufferSource, final BlockAndTintGetter level, final PoseStack poseStack) {
         final Vec3 first = positions.getFirst();
         final Vector3d origin = new Vector3d();
         final Vec3 cameraPosition = Minecraft.getInstance().gameRenderer.mainCamera().position();

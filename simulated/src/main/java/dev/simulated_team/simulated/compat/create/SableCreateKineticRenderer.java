@@ -16,7 +16,7 @@ import com.zurrtum.create.content.equipment.armor.BacktankBlock;
 import com.zurrtum.create.content.equipment.armor.BacktankBlockEntity;
 import com.zurrtum.create.content.kinetics.base.KineticBlockEntity;
 import com.zurrtum.create.content.kinetics.simpleRelays.BracketedKineticBlockEntity;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.core.Direction;
@@ -37,7 +37,7 @@ public final class SableCreateKineticRenderer {
             final BlockEntity blockEntity,
             final float partialTick,
             final PoseStack poseStack,
-            final MultiBufferSource bufferSource,
+            final SubmitNodeCollector bufferSource,
             final int light,
             final int overlay
     ) {
@@ -110,7 +110,7 @@ public final class SableCreateKineticRenderer {
             final BlockEntity blockEntity,
             final float partialTick,
             final PoseStack poseStack,
-            final MultiBufferSource bufferSource,
+            final SubmitNodeCollector bufferSource,
             final int light,
             final int overlay
     ) {

@@ -8,7 +8,7 @@ import com.zurrtum.create.client.flywheel.api.visualization.VisualizationManager
 import dev.simulated_team.simulated.index.SimPartialModels;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -22,7 +22,7 @@ public class SwivelBearingRenderer extends KineticBlockEntityRenderer<SwivelBear
     }
 
     @Override
-    protected void renderSafe(final SwivelBearingBlockEntity be, final float partialTicks, final PoseStack ms, final MultiBufferSource buffer, final int light, final int overlay) {
+    protected void renderSafe(final SwivelBearingBlockEntity be, final float partialTicks, final PoseStack ms, final SubmitNodeCollector buffer, final int light, final int overlay) {
         if (VisualizationManager.supportsVisualization(be.getLevel()) && !isRenderingInSubLevel()) {
             return;
         }

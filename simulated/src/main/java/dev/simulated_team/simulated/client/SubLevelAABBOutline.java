@@ -2,7 +2,7 @@ package dev.simulated_team.simulated.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.zurrtum.create.client.catnip.outliner.AABBOutline;
-import com.zurrtum.create.client.catnip.render.SuperRenderTypeBuffer;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import dev.ryanhcode.sable.Sable;
 import dev.ryanhcode.sable.companion.math.Pose3dc;
 import dev.ryanhcode.sable.sublevel.ClientSubLevel;
@@ -24,7 +24,7 @@ public class SubLevelAABBOutline extends AABBOutline {
     }
 
     @Override
-    public void render(final Minecraft minecraft, final PoseStack poseStack, final SuperRenderTypeBuffer buffer,
+    public void render(final Minecraft minecraft, final PoseStack poseStack, final SubmitNodeCollector buffer,
                        final Vec3 camera, final float partialTick) {
         final ClientSubLevel subLevel = Sable.HELPER.getContainingClient(this.bb.getCenter());
         if (subLevel == null) {

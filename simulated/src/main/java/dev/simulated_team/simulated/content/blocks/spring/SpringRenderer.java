@@ -15,7 +15,7 @@ import dev.simulated_team.simulated.util.SimColors;
 import dev.simulated_team.simulated.util.SimMathUtils;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
@@ -51,7 +51,7 @@ public class SpringRenderer extends SmartBlockEntityRenderer<SpringBlockEntity> 
      * The normal block-entity submission queue is bypassed for those blocks.
      */
     public static void renderInSubLevel(final SpringBlockEntity be, final float partialTicks, final PoseStack ps,
-                                        final MultiBufferSource bufferSource, final int light, final int overlay) {
+                                        final SubmitNodeCollector bufferSource, final int light, final int overlay) {
         final Object registeredRenderer = Minecraft.getInstance().getBlockEntityRenderDispatcher().getRenderer(be);
         if (registeredRenderer instanceof final SpringRenderer springRenderer) {
             springRenderer.renderSafe(be, partialTicks, ps, bufferSource, light, overlay);
@@ -78,7 +78,7 @@ public class SpringRenderer extends SmartBlockEntityRenderer<SpringBlockEntity> 
     }
 
     @Override
-    protected void renderSafe(final SpringBlockEntity be, final float partialTicks, final PoseStack ps, final MultiBufferSource bufferSource, final int light, final int overlay) {
+    protected void renderSafe(final SpringBlockEntity be, final float partialTicks, final PoseStack ps, final SubmitNodeCollector bufferSource, final int light, final int overlay) {
         super.renderSafe(be, partialTicks, ps, bufferSource, light, overlay);
         if (!be.isController()) {
             return;

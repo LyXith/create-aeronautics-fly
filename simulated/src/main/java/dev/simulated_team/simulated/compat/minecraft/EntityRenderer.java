@@ -1,7 +1,7 @@
 package dev.simulated_team.simulated.compat.minecraft;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -54,7 +54,7 @@ public abstract class EntityRenderer<T extends Entity>
     }
 
     public void render(final T entity, final float yaw, final float partialTicks, final PoseStack poseStack,
-                       final MultiBufferSource bufferSource, final int light) {
+                       final SubmitNodeCollector bufferSource, final int light) {
     }
 
     public abstract Identifier getTextureLocation(T entity);

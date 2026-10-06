@@ -10,7 +10,7 @@ import dev.simulated_team.simulated.index.SimPartialModels;
 import com.zurrtum.create.client.catnip.animation.AnimationTickHolder;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -22,19 +22,19 @@ public class DirectionalGearshiftRenderer extends SplitShaftRenderer {
         super(context);
     }
 
-    protected void renderSafe(final SplitShaftBlockEntity be, final float partialTicks, final PoseStack ms, final MultiBufferSource bufferSource,
+    protected void renderSafe(final SplitShaftBlockEntity be, final float partialTicks, final PoseStack ms, final SubmitNodeCollector bufferSource,
                               final int light, final int overlay) {
         renderDynamicParts(be, partialTicks, ms, bufferSource, light);
     }
 
     public static void renderInSubLevel(final DirectionalGearshiftBlockEntity be, final float partialTicks,
-                                        final PoseStack ms, final MultiBufferSource bufferSource,
+                                        final PoseStack ms, final SubmitNodeCollector bufferSource,
                                         final int light, final int overlay) {
         renderDynamicParts(be, partialTicks, ms, bufferSource, light);
     }
 
     private static void renderDynamicParts(final SplitShaftBlockEntity be, final float partialTicks,
-                                           final PoseStack ms, final MultiBufferSource bufferSource,
+                                           final PoseStack ms, final SubmitNodeCollector bufferSource,
                                            final int light) {
         final BlockState blockState = be.getBlockState();
         final Direction.Axis axis = SimBlocks.DIRECTIONAL_GEARSHIFT.get().getRotationAxis(blockState);

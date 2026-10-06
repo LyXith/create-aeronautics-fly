@@ -19,7 +19,7 @@ import com.zurrtum.create.client.ponder.foundation.element.AnimatedSceneElementB
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.Camera;
 import net.minecraft.util.LightCoordsUtil;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.SubmitNodeCollector;
@@ -84,7 +84,7 @@ public class RopeStrandElement extends AnimatedSceneElementBase implements Anima
     protected void renderLast(final EntityRenderDispatcher entityRenderManager,
                               final ItemModelResolver itemModelManager,
                               final PonderLevel world,
-                              final MultiBufferSource buffer,
+                              final SubmitNodeCollector buffer,
                               final SubmitNodeCollector queue,
                               final Camera camera,
                               final CameraRenderState cameraRenderState,

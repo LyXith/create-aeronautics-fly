@@ -15,7 +15,7 @@ import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
 import com.zurrtum.create.client.catnip.render.SuperByteBufferCache;
 import com.zurrtum.create.catnip.theme.Color;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.resources.model.geometry.BakedQuad;
@@ -44,7 +44,7 @@ public class SteeringWheelRenderer extends KineticBlockEntityRenderer<SteeringWh
     }
 
     @Override
-    protected void renderSafe(final SteeringWheelBlockEntity be, final float partialTicks, final PoseStack ms, final MultiBufferSource buffer,
+    protected void renderSafe(final SteeringWheelBlockEntity be, final float partialTicks, final PoseStack ms, final SubmitNodeCollector buffer,
                               final int light, final int overlay) {
         if (VisualizationManager.supportsVisualization(be.getLevel()) && !isRenderingInSubLevel()) {
             return;
@@ -75,7 +75,7 @@ public class SteeringWheelRenderer extends KineticBlockEntityRenderer<SteeringWh
 
         model.light(light);
         model.color(Color.WHITE);
-        model.renderInto(ms.last(), buffer.getBuffer(RenderTypes.solidMovingBlock()));
+        model.submit(ms, buffer);
     }
 
     private SuperByteBuffer getWheelModel(final SteeringWheelBlockEntity be) {

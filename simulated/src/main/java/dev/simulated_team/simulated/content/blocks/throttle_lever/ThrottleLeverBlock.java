@@ -1,6 +1,5 @@
 package dev.simulated_team.simulated.content.blocks.throttle_lever;
 
-import com.mojang.serialization.MapCodec;
 import com.zurrtum.create.AllItems;
 import com.zurrtum.create.content.equipment.wrench.IWrenchable;
 import com.zurrtum.create.foundation.block.IBE;
@@ -34,7 +33,6 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 public class ThrottleLeverBlock extends FaceAttachedHorizontalDirectionalBlock implements IBE<ThrottleLeverBlockEntity>, IWrenchable, CommonRedstoneBlock {
-    public static MapCodec<ThrottleLeverBlock> CODEC = simpleCodec(ThrottleLeverBlock::new);
     public static BooleanProperty INVERTED = BooleanProperty.create("inverted");
 
     public ThrottleLeverBlock(final Properties builder) {
@@ -59,11 +57,6 @@ public class ThrottleLeverBlock extends FaceAttachedHorizontalDirectionalBlock i
     static void updateNeighbors(final BlockState state, final Level world, final BlockPos pos) {
         world.updateNeighborsAt(pos, state.getBlock());
         world.updateNeighborsAt(pos.relative(getConnectedDirection(state).getOpposite()), state.getBlock());
-    }
-
-    @Override
-    protected MapCodec<? extends FaceAttachedHorizontalDirectionalBlock> codec() {
-        return CODEC;
     }
 
     @Override

@@ -12,7 +12,7 @@ import dev.ryanhcode.sable.sublevel.SubLevel;
 import dev.ryanhcode.sable.companion.math.JOMLConversion;
 import dev.simulated_team.simulated.Simulated;
 import dev.simulated_team.simulated.content.blocks.spring.SpringBlock;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -31,7 +31,7 @@ public class MergingGlueRenderer extends SmartBlockEntityRenderer<MergingGlueBlo
     }
 
     @Override
-    protected void renderSafe(final MergingGlueBlockEntity be, final float partialTicks, final PoseStack ms, final MultiBufferSource bufferSource, final int light, final int overlay) {
+    protected void renderSafe(final MergingGlueBlockEntity be, final float partialTicks, final PoseStack ms, final SubmitNodeCollector bufferSource, final int light, final int overlay) {
         if (!be.isController()) {
             return;
         }

@@ -9,7 +9,7 @@ import net.minecraft.client.Camera;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import org.joml.Quaternionf;
 import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Final;
@@ -56,7 +56,7 @@ public abstract class GameRendererMixin {
         final PoseStack poseStack = new PoseStack();
         poseStack.rotate(camera.rotation().conjugate(new Quaternionf()));
 
-        final MultiBufferSource.BufferSource bufferSource = this.minecraft.renderBuffers().bufferSource();
+        final SubmitNodeCollector bufferSource = this.minecraft.renderBuffers().bufferSource();
         IrisLaserRenderQueue.drawAfterShaderComposite(bufferSource);
         if (PhysicsStaffRenderHandler.renderAfterShaderComposite(bufferSource, poseStack, camera)) {
             bufferSource.endBatch();

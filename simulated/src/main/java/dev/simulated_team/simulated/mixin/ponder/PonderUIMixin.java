@@ -1,7 +1,7 @@
 package dev.simulated_team.simulated.mixin.ponder;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.zurrtum.create.client.catnip.render.DefaultSuperRenderTypeBuffer.Dispatcher;
 import dev.simulated_team.simulated.mixin_interface.ponder.PonderSceneExtension;
 import com.zurrtum.create.client.ponder.foundation.render.SceneRenderer;
 import com.zurrtum.create.client.ponder.foundation.render.SceneRenderState;
@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(SceneRenderer.class)
 public class PonderUIMixin {
     @ModifyConstant(method = "renderScene", constant = @Constant(intValue = 0x66_000000, ordinal = 0))
-    private static int customShadowFade(final int constant, final Minecraft minecraft, final Dispatcher dispatcher,
+    private static int customShadowFade(final int constant, final Minecraft minecraft, final SubmitNodeCollector collector,
                                         final SceneRenderState renderState, final PoseStack poseStack) {
         final int alpha = (int) ((constant >>> 24) * ((PonderSceneExtension) renderState.scene())
                 .simulated$getBasePlateAnimationTimer(renderState.partialTicks()));
@@ -26,7 +26,7 @@ public class PonderUIMixin {
 
     @Inject(method = "renderScene", at = @At(value = "INVOKE",
             target = "Lcom/zurrtum/create/client/catnip/gui/UIRenderHelper;flipForGuiRender(Lcom/mojang/blaze3d/vertex/PoseStack;)V"))
-    private static void shadowTranslate(final Minecraft minecraft, final Dispatcher dispatcher,
+    private static void shadowTranslate(final Minecraft minecraft, final SubmitNodeCollector collector,
                                         final SceneRenderState renderState, final PoseStack poseStack, final CallbackInfo ci) {
         final Vec3 offset = ((PonderSceneExtension) renderState.scene())
                 .simulated$getShadowOffset(renderState.partialTicks());

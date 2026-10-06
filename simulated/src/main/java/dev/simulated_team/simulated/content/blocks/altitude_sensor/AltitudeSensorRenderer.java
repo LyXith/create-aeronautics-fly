@@ -10,7 +10,7 @@ import dev.simulated_team.simulated.util.SimColors;
 import com.zurrtum.create.client.catnip.animation.AnimationTickHolder;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -34,7 +34,7 @@ public class AltitudeSensorRenderer extends SmartBlockEntityRenderer<AltitudeSen
     }
 
     public static void render(final BlockState blockState, final int tickCount, final float dialValue, final float visualHeight,
-                              final PoseStack poseStack, final PoseStack contraptionPose, final Matrix4f worldLight, final MultiBufferSource bufferSource, final int light) {
+                              final PoseStack poseStack, final PoseStack contraptionPose, final Matrix4f worldLight, final SubmitNodeCollector bufferSource, final int light) {
         final Level level = SableDistUtil.getClientLevel();
         final VertexConsumer vb = bufferSource.getBuffer(RenderTypes.cutoutMovingBlock());
         final SuperByteBuffer indicator = CachedBuffers.partial(SimPartialModels.ALTITUDE_SENSOR_INDICATOR, blockState);
@@ -97,7 +97,7 @@ public class AltitudeSensorRenderer extends SmartBlockEntityRenderer<AltitudeSen
     }
 
     @Override
-    protected void renderSafe(final AltitudeSensorBlockEntity be, final float partialTicks, final PoseStack ms, final MultiBufferSource buffer, final int light, final int overlay) {
+    protected void renderSafe(final AltitudeSensorBlockEntity be, final float partialTicks, final PoseStack ms, final SubmitNodeCollector buffer, final int light, final int overlay) {
         super.renderSafe(be, partialTicks, ms, buffer, light, overlay);
 
         render(be.getBlockState(), be.tickCount, be.getValue(), be.getVisualHeight(partialTicks),

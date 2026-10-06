@@ -259,8 +259,8 @@ public class SimAssemblyContraption {
                     SimAssemblyService.INSTANCE.canStickTo(blockState, state);
 
             if (canStick) {
-                if (state.getPistonPushReaction() == PushReaction.PUSH_ONLY
-                        || blockState.getPistonPushReaction() == PushReaction.PUSH_ONLY) {
+                if (state.getPistonPushReaction() == PushReaction.PUSH
+                        || blockState.getPistonPushReaction() == PushReaction.PUSH) {
                     canStick = false;
                 }
 

@@ -9,7 +9,7 @@ import com.zurrtum.create.catnip.data.Iterate;
 import com.zurrtum.create.catnip.math.AngleHelper;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -28,7 +28,7 @@ public class ModulatingLinkedReceiverRenderer extends SmartBlockEntityRenderer<M
     }
 
     @Override
-    protected void renderSafe(final ModulatingLinkedReceiverBlockEntity be, final float partialTicks, final PoseStack ms, final MultiBufferSource bufferSource, final int light, final int overlay) {
+    protected void renderSafe(final ModulatingLinkedReceiverBlockEntity be, final float partialTicks, final PoseStack ms, final SubmitNodeCollector bufferSource, final int light, final int overlay) {
         super.renderSafe(be, partialTicks, ms, bufferSource, light, overlay);
 
         if (VisualizationManager.supportsVisualization(be.getLevel()) && !isRenderingInSubLevel()) {
@@ -60,7 +60,7 @@ public class ModulatingLinkedReceiverRenderer extends SmartBlockEntityRenderer<M
             superBuffer.rotateCentered(AngleHelper.rad(-90 - AngleHelper.verticalAngle(facing)), Direction.EAST);
 
             superBuffer.light(light);
-            superBuffer.renderInto(ms.last(), bufferSource.getBuffer(RenderTypes.solidMovingBlock()));
+            superBuffer.submit(ms, bufferSource);
         }
     }
 }

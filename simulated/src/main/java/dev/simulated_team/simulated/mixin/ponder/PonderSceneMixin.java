@@ -3,7 +3,7 @@ package dev.simulated_team.simulated.mixin.ponder;
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.simulated_team.simulated.mixin_interface.ponder.PonderSceneExtension;
 import com.zurrtum.create.catnip.animation.LerpedFloat;
-import com.zurrtum.create.client.catnip.render.SuperRenderTypeBuffer;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import com.zurrtum.create.client.ponder.foundation.PonderScene;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.SubmitNodeStorage;
@@ -108,7 +108,7 @@ public class PonderSceneMixin implements PonderSceneExtension {
     @Redirect(remap = false, method = "renderScene", at = @At(value = "INVOKE",
             target = "Lcom/zurrtum/create/client/ponder/foundation/PonderScene$SceneCamera;set(FF)V"))
     public void onCameraSet(final PonderScene.SceneCamera instance, final float xRotation, final float yRotation,
-                            final Minecraft minecraft, final SuperRenderTypeBuffer buffer,
+                            final Minecraft minecraft, final SubmitNodeCollector buffer,
                             final SubmitNodeStorage queue, final PoseStack poseStack, final float partialTicks) {
         instance.set(-this.transform.xRotation.getValue(partialTicks),
                 this.transform.yRotation.getValue(partialTicks) + 180);

@@ -10,7 +10,7 @@ import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
 import net.minecraft.util.Util;
 import net.minecraft.util.LightCoordsUtil;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import org.joml.Vector3d;
 import org.joml.Vector4f;
@@ -24,7 +24,7 @@ public class LaserPointerRenderer extends AbstractLaserRenderer<LaserPointerBloc
     }
 
     @Override
-    protected void renderSafe(final LaserPointerBlockEntity blockEntity, final float partialTicks, final PoseStack pose, final MultiBufferSource buffer, final int light, final int overlay) {
+    protected void renderSafe(final LaserPointerBlockEntity blockEntity, final float partialTicks, final PoseStack pose, final SubmitNodeCollector buffer, final int light, final int overlay) {
         final SuperByteBuffer superBuffer;
 
         final Vector4f colors = this.getColors(blockEntity, partialTicks);
@@ -44,7 +44,7 @@ public class LaserPointerRenderer extends AbstractLaserRenderer<LaserPointerBloc
         }
         superBuffer.disableDiffuse();
         superBuffer.color((int) (colors.x * 255), (int) (colors.z * 255), (int) (colors.y * 255), 255);
-        superBuffer.renderInto(pose.last(), buffer.getBuffer(SimRenderTypes.lens()));
+        superBuffer.submit(pose, buffer);
 
         // only draw non-black lasers
         if (!isDarkerThanDark) {

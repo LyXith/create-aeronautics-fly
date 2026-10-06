@@ -15,8 +15,8 @@ import java.lang.reflect.Proxy;
  * without creating a compile-time dependency on Sable's newer client API.
  *
  * <p>The callback hands the renderer a {@link SubmitNodeCollector}, the 26.3
- * replacement for the 1.21 {@code MultiBufferSource}; legacy renderers that still
- * draw through a {@code MultiBufferSource} are adapted through
+ * replacement for the 1.21 {@code SubmitNodeCollector}; legacy renderers that still
+ * draw through a {@code SubmitNodeCollector} are adapted through
  * {@link RenderBridge} so their geometry reaches the submit-node pass.</p>
  */
 public final class SableSubLevelRendererCompat {

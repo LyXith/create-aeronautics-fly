@@ -3,7 +3,7 @@ package dev.simulated_team.simulated.content.blocks.void_anchor;
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.simulated_team.simulated.content.end_sea.EndSeaShadowRenderer;
 import dev.simulated_team.simulated.compat.create.SmartBlockEntityRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.world.phys.Vec3;
 
@@ -30,7 +30,7 @@ public class VoidAnchorRenderer extends SmartBlockEntityRenderer<VoidAnchorBlock
     }
 
     @Override
-    protected void renderSafe(final VoidAnchorBlockEntity blockEntity, final float f, final PoseStack poseStack, final MultiBufferSource multiBufferSource, final int i, final int j) {
+    protected void renderSafe(final VoidAnchorBlockEntity blockEntity, final float f, final PoseStack poseStack, final SubmitNodeCollector multiBufferSource, final int i, final int j) {
         if (EndSeaShadowRenderer.renderingShadowMap())
             return;
 

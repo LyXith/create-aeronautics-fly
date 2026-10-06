@@ -24,13 +24,13 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import com.zurrtum.create.client.catnip.animation.AnimationTickHolder;
 import com.zurrtum.create.catnip.data.Pair;
 import com.zurrtum.create.client.catnip.outliner.LineOutline;
-import com.zurrtum.create.client.catnip.render.DefaultSuperRenderTypeBuffer;
-import com.zurrtum.create.client.catnip.render.SuperRenderTypeBuffer;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.Camera;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -356,9 +356,9 @@ public class PhysicsStaffClientHandler {
         }
     }
 
-    public void onRender(final PoseStack ms, final MultiBufferSource worldBuffer) {
+    public void onRender(final PoseStack ms, final SubmitNodeCollector worldBuffer) {
         final boolean shadersActive = OptionalShaderMods.isShaderPackActive();
-        final SuperRenderTypeBuffer legacyBuffer = shadersActive ? null : DefaultSuperRenderTypeBuffer.getInstance();
+        final SubmitNodeCollector legacyBuffer = shadersActive ? null : DefaultSuperRenderTypeBuffer.getInstance();
         final VertexConsumer shaderBuffer = shadersActive ? worldBuffer.getBuffer(SimRenderTypes.staffOverlay()) : null;
         final float pt = AnimationTickHolder.getPartialTicks();
         final Minecraft client = Minecraft.getInstance();
@@ -523,7 +523,7 @@ public class PhysicsStaffClientHandler {
             this.cubeScale = this.extension;
         }
 
-        private void render(final Vec3 start, final Vec3 end, final PoseStack ms, final SuperRenderTypeBuffer buffer, final Vec3 camera, final float pt) {
+        private void render(final Vec3 start, final Vec3 end, final PoseStack ms, final SubmitNodeCollector buffer, final Vec3 camera, final float pt) {
             final Vec3 relative = end.subtract(start);
             this.length = relative.length();
 

@@ -8,7 +8,7 @@ import com.zurrtum.create.catnip.math.AngleHelper;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.SubmitNodeCollector;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -55,7 +55,7 @@ public class RedstoneInductorRenderer extends ColoredOverlayBlockEntityRenderer<
     }
 
     public static void renderInSubLevel(final RedstoneInductorBlockEntity be, final float partialTicks,
-                                        final PoseStack poseStack, final MultiBufferSource bufferSource,
+                                        final PoseStack poseStack, final SubmitNodeCollector bufferSource,
                                         final int light, final int overlay) {
         final Direction facing = be.getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING);
         CachedBuffers.partial(SimPartialModels.REDSTONE_INDUCTOR_INDICATOR, be.getBlockState())
@@ -63,7 +63,7 @@ public class RedstoneInductorRenderer extends ColoredOverlayBlockEntityRenderer<
                 .rotateYDegrees(AngleHelper.horizontalAngle(facing))
                 .color(getIndicatorColor(be, partialTicks))
                 .light(light)
-                .renderInto(poseStack.last(), bufferSource.getBuffer(RenderTypes.solidMovingBlock()));
+                .submit(poseStack, bufferSource);
     }
 
     private static int getIndicatorColor(final RedstoneInductorBlockEntity be, final float partialTicks) {

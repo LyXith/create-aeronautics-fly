@@ -1,6 +1,5 @@
 package dev.simulated_team.simulated.content.blocks.redstone.redstone_accumulator;
 
-import com.mojang.serialization.MapCodec;
 import com.zurrtum.create.content.redstone.diodes.AbstractDiodeBlock;
 import com.zurrtum.create.foundation.block.IBE;
 import dev.simulated_team.simulated.index.SimBlockEntityTypes;
@@ -34,7 +33,6 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 public class RedstoneAccumulatorBlock extends AbstractDiodeBlock implements IBE<RedstoneAccumulatorBlockEntity>, CommonRedstoneBlock {
-    public static final MapCodec<RedstoneAccumulatorBlock> CODEC = simpleCodec(RedstoneAccumulatorBlock::new);
     public static BooleanProperty POWERING = BooleanProperty.create("powering");
     public static BooleanProperty SIDE_POWERED = BooleanProperty.create("side_powered");
     public static BooleanProperty INVERTED = BlockStateProperties.INVERTED;
@@ -47,11 +45,6 @@ public class RedstoneAccumulatorBlock extends AbstractDiodeBlock implements IBE<
                 .setValue(POWERING, false)
                 .setValue(INVERTED, false)
         );
-    }
-
-    @Override
-    protected MapCodec<? extends DiodeBlock> codec() {
-        return CODEC;
     }
 
     @Override

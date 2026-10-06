@@ -12,9 +12,9 @@ import dev.simulated_team.simulated.compat.create.RenderBridge;
 import dev.simulated_team.simulated.content.physics_staff.OptionalShaderMods;
 import dev.simulated_team.simulated.index.SimRenderTypes;
 import com.zurrtum.create.catnip.data.Couple;
-import com.zurrtum.create.client.catnip.render.SuperRenderTypeBuffer;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.util.LightCoordsUtil;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -32,7 +32,7 @@ public abstract class AbstractLaserRenderer<T extends AbstractLaserBlockEntity> 
     }
 
     @Override
-    protected void renderSafe(final T blockEntity, final float partialTicks, final PoseStack pose, final MultiBufferSource buffer, final int light, final int overlay) {
+    protected void renderSafe(final T blockEntity, final float partialTicks, final PoseStack pose, final SubmitNodeCollector buffer, final int light, final int overlay) {
         super.renderSafe(blockEntity, partialTicks, pose, buffer, light, overlay);
 
         final LaserBehaviour laser = blockEntity.getAllBehaviours().stream().filter(behaviour -> behaviour instanceof LaserBehaviour).map(behaviour -> (LaserBehaviour) behaviour).findFirst().orElse(null);
@@ -97,7 +97,7 @@ public abstract class AbstractLaserRenderer<T extends AbstractLaserBlockEntity> 
         pose.translate(-0.5, -0.5, 0.0);
     }
 
-    protected void createLaser(final Vector4f color, final PoseStack pose, final MultiBufferSource buffer, final float maxLength, final float length) {
+    protected void createLaser(final Vector4f color, final PoseStack pose, final SubmitNodeCollector buffer, final float maxLength, final float length) {
         if (length <= 0 || maxLength <= 0) {
             return;
         }
@@ -165,7 +165,7 @@ public abstract class AbstractLaserRenderer<T extends AbstractLaserBlockEntity> 
 
         final RenderType renderType = SimRenderTypes.laser();
         final VertexConsumer builder;
-        if (buffer instanceof final SuperRenderTypeBuffer superRenderTypeBuffer) {
+        if (buffer instanceof final SubmitNodeCollector superRenderTypeBuffer) {
             builder = superRenderTypeBuffer.getLateBuffer(renderType);
         } else {
             builder = buffer.getBuffer(renderType);

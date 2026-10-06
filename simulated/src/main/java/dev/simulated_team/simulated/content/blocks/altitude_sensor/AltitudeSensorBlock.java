@@ -1,6 +1,5 @@
 package dev.simulated_team.simulated.content.blocks.altitude_sensor;
 
-import com.mojang.serialization.MapCodec;
 import com.zurrtum.create.AllItems;
 import com.zurrtum.create.content.equipment.wrench.IWrenchable;
 import com.zurrtum.create.foundation.block.IBE;
@@ -39,15 +38,9 @@ import static net.minecraft.world.level.block.state.properties.BlockStatePropert
 
 public class AltitudeSensorBlock extends FaceAttachedHorizontalDirectionalBlock implements IBE<AltitudeSensorBlockEntity>, IWrenchable, CommonRedstoneBlock {
     public static final EnumProperty<FaceType> DIAL = EnumProperty.create("dial", FaceType.class);
-    public static final MapCodec<AltitudeSensorBlock> CODEC = simpleCodec(AltitudeSensorBlock::new);
 
     public AltitudeSensorBlock(final Properties pProperties) {
         super(pProperties);
-    }
-
-    @Override
-    protected @NotNull MapCodec<? extends FaceAttachedHorizontalDirectionalBlock> codec() {
-        return CODEC;
     }
 
     @Nullable

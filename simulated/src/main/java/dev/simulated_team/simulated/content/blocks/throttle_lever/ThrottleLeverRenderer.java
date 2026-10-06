@@ -15,7 +15,7 @@ import com.zurrtum.create.catnip.math.AngleHelper;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -54,7 +54,7 @@ public class ThrottleLeverRenderer extends SafeBlockEntityRenderer<ThrottleLever
     }
 
     @Override
-    protected void renderSafe(final ThrottleLeverBlockEntity be, final float partialTicks, final PoseStack ms, final MultiBufferSource bufferSource,
+    protected void renderSafe(final ThrottleLeverBlockEntity be, final float partialTicks, final PoseStack ms, final SubmitNodeCollector bufferSource,
                               final int light, final int overlay) {
         final BlockState leverState = be.getBlockState();
         final float state = be.clientAngle.getValue(partialTicks);
@@ -105,7 +105,7 @@ public class ThrottleLeverRenderer extends SafeBlockEntityRenderer<ThrottleLever
         }
     }
 
-    private static void renderOutline(final ThrottleLeverBlockEntity be, final PoseStack ms, final MultiBufferSource bufferSource, final float angle) {
+    private static void renderOutline(final ThrottleLeverBlockEntity be, final PoseStack ms, final SubmitNodeCollector bufferSource, final float angle) {
         final VertexConsumer consumer = bufferSource.getBuffer(RenderTypes.lines());
         final VoxelShape leverShape = SimBlocks.THROTTLE_LEVER.get().getHandleShape(SimBlocks.THROTTLE_LEVER.getDefaultState());
 

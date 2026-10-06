@@ -9,7 +9,7 @@ import com.zurrtum.create.client.catnip.gui.element.DelegatedStencilElement;
 import com.zurrtum.create.catnip.theme.Color;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.util.LightCoordsUtil;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -66,7 +66,7 @@ public class SimIcons extends AllIcons {
         graphics.blit(RenderPipelines.GUI_TEXTURED, ICON_ATLAS, x, y, this.iconX, this.iconY, 16, 16, 64, 64);
     }
 
-    public void render(final PoseStack ms, final MultiBufferSource buffer, final int color) {
+    public void render(final PoseStack ms, final SubmitNodeCollector buffer, final int color) {
         final VertexConsumer builder = buffer.getBuffer(RenderTypes.text(ICON_ATLAS));
         final Matrix4f matrix = ms.last().pose();
         final Color rgb = new Color(color);

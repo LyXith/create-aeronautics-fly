@@ -331,7 +331,7 @@ public class SimulatedClient {
                 .getBlockEntityRenderDispatcher()
                 .getRenderer(blockEntity);
         if (registeredRenderer instanceof final SmartBlockEntityRenderer<?> renderer) {
-            // Legacy renderers still draw through a MultiBufferSource; RenderBridge
+            // Legacy renderers still draw through a SubmitNodeCollector; RenderBridge
             // discovers the render layers they ask for and submits each one through
             // the 26.3 submit-node path so nothing is dropped.
             RenderBridge.submit(poseStack, collector, (legacyPose, buffers) ->

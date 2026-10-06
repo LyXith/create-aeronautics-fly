@@ -1,6 +1,5 @@
 package dev.simulated_team.simulated.content.blocks.docking_connector;
 
-import com.mojang.serialization.MapCodec;
 import dev.simulated_team.simulated.index.SimBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -25,7 +24,6 @@ import org.jetbrains.annotations.Nullable;
 
 public class PairedDockingConnectorBlock extends DirectionalBlock {
 
-    public static final MapCodec<PairedDockingConnectorBlock> CODEC = simpleCodec(PairedDockingConnectorBlock::new);
 
     private static final VoxelShape[] SHAPES = {
             box(0.0, -16.0, 0.0, 16.0, 16.0, 16.0),
@@ -130,8 +128,4 @@ public class PairedDockingConnectorBlock extends DirectionalBlock {
         return SimBlocks.DOCKING_CONNECTOR.asStack();
     }
 
-    @Override
-    protected @NotNull MapCodec<? extends DirectionalBlock> codec() {
-        return CODEC;
-    }
 }

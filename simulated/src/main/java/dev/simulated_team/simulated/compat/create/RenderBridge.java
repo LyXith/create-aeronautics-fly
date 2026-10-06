@@ -2,7 +2,7 @@ package dev.simulated_team.simulated.compat.create;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 
@@ -72,7 +72,7 @@ public final class RenderBridge {
         return ACTIVE_LAYER.get() == layer;
     }
 
-    public static void submit(final PoseStack poseStack, final SubmitNodeCollector queue, final BiConsumer<PoseStack, MultiBufferSource> renderer) {
+    public static void submit(final PoseStack poseStack, final SubmitNodeCollector queue, final BiConsumer<PoseStack, SubmitNodeCollector> renderer) {
         final Set<RenderType> layers = new LinkedHashSet<>();
         DISCOVERING_LAYERS.set(true);
         try {

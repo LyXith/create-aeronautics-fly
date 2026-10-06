@@ -11,7 +11,7 @@ import com.zurrtum.create.catnip.animation.LerpedFloat;
 import com.zurrtum.create.catnip.math.AngleHelper;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -60,7 +60,7 @@ public class LinkedTypewriterRenderer extends SmartBlockEntityRenderer<LinkedTyp
     }
 
     @Override
-    protected void renderSafe(final LinkedTypewriterBlockEntity be, final float partialTicks, final PoseStack ms, final MultiBufferSource buffer,
+    protected void renderSafe(final LinkedTypewriterBlockEntity be, final float partialTicks, final PoseStack ms, final SubmitNodeCollector buffer,
                               int light, final int overlay) {
         super.renderSafe(be, partialTicks, ms, buffer, light, overlay);
 

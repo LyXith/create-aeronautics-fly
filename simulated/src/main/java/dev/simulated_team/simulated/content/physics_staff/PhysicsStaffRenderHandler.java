@@ -15,7 +15,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.util.LightCoordsUtil;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
@@ -67,7 +67,7 @@ public class PhysicsStaffRenderHandler {
     /**
      * Renders the selection / hovering box for the staff
      */
-    public static void renderSelectionBox(final MultiBufferSource bufferSource, final PoseStack ps, final Camera camera) {
+    public static void renderSelectionBox(final SubmitNodeCollector bufferSource, final PoseStack ps, final Camera camera) {
         if (OptionalShaderMods.isShaderPackActive()) {
             return;
         }
@@ -79,7 +79,7 @@ public class PhysicsStaffRenderHandler {
      * Iris composites the shader-pack frame after the normal world callbacks. Render the staff's
      * world-space overlay after that composite so it is not overwritten by the final shader pass.
      */
-    public static boolean renderAfterShaderComposite(final MultiBufferSource bufferSource,
+    public static boolean renderAfterShaderComposite(final SubmitNodeCollector bufferSource,
                                                      final PoseStack ps, final Camera camera) {
         if (!OptionalShaderMods.isShaderPackActive()) {
             return false;
@@ -89,7 +89,7 @@ public class PhysicsStaffRenderHandler {
         return true;
     }
 
-    private static void renderSelectionBoxContents(final MultiBufferSource bufferSource, final PoseStack ps,
+    private static void renderSelectionBoxContents(final SubmitNodeCollector bufferSource, final PoseStack ps,
                                                    final Camera camera) {
 
         final Minecraft minecraft = Minecraft.getInstance();
@@ -166,7 +166,7 @@ public class PhysicsStaffRenderHandler {
         hoverSubLevel = clientSubLevel;
     }
 
-    private static void renderTransformedSelectionBox(final MultiBufferSource bufferSource, final PoseStack ps,
+    private static void renderTransformedSelectionBox(final SubmitNodeCollector bufferSource, final PoseStack ps,
                                                       final Vec3 cameraPos, final ClientSubLevel subLevel,
                                                       final BlockPos blockPos, final float partialTicks) {
         final double minX = blockPos.getX();
@@ -264,7 +264,7 @@ public class PhysicsStaffRenderHandler {
     /**
      * Renders all the locks our client is aware about
      */
-    private static void renderAllLocks(final MultiBufferSource bufferSource, final PoseStack ps, final Level level, final Vec3 cameraPos) {
+    private static void renderAllLocks(final SubmitNodeCollector bufferSource, final PoseStack ps, final Level level, final Vec3 cameraPos) {
         final Minecraft client = Minecraft.getInstance();
         final List<UUID> locks = SimulatedClient.PHYSICS_STAFF_CLIENT_HANDLER.getLocks(level);
         final SubLevelContainer container = SubLevelContainer.getContainer(level);

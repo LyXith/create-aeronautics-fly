@@ -1,7 +1,7 @@
 package dev.simulated_team.simulated.compat.create;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -56,7 +56,7 @@ public class SmartBlockEntityRenderer<T extends net.minecraft.world.level.block.
     }
 
     protected void renderSafe(final T blockEntity, final float partialTicks, final PoseStack poseStack,
-                              final MultiBufferSource bufferSource, final int light, final int overlay) {
+                              final SubmitNodeCollector bufferSource, final int light, final int overlay) {
     }
 
     /**
@@ -64,7 +64,7 @@ public class SmartBlockEntityRenderer<T extends net.minecraft.world.level.block.
      * immediate moving-sublevel renderer.
      */
     public final void renderExplicitlyInSubLevel(final T blockEntity, final float partialTicks, final PoseStack poseStack,
-                                                 final MultiBufferSource bufferSource, final int light, final int overlay) {
+                                                 final SubmitNodeCollector bufferSource, final int light, final int overlay) {
         final boolean previous = renderingInSubLevel;
         renderingInSubLevel = true;
         try {

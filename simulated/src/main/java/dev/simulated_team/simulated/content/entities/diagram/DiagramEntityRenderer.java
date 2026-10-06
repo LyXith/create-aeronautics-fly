@@ -5,7 +5,7 @@ import com.zurrtum.create.client.flywheel.lib.model.baked.PartialModel;
 import dev.simulated_team.simulated.index.SimPartialModels;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.Sheets;
 import dev.simulated_team.simulated.compat.minecraft.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -19,7 +19,7 @@ public class DiagramEntityRenderer extends EntityRenderer<DiagramEntity> {
 	}
 
 	@Override
-	public void render(final DiagramEntity entity, final float yaw, final float pt, final PoseStack ms, final MultiBufferSource buffer,
+	public void render(final DiagramEntity entity, final float yaw, final float pt, final PoseStack ms, final SubmitNodeCollector buffer,
                        final int light) {
 		final PartialModel partialModel = entity.size == 3 ? SimPartialModels.CONTRAPTION_DIAGRAM_3x3
 			: entity.size == 2 ? SimPartialModels.CONTRAPTION_DIAGRAM_2x2 : SimPartialModels.CONTRAPTION_DIAGRAM_1x1;
@@ -33,7 +33,7 @@ public class DiagramEntityRenderer extends EntityRenderer<DiagramEntity> {
 
 		sbb.disableDiffuse()
 			.light(light)
-			.renderInto(ms.last(), buffer.getBuffer(Sheets.cutoutBlockItemSheet()));
+			.submit(ms, buffer);
 		super.render(entity, yaw, pt, ms, buffer, light);
 	}
 

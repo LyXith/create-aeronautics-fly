@@ -9,7 +9,7 @@ import dev.simulated_team.simulated.index.SimPartialModels;
 import com.zurrtum.create.catnip.math.AngleHelper;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -23,7 +23,7 @@ public class TorsionSpringRenderer extends KineticBlockEntityRenderer<TorsionSpr
     }
 
     @Override
-    protected void renderSafe(final TorsionSpringBlockEntity be, final float partialTicks, final PoseStack ms, final MultiBufferSource buffer, final int light, final int overlay) {
+    protected void renderSafe(final TorsionSpringBlockEntity be, final float partialTicks, final PoseStack ms, final SubmitNodeCollector buffer, final int light, final int overlay) {
         if (VisualizationManager.supportsVisualization(be.getLevel()) && !isRenderingInSubLevel()) {
             return;
         }
@@ -39,11 +39,11 @@ public class TorsionSpringRenderer extends KineticBlockEntityRenderer<TorsionSpr
             spring.rotateCentered(AngleHelper.rad(AngleHelper.horizontalAngle(facing.getOpposite())), Direction.UP);
         }
         spring.rotateCentered(AngleHelper.rad(-90 - AngleHelper.verticalAngle(facing)), Direction.EAST);
-        spring.renderInto(ms.last(), buffer.getBuffer(RenderTypes.solidMovingBlock()));
+        spring.submit(ms, buffer);
 
         final SuperByteBuffer shaftOut = CachedBuffers.partialFacing(AllPartialModels.SHAFT_HALF, be.getBlockState(), facing);
         kineticRotationTransform(shaftOut, be, facing.getAxis(), getAngleForBe(be.getExtraKinetics(), be.getBlockPos(), facing.getAxis()), light);
-        shaftOut.renderInto(ms.last(), buffer.getBuffer(RenderTypes.solidMovingBlock()));
+        shaftOut.submit(ms, buffer);
     }
 
     @Override

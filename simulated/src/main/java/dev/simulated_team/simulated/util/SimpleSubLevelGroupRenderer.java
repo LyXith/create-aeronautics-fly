@@ -30,7 +30,7 @@ import java.util.Collection;
 /**
  * Renders a chain of sub-levels into an off-screen target for the diagram screen.
  *
- * <p>26.3 port: the old {@code MultiBufferSource} + {@code BlockRenderDispatcher}
+ * <p>26.3 port: the old {@code SubmitNodeCollector} + {@code BlockRenderDispatcher}
  * pair is gone. Models are now registered on a {@link SubmitNodeStorage}, which
  * {@link AdvancedFbo.Pass} feeds through the vanilla feature dispatcher and executes
  * in a {@code RenderPass} bound to the target's attachments.

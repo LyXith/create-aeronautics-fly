@@ -7,7 +7,7 @@ import dev.simulated_team.simulated.index.SimRenderTypes;
 import com.zurrtum.create.catnip.math.AngleHelper;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
@@ -21,7 +21,7 @@ public class RedstoneAccumulatorRenderer extends SmartBlockEntityRenderer<Redsto
     }
 
     @Override
-    protected void renderSafe(final RedstoneAccumulatorBlockEntity be, final float partialTicks, final PoseStack ms, final MultiBufferSource buffer, final int light, final int overlay) {
+    protected void renderSafe(final RedstoneAccumulatorBlockEntity be, final float partialTicks, final PoseStack ms, final SubmitNodeCollector buffer, final int light, final int overlay) {
         final SuperByteBuffer render = CachedBuffers.partial(SimPartialModels.REDSTONE_ACCUMULATOR_DIODE, be.getBlockState())
                 .color(255, 255, 255, this.getLitAmount(be, partialTicks));
 
@@ -29,7 +29,7 @@ public class RedstoneAccumulatorRenderer extends SmartBlockEntityRenderer<Redsto
         render.light(light);
         render.translate(0.5, 0, 0.5);
         render.rotateYDegrees(AngleHelper.horizontalAngle(facing)).pushPose();
-        render.renderInto(ms.last(), buffer.getBuffer(DIODE_RENDER_TYPE));
+        render.submit(ms, buffer);
     }
 
     private int getLitAmount(final RedstoneAccumulatorBlockEntity be, final float partialTicks) {

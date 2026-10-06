@@ -6,7 +6,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.simulated_team.simulated.content.physics_staff.OptionalShaderMods;
 import dev.simulated_team.simulated.index.SimRenderTypes;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import org.joml.Matrix4f;
 import org.joml.Matrix4fStack;
 
@@ -72,7 +72,7 @@ public final class IrisLaserRenderQueue {
         collectingWorldFrame = false;
     }
 
-    public static void drawAfterShaderComposite(final MultiBufferSource.BufferSource buffer) {
+    public static void drawAfterShaderComposite(final SubmitNodeCollector buffer) {
         final Matrix4fStack modelViewStack = RenderSystem.getModelViewStack();
         final GpuBufferSlice previousProjection = RenderSystem.getProjectionMatrixBuffer();
         final ProjectionType previousProjectionType = RenderSystem.getProjectionType();

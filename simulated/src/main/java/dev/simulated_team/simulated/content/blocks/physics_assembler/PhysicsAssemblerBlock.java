@@ -1,6 +1,5 @@
 package dev.simulated_team.simulated.content.blocks.physics_assembler;
 
-import com.mojang.serialization.MapCodec;
 import com.zurrtum.create.content.equipment.wrench.IWrenchable;
 import com.zurrtum.create.content.kinetics.deployer.DeployerFakePlayer;
 import com.zurrtum.create.foundation.block.IBE;
@@ -28,7 +27,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
 public class PhysicsAssemblerBlock extends FaceAttachedHorizontalDirectionalBlock implements IBE<PhysicsAssemblerBlockEntity>, IWrenchable, BlockSubLevelAssemblyListener {
-    public static final MapCodec<PhysicsAssemblerBlock> CODEC = simpleCodec(PhysicsAssemblerBlock::new);
 
     public PhysicsAssemblerBlock(final Properties properties) {
         super(properties);
@@ -42,11 +40,6 @@ public class PhysicsAssemblerBlock extends FaceAttachedHorizontalDirectionalBloc
     public static boolean canAttach(final LevelReader reader, final BlockPos pos, final Direction direction) {
         final BlockPos blockpos = pos.relative(direction);
         return !reader.getBlockState(blockpos).getBlockSupportShape(reader, pos).getFaceShape(direction.getOpposite()).isEmpty();
-    }
-
-    @Override
-    protected MapCodec<? extends FaceAttachedHorizontalDirectionalBlock> codec() {
-        return CODEC;
     }
 
     @Override

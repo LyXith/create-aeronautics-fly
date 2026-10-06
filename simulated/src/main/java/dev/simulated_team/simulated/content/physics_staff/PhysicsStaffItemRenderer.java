@@ -16,7 +16,7 @@ import dev.simulated_team.simulated.util.SimMathUtils;
 import com.zurrtum.create.client.catnip.animation.AnimationTickHolder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.LightCoordsUtil;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
@@ -48,7 +48,7 @@ public class PhysicsStaffItemRenderer extends CustomRenderedItemModelRenderer {
 
     @Override
     protected void render(final ItemStack stack, final CustomRenderedItemModel model, final PartialItemModelRenderer renderer, final ItemDisplayContext context, final PoseStack ms,
-                          final MultiBufferSource buffer, final int light, final int overlay) {
+                          final SubmitNodeCollector buffer, final int light, final int overlay) {
         float openAmount = 0;
         float cubeScale = 0;
         final PhysicsStaffClientHandler clientHandler = SimulatedClient.PHYSICS_STAFF_CLIENT_HANDLER;

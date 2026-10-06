@@ -3,7 +3,6 @@ package dev.simulated_team.simulated.content.blocks.redstone.linked_typewriter;
 import net.minecraft.util.Prediction;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.serialization.MapCodec;
 import com.zurrtum.create.AllItems;
 import com.zurrtum.create.content.equipment.wrench.IWrenchable;
 import com.zurrtum.create.client.content.redstone.link.controller.LinkedControllerClientHandler;
@@ -54,17 +53,11 @@ import java.util.UUID;
 
 public class LinkedTypewriterBlock extends HorizontalDirectionalBlock implements IBE<LinkedTypewriterBlockEntity>, IWrenchable {
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
-    public static final MapCodec<LinkedTypewriterBlock> CODEC = simpleCodec(LinkedTypewriterBlock::new);
     public static final net.minecraft.world.level.block.state.properties.Property<Direction> HORIZONTAL_FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     public LinkedTypewriterBlock(final Properties properties) {
         super(properties);
         this.registerDefaultState(this.defaultBlockState().setValue(POWERED, false));
-    }
-
-    @Override
-    protected MapCodec<? extends HorizontalDirectionalBlock> codec() {
-        return CODEC;
     }
 
     @Override

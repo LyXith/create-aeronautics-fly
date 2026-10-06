@@ -1,7 +1,6 @@
 package dev.simulated_team.simulated.content.blocks.lasers.laser_pointer;
 import net.minecraft.core.component.DataComponents;
 
-import com.mojang.serialization.MapCodec;
 import com.zurrtum.create.content.equipment.wrench.IWrenchable;
 import com.zurrtum.create.content.kinetics.base.KineticBlockEntity;
 import com.zurrtum.create.foundation.block.IBE;
@@ -42,7 +41,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class LaserPointerBlock extends DirectionalBlock implements IBE<LaserPointerBlockEntity>, IWrenchable {
-    public static final MapCodec<LaserPointerBlock> CODEC = simpleCodec(LaserPointerBlock::new);
 
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
     public static final BooleanProperty INVERTED = BlockStateProperties.INVERTED;
@@ -50,11 +48,6 @@ public class LaserPointerBlock extends DirectionalBlock implements IBE<LaserPoin
     public LaserPointerBlock(final Properties properties) {
         super(properties);
         this.registerDefaultState(this.defaultBlockState().setValue(POWERED, false).setValue(INVERTED, false));
-    }
-
-    @Override
-    protected MapCodec<? extends DirectionalBlock> codec() {
-        return CODEC;
     }
 
     @Override

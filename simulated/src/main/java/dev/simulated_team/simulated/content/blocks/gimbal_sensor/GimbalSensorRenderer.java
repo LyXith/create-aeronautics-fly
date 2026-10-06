@@ -11,7 +11,7 @@ import dev.simulated_team.simulated.util.SimColors;
 import dev.simulated_team.simulated.util.SimDirectionUtil;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -26,7 +26,7 @@ public class GimbalSensorRenderer extends SafeBlockEntityRenderer<GimbalSensorBl
     }
 
     @Override
-    protected void renderSafe(final GimbalSensorBlockEntity be, final float partialTicks, final PoseStack ms, final MultiBufferSource buffer, final int light, final int overlay) {
+    protected void renderSafe(final GimbalSensorBlockEntity be, final float partialTicks, final PoseStack ms, final SubmitNodeCollector buffer, final int light, final int overlay) {
         FilteringRenderer.renderOnBlockEntity(be, partialTicks, ms, buffer, light, overlay);
 
         if (VisualizationManager.supportsVisualization(be.getLevel())) {
@@ -41,13 +41,13 @@ public class GimbalSensorRenderer extends SafeBlockEntityRenderer<GimbalSensorBl
      * fallback. The baked block model already supplies the casing.
      */
     public static void renderInSubLevel(final GimbalSensorBlockEntity be, final float partialTicks, final PoseStack ms,
-                                        final MultiBufferSource buffer, final int light, final int overlay) {
+                                        final SubmitNodeCollector buffer, final int light, final int overlay) {
         FilteringRenderer.renderOnBlockEntity(be, partialTicks, ms, buffer, light, overlay);
         renderAnimatedParts(be, partialTicks, ms, buffer, light);
     }
 
     private static void renderAnimatedParts(final GimbalSensorBlockEntity be, final float partialTicks,
-                                            final PoseStack ms, final MultiBufferSource buffer, final int light) {
+                                            final PoseStack ms, final SubmitNodeCollector buffer, final int light) {
         final VertexConsumer vb = buffer.getBuffer(RenderTypes.cutoutMovingBlock());
         final Quaternionf Q = be.getBaseQuaternion();
 
@@ -65,7 +65,7 @@ public class GimbalSensorRenderer extends SafeBlockEntityRenderer<GimbalSensorBl
             // int color = (signalStrength > 0) ? 0xCD0000 : 0x630002; // Digital indicators (on/off only)
             indicator.light(light)
                     .color(color)
-                    .renderInto(ms.last(), buffer.getBuffer(RenderTypes.cutoutMovingBlock()));
+                    .submit(ms, buffer);
 
             ms.popPose();
         }

@@ -3,7 +3,7 @@ package dev.simulated_team.simulated.mixin.shader_compat;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.zurrtum.create.client.catnip.render.SuperRenderTypeBuffer;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import com.zurrtum.create.client.flywheel.lib.util.ShadersModHelper;
 import dev.simulated_team.simulated.index.SimRenderTypes;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
@@ -25,10 +25,10 @@ public class GhostBlockRendererMixin {
             method = "render",
             at = @At(
                     value = "INVOKE",
-                    target = "Lcom/zurrtum/create/client/catnip/render/SuperRenderTypeBuffer;getEarlyBuffer(Lnet/minecraft/client/renderer/chunk/ChunkSectionLayer;)Lcom/mojang/blaze3d/vertex/VertexConsumer;"
+                    target = "Lcom/zurrtum/create/client/catnip/render/SubmitNodeCollector;getEarlyBuffer(Lnet/minecraft/client/renderer/chunk/ChunkSectionLayer;)Lcom/mojang/blaze3d/vertex/VertexConsumer;"
             )
     )
-    private VertexConsumer simulated$useShaderCompatibleGhostLayer(final SuperRenderTypeBuffer buffer,
+    private VertexConsumer simulated$useShaderCompatibleGhostLayer(final SubmitNodeCollector buffer,
                                                                     final ChunkSectionLayer layer,
                                                                     final Operation<VertexConsumer> original) {
         if (layer == ChunkSectionLayer.TRANSLUCENT && ShadersModHelper.isShaderPackInUse()) {

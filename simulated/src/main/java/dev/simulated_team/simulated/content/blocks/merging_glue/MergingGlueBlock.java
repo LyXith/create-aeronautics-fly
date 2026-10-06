@@ -1,6 +1,5 @@
 package dev.simulated_team.simulated.content.blocks.merging_glue;
 
-import com.mojang.serialization.MapCodec;
 import com.zurrtum.create.foundation.block.IBE;
 import dev.simulated_team.simulated.index.SimBlockEntityTypes;
 import dev.simulated_team.simulated.index.SimBlockShapes;
@@ -20,7 +19,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
 public class MergingGlueBlock extends DirectionalBlock implements IBE<MergingGlueBlockEntity> {
-    public static final MapCodec<MergingGlueBlock> CODEC = simpleCodec(MergingGlueBlock::new);
 
     public MergingGlueBlock(final Properties properties) {
         super(properties);
@@ -73,11 +71,6 @@ public class MergingGlueBlock extends DirectionalBlock implements IBE<MergingGlu
     protected void createBlockStateDefinition(final StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(FACING);
-    }
-
-    @Override
-    protected @NotNull MapCodec<? extends DirectionalBlock> codec() {
-        return CODEC;
     }
 
     @Override

@@ -13,7 +13,7 @@ import dev.simulated_team.simulated.util.SimDirectionUtil;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -29,7 +29,7 @@ public class NavTableRenderer extends SmartBlockEntityRenderer<NavTableBlockEnti
     }
 
     @Override
-    protected void renderSafe(final NavTableBlockEntity navBE, final float partialTicks, final PoseStack ms, final MultiBufferSource buffer, final int light, final int overlay) {
+    protected void renderSafe(final NavTableBlockEntity navBE, final float partialTicks, final PoseStack ms, final SubmitNodeCollector buffer, final int light, final int overlay) {
         super.renderSafe(navBE, partialTicks, ms, buffer, light, overlay);
 
         final ItemStack heldItem = navBE.getHeldItem();
@@ -60,7 +60,7 @@ public class NavTableRenderer extends SmartBlockEntityRenderer<NavTableBlockEnti
                 final int color = SimColors.redstone(signalStrength); // Analog indicators (mixes between colors smoothly)
                 indicator.light(light)
                         .color(color)
-                        .renderInto(ms.last(), buffer.getBuffer(RenderTypes.cutoutMovingBlock()));
+                        .submit(ms, buffer);
 
                 ms.popPose();
             }
@@ -72,7 +72,7 @@ public class NavTableRenderer extends SmartBlockEntityRenderer<NavTableBlockEnti
             final SuperByteBuffer pointer = CachedBuffers.partial(SimPartialModels.NAV_TABLE_POINTER, navState);
 
             pointer.rotateY(arrowAngle);
-            pointer.light(light).renderInto(ms.last(), buffer.getBuffer(RenderTypes.cutoutMovingBlock()));
+            pointer.light(light).submit(ms, buffer);
             ms.popPose();
         }
 

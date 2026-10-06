@@ -2,7 +2,7 @@ package dev.simulated_team.simulated.content.blocks.lasers;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.simulated_team.simulated.index.SimRenderTypes;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import org.joml.Matrix4f;
 
 import java.util.ArrayList;
@@ -45,7 +45,7 @@ public final class LateLaserRenderQueue {
         collectingWorldFrame = false;
     }
 
-    public static void drawAfterClouds(final MultiBufferSource.BufferSource buffer) {
+    public static void drawAfterClouds(final SubmitNodeCollector buffer) {
         try {
             if (QUEUED_LASERS.isEmpty()) {
                 return;

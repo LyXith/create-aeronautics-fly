@@ -568,7 +568,7 @@ public class SimBlocks {
                     .properties(properties -> properties
                             .noOcclusion()
                             .noLootTable()
-                            .pushReaction(PushReaction.BLOCK)
+                            .pushReaction(PushReaction.IMMOVEABLE)
                             .forceSolidOff())
                     .register();
 

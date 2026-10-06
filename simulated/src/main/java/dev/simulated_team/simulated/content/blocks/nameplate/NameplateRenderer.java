@@ -7,7 +7,7 @@ import dev.simulated_team.simulated.data.SimLang;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -33,7 +33,7 @@ public class NameplateRenderer extends SafeBlockEntityRenderer<NameplateBlockEnt
     }
 
     @Override
-    public void renderSafe(final NameplateBlockEntity be, final float pPartialTick, final PoseStack ps, final MultiBufferSource pBuffer, int packedLight, final int pPackedOverlay) {
+    public void renderSafe(final NameplateBlockEntity be, final float pPartialTick, final PoseStack ps, final SubmitNodeCollector pBuffer, int packedLight, final int pPackedOverlay) {
         final Font font = Minecraft.getInstance().font;
 
         final BlockState state = be.getBlockState();

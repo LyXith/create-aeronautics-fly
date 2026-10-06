@@ -25,7 +25,7 @@ public class KineticBlockEntityRenderer<T extends KineticBlockEntity> extends Sm
 
     @Override
     protected void renderSafe(final T blockEntity, final float partialTicks, final PoseStack poseStack,
-                              final net.minecraft.client.renderer.MultiBufferSource bufferSource, final int light, final int overlay) {
+                              final net.minecraft.client.renderer.SubmitNodeCollector bufferSource, final int light, final int overlay) {
         final BlockState state = getRenderedBlockState(blockEntity);
         renderRotatingBuffer(blockEntity, getRotatedModel(blockEntity, state), poseStack,
                 bufferSource.getBuffer(ItemBlockRenderTypes.getMovingBlockRenderType(state)), light);

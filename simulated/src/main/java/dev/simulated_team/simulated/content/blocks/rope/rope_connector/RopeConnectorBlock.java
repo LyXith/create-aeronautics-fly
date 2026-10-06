@@ -1,6 +1,5 @@
 package dev.simulated_team.simulated.content.blocks.rope.rope_connector;
 
-import com.mojang.serialization.MapCodec;
 import com.zurrtum.create.api.contraption.BlockMovementChecks;
 import com.zurrtum.create.foundation.block.IBE;
 import com.zurrtum.create.impl.contraption.BlockMovementChecksImpl;
@@ -30,7 +29,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class RopeConnectorBlock extends AbstractDirectionalAxisBlock implements IBE<RopeConnectorBlockEntity>, RopeHolderBlock<RopeConnectorBlockEntity>, BlockSubLevelAssemblyListener, BlockSubLevelCollisionShape {
-    public static final MapCodec<RopeConnectorBlock> CODEC = simpleCodec(RopeConnectorBlock::new);
     private static final DirectionalAxisShaper SHAPE = DirectionalAxisShaper.make(SimBlockShapes.ROPE_CONNECTOR);
     private static final DirectionalAxisShaper PHYSICS_COLLIDER = DirectionalAxisShaper.make(SimBlockShapes.ROPE_CONNECTOR_COLLIDER);
 
@@ -52,11 +50,6 @@ public class RopeConnectorBlock extends AbstractDirectionalAxisBlock implements 
 
     public RopeConnectorBlock(final Properties properties) {
         super(properties);
-    }
-
-    @Override
-    protected MapCodec<? extends DirectionalBlock> codec() {
-        return CODEC;
     }
 
     @Override
