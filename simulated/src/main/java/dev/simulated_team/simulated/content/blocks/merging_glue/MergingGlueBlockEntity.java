@@ -84,7 +84,15 @@ public class MergingGlueBlockEntity extends SmartBlockEntity implements BlockEnt
         if (serverSide && this.isController && this.ageTicks > DURATION + WAIT_ASSEMBLE) {
 
             final SubLevel subLevel = Sable.HELPER.getContaining(this);
-            final SubLevel partnerSubLevel = Sable.HELPER.getContaining(this.level, this.partnerPosition);
+            final SubLevel partnerSubLevel = this.partnerPosition == null ? null : Sable.HELPER.getContaining(this.level, this.partnerPosition);
+
+            if (subLevel == null) {
+                // Our own sub-level is gone (split apart, unloaded, or already assembled
+                // somewhere else). disassembleToPartner would NPE uncasting it, so just
+                // drop the placeholder glue instead of crashing the tick.
+                this.breakGlue();
+                return;
+            }
 
             if (partnerSubLevel instanceof final ServerSubLevel partnerServerSubLevel) {
                 if (partnerServerSubLevel.getMassTracker().getMass() < ((ServerSubLevel) subLevel).getMassTracker().getMass()) {

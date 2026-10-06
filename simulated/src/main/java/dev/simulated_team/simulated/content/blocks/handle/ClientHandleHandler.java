@@ -34,6 +34,17 @@ public class ClientHandleHandler extends BlockHoldInteraction {
 
     @Override
     public void startHold(final Level level, final Player player, final BlockPos blockPos) {
+        // Holding right click re-fires HandleBlock.useItemOn every four ticks (vanilla
+        // startUseItem sets rightClickDelay = 4). Re-entering would route through
+        // HoldInteractionManager.start(), which stop()s the already-running interaction
+        // before starting it again. That re-sends the remove/add packet pair to the server
+        // and zeroes desiredRange *after* it was recomputed below, so the grab joint is
+        // rebuilt with range -1 every four ticks and the handle animation visibly restarts.
+        if (this.isActive() && blockPos.equals(this.getInteractionPos())) {
+            this.movingSubLevel = player.isShiftKeyDown();
+            return;
+        }
+
         final InteractionHand hand = this.getHandOrNull(player);
 
         if (hand == null) return;

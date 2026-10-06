@@ -70,16 +70,34 @@ public record PlaceMergingGluePacket(BlockPos parentPos, BlockPos childPos, Dire
         final MergingGlueBlockEntity partner = this.addMergingGlue(level, childRelative, parentRelative, this.childFacing(), false, (float) distanceSquared);
 
         if (controller == null || partner == null) {
-            level.setBlockAndUpdate(parentRelative, Blocks.AIR.defaultBlockState());
-            level.setBlockAndUpdate(childRelative, Blocks.AIR.defaultBlockState());
+            this.clearGlue(level, parentRelative, childRelative);
             return;
         }
 
         player.awardStat(Stats.ITEM_USED.get(glue.getItem()));
         controller.startControlling(partner);
+
+        if (!controller.isController()) {
+            // startControlling() bailed out because one of the sub-levels was no longer
+            // available. Without a controlling glue the two placeholder blocks would sit
+            // in the world for ten seconds doing nothing, so undo the placement.
+            this.clearGlue(level, parentRelative, childRelative);
+        }
+    }
+
+    private void clearGlue(final Level level, final BlockPos parentRelative, final BlockPos childRelative) {
+        level.setBlockAndUpdate(parentRelative, Blocks.AIR.defaultBlockState());
+        level.setBlockAndUpdate(childRelative, Blocks.AIR.defaultBlockState());
     }
 
     private MergingGlueBlockEntity addMergingGlue(final Level level, final BlockPos placedPos, final BlockPos childPos, final Direction facing, final boolean controller, final float distance) {
+        // The client only predicts this when the spot is free, but the server has to check
+        // too: setBlockAndUpdate() happily overwrites a real block, and the placeholder
+        // glue would end up displacing whatever used to be here.
+        if (!level.getBlockState(placedPos).canBeReplaced()) {
+            return null;
+        }
+
         final BlockState newState = SimBlocks.MERGING_GLUE.getDefaultState();
 
         if (level.setBlockAndUpdate(placedPos, newState.setValue(MergingGlueBlock.FACING, facing))) {

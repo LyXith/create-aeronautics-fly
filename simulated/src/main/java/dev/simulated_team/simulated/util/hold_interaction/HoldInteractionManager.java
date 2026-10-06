@@ -24,6 +24,12 @@ public class HoldInteractionManager {
     }
 
     public static void start(final BlockHoldInteraction blockHoldInteraction) {
+        if (active == blockHoldInteraction) {
+            // Already running. Restarting would call stop() first and discard the state
+            // the interaction's startHold() accumulated (scroll range, physics joint, ...).
+            return;
+        }
+
         if (active != null) {
             active.stop();
         }
