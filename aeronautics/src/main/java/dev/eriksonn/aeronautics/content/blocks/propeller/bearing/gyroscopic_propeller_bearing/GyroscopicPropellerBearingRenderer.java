@@ -11,7 +11,7 @@ import com.zurrtum.create.catnip.math.AngleHelper;
 import com.zurrtum.create.catnip.math.VecHelper;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -28,7 +28,7 @@ public class GyroscopicPropellerBearingRenderer extends KineticBlockEntityRender
     }
 
     @Override
-    protected void renderSafe(final GyroscopicPropellerBearingBlockEntity be, final float partialTicks, final PoseStack ms, final MultiBufferSource buffer, final int light, final int overlay) {
+    protected void renderSafe(final GyroscopicPropellerBearingBlockEntity be, final float partialTicks, final PoseStack ms, final SubmitNodeCollector buffer, final int light, final int overlay) {
         if (VisualizationManager.supportsVisualization(be.getLevel()) && !isRenderingInSubLevel()) return;
 
         super.renderSafe(be, partialTicks, ms, buffer, light, overlay);
@@ -59,7 +59,7 @@ public class GyroscopicPropellerBearingRenderer extends KineticBlockEntityRender
         }
 
         superBuffer.rotateCentered(AngleHelper.rad(-90 - AngleHelper.verticalAngle(facing)), Direction.EAST);
-        superBuffer.renderInto(ms.last(), buffer.getBuffer(RenderTypes.solidMovingBlock()));
+        superBuffer.submit(RenderTypes.solidMovingBlock(), ms, buffer);
 
 
         for (int i = 0; i < 4; i++) {
@@ -109,8 +109,8 @@ public class GyroscopicPropellerBearingRenderer extends KineticBlockEntityRender
             headBuffer.rotate(AngleHelper.rad(-90 * j), Direction.UP);
             poleBuffer.rotate(AngleHelper.rad(-90 * j), Direction.UP);
 
-            headBuffer.light(light).renderInto(ms.last(), buffer.getBuffer(RenderTypes.solidMovingBlock()));
-            poleBuffer.light(light).renderInto(ms.last(), buffer.getBuffer(RenderTypes.solidMovingBlock()));
+            headBuffer.light(light).submit(RenderTypes.solidMovingBlock(), ms, buffer);
+            poleBuffer.light(light).submit(RenderTypes.solidMovingBlock(), ms, buffer);
 
         }
     }

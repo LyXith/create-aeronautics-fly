@@ -6,12 +6,13 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.eriksonn.aeronautics.index.client.AeroRenderTypes;
 import dev.simulated_team.simulated.content.physics_staff.OptionalShaderMods;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import org.joml.Matrix4f;
 import org.joml.Matrix4fStack;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 /**
  * Draws burner flames after Iris has composited the shader-pack frame.
@@ -61,7 +62,7 @@ public final class IrisBurnerFlameRenderQueue {
         // Bake it in because Iris replaces the global transform before this
         // queue is drawn.
         final Matrix4f worldMatrix =
-                new Matrix4f(RenderSystem.getModelViewMatrix()).mul(matrix);
+                new Matrix4f(RenderSystem.getModelViewMatrixCopy()).mul(matrix);
         QUEUED_FLAMES.add(new QueuedFlame(
                 worldMatrix,
                 animationPhase,
@@ -75,9 +76,7 @@ public final class IrisBurnerFlameRenderQueue {
         collectingWorldFrame = false;
     }
 
-    public static void drawAfterShaderComposite(
-            final MultiBufferSource.BufferSource buffer
-    ) {
+    public static void drawAfterShaderComposite(final SubmitNodeCollector buffer) {
         final Matrix4fStack modelViewStack = RenderSystem.getModelViewStack();
         final GpuBufferSlice previousProjection =
                 RenderSystem.getProjectionMatrixBuffer();
@@ -105,19 +104,22 @@ public final class IrisBurnerFlameRenderQueue {
                 RenderSystem.setShaderFog(worldFog);
             }
 
-            final VertexConsumer consumer = buffer.getBuffer(
-                    AeroRenderTypes.irisCompositeBurnerFlame()
-            );
+            // 26.3 没有 MultiBufferSource/endBatch：这些火焰几何改成本帧的
+            // 普通 submit 节点，由 LevelRenderer 的 SubmitNodeStorage 统一排期，
+            // 与 simulated 的 IrisLaserRenderQueue 采用同一套机制。
+            final PoseStack identity = new PoseStack();
             for (final QueuedFlame flame : QUEUED_FLAMES) {
-                HotAirBurnerRenderer.renderFlame(
-                        flame.matrix,
-                        consumer,
-                        flame.animationPhase,
-                        flame.intensity,
-                        flame.palette
-                );
+                final Matrix4f matrix = flame.matrix;
+                buffer.submitCustomGeometry(identity,
+                        AeroRenderTypes.irisCompositeBurnerFlame(),
+                        (vertexPose, consumer) -> HotAirBurnerRenderer.renderFlame(
+                                matrix,
+                                consumer,
+                                flame.animationPhase,
+                                flame.intensity,
+                                flame.palette
+                        ));
             }
-            buffer.endBatch(AeroRenderTypes.irisCompositeBurnerFlame());
         } finally {
             if (modelViewPushed) {
                 modelViewStack.popMatrix();

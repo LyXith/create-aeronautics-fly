@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.LightCoordsUtil;
 
 public class HotAirEmberParticle extends SingleQuadParticle implements ParticleSubLevelKickable {
     private final boolean isSoul;
@@ -49,7 +50,7 @@ public class HotAirEmberParticle extends SingleQuadParticle implements ParticleS
 
     public int getLightColor(final float partialTick) {
         final BlockPos blockpos = new BlockPos((int) this.x, (int) this.y, (int) this.z);
-        return this.level.isLoaded(blockpos) ? (LevelRenderer.getLightColor(this.level, blockpos) | (15 << 4)) : 0;
+        return this.level.isLoaded(blockpos) ? (LightCoordsUtil.getLightCoords(this.level, blockpos) | (15 << 4)) : 0;
     }
 
 

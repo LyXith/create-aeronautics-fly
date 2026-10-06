@@ -103,12 +103,12 @@ public class SmartPropellerBlockEntity extends BasePropellerBlockEntity {
         final Direction dir = Direction.get(Direction.AxisDirection.POSITIVE, this.getBlockState().getValue(BlockStateProperties.HORIZONTAL_AXIS)).getClockWise();
         final Quaterniond rot = new Quaterniond(new AxisAngle4d(-Math.toRadians(this.hingeAngle.getValue()), dir.getStepX(), dir.getStepY(), dir.getStepZ()));
 
-        double particleCount = this.level.random.nextFloat();
+        double particleCount = this.level.getRandom().nextFloat();
         particleCount = Math.min(particleCount, 10);
 
         for (int i = 0; i < particleCount; i++) {
-            final double R = this.getRadius() * Math.sqrt(this.level.random.nextFloat());
-            final double angle = Math.PI * 2.0 * this.level.random.nextFloat();
+            final double R = this.getRadius() * Math.sqrt(this.level.getRandom().nextFloat());
+            final double angle = Math.PI * 2.0 * this.level.getRandom().nextFloat();
 
             Vec3 particlePos = new Vec3(Math.cos(angle) * R, this.getOffset(), Math.sin(angle) * R);
             Vec3 speedVector = new Vec3(0, this.getAirflow() / 40f, 0);

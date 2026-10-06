@@ -137,8 +137,8 @@ public class PropellerActorBehaviour extends BlockEntityBehaviour implements IHa
         quat.transform(max);
         quat.transform(min);
 
-        min.add(JOMLConversion.toJOML(this.getPos().getCenter()));
-        max.add(JOMLConversion.toJOML(this.getPos().getCenter()));
+        min.add(JOMLConversion.toJOML(Vec3.atCenterOf(this.getPos())));
+        max.add(JOMLConversion.toJOML(Vec3.atCenterOf(this.getPos())));
 
         final BoundingBox3d aabb = new BoundingBox3d(min.x, min.y, min.z, max.x, max.y, max.z);
 
@@ -162,7 +162,7 @@ public class PropellerActorBehaviour extends BlockEntityBehaviour implements IHa
                 final Vec3 qc = entity.getBoundingBox().getCenter();
                 STORED_MUT_POS.set(qc.x, qc.y, qc.z);
 
-                final Vector3d temp = new Vector3d().set(JOMLConversion.toJOML(this.getPos().getCenter()));
+                final Vector3d temp = new Vector3d().set(JOMLConversion.toJOML(Vec3.atCenterOf(this.getPos())));
                 if (subLevel != null) {
                     subLevel.logicalPose().transformPosition(temp);
                 }
@@ -349,7 +349,7 @@ public class PropellerActorBehaviour extends BlockEntityBehaviour implements IHa
         if (this.particleSmoothing > 0)
             count = Math.log(count / this.particleSmoothing + 1) * this.particleSmoothing;
 
-        return Math.min((int) (count + this.getLevel().random.nextFloat()), this.maxParticleAmount);
+        return Math.min((int) (count + this.getLevel().getRandom().nextFloat()), this.maxParticleAmount);
     }
 
     public void setThrustDirection(final Vector3dc thrustDirection) {

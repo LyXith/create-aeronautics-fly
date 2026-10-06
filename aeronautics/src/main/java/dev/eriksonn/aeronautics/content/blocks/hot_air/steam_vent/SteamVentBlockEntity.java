@@ -203,10 +203,10 @@ public class SteamVentBlockEntity extends SmartBlockEntity implements BlockEntit
 
             if (this.signalStrength == 0 && signal != 0) {
                 this.level.playSound(null, this.worldPosition, AeroSoundEvents.STEAM_VENT_OPEN.event(),  SoundSource.BLOCKS,
-                        .25f, 1.1f - this.level.random.nextFloat() * .2f);
+                        .25f, 1.1f - this.level.getRandom().nextFloat() * .2f);
             } else if (signal == 0) {
                 this.level.playSound(null, this.worldPosition, AeroSoundEvents.STEAM_VENT_CLOSE.event(), SoundSource.BLOCKS,
-                        .5f, 0.7f - this.level.random.nextFloat() * .2f);
+                        .5f, 0.7f - this.level.getRandom().nextFloat() * .2f);
             }
             this.signalStrength = signal;
             this.sendData();

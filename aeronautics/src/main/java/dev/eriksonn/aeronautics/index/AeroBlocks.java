@@ -58,11 +58,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
-import net.minecraft.world.level.storage.loot.providers.number.floats.ConstantValue;
+import net.minecraft.core.Holder;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ConstantValue;
 import io.github.fabricators_of_create.porting_lib.models.generators.ConfiguredModel;
 
 import static com.zurrtum.create.foundation.data.ModelGen.customItemModel;
 import static com.zurrtum.create.foundation.data.TagGen.*;
+import io.github.fabricators_of_create.porting_lib.models.generators.ModelBuilder;
+import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 
 public class AeroBlocks {
     private static final SimulatedRegistrate REGISTRATE = Aeronautics.getRegistrate();
@@ -83,8 +86,12 @@ public class AeroBlocks {
                     AeroSoundEvents.ENVELOPE_HIT::event,
                     () -> SoundEvents.WOOL_FALL)))
             .properties(p -> p.mapColor(DyeColor.WHITE))
-            .blockstate((c, p) -> p.simpleBlock(c.get(), p.models()
-                    .cubeAll(c.getName(), p.modLoc("block/envelope_block/envelope_" + DyeColor.WHITE.getName()))))
+            .blockstate((c, p) -> {
+                final ModelBuilder model = p.models()
+                        .withExistingParent(c.getName(), "block/cube_all")
+                        .texture("all", p.modLoc("block/envelope_block/envelope_" + DyeColor.WHITE.getName()));
+                p.simpleBlock(c.get(), model);
+            })
             .recipe((c, p) -> p.shaped(RecipeCategory.MISC, c.get(), 4)
                     .pattern("WS")
                     .pattern("SW")
@@ -118,8 +125,12 @@ public class AeroBlocks {
                                     AeroSoundEvents.ENVELOPE_HIT::event,
                                     () -> SoundEvents.WOOL_FALL)))
                     .properties(p -> p.mapColor(color))
-                    .blockstate((c, p) -> p.simpleBlock(c.get(), p.models()
-                            .cubeAll(c.getName(), p.modLoc("block/envelope_block/envelope_" + colorName))))
+                    .blockstate((c, p) -> {
+                        final ModelBuilder model = p.models()
+                                .withExistingParent(c.getName(), "block/cube_all")
+                                .texture("all", p.modLoc("block/envelope_block/envelope_" + colorName));
+                        p.simpleBlock(c.get(), model);
+                    })
                     .recipe((c, p) -> p.shaped(RecipeCategory.MISC, c.get(), 4)
                             .pattern("WS")
                             .pattern("SW")
@@ -160,7 +171,7 @@ public class AeroBlocks {
                         .texture("0", p.modLoc("block/envelope_block/envelope_" + colorName))))
                 .loot((p, b) -> p.add(b, p.createSingleItemTable(DYED_ENVELOPE_BLOCKS.get(color))
                         .withPool(p.applyExplosionCondition(AllBlocks.SHAFT, LootPool.lootPool()
-                                .setRolls(ConstantValue.exactly(1.0F))
+                                .setRolls(Holder.direct(new ConstantValue(1)))
                                 .add(LootItem.lootTableItem(AllBlocks.SHAFT))))))
                 .tag(AeroTags.BlockTags.ENVELOPE)
                 .transform(axeOnly())
@@ -217,7 +228,7 @@ public class AeroBlocks {
                             .pattern("G")
                             .pattern("C")
                             .define('G', AeroTags.ItemTags.GOLD_SHEET)
-                            .define('C', Blocks.COPPER_BLOCK)
+                            .define('C', Blocks.COPPER_BLOCK.weathering().unaffected())
                             .unlockedBy("has_ingredient", RegistrateRecipeProvider.has(Items.COPPER_INGOT))
                             .save(p))
                     .register();
@@ -270,11 +281,11 @@ public class AeroBlocks {
                     .transform(axeOrPickaxe())
                     .transform(AeroStress.setImpact(4.0))
                     .blockstate((ctx, prov) -> {
-                        prov.getVariantBuilder(ctx.getEntry()).forAllStates((state) ->
+                        prov.getVariantBuilder(ctx.getEntry()).forAllStates((state) -> new ConfiguredModel[]{
                                 ConfiguredModel.builder().modelFile(AssetLookup.partialBaseModel(ctx, prov).apply(state))
                                         .rotationY(state.getValue(BlockStateProperties.HORIZONTAL_AXIS) == Direction.Axis.X ? 90 : 0)
                                         .rotationX(state.getValue(SmartPropellerBlock.CEILING) ? 180 : 0)
-                                        .build());
+                                        .build()});
                     })
                     .item()
                     .transform(customItemModel())
@@ -384,8 +395,8 @@ public class AeroBlocks {
                     .register();
 
     private static <B extends Block, R> NonNullUnaryOperator<BlockBuilder<B, R>> flammable(final int encouragement, final int flamability) {
-        return builder -> builder.onRegisterAfter(Registries.BLOCK, block -> ((FireBlock) Blocks.FIRE)
-                .setFlammable(block, encouragement, flamability));
+        return builder -> builder.onRegisterAfter(Registries.BLOCK, block ->
+                FlammableBlockRegistry.getInstance(Blocks.FIRE).add(block, encouragement, flamability));
     }
 
     public static void init() {

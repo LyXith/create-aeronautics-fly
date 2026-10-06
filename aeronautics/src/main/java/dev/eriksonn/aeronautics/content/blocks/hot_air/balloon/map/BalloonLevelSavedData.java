@@ -18,9 +18,11 @@ import net.minecraft.world.level.saveddata.SavedDataType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import net.minecraft.resources.Identifier;
 
 public class BalloonLevelSavedData extends SavedData {
     public static final String ID = "aeronautics_unloaded_balloons";
+    public static final Identifier DATA_ID = Identifier.fromNamespaceAndPath("aeronautics", ID);
     public static Codec<List<SavedBalloon>> CODEC = Codec.list(SavedBalloon.CODEC);
 
     private Level level;
@@ -40,7 +42,7 @@ public class BalloonLevelSavedData extends SavedData {
     public static BalloonLevelSavedData get(final ServerLevel level) {
         final BalloonLevelSavedData data = level.getChunkSource().getDataStorage().computeIfAbsent(
                 new SavedDataType<>(
-                        ID,
+                        DATA_ID,
                         BalloonLevelSavedData::new,
                         CompoundTag.CODEC.xmap(
                                 tag -> create(level, tag, level.registryAccess()),

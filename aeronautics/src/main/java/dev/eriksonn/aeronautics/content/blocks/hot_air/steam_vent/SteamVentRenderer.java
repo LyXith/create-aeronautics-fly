@@ -9,7 +9,7 @@ import dev.eriksonn.aeronautics.index.AeroPartialModels;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
 import net.minecraft.util.LightCoordsUtil;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -22,10 +22,9 @@ public class SteamVentRenderer extends SmartBlockEntityRenderer<SteamVentBlockEn
     }
 
     @Override
-    protected void renderSafe(final SteamVentBlockEntity blockEntity, final float partialTicks, final PoseStack ms, final MultiBufferSource buffer, final int light, final int overlay) {
+    protected void renderSafe(final SteamVentBlockEntity blockEntity, final float partialTicks, final PoseStack ms, final SubmitNodeCollector buffer, final int light, final int overlay) {
         super.renderSafe(blockEntity, partialTicks, ms, buffer, light, overlay);
 
-        final VertexConsumer cutoutConsumer = buffer.getBuffer(RenderTypes.cutoutMovingBlock());
         final float signalStrength = Math.max(0, blockEntity.signalStrength / 15F);
 
         final BlockState state = blockEntity.getBlockState();
@@ -33,7 +32,7 @@ public class SteamVentRenderer extends SmartBlockEntityRenderer<SteamVentBlockEn
                 .partial(AeroPartialModels.STEAM_VENT_REDSTONE, state)
                 .light(light)
                 .color(SimColors.redstone(signalStrength))
-                .renderInto(ms.last(), cutoutConsumer);
+                .submit(RenderTypes.cutoutMovingBlock(), ms, buffer);
 
         final GasEmitterRenderHandler renderHandler = blockEntity.getRenderHandler();
         final int alpha = renderHandler.getAlpha(partialTicks);
@@ -41,7 +40,6 @@ public class SteamVentRenderer extends SmartBlockEntityRenderer<SteamVentBlockEn
         if (alpha > 2) {
 
             final float position = renderHandler.getPosition(partialTicks);
-            final VertexConsumer translucentConsumer = buffer.getBuffer(RenderTypes.translucentMovingBlock());
             final SuperByteBuffer base = CachedBuffers.partial(AeroPartialModels.STEAM_VENT_BASE, state);
             final SuperByteBuffer jet = CachedBuffers.partial(AeroPartialModels.STEAM_VENT_JET, state);
 
@@ -50,13 +48,13 @@ public class SteamVentRenderer extends SmartBlockEntityRenderer<SteamVentBlockEn
             base.disableDiffuse()
                     .light(LightCoordsUtil.FULL_BRIGHT)
                     .color(255, 255, 255, alpha)
-                    .renderInto(ms.last(), translucentConsumer);
+                    .submit(RenderTypes.translucentMovingBlock(), ms, buffer);
 
             ms.translate(0.0f, (position - 1) / 3.0f, 0.0f);
             jet.disableDiffuse()
                     .light(LightCoordsUtil.FULL_BRIGHT)
                     .color(255, 255, 255, alpha)
-                    .renderInto(ms.last(), translucentConsumer);
+                    .submit(RenderTypes.translucentMovingBlock(), ms, buffer);
 
             ms.popPose();
         }

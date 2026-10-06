@@ -1,15 +1,15 @@
 package dev.eriksonn.aeronautics.index.client;
 
 import com.mojang.renderpearl.api.pipeline.RenderPipeline;
-import com.mojang.renderpearl.api.pipeline.UniformType;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.renderpearl.api.vertex.VertexFormat;
 import dev.eriksonn.aeronautics.Aeronautics;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.rendertype.RenderSetup;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
+import com.mojang.renderpearl.api.pipeline.PrimitiveTopology;
+import net.minecraft.client.renderer.BindGroupLayouts;
 
 public final class AeroRenderTypes {
     public static final Identifier LEVITITE_SHADER = Aeronautics.path("levitite/levitite");
@@ -44,15 +44,13 @@ public final class AeroRenderTypes {
                 .withLocation(Aeronautics.path("pipeline/" + name))
                 .withVertexShader(Aeronautics.path("core/burner_flame"))
                 .withFragmentShader(Aeronautics.path("core/burner_flame"))
-                .withUniform("DynamicTransforms", UniformType.UNIFORM_BUFFER)
-                .withUniform("Projection", UniformType.UNIFORM_BUFFER)
-                .withUniform("Fog", UniformType.UNIFORM_BUFFER)
-                .withSampler("Sampler0")
+                .withBindGroupLayout(BindGroupLayouts.DYNAMIC_TRANSFORMS)
+                .withBindGroupLayout(BindGroupLayouts.PROJECTION)
+                .withBindGroupLayout(BindGroupLayouts.FOG)
+                .withBindGroupLayout(BindGroupLayouts.SAMPLER0)
                 .withCull(false)
-                .withVertexFormat(
-                        DefaultVertexFormat.POSITION_TEX_COLOR,
-                        VertexFormat.Mode.QUADS
-                )
+                .withVertexBinding(0, DefaultVertexFormat.POSITION_TEX_COLOR)
+                .withPrimitiveTopology(PrimitiveTopology.QUADS)
                 .build());
     }
 

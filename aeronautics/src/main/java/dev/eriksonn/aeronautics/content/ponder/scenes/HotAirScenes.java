@@ -492,7 +492,7 @@ public class HotAirScenes {
         scene.world().showSectionAndMerge(util.select().fromTo(2, 5, 2, 6, 7, 2), Direction.SOUTH, shipLink);
         scene.idle(20);
         scene.overlay().showControls(util.vector().blockSurface(util.grid().at(4, 7, 2), Direction.NORTH), Pointing.RIGHT, 30)
-                .withItem(new ItemStack(Items.BLUE_DYE));
+                .withItem(new ItemStack(Items.DYE.blue()));
         scene.idle(7);
         scene.world().setBlock(new BlockPos(4, 6, 2), AeroBlocks.DYED_ENVELOPE_BLOCKS.get(DyeColor.BLUE).defaultBlockState(), false);
         scene.idle(10);
@@ -505,7 +505,7 @@ public class HotAirScenes {
         scene.idle(20);
 
         scene.overlay().showControls(util.vector().blockSurface(util.grid().at(4, 7, 2), Direction.NORTH), Pointing.RIGHT, 20)
-                .withItem(new ItemStack(Items.BLUE_DYE));
+                .withItem(new ItemStack(Items.DYE.blue()));
         scene.idle(7);
         scene.world().setBlocks(
                 util.select().fromTo(5, 6, 2, 3, 6, 2).add(util.select().fromTo(4, 5, 2, 4, 7, 2)),
@@ -514,7 +514,7 @@ public class HotAirScenes {
 
         scene.idle(20);
         scene.overlay().showControls(util.vector().blockSurface(util.grid().at(4, 7, 2), Direction.NORTH), Pointing.RIGHT, 20)
-                .withItem(new ItemStack(Items.BLUE_DYE));
+                .withItem(new ItemStack(Items.DYE.blue()));
         scene.idle(7);
         scene.world().modifyBlocks(util.select().layers(5, 4),
                 state -> {

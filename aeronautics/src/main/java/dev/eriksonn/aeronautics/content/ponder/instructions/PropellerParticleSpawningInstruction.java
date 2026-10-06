@@ -69,7 +69,7 @@ public class PropellerParticleSpawningInstruction extends TickingInstruction {
 		{
 
 			final PonderLevel level = scene.getLevel();
-			final float particleCount = this.particleAmount + level.random.nextFloat() - 1.0f;
+			final float particleCount = this.particleAmount + level.getRandom().nextFloat() - 1.0f;
 
 			Vec3 totalOffset = VecHelper.getCenterOf(this.location);
 			final Quaternionf elementRot = new Quaternionf();
@@ -96,8 +96,8 @@ public class PropellerParticleSpawningInstruction extends TickingInstruction {
 			}
 
 			for (int i = 0; i < particleCount; i++) {
-				final double R = this.radius * Math.sqrt(level.random.nextFloat());
-				final double angle = Math.PI * 2.0 * level.random.nextFloat();
+				final double R = this.radius * Math.sqrt(level.getRandom().nextFloat());
+				final double angle = Math.PI * 2.0 * level.getRandom().nextFloat();
 				Vec3 randomOffset = VecHelper.offsetRandomly(Vec3.ZERO, RandomSource.create(), .5f);
 				randomOffset = new Vec3(randomOffset.x, 0, randomOffset.z);
 				Vec3 particlePos = new Vec3(Math.cos(angle) * R, 0, Math.sin(angle) * R).add(randomOffset);

@@ -16,6 +16,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.SwingAnimation;
 
 public record LevititeCatalystCrystallizationPacket(BlockPos pos, InteractionHand hand) implements CustomPacketPayload {
 	public static final Type<LevititeCatalystCrystallizationPacket> TYPE = new Type<>(Aeronautics.path("levitite_blend_crystallize"));
@@ -46,7 +47,7 @@ public record LevititeCatalystCrystallizationPacket(BlockPos pos, InteractionHan
 				item.shrink(1);
 			}
 		}
-		player.swing(this.hand);
+		player.swing(this.hand, SwingAnimation.DEFAULT, true);
 		final CrystalPropagationContext itemContext = item.is(AeroTags.ItemTags.LEVITITE_SOUL_CATALYZER) ?
 				AeroLevititeBlendPropagationContexts.SOUL_CONTEXT.get() :
 				AeroLevititeBlendPropagationContexts.STANDARD_CONTEXT.get();

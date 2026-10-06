@@ -38,7 +38,7 @@ public class AeroStress extends CStress {
 		};
 	}
 
-	public static <B extends Block, P> NonNullUnaryOperator<BlockBuilder<B, P>> setCapacity(final double value) {
+	public static <B extends Block, P> NonNullUnaryOperator<BlockBuilder<B, P>> setBlockCapacity(final double value) {
 		return (builder) -> {
 			assertFromAeronautics(builder);
 			DEFAULT_CAPACITIES.put(Aeronautics.path(builder.getName()), value);

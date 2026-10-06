@@ -9,6 +9,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
 import java.util.List;
+import net.minecraft.world.phys.Vec3;
 
 public class GyroActorBehaviour<T extends GyroscopicPropellerBearingBlockEntity> extends PropellerActorBehaviour {
 
@@ -18,7 +19,7 @@ public class GyroActorBehaviour<T extends GyroscopicPropellerBearingBlockEntity>
 
     @Override
     public void additionalTooltipInfo(final List<Component> tooltip, final boolean isPlayerSneaking) {
-        final double gravStrength = DimensionPhysicsData.getGravity(this.getLevel(), JOMLConversion.toJOML(this.getPos().getCenter())).length();
+        final double gravStrength = DimensionPhysicsData.getGravity(this.getLevel(), JOMLConversion.toJOML(Vec3.atCenterOf(this.getPos()))).length();
 
         final MutableComponent canLiftComponent = AeroLang.kilopixelGram(Math.abs(this.propeller.getScaledThrust()) / gravStrength)
                 .style(ChatFormatting.AQUA)

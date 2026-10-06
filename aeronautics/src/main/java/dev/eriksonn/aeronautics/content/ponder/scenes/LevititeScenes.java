@@ -381,10 +381,10 @@ public class LevititeScenes {
         for (int i = 0; i < 3; i++) {
             BlockPos p = propellerPos.offset(3-i,0,2);
             world.replaceBlocks(util.select().position(p),state , false);
-            scene.effects().emitParticles(p.getCenter(), withinBlockSpace(particle, 1.5f), 10, 2);
+            scene.effects().emitParticles(Vec3.atCenterOf(p), withinBlockSpace(particle, 1.5f), 10, 2);
             p = propellerPos.offset(3-i,0,-2);
             world.replaceBlocks(util.select().position(p), state, false);
-            scene.effects().emitParticles(p.getCenter(), withinBlockSpace(particle, 1.5f), 10, 2);
+            scene.effects().emitParticles(Vec3.atCenterOf(p), withinBlockSpace(particle, 1.5f), 10, 2);
             scene.idle(5);
         }
 

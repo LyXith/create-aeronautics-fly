@@ -66,12 +66,12 @@ public interface CrystalPropagationContext {
     BlockState getCrystalBlockState(Level level, BlockPos pos);
 
     default int getNewAge(final Level level, final int attempts, final boolean isDormant) {
-        return level.random.nextInt(10, 40);
+        return level.getRandom().nextInt(10, 40);
     }
 
     default boolean shouldCrystallize(final Level level, final int attempts, final boolean isDormant) {
         final float maxAttempts = isDormant ? 10 : 5;
-        return level.random.nextFloat() < attempts / maxAttempts;
+        return level.getRandom().nextFloat() < attempts / maxAttempts;
     }
 
     boolean canSpreadTo(FluidState state);

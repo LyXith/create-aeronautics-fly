@@ -7,9 +7,10 @@ import net.minecraft.util.datafix.DataFixTypes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
+import net.minecraft.resources.Identifier;
 
 public class CrystallizationWorldSaveData extends SavedData {
-	public static final String ID = "aeronautics_levitite_data";
+	public static final Identifier ID = Identifier.fromNamespaceAndPath("aeronautics", "levitite_data");
 	
 	Level level;
 	

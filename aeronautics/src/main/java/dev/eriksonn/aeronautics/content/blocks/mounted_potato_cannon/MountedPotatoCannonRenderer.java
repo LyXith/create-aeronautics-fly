@@ -15,7 +15,7 @@ import com.zurrtum.create.catnip.math.AngleHelper;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -34,17 +34,16 @@ public class MountedPotatoCannonRenderer extends SafeBlockEntityRenderer<Mounted
 	}
 
 	@Override
-	protected void renderSafe(final MountedPotatoCannonBlockEntity be, final float partialTicks, final PoseStack ms, final MultiBufferSource buffer, final int light, final int overlay) {
+	protected void renderSafe(final MountedPotatoCannonBlockEntity be, final float partialTicks, final PoseStack ms, final SubmitNodeCollector buffer, final int light, final int overlay) {
 		FilteringRenderer.renderOnBlockEntity(be, partialTicks, ms, buffer, light, overlay);
 		this.renderComponents(be, partialTicks, ms, buffer, light, overlay);
 	}
 
-	private void renderComponents(final MountedPotatoCannonBlockEntity be, final float partialTicks, final PoseStack ms, final MultiBufferSource buffer, final int light, final int overlay) {
-		final VertexConsumer vb = buffer.getBuffer(RenderTypes.cutoutMovingBlock());
+	private void renderComponents(final MountedPotatoCannonBlockEntity be, final float partialTicks, final PoseStack ms, final SubmitNodeCollector buffer, final int light, final int overlay) {
 
 		final boolean drawParts = isRenderingInSubLevel() || !VisualizationManager.supportsVisualization(be.getLevel());
 		if (drawParts) {
-			KineticBlockEntityRenderer.renderRotatingKineticBlock(be, this.getRenderedBlockState(be), ms, vb, light);
+			KineticBlockEntityRenderer.renderRotatingKineticBlock(be, this.getRenderedBlockState(be), ms, buffer, light);
 		}
 
 		final BlockState blockState = be.getBlockState();
@@ -57,18 +56,18 @@ public class MountedPotatoCannonRenderer extends SafeBlockEntityRenderer<Mounted
 		transform(barrel, blockState, true)
 				.translate(0, 0, barrelOffset)
 				.light(light)
-				.renderInto(ms.last(), vb);
+				.submit(RenderTypes.cutoutMovingBlock(), ms, buffer);
 
 		final SuperByteBuffer bellow = CachedBuffers.partial(AeroPartialModels.CANNON_BELLOW, blockState);
 		transform(bellow, blockState, true)
 				.translate(0, bellowOffset, 0)
 				.light(light)
-				.renderInto(ms.last(), vb);
+				.submit(RenderTypes.cutoutMovingBlock(), ms, buffer);
 
 		transform(bellow, blockState, true)
 				.rotateCentered((float) (Math.PI), Direction.SOUTH)
 				.light(light)
-				.translate(0, bellowOffset, 0).renderInto(ms.last(), vb);
+				.translate(0, bellowOffset, 0).submit(RenderTypes.cutoutMovingBlock(), ms, buffer);
 
 		if (drawParts) {
 			final SuperByteBuffer cogwheel = CachedBuffers.partial(AeroPartialModels.CANNON_COG, blockState);
@@ -76,7 +75,7 @@ public class MountedPotatoCannonRenderer extends SafeBlockEntityRenderer<Mounted
 			transform(cogwheel, blockState, true)
 					.rotateCentered(Mth.DEG_TO_RAD * (angle % 360), Direction.SOUTH)
 					.light(light)
-					.renderInto(ms.last(), vb);
+					.submit(RenderTypes.cutoutMovingBlock(), ms, buffer);
 		}
 	}
 

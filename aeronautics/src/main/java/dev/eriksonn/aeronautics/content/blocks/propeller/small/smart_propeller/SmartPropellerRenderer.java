@@ -9,7 +9,7 @@ import dev.eriksonn.aeronautics.index.AeroPartialModels;
 import com.zurrtum.create.catnip.math.AngleHelper;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -26,14 +26,12 @@ public class SmartPropellerRenderer extends SimplePropellerRenderer<SmartPropell
     }
 
     @Override
-    public void renderSafe(final SmartPropellerBlockEntity be, final float partialTicks, final PoseStack ms, final MultiBufferSource buffer, final int light, final int overlay) {
+    public void renderSafe(final SmartPropellerBlockEntity be, final float partialTicks, final PoseStack ms, final SubmitNodeCollector buffer, final int light, final int overlay) {
         final BlockState state = this.getRenderedBlockState(be);
-        final RenderType type = this.getRenderType(be, state);
-        renderRotatingBuffer(be, this.getRotatedModel(be, state), ms, buffer.getBuffer(type), light);
+        renderRotatingBuffer(be, this.getRotatedModel(be, state), ms, buffer, light);
 
         final Direction.Axis horizontal = state.getValue(BlockStateProperties.HORIZONTAL_AXIS);
 
-        final VertexConsumer vb = buffer.getBuffer(RenderTypes.solidMovingBlock());
 
         final SuperByteBuffer propeller = CachedBuffers.partialFacing(this.getCurrentModel(be), state, Direction.UP)
                 .light(light);
@@ -60,8 +58,8 @@ public class SmartPropellerRenderer extends SimplePropellerRenderer<SmartPropell
         hinge.translate(0, -1 / 16f, 0);
         hinge.rotateCentered(AngleHelper.rad(90), Direction.EAST);
 
-        propeller.renderInto(ms.last(), vb);
-        hinge.renderInto(ms.last(), vb);
+        propeller.submit(RenderTypes.solidMovingBlock(), ms, buffer);
+        hinge.submit(RenderTypes.solidMovingBlock(), ms, buffer);
     }
 
     @Override

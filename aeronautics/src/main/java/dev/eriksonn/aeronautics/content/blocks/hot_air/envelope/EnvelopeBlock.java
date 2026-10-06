@@ -39,7 +39,7 @@ public class EnvelopeBlock extends CasingBlock implements Envelope, SpecialBlock
     protected final DyeColor color;
 
     public EnvelopeBlock(final Properties properties, final DyeColor color) {
-        super(properties);
+        super(properties.bounceRestitution(0.65F));
         this.color = color;
     }
 
@@ -130,7 +130,7 @@ public class EnvelopeBlock extends CasingBlock implements Envelope, SpecialBlock
     }
 
     @Override
-    protected int getLightBlock(final BlockState state) {
+    protected int getLightDampening(final BlockState state) {
         return 1;
     }
 
@@ -140,7 +140,7 @@ public class EnvelopeBlock extends CasingBlock implements Envelope, SpecialBlock
 
         if (color != null) {
             if (!level.isClientSide())
-                level.playSound(null, blockPos, SoundEvents.DYE_USE, SoundSource.BLOCKS, 1.0f, 1.1f - level.random.nextFloat() * .2f);
+                level.playSound(null, blockPos, SoundEvents.DYE_USE, SoundSource.BLOCKS, 1.0f, 1.1f - level.getRandom().nextFloat() * .2f);
 
             EnvelopeBlock.applyDye(blockState, level, blockPos, color);
             return InteractionResult.SUCCESS;
@@ -168,22 +168,9 @@ public class EnvelopeBlock extends CasingBlock implements Envelope, SpecialBlock
 
     }
 
-    @Override
-    public void updateEntityMovementAfterFallOn(final BlockGetter pLevel, final Entity pEntity) {
-        if (pEntity.isSuppressingBounce()) {
-            super.updateEntityMovementAfterFallOn(pLevel, pEntity);
-        } else {
-            this.bounceUp(pEntity);
-        }
-    }
-
-    private void bounceUp(final Entity entity) {
-        final Vec3 vec3 = entity.getDeltaMovement();
-        if (vec3.y < 0.0) {
-            final double scale = 0.65 * (entity instanceof LivingEntity ? 1.0 : 0.8);
-            entity.setDeltaMovement(vec3.x, -vec3.y * scale, vec3.z);
-        }
-    }
+    // 26.3 已经没有 Block#updateEntityMovementAfterFallOn：实体反弹改由
+    // BlockBehaviour.Properties#bounceRestitution 驱动（在构造函数里设置），
+    // 非 LivingEntity 会额外乘 0.8，与原来 bounceUp 里的 0.65/0.52 比例一致。
 
     @Override
     public ItemRequirement getRequiredItems(BlockState state, @Nullable BlockEntity blockEntity) {

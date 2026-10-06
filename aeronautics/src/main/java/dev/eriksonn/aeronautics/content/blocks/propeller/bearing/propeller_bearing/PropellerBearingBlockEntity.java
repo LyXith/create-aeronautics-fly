@@ -35,7 +35,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.util.Tuple;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -442,7 +442,7 @@ public class PropellerBearingBlockEntity extends MechanicalBearingBlockEntity im
         if (this.movedContraption != null) {
             final Map<BlockPos, StructureTemplate.StructureBlockInfo> Blocks = this.movedContraption.getContraption().getBlocks();
             final Vec3i direction = this.getBlockState().getValue(PropellerBearingBlock.FACING).getUnitVec3i();
-            final HashMap<Integer, Tuple<Integer, Integer>> layerHashMap = new HashMap<>();
+            final HashMap<Integer, Pair<Integer, Integer>> layerHashMap = new HashMap<>();
 
             for (final Map.Entry<BlockPos, StructureTemplate.StructureBlockInfo> entry : Blocks.entrySet()) {
                 final float sailPower = this.getSailPower(entry.getValue());
@@ -454,24 +454,23 @@ public class PropellerBearingBlockEntity extends MechanicalBearingBlockEntity im
                     this.totalSailPower += sailPower;
                     currentPos = currentPos.offset(direction.multiply(-offset));
                     final int radius = currentPos.getX() * currentPos.getX() + currentPos.getY() * currentPos.getY() + currentPos.getZ() * currentPos.getZ();
-                    if (layerHashMap.containsKey(offset)) {
-                        final Tuple<Integer, Integer> tuple = layerHashMap.get(offset);
-                        if (radius < tuple.getA()) {
-                            tuple.setA(radius);
-                        }
-                        if (radius > tuple.getB()) {
-                            tuple.setB(radius);
-                        }
+                    // 26.3 没有 net.minecraft.util.Tuple 了；Pair 是不可变的，
+                    // 所以直接用 min/max 重建后写回，语义与原来的 setA/setB 一致。
+                    final Pair<Integer, Integer> existing = layerHashMap.get(offset);
+                    if (existing == null) {
+                        layerHashMap.put(offset, Pair.of(radius, radius));
                     } else {
-                        layerHashMap.put(offset, new Tuple<>(radius, radius));
+                        layerHashMap.put(offset, Pair.of(
+                                Math.min(radius, existing.getFirst()),
+                                Math.max(radius, existing.getSecond())));
                     }
                 }
             }
 
-            for (final Map.Entry<Integer, Tuple<Integer, Integer>> entry : layerHashMap.entrySet()) {
-                final Tuple<Integer, Integer> tuple = entry.getValue();
-                final double inner = Math.max(Math.sqrt(tuple.getA()) - 0.5, 0);
-                final double outer = Math.sqrt(tuple.getB()) + 0.5;
+            for (final Map.Entry<Integer, Pair<Integer, Integer>> entry : layerHashMap.entrySet()) {
+                final Pair<Integer, Integer> tuple = entry.getValue();
+                final double inner = Math.max(Math.sqrt(tuple.getFirst()) - 0.5, 0);
+                final double outer = Math.sqrt(tuple.getSecond()) + 0.5;
                 this.behavior.addPropellerLayer(new PropellerActorBehaviour.PropellerLayer(entry.getKey() + 1, inner, outer));
             }
         }

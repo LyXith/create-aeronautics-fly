@@ -24,7 +24,7 @@ public final class AeronauticsFabric implements ModInitializer {
 
         Aeronautics.getRegistrate().register();
 
-        ServerTickEvents.END_WORLD_TICK.register(AeronauticsCommonEvents::onServerTickEnd);
+        ServerTickEvents.END_LEVEL_TICK.register(AeronauticsCommonEvents::onServerTickEnd);
         ServerLifecycleEvents.SERVER_STOPPED.register(AeronauticsCommonEvents::onServerStopped);
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
             if (Boolean.getBoolean("aeronautics.productionSmokeTest")) {

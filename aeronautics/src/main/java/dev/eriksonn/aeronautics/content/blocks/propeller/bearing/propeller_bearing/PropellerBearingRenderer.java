@@ -10,7 +10,7 @@ import dev.eriksonn.aeronautics.index.AeroPartialModels;
 import com.zurrtum.create.catnip.math.AngleHelper;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -26,7 +26,7 @@ public class PropellerBearingRenderer extends KineticBlockEntityRenderer<Propell
     }
 
     @Override
-    protected void renderSafe(PropellerBearingBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer,
+    protected void renderSafe(PropellerBearingBlockEntity be, float partialTicks, PoseStack ms, SubmitNodeCollector buffer,
 							  int light, int overlay) {
 
         if (VisualizationManager.supportsVisualization(be.getLevel()) && !isRenderingInSubLevel()) return;
@@ -46,7 +46,7 @@ public class PropellerBearingRenderer extends KineticBlockEntityRenderer<Propell
             superBuffer.rotateCentered(
                     AngleHelper.rad(AngleHelper.horizontalAngle(facing.getOpposite())),Direction.UP);
         superBuffer.rotateCentered(AngleHelper.rad(-90 - AngleHelper.verticalAngle(facing)),Direction.EAST);
-        superBuffer.renderInto(ms.last(), buffer.getBuffer(RenderTypes.solidMovingBlock()));
+        superBuffer.submit(RenderTypes.solidMovingBlock(), ms, buffer);
     }
 
     @Override

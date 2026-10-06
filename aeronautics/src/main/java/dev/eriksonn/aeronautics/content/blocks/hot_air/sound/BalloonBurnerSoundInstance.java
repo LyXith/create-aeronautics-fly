@@ -52,7 +52,7 @@ public class BalloonBurnerSoundInstance extends AbstractTickableSoundInstance {
     }
 
     public void addPos(final BlockPos pos) {
-        final Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
+        final Camera camera = Minecraft.getInstance().gameRenderer.mainCamera();
 
         if (distSquared(camera, pos) < MAX_DISTANCE * MAX_DISTANCE) {
             if (NEARBY_BLOCKS.add(pos.immutable())) {
@@ -93,7 +93,7 @@ public class BalloonBurnerSoundInstance extends AbstractTickableSoundInstance {
         }
 
         final ClientLevel level = Minecraft.getInstance().level;
-        final Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
+        final Camera camera = Minecraft.getInstance().gameRenderer.mainCamera();
 
         this.meanVolume = 0.001f;
         int volumeChangers = 0;

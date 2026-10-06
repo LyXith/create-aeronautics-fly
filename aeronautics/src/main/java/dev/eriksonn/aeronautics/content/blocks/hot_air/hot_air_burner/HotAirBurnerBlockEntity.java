@@ -104,10 +104,10 @@ public class HotAirBurnerBlockEntity extends SmartBlockEntity
         if (newSignalStrength != this.signalStrength) {
             if (this.signalStrength == 0 && newSignalStrength != 0) {
                 this.level.playSound(null, this.worldPosition, SoundEvents.FIRECHARGE_USE, SoundSource.BLOCKS,
-                        .125f + this.level.random.nextFloat() * .125f, .75f - this.level.random.nextFloat() * .25f);
+                        .125f + this.level.getRandom().nextFloat() * .125f, .75f - this.level.getRandom().nextFloat() * .25f);
             } else if (newSignalStrength == 0) {
                 this.level.playSound(null, this.worldPosition, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS,
-                        .125f + this.level.random.nextFloat() * .125f, 1.1f - this.level.random.nextFloat() * .2f);
+                        .125f + this.level.getRandom().nextFloat() * .125f, 1.1f - this.level.getRandom().nextFloat() * .2f);
             }
             this.signalStrength = newSignalStrength;
             this.powered = shouldPower;

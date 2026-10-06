@@ -177,7 +177,7 @@ public class MountedPotatoCannonBlockEntity extends KineticBlockEntity implement
 							final Vec3 motion = this.getAimingVector().scale((double) type.velocityMultiplier() * 2 /*cannon range*/);
 
 							//spray
-							final Vec3 sprayBase = VecHelper.rotate(new Vec3(0.0d, 0.1d, 0.0d), 360.0f * this.level.random.nextFloat(), Direction.Axis.Z);
+							final Vec3 sprayBase = VecHelper.rotate(new Vec3(0.0d, 0.1d, 0.0d), 360.0f * this.level.getRandom().nextFloat(), Direction.Axis.Z);
 							final float sprayChange = 360.0f / (float) type.split();
 
 							for (int i = 0; i < type.split(); i++) {
@@ -189,7 +189,7 @@ public class MountedPotatoCannonBlockEntity extends KineticBlockEntity implement
 
 									Vec3 splitMotion = motion;
 									if (type.split() > 1) {
-										final float imperfection = 40.0f * (this.level.random.nextFloat() - 0.5f);
+										final float imperfection = 40.0f * (this.level.getRandom().nextFloat() - 0.5f);
 										final Vec3 sprayOffset = VecHelper.rotate(sprayBase, (float) i * sprayChange + imperfection, Direction.Axis.Z);
 										splitMotion = motion.add(VecHelper.lookAt(sprayOffset, motion));
 									}
@@ -202,7 +202,7 @@ public class MountedPotatoCannonBlockEntity extends KineticBlockEntity implement
 
 							this.recoilMagnitude = ((float) type.split() / 2) * AeroConfig.server().physics.mountedPotatoCannonMagnitude.getF();
 
-							AllSoundEvents.FWOOMP.playOnServer(this.level, this.worldPosition, 1, ammo.type().soundPitch() + this.level.random.nextFloat() * .2f);
+							AllSoundEvents.FWOOMP.playOnServer(this.level, this.worldPosition, 1, ammo.type().soundPitch() + this.level.getRandom().nextFloat() * .2f);
 							AeroAdvancements.HEAVIER_ARTILLERY.awardToNearby(this.getBlockPos(), this.level);
 						} else {
 							for (int i = 0; i < 8; i++) {

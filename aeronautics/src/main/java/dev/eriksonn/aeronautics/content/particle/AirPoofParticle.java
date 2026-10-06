@@ -9,7 +9,7 @@ import net.minecraft.util.RandomSource;
 public class AirPoofParticle extends SingleQuadParticle implements ParticleSubLevelKickable {
     protected AirPoofParticle(final ClientLevel level, final double x, final double y, final double z, final double xSpeed, final double ySpeed, final double zSpeed, final TextureAtlasSprite sprite) {
         super(level, x, y, z, xSpeed, ySpeed, zSpeed, sprite);
-        this.alpha = level.random.nextFloat() * 0.2f + 0.3f;
+        this.alpha = level.getRandom().nextFloat() * 0.2f + 0.3f;
         this.xd = xSpeed;
         this.yd = ySpeed;
         this.zd = zSpeed;

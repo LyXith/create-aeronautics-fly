@@ -10,7 +10,7 @@ import com.zurrtum.create.client.flywheel.lib.model.baked.PartialModel;
 import com.zurrtum.create.catnip.math.AngleHelper;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -25,7 +25,7 @@ public abstract class SimplePropellerRenderer<T extends BasePropellerBlockEntity
     }
 
     @Override
-    public void renderSafe(final T be, final float partialTicks, final PoseStack ms, final MultiBufferSource buffer, final int light, final int overlay) {
+    public void renderSafe(final T be, final float partialTicks, final PoseStack ms, final SubmitNodeCollector buffer, final int light, final int overlay) {
         if (VisualizationManager.supportsVisualization(be.getLevel()) && !isRenderingInSubLevel()) {
             return;
         }
@@ -35,7 +35,6 @@ public abstract class SimplePropellerRenderer<T extends BasePropellerBlockEntity
         final BlockState state = be.getBlockState();
         final Direction dir = state.getValue(BlockStateProperties.FACING);
 
-        final VertexConsumer vb = buffer.getBuffer(RenderTypes.solidMovingBlock());
 
         final SuperByteBuffer propeller = CachedBuffers.partialFacing(this.getCurrentModel(be), state);
 
@@ -51,7 +50,7 @@ public abstract class SimplePropellerRenderer<T extends BasePropellerBlockEntity
 
         propeller.translate(0, 0, -3 / 16f).rotateCentered(AngleHelper.rad(-90 - AngleHelper.verticalAngle(dir)), Direction.EAST);
 
-        propeller.renderInto(ms.last(), vb);
+        propeller.submit(RenderTypes.solidMovingBlock(), ms, buffer);
     }
 
     public abstract PartialModel getCurrentModel(T be);

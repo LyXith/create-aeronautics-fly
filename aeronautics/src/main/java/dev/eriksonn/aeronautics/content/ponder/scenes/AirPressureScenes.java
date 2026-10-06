@@ -112,7 +112,7 @@ public class AirPressureScenes {
         }else
             scene.idle(40);
         final BlockPos sensorPos = pressureItem.getSensorPos();
-        final Vec3 sensorPointing = sensorPos.getCenter();
+        final Vec3 sensorPointing = Vec3.atCenterOf(sensorPos);
         world.showSection(select.position(sensorPos),Direction.DOWN);
         scene.addInstruction(new AltitudeSensorVisualHeightInstruction.Linear(sensorPos, 0, 0.5f, 0.5f, f -> f));
         scene.idle(10);

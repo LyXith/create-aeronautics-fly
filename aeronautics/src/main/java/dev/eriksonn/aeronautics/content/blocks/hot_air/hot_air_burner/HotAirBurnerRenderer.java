@@ -6,7 +6,6 @@ import com.mojang.math.Axis;
 import dev.eriksonn.aeronautics.index.AeroPartialModels;
 import dev.ryanhcode.sable.Sable;
 import dev.ryanhcode.sable.sublevel.SubLevel;
-import dev.simulated_team.simulated.compat.create.RenderBridge;
 import dev.simulated_team.simulated.compat.create.SmartBlockEntityRenderer;
 import dev.simulated_team.simulated.content.physics_staff.OptionalShaderMods;
 import dev.simulated_team.simulated.util.SimColors;
@@ -15,7 +14,7 @@ import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
 import com.zurrtum.create.client.ponder.api.level.PonderLevel;
 import dev.eriksonn.aeronautics.index.client.AeroRenderTypes;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -34,13 +33,12 @@ public class HotAirBurnerRenderer extends SmartBlockEntityRenderer<HotAirBurnerB
     }
 
     @Override
-    protected void renderSafe(final HotAirBurnerBlockEntity be, final float partialTicks, final PoseStack ms, final MultiBufferSource buffer, final int light, final int overlay) {
+    protected void renderSafe(final HotAirBurnerBlockEntity be, final float partialTicks, final PoseStack ms, final SubmitNodeCollector buffer, final int light, final int overlay) {
         final float signalStrength = Math.max(0, be.getSignalStrength() / 15F);
         final SuperByteBuffer indicator = CachedBuffers.partial(AeroPartialModels.HOT_AIR_BURNER_INDICATOR, be.getBlockState());
-        final VertexConsumer vb = buffer.getBuffer(RenderTypes.cutoutMovingBlock());
         indicator.light(light)
                 .color(SimColors.redstone(signalStrength))
-                .renderInto(ms.last(), vb);
+                .submit(RenderTypes.cutoutMovingBlock(), ms, buffer);
 
         if (signalStrength <= 0.0) {
             return;
@@ -52,9 +50,9 @@ public class HotAirBurnerRenderer extends SmartBlockEntityRenderer<HotAirBurnerB
         ms.translate(-0.5, FLAME_QUAD_Y, 0.5);
 
         final BlockPos pos = be.getBlockPos();
-        final Vec3 center = pos.getCenter();
+        final Vec3 center = Vec3.atCenterOf(pos);
         final Minecraft minecraft = Minecraft.getInstance();
-        Vec3 camera = minecraft.gameRenderer.getMainCamera().position();
+        Vec3 camera = minecraft.gameRenderer.mainCamera().position();
         if (be.getLevel() instanceof PonderLevel && minecraft.getCameraEntity() != null) {
             camera = minecraft.getCameraEntity().getPosition(partialTicks);
         }
@@ -102,47 +100,35 @@ public class HotAirBurnerRenderer extends SmartBlockEntityRenderer<HotAirBurnerB
 
     private static void renderFlameOrEnqueue(
             final Matrix4f pose,
-            final MultiBufferSource buffer,
+            final SubmitNodeCollector buffer,
             final float animationPhase,
             final float intensity,
             final float palette
     ) {
+        // 26.3 的帧图不再提供立即模式的顶点缓冲（MultiBufferSource 已删除），
+        // Veil 的 layer 发现/回放也随 Veil 一起移除，因此只剩「入队给 Iris 合成
+        // 之后再画」与「直接作为本帧的 submit 节点」两条真实路径。
         if (OptionalShaderMods.isShaderPackActive()
-                && IrisBurnerFlameRenderQueue.isCollectingWorldFrame()) {
-            final RenderType irisRenderType =
-                    AeroRenderTypes.irisCompositeBurnerFlame();
-            if (RenderBridge.isDiscoveringLayers()) {
-                buffer.getBuffer(irisRenderType);
-                return;
-            }
-            if (RenderBridge.isReplayingLayer()) {
-                if (RenderBridge.isReplayingLayer(irisRenderType)) {
-                    IrisBurnerFlameRenderQueue.enqueue(
-                            pose,
-                            animationPhase,
-                            intensity,
-                            palette
-                    );
-                }
-                return;
-            }
-            if (IrisBurnerFlameRenderQueue.enqueue(
-                    pose,
-                    animationPhase,
-                    intensity,
-                    palette
-            )) {
-                return;
-            }
+                && IrisBurnerFlameRenderQueue.isCollectingWorldFrame()
+                && IrisBurnerFlameRenderQueue.enqueue(
+                        pose,
+                        animationPhase,
+                        intensity,
+                        palette
+                )) {
+            return;
         }
 
-        renderFlame(
-                pose,
-                buffer.getBuffer(AeroRenderTypes.burnerFlame()),
-                animationPhase,
-                intensity,
-                palette
-        );
+        // 调用方之后会 popPose，而 submit 节点是稍后才回放的，所以先拷一份矩阵。
+        final Matrix4f flameMatrix = new Matrix4f(pose);
+        buffer.submitCustomGeometry(new PoseStack(), AeroRenderTypes.burnerFlame(),
+                (vertexPose, consumer) -> renderFlame(
+                        flameMatrix,
+                        consumer,
+                        animationPhase,
+                        intensity,
+                        palette
+                ));
     }
 
     static void renderFlame(

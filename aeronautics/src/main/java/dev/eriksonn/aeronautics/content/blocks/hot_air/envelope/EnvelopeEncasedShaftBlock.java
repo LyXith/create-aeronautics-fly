@@ -38,7 +38,7 @@ public class EnvelopeEncasedShaftBlock extends EncasedShaftBlock implements Enve
     protected final DyeColor color;
 
     protected EnvelopeEncasedShaftBlock(final Properties properties, final DyeColor color) {
-        super(properties, AeroBlocks.DYED_ENVELOPE_BLOCKS.get(color));
+        super(properties.bounceRestitution(0.5F), AeroBlocks.DYED_ENVELOPE_BLOCKS.get(color));
         this.color = color;
     }
 
@@ -52,7 +52,7 @@ public class EnvelopeEncasedShaftBlock extends EncasedShaftBlock implements Enve
 
         if (color != null) {
             if (!level.isClientSide())
-                level.playSound(null, blockPos, SoundEvents.DYE_USE, SoundSource.BLOCKS, 1.0f, 1.1f - level.random.nextFloat() * .2f);
+                level.playSound(null, blockPos, SoundEvents.DYE_USE, SoundSource.BLOCKS, 1.0f, 1.1f - level.getRandom().nextFloat() * .2f);
 
             EnvelopeBlock.applyDye(blockState, level, blockPos, color);
             return InteractionResult.SUCCESS;
@@ -69,7 +69,7 @@ public class EnvelopeEncasedShaftBlock extends EncasedShaftBlock implements Enve
         if (world instanceof ServerLevel) {
             final Player player = context.getPlayer();
             if (player != null && !player.hasInfiniteMaterials())
-                player.getInventory().placeItemBackInInventory(AeroBlocks.WHITE_ENVELOPE_BLOCK.asStack(, Prediction.SERVER_ONLY));
+                player.getInventory().placeItemBackInInventory(AeroBlocks.WHITE_ENVELOPE_BLOCK.asStack(), Prediction.SERVER_ONLY);
         }
         return InteractionResult.SUCCESS;
     }
@@ -98,26 +98,13 @@ public class EnvelopeEncasedShaftBlock extends EncasedShaftBlock implements Enve
         }
     }
 
-    @Override
-    public void updateEntityMovementAfterFallOn(final BlockGetter pLevel, final Entity pEntity) {
-        if (pEntity.isSuppressingBounce()) {
-            super.updateEntityMovementAfterFallOn(pLevel, pEntity);
-        } else {
-            this.bounceUp(pEntity);
-        }
-    }
+    // 26.3 已经没有 Block#updateEntityMovementAfterFallOn：实体反弹改由
+    // BlockBehaviour.Properties#bounceRestitution 驱动（在构造函数里设置），
+    // 原来 bounceUp 用的 0.5/0.25 就是「非 LivingEntity 再乘一个系数」的比例。
 
     @Override
     public ItemStack getCloneItemStack(final LevelReader level, final BlockPos pos, final BlockState state, final boolean includeData) {
         return this.getCasing().asItem().getDefaultInstance();
-    }
-
-    public void bounceUp(final Entity pEntity) {
-        final Vec3 vec3 = pEntity.getDeltaMovement();
-        if (vec3.y < 0.0D) {
-            final double d0 = pEntity instanceof LivingEntity ? 0.5D : 0.25D;
-            pEntity.setDeltaMovement(vec3.x, -vec3.y * d0, vec3.z);
-        }
     }
 
     @Override

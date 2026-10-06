@@ -11,6 +11,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
+import net.minecraft.util.LightCoordsUtil;
 
 public class PropellerAirParticle extends SimpleAnimatedParticle {
 
@@ -21,7 +22,7 @@ public class PropellerAirParticle extends SimpleAnimatedParticle {
 
     protected PropellerAirParticle(final ClientLevel world, final double x, final double y, final double z, final double dx, final double dy,
                                    final double dz, final SpriteSet sprite, final boolean enableCollision, final boolean isVirtual) {
-        super(world, x, y, z, sprite, world.random.nextFloat() * .5f);
+        super(world, x, y, z, sprite, world.getRandom().nextFloat() * .5f);
         this.quadSize *= 0.75F;
         this.lifetime = lifeTime;
         this.bbWidth = this.bbHeight = 0.01f;
@@ -77,7 +78,7 @@ public class PropellerAirParticle extends SimpleAnimatedParticle {
             }
             if (this.hasPhysics && (pX != 0.0D || pY != 0.0D || pZ != 0.0D)) {
                 if (!this.level.getBlockState(new BlockPos((int) (Math.floor(this.x + pX)), (int) (Math.floor(this.y + pY)), (int) (Math.floor(this.z + pZ)))).is(AllTags.AllBlockTags.FAN_TRANSPARENT.tag)) {
-                    final Vec3 vec3 = Entity.collideBoundingBox(null, new Vec3(pX, pY, pZ), this.getBoundingBox(), this.level, List.of());
+                    final Vec3 vec3 = Entity.collideBoundingBox((Entity) null, new Vec3(pX, pY, pZ), this.getBoundingBox(), this.level, List.of());
                     //Vec3 Vec3 = Entity.collideBoundingBox((Entity) null, new Vec3(pX, pY, pZ), this.getBoundingBox(), this.level, ISelectionContext.empty(), new ReuseableStream<>(Stream.empty()));
                     pX = vec3.x;
                     pY = vec3.y;
@@ -112,7 +113,7 @@ public class PropellerAirParticle extends SimpleAnimatedParticle {
 
     public int getLightColor(final float partialTick) {
         final BlockPos blockpos = new BlockPos((int) this.x, (int) this.y, (int) this.z);
-        return this.level.isLoaded(blockpos) ? LevelRenderer.getLightColor(this.level, blockpos) : 0;
+        return this.level.isLoaded(blockpos) ? LightCoordsUtil.getLightCoords(this.level, blockpos) : 0;
     }
 
     private void selectSprite(final int index) {

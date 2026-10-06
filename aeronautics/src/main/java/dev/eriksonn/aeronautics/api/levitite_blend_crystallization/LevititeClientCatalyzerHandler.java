@@ -17,9 +17,9 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
-import org.lwjgl.glfw.GLFW;
 
 import static com.zurrtum.create.client.foundation.utility.RaycastHelper.getTraceTarget;
+import net.minecraft.world.item.component.SwingAnimation;
 
 public class LevititeClientCatalyzerHandler implements InteractCallback {
     @NotNull
@@ -37,7 +37,9 @@ public class LevititeClientCatalyzerHandler implements InteractCallback {
     @Override
     public Result onUse(final int modifiers, final int action, final KeyMapping rightKey) {
 
-        if (action == GLFW.GLFW_PRESS) {
+        // 26.3 用 SDL 取代了 GLFW（org.lwjgl.glfw 已不在类路径上）；
+            // MC 自己的 KeyboardHandler/MouseHandler 同样以 1 表示按下。
+            if (action == 1) {
             final LocalPlayer player = (LocalPlayer) SimDistUtil.getClientPlayer();
             final Level level = player.level();
 
@@ -51,7 +53,7 @@ public class LevititeClientCatalyzerHandler implements InteractCallback {
             final BlockHitResult ray = level.clip(context);
             if (ray.getType() != HitResult.Type.MISS && level.getFluidState(ray.getBlockPos()).getType() == LevititeBlendHelper.getFluid()) {
                 VeilPacketManager.server().sendPacket(new LevititeCatalystCrystallizationPacket(ray.getBlockPos(), hand));
-                player.swing(hand);
+                player.swing(hand, SwingAnimation.DEFAULT, true);
                 return new Result(true);
             }
         }

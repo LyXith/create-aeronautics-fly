@@ -41,7 +41,7 @@ public abstract class ItemEntityMixin extends Entity {
             this.setDeltaMovement(this.getDeltaMovement().scale(dragFraction));
 
             if (this.level().isClientSide() && component.particle().isPresent()) {
-                if (this.level().random.nextFloat() < Mth.clamp(this.getItem().getCount() - 10, 5, 100) / 64f) {
+                if (this.level().getRandom().nextFloat() < Mth.clamp(this.getItem().getCount() - 10, 5, 100) / 64f) {
                     final Vec3 ppos = VecHelper.offsetRandomly(this.getPosition(0), this.getRandom(), 0.4f).add(0, 0.3, 0);
                     this.level().addParticle(component.particle().get(), ppos.x, ppos.y, ppos.z, 0, 0, 0);
                 }

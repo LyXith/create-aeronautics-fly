@@ -67,7 +67,7 @@ public abstract class BasePropellerBlock extends DirectionalKineticBlock impleme
 
     @Override
     public InteractionResult onWrenched(BlockState state, final UseOnContext context) {
-        final Vec3 diff = context.getClickLocation().subtract(context.getClickedPos().getCenter());
+        final Vec3 diff = context.getClickLocation().subtract(Vec3.atCenterOf(context.getClickedPos()));
 
         final Direction facing = state.getValue(FACING);
         final Vec3i normal = facing.getUnitVec3i();

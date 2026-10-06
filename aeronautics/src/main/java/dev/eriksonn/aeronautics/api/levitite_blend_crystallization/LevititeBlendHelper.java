@@ -64,7 +64,7 @@ public class LevititeBlendHelper {
     public static void spawnParticles(final Level pLevel, final BlockPos pPos, final ParticleOptions type, final int count) {
         if (!pLevel.isClientSide()) {
             final double d0 = 0.5625D;
-            final RandomSource random = pLevel.random;
+            final RandomSource random = pLevel.getRandom();
             final ServerLevel serverLevel = (ServerLevel) pLevel;
 
             serverLevel.sendParticles(type, pPos.getX() + 0.5, pPos.getY() + 0.5, pPos.getZ() + 0.5, count, 0.3, 0.3, 0.3, 0);
