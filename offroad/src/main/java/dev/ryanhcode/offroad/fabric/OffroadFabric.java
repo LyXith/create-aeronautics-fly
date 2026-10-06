@@ -21,6 +21,6 @@ public final class OffroadFabric implements ModInitializer {
         DefaultItemComponentEvents.MODIFY.register(context ->
                 OffroadCommonEvents.modifyDefaultComponents((item, modifier) ->
                         context.modify(item.asItem(), builder -> modifier.accept(builder::set))));
-        ServerTickEvents.END_WORLD_TICK.register(OffroadCommonEvents::tickLevelEvent);
+        ServerTickEvents.END_LEVEL_TICK.register(OffroadCommonEvents::tickLevelEvent);
     }
 }

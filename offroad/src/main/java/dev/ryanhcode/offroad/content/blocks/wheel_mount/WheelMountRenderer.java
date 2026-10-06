@@ -15,7 +15,7 @@ import com.zurrtum.create.catnip.math.AngleHelper;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -35,13 +35,11 @@ public class WheelMountRenderer extends KineticBlockEntityRenderer<WheelMountBlo
     }
 
     @Override
-    protected void renderSafe(final WheelMountBlockEntity be, final float partialTicks, final PoseStack ms, final MultiBufferSource buffer, final int light, final int overlay) {
+    protected void renderSafe(final WheelMountBlockEntity be, final float partialTicks, final PoseStack ms, final SubmitNodeCollector buffer, final int light, final int overlay) {
         final BlockState state = this.getRenderedBlockState(be);
-        final RenderType type = this.getRenderType(be, state);
-        renderRotatingBuffer(be, this.getRotatedModel(be, state), ms, buffer.getBuffer(type), light);
+        renderRotatingBuffer(be, this.getRotatedModel(be, state), ms, buffer, light);
 
         FilteringRenderer.renderOnBlockEntity(be, partialTicks, ms, buffer, light, overlay);
-        final VertexConsumer vb = buffer.getBuffer(RenderTypes.cutoutMovingBlock());
 
         final Direction direction = be.getBlockState()
                 .getValue(BlockStateProperties.HORIZONTAL_FACING)
@@ -90,9 +88,9 @@ public class WheelMountRenderer extends KineticBlockEntityRenderer<WheelMountBlo
         ms.translate(0.5, 0.5, 0.5);
         ms.rotate(Axis.XP.rotation((float) teleAngle));
         ms.translate(-0.5, -0.5, -0.5);
-        teleOuter.light(light).renderInto(ms.last(), vb);
+        teleOuter.light(light).submit(RenderTypes.cutoutMovingBlock(), ms, buffer);
         ms.translate(0.0, 0.0, -(teleDistance - 1.0));
-        teleInner.light(light).renderInto(ms.last(), vb);
+        teleInner.light(light).submit(RenderTypes.cutoutMovingBlock(), ms, buffer);
         ms.popPose();
 
         ms.pushPose();
@@ -102,7 +100,7 @@ public class WheelMountRenderer extends KineticBlockEntityRenderer<WheelMountBlo
         ms.rotateAround(Axis.YP.rotation((float) be.getLerpedYaw(partialTicks)), 0.0F, 0.0F, (float) (-horizontalWheelPosition + 6.0 / 16.0));
         ms.translate(-0.5, -0.5, -0.5);
 
-        teleMount.light(light).renderInto(ms.last(), vb);
+        teleMount.light(light).submit(RenderTypes.cutoutMovingBlock(), ms, buffer);
 
         ms.translate(0.5, 0.5, 0.5);
         ms.translate(0.0, 0.0, -26.0 / 16.0f);
@@ -129,7 +127,7 @@ public class WheelMountRenderer extends KineticBlockEntityRenderer<WheelMountBlo
                     final SuperByteBuffer wheel = CachedBuffers.partial(tireModel.partialModel(), state);
                     wheel.light(light)
                             .translate(-0.5f, tireModel.modelOffsetY(), -0.5f)
-                            .renderInto(ms.last(), vb);
+                            .submit(RenderTypes.cutoutMovingBlock(), ms, buffer);
                 }
             }
         }
@@ -147,24 +145,24 @@ public class WheelMountRenderer extends KineticBlockEntityRenderer<WheelMountBlo
         final float springExtension = (float) springDistance;
         final float springSpan = springExtension - 4.0f / 16.0f;
 
-        springTop.light(light).renderInto(ms.last(), vb);
+        springTop.light(light).submit(RenderTypes.cutoutMovingBlock(), ms, buffer);
         springMiddle.light(light)
                 .translate(0.0f, 13.0f / 16.0f, 0.0f)
                 .scale(1.0f, springSpan / (14.0f / 16.0f), 1.0f)
                 .translateBack(0.0f, 13.0f / 16.0f, 0.0f)
-                .renderInto(ms.last(), vb);
+                .submit(RenderTypes.cutoutMovingBlock(), ms, buffer);
         springBottom.light(light)
                 .translate(0.0, -(springSpan + -14.0 / 16.0), 0.0)
-                .renderInto(ms.last(), vb);
+                .submit(RenderTypes.cutoutMovingBlock(), ms, buffer);
         ms.popPose();
 
         diodeLeft.light(light)
                 .color(SimColors.redstone(be.clientSteeringSignalLeft / 15.0f))
-                .renderInto(ms.last(), vb);
+                .submit(RenderTypes.cutoutMovingBlock(), ms, buffer);
 
         diodeRight.light(light)
                 .color(SimColors.redstone(be.clientSteeringSignalRight / 15.0f))
-                .renderInto(ms.last(), vb);
+                .submit(RenderTypes.cutoutMovingBlock(), ms, buffer);
         ms.popPose();
     }
 

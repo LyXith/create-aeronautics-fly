@@ -144,7 +144,7 @@ public class WheelMountBlock extends HorizontalKineticBlock implements IBE<Wheel
                 mount.sendData();
                 passed[0] = true;
 
-                final float pitch = 0.8f + level.random.nextFloat() * 0.4f;
+                final float pitch = 0.8f + level.getRandom().nextFloat() * 0.4f;
                 final float volume = .75f;
 
                 if (oldSlotItem.isEmpty() && !newSlotItem.isEmpty()) {

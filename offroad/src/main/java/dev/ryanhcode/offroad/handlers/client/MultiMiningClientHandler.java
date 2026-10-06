@@ -124,34 +124,34 @@ public class MultiMiningClientHandler {
             final ClientLevel clientLevel = (ClientLevel) level;
             final double radius = 0.5;
             if (accelerator.getBlockState(pos.below()).isAir()) {
-                if (level.random.nextFloat() > 0.8) {
+                if (level.getRandom().nextFloat() > 0.8) {
                     final BlockParticleOption blockBreakingParticles = new BlockParticleOption(ParticleTypes.BLOCK, state);
 
                     clientLevel.addParticle(blockBreakingParticles,
-                            pos.getX() + 0.5 + (level.random.nextFloat() - 0.5) * 2 * radius,
+                            pos.getX() + 0.5 + (level.getRandom().nextFloat() - 0.5) * 2 * radius,
                             pos.getY(),
-                            pos.getZ() + 0.5 + (level.random.nextFloat() - 0.5) * 2 * radius,
+                            pos.getZ() + 0.5 + (level.getRandom().nextFloat() - 0.5) * 2 * radius,
                             0,
                             -1,
                             0);
 
-                    if (level.random.nextFloat() > 0.8) {
+                    if (level.getRandom().nextFloat() > 0.8) {
                         clientLevel.addParticle(ParticleTypes.ASH,
-                                pos.getX() + 0.5 + (level.random.nextFloat() - 0.5) * 2 * radius,
+                                pos.getX() + 0.5 + (level.getRandom().nextFloat() - 0.5) * 2 * radius,
                                 pos.getY(),
-                                pos.getZ() + 0.5 + (level.random.nextFloat() - 0.5) * 2 * radius,
+                                pos.getZ() + 0.5 + (level.getRandom().nextFloat() - 0.5) * 2 * radius,
                                 0,
                                 -1,
                                 0);
                     }
                 }
             } else if (accelerator.getBlockState(pos.above()).isAir()) {
-                if (level.random.nextFloat() > 0.9) {
-                    if (level.random.nextFloat() > 0.5) {
+                if (level.getRandom().nextFloat() > 0.9) {
+                    if (level.getRandom().nextFloat() > 0.5) {
                         clientLevel.addParticle(ParticleTypes.CRIT,
-                                pos.getX() + 0.5 + (level.random.nextFloat() - 0.5) * 2 * radius,
+                                pos.getX() + 0.5 + (level.getRandom().nextFloat() - 0.5) * 2 * radius,
                                 pos.getY() + 1.2,
-                                pos.getZ() + 0.5 + (level.random.nextFloat() - 0.5) * 2 * radius,
+                                pos.getZ() + 0.5 + (level.getRandom().nextFloat() - 0.5) * 2 * radius,
                                 0,
                                 0,
                                 0);
@@ -160,7 +160,7 @@ public class MultiMiningClientHandler {
             }
 
             final double chance = 1 - (0.4 / (Math.sqrt(Math.pow(blocksBeingBroken, 2))));
-            if (soundCount < 64 && level.random.nextFloat() > chance) {
+            if (soundCount < 64 && level.getRandom().nextFloat() > chance) {
                 soundCount++;
                 clientLevel.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, state.getSoundType()
                         .getHitSound(), SoundSource.BLOCKS, .4f, 0.1f, false);

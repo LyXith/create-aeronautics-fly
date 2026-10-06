@@ -38,7 +38,7 @@ public class OffroadStress extends CStress {
 		};
 	}
 
-	public static <B extends Block, P> NonNullUnaryOperator<BlockBuilder<B, P>> setCapacity(final double value) {
+	public static <B extends Block, P> NonNullUnaryOperator<BlockBuilder<B, P>> setBlockCapacity(final double value) {
 		return (builder) -> {
 			assertFromOffroad(builder);
 			DEFAULT_CAPACITIES.put(Offroad.path(builder.getName()), value);
