@@ -67,8 +67,6 @@ public class SimIcons extends AllIcons {
     }
 
     public void render(final PoseStack ms, final SubmitNodeCollector buffer, final int color) {
-        final VertexConsumer builder = buffer.getBuffer(RenderTypes.text(ICON_ATLAS));
-        final Matrix4f matrix = ms.last().pose();
         final Color rgb = new Color(color);
         final int light = LightCoordsUtil.FULL_BRIGHT;
 
@@ -82,10 +80,13 @@ public class SimIcons extends AllIcons {
         final float v1 = this.iconY * 1f / ICON_ATLAS_SIZE;
         final float v2 = (this.iconY + 16) * 1f / ICON_ATLAS_SIZE;
 
-        this.vertex(builder, matrix, vec1, rgb, u1, v1, light);
-        this.vertex(builder, matrix, vec2, rgb, u1, v2, light);
-        this.vertex(builder, matrix, vec3, rgb, u2, v2, light);
-        this.vertex(builder, matrix, vec4, rgb, u2, v1, light);
+        buffer.submitCustomGeometry(ms, RenderTypes.text(ICON_ATLAS), (pose, builder) -> {
+            final Matrix4f matrix = pose.pose();
+            this.vertex(builder, matrix, vec1, rgb, u1, v1, light);
+            this.vertex(builder, matrix, vec2, rgb, u1, v2, light);
+            this.vertex(builder, matrix, vec3, rgb, u2, v2, light);
+            this.vertex(builder, matrix, vec4, rgb, u2, v1, light);
+        });
     }
 
     private void vertex(final VertexConsumer builder, final Matrix4f matrix, final Vec3 vec, final Color rgb, final float u, final float v, final int light) {

@@ -131,8 +131,8 @@ public class RopeStrandRenderer {
                 new Vector3d(rad, 0, -rad),
         };
 
-        final VertexConsumer linesVB = buffer.getBuffer(RenderTypes.lines());
-        final Matrix4f pose = ps.last().pose();
+        buffer.submitCustomGeometry(ps, RenderTypes.lines(), (linePose, linesVB) -> {
+        final Matrix4f pose = linePose.pose();
 
         for (int i = 0; i < ropeRenderPoints.size() + 1; i++) {
             final RopeRenderPoint renderPoint0 = ropeRenderPoints.get(Math.max(0, i - 1));
@@ -153,13 +153,14 @@ public class RopeStrandRenderer {
 
                 linesVB.addVertex(pose, (float) previousCorner.x, (float) previousCorner.y, (float) previousCorner.z)
                         .setColor(0f, 0f, 0f, .4f)
-                        .setNormal(ps.last(), (float) cornerDiff.x, (float) cornerDiff.y, (float) cornerDiff.z);
+                        .setNormal(linePose, (float) cornerDiff.x, (float) cornerDiff.y, (float) cornerDiff.z);
 
                 linesVB.addVertex(pose, (float) currentCorner.x, (float) currentCorner.y, (float) currentCorner.z)
                         .setColor(0f, 0f, 0f, .4f)
-                        .setNormal(ps.last(), (float) cornerDiff.x, (float) cornerDiff.y, (float) cornerDiff.z);
+                        .setNormal(linePose, (float) cornerDiff.x, (float) cornerDiff.y, (float) cornerDiff.z);
             }
         }
+        });
     }
 
     private static @NotNull ObjectArrayList<RopeRenderPoint> buildRenderPoints(final float partialTick, final List<ClientRopePoint> inputPoints) {

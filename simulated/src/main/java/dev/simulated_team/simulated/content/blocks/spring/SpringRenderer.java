@@ -1,4 +1,5 @@
 package dev.simulated_team.simulated.content.blocks.spring;
+import net.minecraft.client.renderer.rendertype.RenderType;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -92,7 +93,7 @@ public class SpringRenderer extends SmartBlockEntityRenderer<SpringBlockEntity> 
         final BlockState state = be.getBlockState();
         final SpringBlock.Size size = state.getValue(SpringBlock.SIZE);
         final String name = (size == SpringBlock.Size.MEDIUM ? "" : (size.getSerializedName() + "_")) + "spring";
-        final VertexConsumer buffer = bufferSource.getBuffer(SimRenderTypes.spring(Simulated.path("textures/block/spring/" + name + ".png")));
+        final RenderType renderType = SimRenderTypes.spring(Simulated.path("textures/block/spring/" + name + ".png"));
 
         ps.pushPose();
 
@@ -238,7 +239,8 @@ public class SpringRenderer extends SmartBlockEntityRenderer<SpringBlockEntity> 
                     (float) (runningSpringLength + length) * uvScale,
                     light,
                     color,
-                    buffer,
+                    renderType,
+                    bufferSource,
                     width,
                     textureWidth);
 
@@ -255,7 +257,8 @@ public class SpringRenderer extends SmartBlockEntityRenderer<SpringBlockEntity> 
                     0.0f - (float) (runningSpringLength + length) * uvScale,
                     light,
                     color,
-                    buffer,
+                    renderType,
+                    bufferSource,
                     width,
                     textureWidth);
             runningSpringLength += length;
@@ -329,9 +332,11 @@ public class SpringRenderer extends SmartBlockEntityRenderer<SpringBlockEntity> 
                                final float uvEnd,
                                final int light,
                                final int color,
-                               final VertexConsumer a,
+                               final RenderType renderType,
+                               final SubmitNodeCollector collector,
                                final float width,
                                final float textureWidth) {
+        collector.submitCustomGeometry(ms, renderType, (pose, a) -> {
         inputStartUp.cross(startDirection, this.startLeft).normalize();
         inputEndUp.cross(endDirection, this.endLeft).normalize();
 
@@ -350,35 +355,36 @@ public class SpringRenderer extends SmartBlockEntityRenderer<SpringBlockEntity> 
 
         final float uvScale = 16.0f / textureWidth;
         final float uvXOffset = second ? width / textureWidth : 0.0f;
-        this.vert(ms, a, startPos.add(this.startLeft, this.vertex).sub(this.startUp), color, 0.0f + uvXOffset, uvStart * uvScale, startDown, light);
-        this.vert(ms, a, endPos.add(this.endLeft, this.vertex).sub(this.endUp), color, 0.0f + uvXOffset, uvEnd * uvScale, endDown, light);
-        this.vert(ms, a, endPos.sub(this.endLeft, this.vertex).sub(this.endUp), color, texW + uvXOffset, uvEnd * uvScale, endDown, light);
-        this.vert(ms, a, startPos.sub(this.startLeft, this.vertex).sub(this.startUp), color, texW + uvXOffset, uvStart * uvScale, startDown, light);
+        this.vert(pose, a, startPos.add(this.startLeft, this.vertex).sub(this.startUp), color, 0.0f + uvXOffset, uvStart * uvScale, startDown, light);
+        this.vert(pose, a, endPos.add(this.endLeft, this.vertex).sub(this.endUp), color, 0.0f + uvXOffset, uvEnd * uvScale, endDown, light);
+        this.vert(pose, a, endPos.sub(this.endLeft, this.vertex).sub(this.endUp), color, texW + uvXOffset, uvEnd * uvScale, endDown, light);
+        this.vert(pose, a, startPos.sub(this.startLeft, this.vertex).sub(this.startUp), color, texW + uvXOffset, uvStart * uvScale, startDown, light);
 
-        this.vert(ms, a, startPos.sub(this.startLeft, this.vertex).add(this.startUp), color, 0.0f + uvXOffset, uvStart * uvScale, this.startUp, light);
-        this.vert(ms, a, endPos.sub(this.endLeft, this.vertex).add(this.endUp), color, 0.0f + uvXOffset, uvEnd * uvScale, this.endUp, light);
-        this.vert(ms, a, endPos.add(this.endLeft, this.vertex).add(this.endUp), color, texW + uvXOffset, uvEnd * uvScale, this.endUp, light);
-        this.vert(ms, a, startPos.add(this.startLeft, this.vertex).add(this.startUp), color, texW + uvXOffset, uvStart * uvScale, this.startUp, light);
+        this.vert(pose, a, startPos.sub(this.startLeft, this.vertex).add(this.startUp), color, 0.0f + uvXOffset, uvStart * uvScale, this.startUp, light);
+        this.vert(pose, a, endPos.sub(this.endLeft, this.vertex).add(this.endUp), color, 0.0f + uvXOffset, uvEnd * uvScale, this.endUp, light);
+        this.vert(pose, a, endPos.add(this.endLeft, this.vertex).add(this.endUp), color, texW + uvXOffset, uvEnd * uvScale, this.endUp, light);
+        this.vert(pose, a, startPos.add(this.startLeft, this.vertex).add(this.startUp), color, texW + uvXOffset, uvStart * uvScale, this.startUp, light);
 
-        this.vert(ms, a, startPos.sub(this.startLeft, this.vertex).sub(this.startUp), color, 0.0f + uvXOffset, uvStart * uvScale, startRight, light);
-        this.vert(ms, a, endPos.sub(this.endLeft, this.vertex).sub(this.endUp), color, 0.0f + uvXOffset, uvEnd * uvScale, endRight, light);
-        this.vert(ms, a, endPos.sub(this.endLeft, this.vertex).add(this.endUp), color, texW + uvXOffset, uvEnd * uvScale, endRight, light);
-        this.vert(ms, a, startPos.sub(this.startLeft, this.vertex).add(this.startUp), color, texW + uvXOffset, uvStart * uvScale, startRight, light);
+        this.vert(pose, a, startPos.sub(this.startLeft, this.vertex).sub(this.startUp), color, 0.0f + uvXOffset, uvStart * uvScale, startRight, light);
+        this.vert(pose, a, endPos.sub(this.endLeft, this.vertex).sub(this.endUp), color, 0.0f + uvXOffset, uvEnd * uvScale, endRight, light);
+        this.vert(pose, a, endPos.sub(this.endLeft, this.vertex).add(this.endUp), color, texW + uvXOffset, uvEnd * uvScale, endRight, light);
+        this.vert(pose, a, startPos.sub(this.startLeft, this.vertex).add(this.startUp), color, texW + uvXOffset, uvStart * uvScale, startRight, light);
 
-        this.vert(ms, a, startPos.add(this.startLeft, this.vertex).add(this.startUp), color, 0.0f + uvXOffset, uvStart * uvScale, this.startLeft, light);
-        this.vert(ms, a, endPos.add(this.endLeft, this.vertex).add(this.endUp), color, 0.0f + uvXOffset, uvEnd * uvScale, this.endLeft, light);
-        this.vert(ms, a, endPos.add(this.endLeft, this.vertex).sub(this.endUp), color, texW + uvXOffset, uvEnd * uvScale, this.endLeft, light);
-        this.vert(ms, a, startPos.add(this.startLeft, this.vertex).sub(this.startUp), color, texW + uvXOffset, uvStart * uvScale, this.startLeft, light);
+        this.vert(pose, a, startPos.add(this.startLeft, this.vertex).add(this.startUp), color, 0.0f + uvXOffset, uvStart * uvScale, this.startLeft, light);
+        this.vert(pose, a, endPos.add(this.endLeft, this.vertex).add(this.endUp), color, 0.0f + uvXOffset, uvEnd * uvScale, this.endLeft, light);
+        this.vert(pose, a, endPos.add(this.endLeft, this.vertex).sub(this.endUp), color, texW + uvXOffset, uvEnd * uvScale, this.endLeft, light);
+        this.vert(pose, a, startPos.add(this.startLeft, this.vertex).sub(this.startUp), color, texW + uvXOffset, uvStart * uvScale, this.startLeft, light);
+        });
     }
 
-    private void vert(final PoseStack ms, final VertexConsumer a, final Vector3dc pos, final int color, final float u1, final float v1, final Vector3dc normal, final int light) {
+    private void vert(final PoseStack.Pose pose, final VertexConsumer a, final Vector3dc pos, final int color, final float u1, final float v1, final Vector3dc normal, final int light) {
         normal.normalize(this.normalizedNormal);
-        a.addVertex(ms.last().pose(), (float) pos.x(), (float) pos.y(), (float) pos.z())
+        a.addVertex(pose.pose(), (float) pos.x(), (float) pos.y(), (float) pos.z())
                 .setColor(color)
                 .setUv(u1, v1)
                 .setOverlay(OverlayTexture.NO_OVERLAY)
                 .setLight(light)
-                .setNormal(ms.last(), (float) this.normalizedNormal.x(), (float) this.normalizedNormal.y(), (float) this.normalizedNormal.z());
+                .setNormal(pose, (float) this.normalizedNormal.x(), (float) this.normalizedNormal.y(), (float) this.normalizedNormal.z());
     }
 
     @Override

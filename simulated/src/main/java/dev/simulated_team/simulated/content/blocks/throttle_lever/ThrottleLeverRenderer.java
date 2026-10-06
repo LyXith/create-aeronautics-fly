@@ -9,7 +9,6 @@ import com.zurrtum.create.client.flywheel.lib.transform.PoseTransformStack;
 import com.zurrtum.create.client.flywheel.lib.transform.TransformStack;
 import dev.simulated_team.simulated.index.SimBlocks;
 import dev.simulated_team.simulated.index.SimPartialModels;
-import net.minecraft.client.renderer.ShapeRenderer;
 import dev.simulated_team.simulated.util.SimColors;
 import com.zurrtum.create.catnip.math.AngleHelper;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
@@ -105,7 +104,6 @@ public class ThrottleLeverRenderer extends SafeBlockEntityRenderer<ThrottleLever
     }
 
     private static void renderOutline(final ThrottleLeverBlockEntity be, final PoseStack ms, final SubmitNodeCollector bufferSource, final float angle) {
-        final VertexConsumer consumer = bufferSource.getBuffer(RenderTypes.lines());
         final VoxelShape leverShape = SimBlocks.THROTTLE_LEVER.get().getHandleShape(SimBlocks.THROTTLE_LEVER.getDefaultState());
 
         ms.pushPose();
@@ -115,7 +113,7 @@ public class ThrottleLeverRenderer extends SafeBlockEntityRenderer<ThrottleLever
                 .translate(1 / 2f, 3.0 / 16.0, 1 / 2f)
                 .rotateX(angle)
                 .translateBack(1 / 2f, 3.0 / 16.0, 1 / 2f);
-        ShapeRenderer.renderShape(ms, consumer, leverShape, 0.0, 0.0, 0.0, 0x66000000, 1.0f);
+        bufferSource.submitShapeOutline(ms, leverShape, RenderTypes.lines(), 0x66000000, 1.0f, false);
         ms.popPose();
     }
 

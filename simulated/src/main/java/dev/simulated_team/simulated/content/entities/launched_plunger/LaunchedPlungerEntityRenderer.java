@@ -278,7 +278,7 @@ public class LaunchedPlungerEntityRenderer extends EntityRenderer<LaunchedPlunge
         final Vec3 cameraPosition = Minecraft.getInstance().gameRenderer.mainCamera().position();
 
         final RenderType renderType = SimRenderTypes.rope();
-        final VertexConsumer builder = multiBufferSource.getBuffer(renderType);
+        multiBufferSource.submitCustomGeometry(poseStack, renderType, (pose, builder) -> {
 
         CABLE_POINTS.clear();
         for (final Vec3 position : positions) {
@@ -387,6 +387,7 @@ public class LaunchedPlungerEntityRenderer extends EntityRenderer<LaunchedPlunge
             ORIENTATION.set(NEXT_ORIENTATION);
             v = nextV;
         }
+        });
     }
 
     private static void calculateOrientation(final Quaternionf store, final double x, final double y, final double z, final Vec3 nextPoint) {
