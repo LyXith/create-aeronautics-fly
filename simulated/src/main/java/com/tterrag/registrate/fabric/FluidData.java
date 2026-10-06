@@ -2,29 +2,20 @@ package com.tterrag.registrate.fabric;
 
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import net.fabricmc.api.EnvType;
-import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandler;
-import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
-import net.fabricmc.fabric.api.client.render.fluid.v1.SimpleFluidRenderHandler;
 import net.minecraft.resources.Identifier;
 
 public record FluidData(String translationKey, int light) {
 
     public interface RenderHandlerFactory {
-        Object create(Identifier stillTexture, Identifier flowingTexture);
+        SimpleFluidRenderHandler create(Identifier stillTexture, Identifier flowingTexture);
     }
 
     public static RenderHandlerFactory createDefaultHandler() {
-        return (stillTexture, flowingTexture) -> {
-            final SimpleFluidRenderHandler handler = new SimpleFluidRenderHandler(stillTexture, flowingTexture, flowingTexture, -1);
-            return handler;
-        };
+        return SimpleFluidRenderHandler::new;
     }
 
-    public static  <T extends SimpleFlowableFluid> void registerRenderHandler(NonNullSupplier<RenderHandlerFactory> renderHandler, T entry, Identifier stillTexture, Identifier flowingTexture) {
-        EnvExecutor.runWhenOn(EnvType.CLIENT, () -> () -> {
-            final FluidRenderHandler handler = (FluidRenderHandler) renderHandler.get().create(stillTexture, flowingTexture);
-            FluidRenderHandlerRegistry.INSTANCE.register(entry, handler);
-            FluidRenderHandlerRegistry.INSTANCE.register(entry.getSource(), handler);
-        });
+    public static <T extends SimpleFlowableFluid> void registerRenderHandler(NonNullSupplier<RenderHandlerFactory> renderHandler, T entry, Identifier stillTexture, Identifier flowingTexture) {
+        EnvExecutor.runWhenOn(EnvType.CLIENT, () -> () ->
+                renderHandler.get().create(stillTexture, flowingTexture).register(entry.getSource(), entry));
     }
 }

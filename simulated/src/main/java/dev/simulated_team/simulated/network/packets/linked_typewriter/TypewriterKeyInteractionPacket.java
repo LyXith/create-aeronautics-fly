@@ -11,7 +11,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import org.lwjgl.glfw.GLFW;
+import com.mojang.blaze3d.platform.InputConstants;
 
 public record TypewriterKeyInteractionPacket(BlockPos interactionPos, int key, int scanCode, int action /*If it's being pressed etc*/) implements CustomPacketPayload {
     public static final Type<TypewriterKeyInteractionPacket> TYPE = new Type<>(Simulated.path("key_interaction"));
@@ -28,7 +28,7 @@ public record TypewriterKeyInteractionPacket(BlockPos interactionPos, int key, i
         final BlockEntity be = level.getBlockEntity(this.interactionPos);
 
         if (be instanceof final LinkedTypewriterBlockEntity typeWriter) {
-            final boolean pressed = this.action == GLFW.GLFW_PRESS;
+            final boolean pressed = this.action == InputConstants.PRESS;
             if (pressed) {
                 SimStats.TYPEWRITER_KEY_PRESSES.awardTo(context.player());
             }

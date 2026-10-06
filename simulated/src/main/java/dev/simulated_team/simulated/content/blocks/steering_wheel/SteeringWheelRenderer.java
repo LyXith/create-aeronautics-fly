@@ -18,10 +18,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.BlockModelPart;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
-import net.minecraft.client.renderer.block.model.SimpleModelWrapper;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.resources.model.SimpleModelWrapper;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
@@ -127,15 +127,15 @@ public class SteeringWheelRenderer extends KineticBlockEntityRenderer<SteeringWh
             return null;
         final RandomSource random = RandomSource.create();
         random.setSeed(42L);
-        final List<BlockModelPart> parts = model.collectParts(random);
-        for (final BlockModelPart part : parts) {
+        final List<BlockStateModelPart> parts = model.collectParts(random);
+        for (final BlockStateModelPart part : parts) {
             final List<BakedQuad> quads = part.getQuads(side);
             if (!quads.isEmpty()) {
                 return quads.getFirst().sprite();
             }
         }
         random.setSeed(42L);
-        for (final BlockModelPart part : parts) {
+        for (final BlockStateModelPart part : parts) {
             for (final BakedQuad quad : part.getQuads(null)) {
                 if (quad.direction() == side) {
                     return quad.sprite();

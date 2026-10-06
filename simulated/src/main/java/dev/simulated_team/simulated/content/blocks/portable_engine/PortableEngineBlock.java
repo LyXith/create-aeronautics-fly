@@ -1,5 +1,7 @@
 package dev.simulated_team.simulated.content.blocks.portable_engine;
 
+import net.minecraft.util.Prediction;
+
 import com.zurrtum.create.AllItems;
 import com.zurrtum.create.content.kinetics.base.HorizontalKineticBlock;
 import com.zurrtum.create.foundation.block.IBE;
@@ -158,7 +160,7 @@ public class PortableEngineBlock extends HorizontalKineticBlock implements IBE<P
                 player.setItemInHand(interactionHand, heldItem);
             } else {
                 slot.setStack(ItemStack.EMPTY);
-                player.getInventory().placeItemBackInInventory(currentItemStack);
+                player.getInventory().placeItemBackInInventory(currentItemStack, Prediction.SERVER_ONLY);
                 level.playSound(null, blockPos, SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, .2f,
                         1f + level.getRandom().nextFloat());
             }

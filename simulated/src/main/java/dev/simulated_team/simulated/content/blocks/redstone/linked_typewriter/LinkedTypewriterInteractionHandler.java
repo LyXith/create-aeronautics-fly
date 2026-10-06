@@ -25,7 +25,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import org.lwjgl.glfw.GLFW;
+import com.mojang.blaze3d.platform.InputConstants;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -40,23 +40,23 @@ public class LinkedTypewriterInteractionHandler {
 
     static {
         // Hardcoded key locations for renderer
-        presetKeys.put(GLFW.GLFW_KEY_Q, 0);
-        presetKeys.put(GLFW.GLFW_KEY_W, 1);
-        presetKeys.put(GLFW.GLFW_KEY_E, 2);
-        presetKeys.put(GLFW.GLFW_KEY_A, 6);
-        presetKeys.put(GLFW.GLFW_KEY_S, 7);
-        presetKeys.put(GLFW.GLFW_KEY_D, 8);
-        presetKeys.put(GLFW.GLFW_KEY_UP, 4);
-        presetKeys.put(GLFW.GLFW_KEY_LEFT, 10);
-        presetKeys.put(GLFW.GLFW_KEY_DOWN, 11);
-        presetKeys.put(GLFW.GLFW_KEY_RIGHT, 12);
-        presetKeys.put(GLFW.GLFW_KEY_SPACE, 13);
-        presetKeys.put(GLFW.GLFW_KEY_0, 12);
-        presetKeys.put(GLFW.GLFW_KEY_KP_0, 12);
+        presetKeys.put(InputConstants.KEY_Q, 0);
+        presetKeys.put(InputConstants.KEY_W, 1);
+        presetKeys.put(InputConstants.KEY_E, 2);
+        presetKeys.put(InputConstants.KEY_A, 6);
+        presetKeys.put(InputConstants.KEY_S, 7);
+        presetKeys.put(InputConstants.KEY_D, 8);
+        presetKeys.put(InputConstants.KEY_UP, 4);
+        presetKeys.put(InputConstants.KEY_LEFT, 10);
+        presetKeys.put(InputConstants.KEY_DOWN, 11);
+        presetKeys.put(InputConstants.KEY_RIGHT, 12);
+        presetKeys.put(InputConstants.KEY_SPACE, 13);
+        presetKeys.put(InputConstants.KEY_0, 12);
+        presetKeys.put(InputConstants.KEY_NUMPAD0, 12);
 
         for (int i = 0; i < 9; i++) {
-            presetKeys.put(GLFW.GLFW_KEY_1 + i, i);
-            presetKeys.put(GLFW.GLFW_KEY_KP_1 + i, i);
+            presetKeys.put(InputConstants.KEY_1 + i, i);
+            presetKeys.put(InputConstants.KEY_NUMPAD1 + i, i);
         }
     }
 
@@ -119,7 +119,7 @@ public class LinkedTypewriterInteractionHandler {
             if (be != null && !be.isRemoved()) {
                 final LinkedTypewriterEntries.KeyboardEntry frequency = be.getTypewriterEntries().getEntry(key);
 
-                if (key == GLFW.GLFW_KEY_ESCAPE) {
+                if (key == InputConstants.KEY_ESCAPE) {
                     be.disconnectUser();
                     VeilPacketManager.server().sendPacket(new TypewriterDisconnectUser(be.getBlockPos()));
 
@@ -130,15 +130,15 @@ public class LinkedTypewriterInteractionHandler {
                     // TODO: cache these that way we don't iterate every keypress and repeat
                     preventPress(key, scanCode);
 
-                    if (action != GLFW.GLFW_REPEAT) {
+                    if (action != InputConstants.REPEAT) {
                         VeilPacketManager.server().sendPacket(new TypewriterKeyInteractionPacket(be.getBlockPos(), key, scanCode, action));
                     }
 
                     final LocalPlayer player = minecraft.player;
-                    if (action == GLFW.GLFW_PRESS) {
+                    if (action == InputConstants.PRESS) {
                         SimSoundEvents.LINKED_TYPEWRITER_TAP.playAt(player.level(), player.blockPosition(), 1.0F, 1.0F, true);
                         checkKeyCodeAndSetPressed(key, true);
-                    } else if (action == GLFW.GLFW_RELEASE) {
+                    } else if (action == InputConstants.RELEASE) {
                         SimSoundEvents.LINKED_TYPEWRITER_UNTAP.playAt(player.level(), player.blockPosition(), 1.0F, 1.0F, true);
                         checkKeyCodeAndSetPressed(key, false);
                     }

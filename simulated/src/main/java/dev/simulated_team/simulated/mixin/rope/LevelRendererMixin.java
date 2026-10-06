@@ -3,7 +3,7 @@ package dev.simulated_team.simulated.mixin.rope;
 import dev.simulated_team.simulated.content.blocks.rope.strand.client.ZiplineClientManager;
 import net.minecraft.client.Camera;
 import net.minecraft.client.renderer.LevelRenderer;
-import net.minecraft.client.renderer.state.LevelRenderState;
+import net.minecraft.client.renderer.state.level.LevelRenderState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

@@ -9,7 +9,7 @@ import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.providers.RegistrateProvider;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
 import net.fabricmc.api.EnvType;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -33,13 +33,13 @@ public class RegistrateLootTableProvider extends LootTableProvider implements Re
         static LootType<RegistrateBlockLootTables> BLOCK = register("block", LootContextParamSets.BLOCK, RegistrateBlockLootTables::new);
         static LootType<RegistrateEntityLootTables> ENTITY = register("entity", LootContextParamSets.ENTITY, RegistrateEntityLootTables::new);
 
-        T getLootCreator(HolderLookup.Provider provider, AbstractRegistrate<?> parent, Consumer<T> callback, FabricDataOutput output);
+        T getLootCreator(HolderLookup.Provider provider, AbstractRegistrate<?> parent, Consumer<T> callback, FabricPackOutput output);
         ContextKeySet getLootSet();
 
-        static <T extends RegistrateLootTables> LootType<T> register(String name, ContextKeySet set, Function4<HolderLookup.Provider, AbstractRegistrate<?>, Consumer<T>, FabricDataOutput, T> factory) {
+        static <T extends RegistrateLootTables> LootType<T> register(String name, ContextKeySet set, Function4<HolderLookup.Provider, AbstractRegistrate<?>, Consumer<T>, FabricPackOutput, T> factory) {
             LootType<T> type = new LootType<T>() {
                 @Override
-                public T getLootCreator(HolderLookup.Provider provider, AbstractRegistrate<?> parent, Consumer<T> callback, FabricDataOutput output) {
+                public T getLootCreator(HolderLookup.Provider provider, AbstractRegistrate<?> parent, Consumer<T> callback, FabricPackOutput output) {
                     return factory.apply(provider, parent, callback, output);
                 }
 
@@ -60,16 +60,16 @@ public class RegistrateLootTableProvider extends LootTableProvider implements Re
     private final Multimap<LootType<?>, Consumer<? super RegistrateLootTables>> specialLootActions = HashMultimap.create();
     private final Multimap<ContextKeySet, Consumer<BiConsumer<ResourceKey<LootTable>, LootTable.Builder>>> lootActions = HashMultimap.create();
     private final List<SubProviderEntry> subProviders;
-    private final FabricDataOutput output;
+    private final FabricPackOutput output;
 
     private CompletableFuture<HolderLookup.Provider> provider;
 
-    public RegistrateLootTableProvider(AbstractRegistrate<?> parent, FabricDataOutput output,
+    public RegistrateLootTableProvider(AbstractRegistrate<?> parent, FabricPackOutput output,
                                        CompletableFuture<HolderLookup.Provider> provider) {
         this(parent, output, provider, new ArrayList<>());
     }
 
-    private RegistrateLootTableProvider(AbstractRegistrate<?> parent, FabricDataOutput output,
+    private RegistrateLootTableProvider(AbstractRegistrate<?> parent, FabricPackOutput output,
                                         CompletableFuture<HolderLookup.Provider> provider,
                                         List<SubProviderEntry> subProviders) {
         super(output, Set.of(), subProviders, provider);
@@ -101,12 +101,12 @@ public class RegistrateLootTableProvider extends LootTableProvider implements Re
         this.lootActions.put(set, action);
     }
 
-    private LootTableSubProvider getLootCreator(HolderLookup. Provider provider, AbstractRegistrate<?> parent, LootType<?> type, FabricDataOutput output) {
+    private LootTableSubProvider getLootCreator(HolderLookup. Provider provider, AbstractRegistrate<?> parent, LootType<?> type, FabricPackOutput output) {
         RegistrateLootTables creator = type.getLootCreator(provider, parent, cons -> specialLootActions.get(type).forEach(c -> c.accept(cons)), output);
         return creator;
     }
 
-    public List<LootTableProvider.SubProviderEntry> getTables(FabricDataOutput output) {
+    public List<LootTableProvider.SubProviderEntry> getTables(FabricPackOutput output) {
         parent.genData(ProviderType.LOOT, this);
         ImmutableList.Builder<LootTableProvider.SubProviderEntry> builder = ImmutableList.builder();
         for (LootType<?> type : LOOT_TYPES.values()) {

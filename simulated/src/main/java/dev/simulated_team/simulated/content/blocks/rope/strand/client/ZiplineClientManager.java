@@ -33,7 +33,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
-import org.lwjgl.glfw.GLFW;
+import com.mojang.blaze3d.platform.InputConstants;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -330,7 +330,7 @@ public class ZiplineClientManager implements InteractCallback {
 
     @Override
     public Result onUse(final int modifiers, final int action, final KeyMapping rightKey) {
-        if (action == GLFW.GLFW_RELEASE || hoveringRope == null || ridingRope == hoveringRope)
+        if (action == InputConstants.RELEASE || hoveringRope == null || ridingRope == hoveringRope)
             return Result.empty();
 
         final Minecraft mc = Minecraft.getInstance();

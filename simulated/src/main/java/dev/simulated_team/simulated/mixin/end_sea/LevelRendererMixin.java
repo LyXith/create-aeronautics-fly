@@ -1,6 +1,6 @@
 package dev.simulated_team.simulated.mixin.end_sea;
 
-import com.mojang.blaze3d.buffers.GpuBufferSlice;
+import com.mojang.renderpearl.api.buffers.GpuBufferSlice;
 import com.mojang.blaze3d.resource.GraphicsResourceAllocator;
 import dev.simulated_team.simulated.content.end_sea.EndSeaRenderer;
 import net.minecraft.client.Camera;

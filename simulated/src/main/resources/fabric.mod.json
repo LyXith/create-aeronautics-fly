@@ -7,7 +7,7 @@
   "authors": ["${mod_author}"],
   "license": "${license}",
   "environment": "*",
-  "accessWidener": "simulated.accesswidener",
+  "accessWidener": "simulated.classtweaker",
   "entrypoints": {
     "main": ["dev.simulated_team.simulated.fabric.SimulatedFabric"],
     "client": ["dev.simulated_team.simulated.fabric.SimulatedFabricClient"],

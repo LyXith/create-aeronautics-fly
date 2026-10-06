@@ -4,7 +4,7 @@ import dev.simulated_team.simulated.content.blocks.redstone.linked_typewriter.Li
 import dev.simulated_team.simulated.content.blocks.redstone.linked_typewriter.screen.LinkedTypewriterMenuCommon;
 import dev.simulated_team.simulated.content.blocks.redstone.linked_typewriter.screen.LinkedTypewriterMenuData;
 import dev.simulated_team.simulated.service.SimMenuService;
-import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
+import net.fabricmc.fabric.api.menu.v1.ExtendedMenuProvider;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -32,7 +32,7 @@ public final class FabricSimMenuService implements SimMenuService {
     @Override
     public void openScreen(final ServerPlayer player, final MenuProvider factory,
                            final LinkedTypewriterMenuData data) {
-        player.openMenu(new ExtendedScreenHandlerFactory<LinkedTypewriterMenuData>() {
+        player.openMenu(new ExtendedMenuProvider<LinkedTypewriterMenuData>() {
             @Override
             public LinkedTypewriterMenuData getScreenOpeningData(final ServerPlayer serverPlayer) {
                 return data;

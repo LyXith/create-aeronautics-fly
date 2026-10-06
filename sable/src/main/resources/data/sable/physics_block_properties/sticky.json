@@ -1,7 +1,0 @@
-{
-  "selector": "#sable:frictive",
-
-  "properties": {
-    "sable:friction": 1.65
-  }
-}

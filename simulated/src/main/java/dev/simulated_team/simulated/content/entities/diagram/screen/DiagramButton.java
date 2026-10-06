@@ -2,7 +2,7 @@ package dev.simulated_team.simulated.content.entities.diagram.screen;
 
 import dev.simulated_team.simulated.index.SimGUITextures;
 import dev.simulated_team.simulated.index.SimSoundEvents;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -46,7 +46,7 @@ public class DiagramButton extends AbstractWidget {
     }
 
     @Override
-    protected void renderWidget(final GuiGraphics guiGraphics, final int mouseX, final int mouseY, final float partialTicks) {
+    protected void extractWidgetRenderState(GuiGraphicsExtractor guiGraphics, final int mouseX, final int mouseY, final float partialTicks) {
         this.texture.render(guiGraphics, this.getX() - 1, this.getY() - 1, this.isHovered() || this.iconSwitch.getAsBoolean() ? DiagramScreen.BUTTON_COLOR : DiagramScreen.DULL_BUTTON_COLOR);
 
         if (this.diagramTooltip != null && this.isHovered()) {

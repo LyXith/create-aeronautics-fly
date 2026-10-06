@@ -86,8 +86,8 @@ import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute;
-import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTab;
+import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.DefaultedMappedRegistry;
 import net.minecraft.core.MappedRegistry;
@@ -229,7 +229,7 @@ public abstract class AbstractRegistrate<S extends AbstractRegistrate<S>> {
         registrationOrder.forEach(Registration::runCallbacks);
         registries.forEach(this::onRegisterLate);
         creativeModeTabModifiers.forEach((key, consumer) ->
-                ItemGroupEvents.modifyEntriesEvent(key).register(entries ->
+                CreativeModeTabEvents.modifyOutputEvent(key).register(entries ->
                         consumer.accept(
                                 new CreativeModeTabModifier(
                                         entries::getEnabledFeatures, entries::shouldShowOpRestrictedItems, entries::accept, entries::getContext
@@ -1138,7 +1138,7 @@ public abstract class AbstractRegistrate<S extends AbstractRegistrate<S>> {
     public <P> NoConfigBuilder<CreativeModeTab, CreativeModeTab, P> defaultCreativeTab(P parent, String name, Consumer<CreativeModeTab.Builder> config) {
         this.defaultCreativeModeTab = ResourceKey.create(Registries.CREATIVE_MODE_TAB, Identifier.fromNamespaceAndPath(this.modid, name));
         return this.generic(parent, name, Registries.CREATIVE_MODE_TAB, () -> {
-            var builder = FabricItemGroup.builder()
+            var builder = FabricCreativeModeTab.builder()
                     .icon(() -> getAll(Registries.ITEM).stream().findFirst().map(ItemEntry::cast).map(ItemEntry::asStack).orElse(new ItemStack(Items.AIR)))
                     .title(this.addLang("itemGroup", this.defaultCreativeModeTab.identifier(), RegistrateLangProvider.toEnglishName(name)));
             config.accept(builder);

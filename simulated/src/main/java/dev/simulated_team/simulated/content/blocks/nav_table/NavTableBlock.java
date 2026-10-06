@@ -1,5 +1,7 @@
 package dev.simulated_team.simulated.content.blocks.nav_table;
 
+import net.minecraft.util.Prediction;
+
 import com.mojang.serialization.MapCodec;
 import com.zurrtum.create.api.schematic.requirement.SpecialBlockItemRequirement;
 import com.zurrtum.create.content.equipment.wrench.IWrenchable;
@@ -109,7 +111,7 @@ public class NavTableBlock extends DirectionalBlock implements IBE<NavTableBlock
                     heldItem.shrink(1);
                 }
                 if (!extract.isEmpty()) {
-                    player.getInventory().placeItemBackInInventory(extract.copy());
+                    player.getInventory().placeItemBackInInventory(extract.copy(), Prediction.SERVER_ONLY);
                 }
 
                 final ItemStack newSlotItem = slot.getStack();

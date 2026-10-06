@@ -12,7 +12,7 @@ import foundry.veil.api.client.color.Colorc;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.data.AtlasIds;
@@ -34,7 +34,7 @@ public class SimulatedCreativeTab {
 	public static int CURRENT_ROW = 0;
 	public static final Object2IntOpenHashMap<Identifier> SECTION_Y_VALUES = new Object2IntOpenHashMap<>();
 
-	public static void renderBanners(final CreativeModeInventoryScreen screen, final GuiGraphics graphics, int mouseX, int mouseY) {
+	public static void renderBanners(final CreativeModeInventoryScreen screen, final GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
 		final Matrix3x2fStack ps = graphics.pose();
 		ps.pushMatrix();
 		int left = ((CreativeModeInventoryScreenAccessor) screen).getLeftPos() + 8;
@@ -85,13 +85,13 @@ public class SimulatedCreativeTab {
 		ps.popMatrix();
 	}
 
-	public static void drawAuraText(GuiGraphics graphics, Component text, int color1, int color2, int x, int y) {
+	public static void drawAuraText(GuiGraphicsExtractor graphics, Component text, int color1, int color2, int x, int y) {
 		Font font = Minecraft.getInstance().font;
-		graphics.drawString(font, text, x, y, color1, true);
+		graphics.text(font, text, x, y, color1, true);
 
 		graphics.enableScissor(x, y, x + font.width(text), y + (int) (font.lineHeight / 1.8f));
 
-		graphics.drawString(font, text, x, y, color2, false);
+		graphics.text(font, text, x, y, color2, false);
 
 		graphics.disableScissor();
 

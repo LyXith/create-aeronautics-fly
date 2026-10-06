@@ -6,14 +6,14 @@ import com.tterrag.registrate.util.DataIngredient;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import io.github.fabricators_of_create.porting_lib.tags.Tags;
 import net.fabricmc.api.EnvType;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.Criterion;
-import net.minecraft.advancements.criterion.EnterBlockTrigger;
-import net.minecraft.advancements.criterion.InventoryChangeTrigger;
-import net.minecraft.advancements.criterion.ItemPredicate;
-import net.minecraft.advancements.criterion.MinMaxBounds;
+import net.minecraft.advancements.triggers.EnterBlockTrigger;
+import net.minecraft.advancements.triggers.InventoryChangeTrigger;
+import net.minecraft.advancements.predicates.ItemPredicate;
+import net.minecraft.advancements.predicates.MinMaxBounds;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -65,7 +65,7 @@ public class RegistrateRecipeProvider extends RecipeProvider.Runner implements R
     @Nullable
     private Delegate delegate;
 
-    public RegistrateRecipeProvider(AbstractRegistrate<?> owner, FabricDataOutput output,
+    public RegistrateRecipeProvider(AbstractRegistrate<?> owner, FabricPackOutput output,
                                     CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries);
         this.owner = owner;

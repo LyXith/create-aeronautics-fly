@@ -7,7 +7,7 @@ import dev.simulated_team.simulated.registrate.SimulatedRegistrate;
 import dev.simulated_team.simulated.registrate.simulated_tab.SimulatedCreativeTab;
 import dev.simulated_team.simulated.service.SimTabService;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -28,7 +28,7 @@ public class CreativeModeInventoryScreenMixin {
 	@Shadow private static CreativeModeTab selectedTab;
 
 	@Inject(method = "render", at = @At("TAIL"))
-	private void simulated$render(final GuiGraphics guiGraphics, final int mouseX, final int mouseY, final float partialTick, final CallbackInfo ci) {
+	private void simulated$render(final GuiGraphicsExtractor guiGraphics, final int mouseX, final int mouseY, final float partialTick, final CallbackInfo ci) {
 		if (selectedTab == SimTabService.INSTANCE.getCreativeTab()) {
 			SimulatedCreativeTab.renderBanners((CreativeModeInventoryScreen) (Object) this, guiGraphics, mouseX, mouseY);
 		}

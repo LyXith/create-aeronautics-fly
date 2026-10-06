@@ -5,7 +5,7 @@ import dev.simulated_team.simulated.content.particle.AugerIndicatorParticle;
 import dev.simulated_team.simulated.content.particle.MagnetFieldParticle;
 import dev.simulated_team.simulated.content.particle.MagnetFieldParticle2;
 import dev.simulated_team.simulated.index.SimParticleTypes;
-import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
+import net.fabricmc.fabric.api.client.particle.v1.ParticleProviderRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -25,7 +25,7 @@ public final class FabricSimParticleTypes {
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     public static void registerFactories() {
-        final ParticleFactoryRegistry registry = ParticleFactoryRegistry.getInstance();
+        final ParticleProviderRegistry registry = ParticleProviderRegistry.getInstance();
         registry.register((ParticleType) SimParticleTypes.MAGNET_FIELD.get(), MagnetFieldParticle.Factory::new);
         registry.register((ParticleType) SimParticleTypes.MAGNET_FIELD2.get(), MagnetFieldParticle2.Factory::new);
         registry.register((ParticleType) SimParticleTypes.AUGER_INDICATOR.get(), AugerIndicatorParticle.Factory::new);

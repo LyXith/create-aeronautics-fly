@@ -14,7 +14,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuConstructor;
 import net.minecraft.world.inventory.MenuType;
 
-import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
+import net.fabricmc.fabric.api.menu.v1.ExtendedMenuProvider;
 import org.jetbrains.annotations.Nullable;
 
 public class MenuEntry<T extends AbstractContainerMenu> extends RegistryEntry<MenuType<?>, MenuType<T>> {
@@ -44,7 +44,7 @@ public class MenuEntry<T extends AbstractContainerMenu> extends RegistryEntry<Me
     }
 
     public void open(ServerPlayer player, Component displayName, MenuConstructor provider, Consumer<Object> extraData) {
-        player.openMenu(new ExtendedScreenHandlerFactory<>() {
+        player.openMenu(new ExtendedMenuProvider<>() {
             // FIXME
             @Override
             public Object getScreenOpeningData(ServerPlayer player) {

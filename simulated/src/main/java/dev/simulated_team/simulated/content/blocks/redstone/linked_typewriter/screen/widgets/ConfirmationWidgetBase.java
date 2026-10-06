@@ -3,7 +3,7 @@ package dev.simulated_team.simulated.content.blocks.redstone.linked_typewriter.s
 import com.zurrtum.create.client.catnip.gui.element.ScreenElement;
 import com.zurrtum.create.client.foundation.gui.widget.IconButton;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 
@@ -23,7 +23,7 @@ public class ConfirmationWidgetBase extends IconButton {
     }
 
     @Override
-    public void doRender(final GuiGraphics graphics, final int mouseX, final int mouseY,
+    public void doRender(final GuiGraphicsExtractor graphics, final int mouseX, final int mouseY,
                          final float partialTicks) {
         super.doRender(graphics, mouseX, mouseY, partialTicks);
         if (this.isHovered && this.visible && this.active && this.confirmation) {

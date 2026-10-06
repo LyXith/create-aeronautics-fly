@@ -13,7 +13,7 @@ import dev.simulated_team.simulated.content.physics_staff.OptionalShaderMods;
 import dev.simulated_team.simulated.index.SimRenderTypes;
 import com.zurrtum.create.catnip.data.Couple;
 import com.zurrtum.create.client.catnip.render.SuperRenderTypeBuffer;
-import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -180,7 +180,7 @@ public abstract class AbstractLaserRenderer<T extends AbstractLaserBlockEntity> 
                     red, green, blue, alpha, endAlpha);
 
             pose.translate(0.5, 0.5, 0.5);
-            pose.mulPose(rotationQuat);
+            pose.rotate(rotationQuat);
             pose.translate(-0.5, -0.5, -0.5);
         }
         pose.popPose();
@@ -222,7 +222,7 @@ public abstract class AbstractLaserRenderer<T extends AbstractLaserBlockEntity> 
         builder.addVertex(matrix, x, y, z)
                 .setColor(red, green, blue, alpha)
                 .setUv(u, v)
-                .setLight(LightTexture.FULL_BRIGHT)
+                .setLight(LightCoordsUtil.FULL_BRIGHT)
                 .setOverlay(OverlayTexture.NO_OVERLAY)
                 .setNormal(0, 1, 0);
     }

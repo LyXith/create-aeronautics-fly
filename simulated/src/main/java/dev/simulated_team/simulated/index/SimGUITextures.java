@@ -5,7 +5,7 @@ import dev.simulated_team.simulated.Simulated;
 import com.zurrtum.create.client.catnip.gui.UIRenderHelper;
 import com.zurrtum.create.client.catnip.gui.element.ScreenElement;
 import com.zurrtum.create.catnip.theme.Color;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
@@ -123,20 +123,20 @@ public enum SimGUITextures implements ScreenElement {
     }
 
     public void bind() {
-        // Texture binding is managed by GuiGraphics in 1.21.10.
+        // Texture binding is managed by GuiGraphicsExtractor in 1.21.10.
     }
 
-    public void render(final GuiGraphics graphics, final int x, final int y) {
+    public void extractRenderState(GuiGraphicsExtractor graphics, final int x, final int y) {
         graphics.blit(RenderPipelines.GUI_TEXTURED, this.location,
                 x, y, this.startX, this.startY, this.width, this.height, this.texWidth, this.texHeight);
     }
 
-    public void render (final GuiGraphics graphics, final int x, final int y, final int width, final int height) {
+    public void extractRenderState(GuiGraphicsExtractor graphics, final int x, final int y, final int width, final int height) {
         graphics.blit(RenderPipelines.GUI_TEXTURED, this.location,
                 x, y, this.startX, this.startY, width, height, this.texWidth, this.texHeight);
     }
 
-    public void render(final GuiGraphics graphics, final int x, final int y, final Color c) {
+    public void extractRenderState(GuiGraphicsExtractor graphics, final int x, final int y, final Color c) {
         this.render(graphics, x, y);
     }
 }

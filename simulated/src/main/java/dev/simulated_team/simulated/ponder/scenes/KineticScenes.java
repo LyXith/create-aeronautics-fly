@@ -32,7 +32,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.AbstractFurnaceBlock;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.RedStoneWireBlock;
+import net.minecraft.world.level.block.RedstoneWireBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -319,7 +319,7 @@ public class KineticScenes {
         scene.idle(60);
         effects.indicateRedstone(analogLeverPos);
         world.toggleRedstonePower(select.position(transmissionPos));
-        world.modifyBlock(redstonePos, s -> s.setValue(RedStoneWireBlock.POWER, 5), false);
+        world.modifyBlock(redstonePos, s -> s.setValue(RedstoneWireBlock.POWER, 5), false);
         world.modifyBlockEntityNBT(select.position(analogLeverPos), AnalogLeverBlockEntity.class, nbt -> {
             nbt.putInt("State", 5);
         });
@@ -350,7 +350,7 @@ public class KineticScenes {
 
         scene.idle(60);
         effects.indicateRedstone(analogLeverPos);
-        world.modifyBlock(redstonePos, s -> s.setValue(RedStoneWireBlock.POWER, 11), false);
+        world.modifyBlock(redstonePos, s -> s.setValue(RedstoneWireBlock.POWER, 11), false);
         world.modifyBlockEntityNBT(select.position(analogLeverPos), AnalogTransmissionBlockEntity.class, nbt -> {
             nbt.putInt("State", 11);
         });
@@ -381,7 +381,7 @@ public class KineticScenes {
 
 
         world.toggleRedstonePower(select.position(transmissionPos));
-        world.modifyBlock(redstonePos, s -> s.setValue(RedStoneWireBlock.POWER, 0), false);
+        world.modifyBlock(redstonePos, s -> s.setValue(RedstoneWireBlock.POWER, 0), false);
         world.modifyBlockEntityNBT(select.position(analogLeverPos), AnalogLeverBlockEntity.class, nbt -> {
             nbt.putInt("State", 0);
         });
@@ -422,7 +422,7 @@ public class KineticScenes {
         scene.idle(20);
         effects.indicateRedstone(analogLeverPos.above());
         world.toggleRedstonePower(select.position(newTransmissionPos));
-        world.modifyBlock(redstonePos, s -> s.setValue(RedStoneWireBlock.POWER, 11), false);
+        world.modifyBlock(redstonePos, s -> s.setValue(RedstoneWireBlock.POWER, 11), false);
         world.modifyBlockEntityNBT(select.position(analogLeverPos), AnalogLeverBlockEntity.class, nbt -> {
             nbt.putInt("State", 11);
         });
@@ -450,7 +450,7 @@ public class KineticScenes {
         scene.idle(60);
 
         world.toggleRedstonePower(select.position(newTransmissionPos));
-        world.modifyBlock(redstonePos, s -> s.setValue(RedStoneWireBlock.POWER, 0), false);
+        world.modifyBlock(redstonePos, s -> s.setValue(RedstoneWireBlock.POWER, 0), false);
         world.modifyBlockEntityNBT(select.position(analogLeverPos), AnalogLeverBlockEntity.class, nbt -> {
             nbt.putInt("State", 0);
         });

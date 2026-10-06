@@ -23,7 +23,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DiodeBlock;
-import net.minecraft.world.level.block.RedStoneWireBlock;
+import net.minecraft.world.level.block.RedstoneWireBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -116,7 +116,7 @@ public class RedstoneInductorBlock extends AbstractDiodeBlock implements IBE<Red
     public int getBackSignal(final Level level, final BlockPos pos, final BlockState state){
         final Direction direction = state.getValue(FACING);
         final BlockPos blockpos = pos.relative(direction);
-            return Math.max(level.getSignal(blockpos, direction), state.is(Blocks.REDSTONE_WIRE) ? state.getValue(RedStoneWireBlock.POWER) : 0);
+            return Math.max(level.getSignal(blockpos, direction), state.is(Blocks.REDSTONE_WIRE) ? state.getValue(RedstoneWireBlock.POWER) : 0);
     }
 
     @Override

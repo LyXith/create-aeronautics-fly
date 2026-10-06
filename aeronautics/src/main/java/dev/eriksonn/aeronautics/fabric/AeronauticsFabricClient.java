@@ -9,10 +9,9 @@ import dev.eriksonn.aeronautics.index.AeroBlocks;
 import foundry.veil.api.network.VeilPacketManager;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
-import net.fabricmc.fabric.api.client.render.fluid.v1.SimpleFluidRenderHandler;
+import com.tterrag.registrate.fabric.SimpleFluidRenderHandler;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
-import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.resources.Identifier;
 
@@ -46,10 +45,10 @@ public final class AeronauticsFabricClient implements ClientModInitializer {
 
         AeronauticsClient.init();
 
-        WorldRenderEvents.START_MAIN.register(
+        LevelRenderEvents.START_MAIN.register(
                 context -> IrisBurnerFlameRenderQueue.beginWorldFrame()
         );
-        WorldRenderEvents.END_MAIN.register(
+        LevelRenderEvents.END_MAIN.register(
                 context -> IrisBurnerFlameRenderQueue.finishWorldFrameCollection()
         );
         ClientTickEvents.START_CLIENT_TICK.register(client -> AeronauticsClientEvents.clientLevelTick(false));

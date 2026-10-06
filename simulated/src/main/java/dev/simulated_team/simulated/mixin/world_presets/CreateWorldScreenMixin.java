@@ -10,7 +10,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.gamerules.GameRules;
-import net.minecraft.world.level.dimension.end.EndDragonFight;
+import net.minecraft.world.level.dimension.end.EnderDragonFight;
 import net.minecraft.world.level.levelgen.presets.WorldPreset;
 import net.minecraft.world.level.storage.WorldData;
 import org.spongepowered.asm.mixin.Final;
@@ -64,7 +64,7 @@ public abstract class CreateWorldScreenMixin {
 
         ((PrimaryLevelDataExtension) worldData).setPreset(key.get().identifier());
         if (holder.is(SimWorldPresets.END_SEA.id())) {
-            ((PrimaryLevelDataExtension) worldData).setEndDragonFight(new EndDragonFight.Data(false, true, true, false, Optional.empty(), Optional.empty(), Optional.empty()));
+            ((PrimaryLevelDataExtension) worldData).setEndDragonFight(new EnderDragonFight.Data(false, true, true, false, Optional.empty(), Optional.empty(), Optional.empty()));
         }
     }
 }

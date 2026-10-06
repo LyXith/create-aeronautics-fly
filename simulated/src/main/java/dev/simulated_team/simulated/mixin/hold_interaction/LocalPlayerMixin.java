@@ -6,7 +6,7 @@ import com.mojang.authlib.GameProfile;
 import dev.simulated_team.simulated.util.hold_interaction.HoldInteractionManager;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.client.player.Input;
+import net.minecraft.world.entity.player.Input;
 import net.minecraft.client.player.LocalPlayer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

@@ -1,7 +1,0 @@
-{
-  "selector": "#sable:slippery",
-
-  "properties": {
-    "sable:friction": 0.0
-  }
-}

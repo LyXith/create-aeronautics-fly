@@ -14,7 +14,7 @@ import com.zurrtum.create.client.ponder.api.element.WorldSectionElement;
 import com.zurrtum.create.client.ponder.api.scene.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.block.RedStoneWireBlock;
+import net.minecraft.world.level.block.RedstoneWireBlock;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
@@ -130,7 +130,7 @@ public class SwivelBearingScenes {
         for (int i = 0; i < 3; i++) {
             final int finalI = i;
             scene.world().modifyBlock(new BlockPos(1 + finalI, 4, 2),
-                    s -> s.setValue(RedStoneWireBlock.POWER, 15 - finalI), false);
+                    s -> s.setValue(RedstoneWireBlock.POWER, 15 - finalI), false);
         }
 
         world.rotateSection(contraption, 0, 565, 0, 235);

@@ -25,7 +25,7 @@ import net.minecraft.data.DataProvider;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.minecraft.resources.ResourceKey;
 import org.jetbrains.annotations.Nullable;
 import org.apache.logging.log4j.LogManager;
@@ -48,9 +48,9 @@ public class RegistrateDataProvider implements DataProvider {
     private final Map<ProviderType<?>, RegistrateProvider> subProviders = new LinkedHashMap<>();
     private final CompletableFuture<Provider> registriesLookup;
 
-    public record DataInfo(FabricDataOutput output, ExistingFileHelper helper, CompletableFuture<Provider> registriesLookup) {}
+    public record DataInfo(FabricPackOutput output, ExistingFileHelper helper, CompletableFuture<Provider> registriesLookup) {}
 
-    public RegistrateDataProvider(AbstractRegistrate<?> parent, String modid, ExistingFileHelper helper, FabricDataOutput output, CompletableFuture<Provider> registriesLookup) {
+    public RegistrateDataProvider(AbstractRegistrate<?> parent, String modid, ExistingFileHelper helper, FabricPackOutput output, CompletableFuture<Provider> registriesLookup) {
         this.mod = modid;
         this.registriesLookup = registriesLookup;
 

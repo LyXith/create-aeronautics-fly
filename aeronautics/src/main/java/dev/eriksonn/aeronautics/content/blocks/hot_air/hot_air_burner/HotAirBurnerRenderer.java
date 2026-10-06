@@ -81,7 +81,7 @@ public class HotAirBurnerRenderer extends SmartBlockEntityRenderer<HotAirBurnerB
         ) / FLAME_ANIMATION_PERIOD;
 
         ms.translate(1.0F, 0.0F, 0.0F);
-        ms.mulPose(Axis.YP.rotation((float) (-angle + Math.PI * 0.5F)));
+        ms.rotate(Axis.YP.rotation((float) (-angle + Math.PI * 0.5F)));
         ms.translate(-1.0F, 0.0F, 0.0F);
         renderFlameOrEnqueue(
                 ms.last().pose(),

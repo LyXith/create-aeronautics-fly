@@ -32,7 +32,7 @@ import dev.simulated_team.simulated.compat.create.CommonLangBuilder;
 import com.zurrtum.create.catnip.theme.Color;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.render.TextureSetup;
 import net.minecraft.client.input.MouseButtonEvent;
@@ -462,7 +462,7 @@ public class DiagramScreen extends AbstractSimiScreen {
     }
 
     @Override
-    protected void renderWindowBackground(final GuiGraphics graphics, final int mouseX, final int mouseY, final float partialTicks) {
+    protected void renderWindowBackground(final GuiGraphicsExtractor graphics, final int mouseX, final int mouseY, final float partialTicks) {
         graphics.fill(0, 0, this.width, this.height, 0x4fffffff);
     }
 
@@ -581,7 +581,7 @@ public class DiagramScreen extends AbstractSimiScreen {
     }
 
     @Override
-    protected void renderWindow(final GuiGraphics graphics, final int mouseX, final int mouseY, final float partialTicks) {
+    protected void renderWindow(final GuiGraphicsExtractor graphics, final int mouseX, final int mouseY, final float partialTicks) {
         final Matrix3x2fStack ps = graphics.pose();
 
         if (this.subLevel.isRemoved() || this.diagram.isRemoved()) {
@@ -589,7 +589,7 @@ public class DiagramScreen extends AbstractSimiScreen {
             return;
         }
 
-        this.note.renderWidget(graphics, mouseX, mouseY, partialTicks);
+        this.note.extractWidgetRenderState(graphics, mouseX, mouseY, partialTicks);
         this.renderContents(this.subLevel, partialTicks);
 
         // genuinely how can this be null they are assigned values in the constructor
@@ -634,7 +634,7 @@ public class DiagramScreen extends AbstractSimiScreen {
         if (text != null && !text.isEmpty()) {
             final int footerW = this.font.width(text);
             graphics.fill(DIAGRAM_TEXTURE.width - footerW - 7, DIAGRAM_TEXTURE.height - 5 - this.font.lineHeight, DIAGRAM_TEXTURE.width - 4, DIAGRAM_TEXTURE.height - 3, BG_COLOR.getRGB());
-            graphics.drawString(this.font, text, DIAGRAM_TEXTURE.width - footerW - 5, DIAGRAM_TEXTURE.height - 3 - this.font.lineHeight, TEXT_COLOR.getRGB(), false);
+            graphics.text(this.font, text, DIAGRAM_TEXTURE.width - footerW - 5, DIAGRAM_TEXTURE.height - 3 - this.font.lineHeight, TEXT_COLOR.getRGB(), false);
         }
 
         this.renderArrows(graphics,
@@ -657,7 +657,7 @@ public class DiagramScreen extends AbstractSimiScreen {
     }
 
     @Override
-    protected void renderWindowForeground(final GuiGraphics graphics, final int mouseX, final int mouseY, final float partialTicks) {
+    protected void renderWindowForeground(final GuiGraphicsExtractor graphics, final int mouseX, final int mouseY, final float partialTicks) {
         final Matrix3x2fStack ps = graphics.pose();
 
         this.renderMagnificationHighlight(graphics, mouseX, mouseY, ps);
@@ -671,7 +671,7 @@ public class DiagramScreen extends AbstractSimiScreen {
         super.renderWindowForeground(graphics, mouseX, mouseY, partialTicks);
     }
 
-    private void renderMagnificationHighlight(final GuiGraphics graphics, final int mouseX, final int mouseY, final Matrix3x2fStack ps) {
+    private void renderMagnificationHighlight(final GuiGraphicsExtractor graphics, final int mouseX, final int mouseY, final Matrix3x2fStack ps) {
         final boolean initiallyWithinNote = this.note.contains(MAGNIFYING_CENTER.x, MAGNIFYING_CENTER.y);
 
         this.updateMagnificationBox(mouseX, mouseY);
@@ -738,7 +738,7 @@ public class DiagramScreen extends AbstractSimiScreen {
         return dest;
     }
 
-    public static void renderFBO(final GuiGraphics graphics, final AdvancedFbo fbo, final int width, final int height) {
+    public static void renderFBO(final GuiGraphicsExtractor graphics, final AdvancedFbo fbo, final int width, final int height) {
         final Matrix3x2fStack pose = graphics.pose();
         pose.pushMatrix();
         pose.translate(0, height);
@@ -747,7 +747,7 @@ public class DiagramScreen extends AbstractSimiScreen {
         pose.popMatrix();
     }
 
-    public void renderArrows(final GuiGraphics graphics,
+    public void renderArrows(final GuiGraphicsExtractor graphics,
                              final int mouseX,
                              final int mouseY,
                              final int areaOriginX,
@@ -808,7 +808,7 @@ public class DiagramScreen extends AbstractSimiScreen {
     /**
      * Renders a force arrow for a given point force and force group
      */
-    private void renderForceArrow(final GuiGraphics graphics,
+    private void renderForceArrow(final GuiGraphicsExtractor graphics,
                                   final ForceGroup forceGroup,
                                   final ForceClusterFinder.Cluster pointForce,
                                   final double maxArrowLength,
@@ -930,7 +930,7 @@ public class DiagramScreen extends AbstractSimiScreen {
         return x >= padding && x < width - padding && y >= padding && y < height - padding;
     }
 
-    private static void drawLine(final GuiGraphics graphics, int x1, int y1, final int x2, final int y2, final int color, final int inflation) {
+    private static void drawLine(final GuiGraphicsExtractor graphics, int x1, int y1, final int x2, final int y2, final int color, final int inflation) {
         // don't miss none of them pixels! you heard me!
         final int dx = Math.abs(x2 - x1);
         final int dy = Math.abs(y2 - y1);
@@ -967,7 +967,7 @@ public class DiagramScreen extends AbstractSimiScreen {
         return Mth.lerp(partialTicks, this.lastTabOffset, this.tabOffset);
     }
 
-    private void renderCenterOfMass(final GuiGraphics graphics) {
+    private void renderCenterOfMass(final GuiGraphicsExtractor graphics) {
         final Vector3d centerOfMass = new Vector3d(this.subLevel.logicalPose().rotationPoint());
         final Vector2d screenCoords = getScreenCoords(centerOfMass, LOCAL_ORIENTATION, LOCAL_CAMERA_POSITION, PROJECTION_MAT, DIAGRAM_TEXTURE.width, DIAGRAM_TEXTURE.height);
 
@@ -1022,7 +1022,7 @@ public class DiagramScreen extends AbstractSimiScreen {
         this.serverData = data;
     }
 
-    public static void renderTooltip(final GuiGraphics guiGraphics, final int x, final int y, final List<FormattedText> lines) {
+    public static void extractTooltip(GuiGraphicsExtractor guiGraphics, final int x, final int y, final List<FormattedText> lines) {
         final Font font = Minecraft.getInstance().font;
 
         final Color colorBackground = new Color(0xff3d322a);
@@ -1042,7 +1042,7 @@ public class DiagramScreen extends AbstractSimiScreen {
     public record GreebleRenderable(int x, int y, int width, int height, Identifier texture,
                                     Greeble.TextureSlice slice) implements Renderable {
         @Override
-        public void render(final GuiGraphics guiGraphics, final int i, final int i1, final float v) {
+        public void extractRenderState(GuiGraphicsExtractor guiGraphics, final int i, final int i1, final float v) {
             guiGraphics.blit(this.texture, this.x, this.y, this.slice.x(), this.slice.y(), this.slice.width(), this.slice.height(), this.width, this.height);
         }
     }

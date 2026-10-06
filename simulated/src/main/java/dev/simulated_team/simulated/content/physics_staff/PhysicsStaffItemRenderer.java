@@ -15,7 +15,7 @@ import dev.simulated_team.simulated.util.SimDistUtil;
 import dev.simulated_team.simulated.util.SimMathUtils;
 import com.zurrtum.create.client.catnip.animation.AnimationTickHolder;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.util.Mth;
@@ -92,20 +92,20 @@ public class PhysicsStaffItemRenderer extends CustomRenderedItemModelRenderer {
                 rotation.transformInverse(dirToAnchor);
 
                 final Quaternionf quat = SimMathUtils.getQuaternionfFromVectorRotation(new Vector3d(0.0, 0.0, -1.0), dirToAnchor);
-                ms.mulPose(utilQuat.identity().rotateY(-Mth.HALF_PI));
-                ms.mulPose(quat.slerp(utilQuat.identity(), 0.6f));
-                ms.mulPose(utilQuat.identity().rotateY(Mth.HALF_PI));
+                ms.rotate(utilQuat.identity().rotateY(-Mth.HALF_PI));
+                ms.rotate(quat.slerp(utilQuat.identity(), 0.6f));
+                ms.rotate(utilQuat.identity().rotateY(Mth.HALF_PI));
             }
             final float tiltMultiplier = context == ItemDisplayContext.FIRST_PERSON_LEFT_HAND ? -1.0f : 1.0f;
 
-            ms.mulPose(utilQuat.identity().rotateZ((float) Math.toRadians((tiltAmount * 0.5 + 0.5) * -61.0f) * tiltMultiplier));
+            ms.rotate(utilQuat.identity().rotateZ((float) Math.toRadians((tiltAmount * 0.5 + 0.5) * -61.0f) * tiltMultiplier));
         }
 
 
         renderer.render(model.getOriginalModel(), Sheets.cutoutBlockSheet(), light);
 
-        renderer.render(SimPartialModels.PHYSICS_STAFF_CORE.get(), SimRenderTypes.itemGlowingSolid(shadersActive), LightTexture.FULL_BRIGHT);
-        renderer.render(SimPartialModels.PHYSICS_STAFF_CORE_GLOW.get(), SimRenderTypes.itemGlowingTranslucent(shadersActive), LightTexture.FULL_BRIGHT);
+        renderer.render(SimPartialModels.PHYSICS_STAFF_CORE.get(), SimRenderTypes.itemGlowingSolid(shadersActive), LightCoordsUtil.FULL_BRIGHT);
+        renderer.render(SimPartialModels.PHYSICS_STAFF_CORE_GLOW.get(), SimRenderTypes.itemGlowingTranslucent(shadersActive), LightCoordsUtil.FULL_BRIGHT);
         final float worldTime = AnimationTickHolder.getRenderTime() / 20;
 
         ms.pushPose();
@@ -116,9 +116,9 @@ public class PhysicsStaffItemRenderer extends CustomRenderedItemModelRenderer {
         ms.translate(0, 9 / 16.0, 0);
         for (int i = 0; i < 2; i++) {
             ms.pushPose();
-            ms.mulPose(Axis.YP.rotationDegrees(i * 180));
+            ms.rotateDegrees(Axis.YP, i * 180);
             ms.translate(-3 / 16.0, 0, 0);
-            ms.mulPose(Axis.ZP.rotationDegrees(openAmount * 20));
+            ms.rotateDegrees(Axis.ZP, openAmount * 20);
             renderer.render(SimPartialModels.PHYSICS_STAFF_SIGMA.get(), Sheets.cutoutBlockSheet(), light);
             ms.popPose();
         }
@@ -140,14 +140,14 @@ public class PhysicsStaffItemRenderer extends CustomRenderedItemModelRenderer {
         cubeScale = Mth.clamp(cubeScale, 0, 1);
         cubeScale *= 0.8f;
         ms.scale(cubeScale, cubeScale, cubeScale);
-        renderer.render(SimPartialModels.PHYSICS_STAFF_INNER_CUBE.get(), SimRenderTypes.itemGlowingSolid(shadersActive), LightTexture.FULL_BRIGHT);
+        renderer.render(SimPartialModels.PHYSICS_STAFF_INNER_CUBE.get(), SimRenderTypes.itemGlowingSolid(shadersActive), LightCoordsUtil.FULL_BRIGHT);
 
         if (context.firstPerson()) {
             captureFirstPersonFocus(ms, minecraft, partialTicks);
         }
 
         ms.scale(1.2f, 1.2f, 1.2f);
-        renderer.render(SimPartialModels.PHYSICS_STAFF_OUTER_CUBE.get(), SimRenderTypes.itemGlowingTranslucent(shadersActive), LightTexture.FULL_BRIGHT);
+        renderer.render(SimPartialModels.PHYSICS_STAFF_OUTER_CUBE.get(), SimRenderTypes.itemGlowingTranslucent(shadersActive), LightCoordsUtil.FULL_BRIGHT);
 
         // Iris doesn't allow individual render types to be ended, so all batches must be ended for the translucent parts to draw correctly
         if (OptionalShaderMods.isIrisLoaded() && !shadersActive) {

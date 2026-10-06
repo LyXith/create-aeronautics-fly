@@ -45,7 +45,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.LodestoneTracker;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.RedStoneWireBlock;
+import net.minecraft.world.level.block.RedstoneWireBlock;
 import net.minecraft.world.level.block.ScaffoldingBlock;
 import net.minecraft.world.level.block.TrapDoorBlock;
 import net.minecraft.world.phys.AABB;
@@ -62,7 +62,7 @@ public class SensorScenes {
         scene.world().modifyBlockEntityNBT(nixie, NixieTubeBlockEntity.class,
                 tag -> tag.putInt("RedstoneStrength", power), true);
         scene.world().modifyBlock(redstone,
-                s -> s.setValue(RedStoneWireBlock.POWER, power), false);
+                s -> s.setValue(RedstoneWireBlock.POWER, power), false);
         if (particles) {
             scene.effects().indicateRedstone(redstone);
         }
@@ -413,7 +413,7 @@ public class SensorScenes {
     // Laser Sensor & Pointer
 
     private static void laserSetRedstone(final int power, final WorldInstructions world, final BlockPos sensorNixiePos, final BlockPos sensorRedstonePos) {
-        world.modifyBlock(sensorRedstonePos, s -> s.setValue(RedStoneWireBlock.POWER, power), false);
+        world.modifyBlock(sensorRedstonePos, s -> s.setValue(RedstoneWireBlock.POWER, power), false);
         world.modifyBlockEntity(sensorNixiePos, NixieTubeBlockEntity.class, be -> {
             be.updateRedstoneStrength(power);
             be.updateDisplayedStrings();
@@ -616,7 +616,7 @@ public class SensorScenes {
             });
 
         scene.world().toggleRedstonePower(util.select().position(lampLocations[index]));
-        scene.world().modifyBlock(wireLocations[index], s -> s.setValue(RedStoneWireBlock.POWER, power ? 5 : 0), false);
+        scene.world().modifyBlock(wireLocations[index], s -> s.setValue(RedstoneWireBlock.POWER, power ? 5 : 0), false);
         if (power) {
             scene.effects().indicateRedstone(lampLocations[index]);
         }
@@ -649,7 +649,7 @@ public class SensorScenes {
     }
 
     public static void gimbalSensorModifyRedstoneDust(final SceneBuilder scene, final BlockPos pos, final Integer strength) {
-        scene.world().modifyBlock(pos, s -> s.setValue(RedStoneWireBlock.POWER, strength), false);
+        scene.world().modifyBlock(pos, s -> s.setValue(RedstoneWireBlock.POWER, strength), false);
     }
 
     public static void setGimbalAngle(final SceneBuilder scene, final SceneBuildingUtil util, final BlockPos pos, final Float angle1, final Float angle2) {
@@ -1040,11 +1040,11 @@ public class SensorScenes {
             for (int j = 0; j < 4; j++) {
                 final int quarter = (j + 2) % 4;
                 final int finalI = i;
-                world.modifyBlock(wireLocations[j], s -> s.setValue(RedStoneWireBlock.POWER, Mth.ceil(Math.max(0, 15 - Math.abs(0.75 * finalI - 15 * quarter)))), false);
+                world.modifyBlock(wireLocations[j], s -> s.setValue(RedstoneWireBlock.POWER, Mth.ceil(Math.max(0, 15 - Math.abs(0.75 * finalI - 15 * quarter)))), false);
 
                 // Hardcode turning the first one back on after a full loop because I'm tired
                 if (i > 60)
-                    world.modifyBlock(wireLocations[2], s -> s.setValue(RedStoneWireBlock.POWER, Mth.ceil((finalI - 60) * 0.75)), false);
+                    world.modifyBlock(wireLocations[2], s -> s.setValue(RedstoneWireBlock.POWER, Mth.ceil((finalI - 60) * 0.75)), false);
             }
 
             if (i == 25) {
@@ -1088,11 +1088,11 @@ public class SensorScenes {
             final int chargingPower = Mth.floor(Math.max(0, 0.375 * finalI));
             final int dechargingPowwer = Mth.ceil(Math.max(0, 15 - 0.375 * finalI));
 
-            world.modifyBlock(wireLocations[1], s -> s.setValue(RedStoneWireBlock.POWER, chargingPower), false);
+            world.modifyBlock(wireLocations[1], s -> s.setValue(RedstoneWireBlock.POWER, chargingPower), false);
             world.modifyBlockEntityNBT(util.select().position(5, 3, 3), NixieTubeBlockEntity.class,
                     nbt -> nbt.putInt("RedstoneStrength", chargingPower));
 
-            world.modifyBlock(wireLocations[2], s -> s.setValue(RedStoneWireBlock.POWER, dechargingPowwer), false);
+            world.modifyBlock(wireLocations[2], s -> s.setValue(RedstoneWireBlock.POWER, dechargingPowwer), false);
             world.modifyBlockEntityNBT(util.select().position(3, 3, 5), NixieTubeBlockEntity.class,
                     nbt -> nbt.putInt("RedstoneStrength", dechargingPowwer));
 

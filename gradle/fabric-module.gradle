@@ -29,11 +29,7 @@ sourceSets {
 }
 
 loom {
-    mixin {
-        useLegacyMixinAp = true
-        defaultRefmapName = "${mod_id}.refmap.json"
-    }
-    def accessWidener = file("src/main/resources/${mod_id}.accesswidener")
+    def accessWidener = file("src/main/resources/${mod_id}.classtweaker")
     if (accessWidener.exists()) {
         accessWidenerPath = accessWidener
     }
@@ -56,31 +52,33 @@ loom {
 
 dependencies {
     minecraft "com.mojang:minecraft:${minecraft_version}"
-    mappings loom.layered { officialMojangMappings() }
 
-    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
-    modImplementation "io.github.llamalad7:mixinextras-fabric:${mixinextras_version}"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
-    modImplementation "maven.modrinth:create-fly:${create_fly_version}"
-    modImplementation "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${forgeconfigapiport_version}"
-    modImplementation "teamreborn:energy:${energy_version}"
+    implementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+    implementation "io.github.llamalad7:mixinextras-fabric:${mixinextras_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+    // Create-Fly, compile-time only: lets compatibility/create mixins reference Create types directly
+    // (string @At targets are not enough when a handler signature needs one). Runtime presence is
+    // gated by the mixin plugin, so the mod still works without Create installed.
+    // JitPack 上的 GitHub 仓库构建产物（LyXith/create-fly-fly，ref pack-26.3-latest）；
+    // runClient 的运行期仍然由 runs/client/mods 里的 mod jar 提供，compileOnly 不进运行时。
+    compileOnly("com.github.LyXith:create-fly-fly:${create_fly_version}") {
+        transitive = false
+    }
+    implementation "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${forgeconfigapiport_version}"
+    implementation "teamreborn:energy:${energy_version}"
 
     compileOnly "dev.ryanhcode.sable-companion:sable-companion-common-1.21.1:${sable_companion_version}"
-    modCompileOnly "maven.modrinth:cc-tweaked:${computercraft_tweaked_version}"
+    compileOnly files("${rootProject.projectDir}/libs/sable-fabric-${sable_mod_version}.jar")
+    compileOnly "maven.modrinth:cc-tweaked:${computercraft_tweaked_version}"
     compileOnly "com.google.code.findbugs:jsr305:3.0.2"
     compileOnly "org.jspecify:jspecify:1.0.0"
 
-    modCompileOnly("foundry.veil:veil-fabric-1.21.1:${veil_version}") { transitive = false }
     compileOnly "org.projectlombok:lombok:1.18.42"
     annotationProcessor "org.projectlombok:lombok:1.18.42"
-    modCompileOnly "io.github.fabricators_of_create.Porting-Lib:tags:3.1.0-beta.39+1.21.1"
-    modCompileOnly "io.github.fabricators_of_create.Porting-Lib:models:3.1.0-beta.39+1.21.1"
-    modCompileOnly "io.github.fabricators_of_create.Porting-Lib:data:3.1.0-beta.39+1.21.1"
-    modCompileOnly "io.github.fabricators_of_create.Porting-Lib:lazy_registration:3.1.0-beta.39+1.21.1"
-    modCompileOnly "maven.modrinth:jei:${jei_version}"
-    modCompileOnly "maven.modrinth:natures-compass:${natures_compass_version}"
-    modCompileOnly "maven.modrinth:explorers-compass:${explorers_compass_version}"
-    modCompileOnly "maven.modrinth:sodium:${sodium_version}"
+    compileOnly "maven.modrinth:jei:${jei_version}"
+    compileOnly "maven.modrinth:natures-compass:${natures_compass_version}"
+    compileOnly "maven.modrinth:explorers-compass:${explorers_compass_version}"
+    compileOnly "maven.modrinth:sodium:${sodium_version}"
 }
 
 processResources {
@@ -106,7 +104,7 @@ processResources {
 
 tasks.withType(JavaCompile).configureEach {
     options.release = java_version as int
-    options.compilerArgs.addAll(['-Xmaxerrs', '1000'])
+    options.compilerArgs.addAll(['-Xmaxerrs', '10000'])
 }
 
 jar {

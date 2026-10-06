@@ -47,7 +47,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.joml.*;
-import org.lwjgl.glfw.GLFW;
+import com.mojang.blaze3d.platform.InputConstants;
 
 import java.lang.Math;
 import java.util.List;
@@ -567,7 +567,7 @@ public class PhysicsStaffClientHandler {
 
         @Override
         public Result onAttack(final int modifiers, final int action, final KeyMapping leftKey) {
-            if (SimulatedClient.PHYSICS_STAFF_CLIENT_HANDLER.holdingStaff && action == GLFW.GLFW_PRESS) {
+            if (SimulatedClient.PHYSICS_STAFF_CLIENT_HANDLER.holdingStaff && action == InputConstants.PRESS) {
                 SimulatedClient.PHYSICS_STAFF_CLIENT_HANDLER.onItemPunched();
                 return new Result(true);
             }
@@ -577,7 +577,7 @@ public class PhysicsStaffClientHandler {
 
         @Override
         public Result onUse(final int modifiers, final int action, final KeyMapping rightKey) {
-            if (SimulatedClient.PHYSICS_STAFF_CLIENT_HANDLER.holdingStaff && action == GLFW.GLFW_PRESS) {
+            if (SimulatedClient.PHYSICS_STAFF_CLIENT_HANDLER.holdingStaff && action == InputConstants.PRESS) {
                 SimulatedClient.PHYSICS_STAFF_CLIENT_HANDLER.onItemUsed(PhysicsStaffAction.START_DRAG);
                 return new Result(true);
             }

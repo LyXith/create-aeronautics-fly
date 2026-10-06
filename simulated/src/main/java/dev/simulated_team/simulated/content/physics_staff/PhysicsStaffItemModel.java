@@ -15,7 +15,7 @@ import dev.simulated_team.simulated.util.SimDistUtil;
 import dev.simulated_team.simulated.util.SimMathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.SubmitNodeCollector;
@@ -107,9 +107,9 @@ public final class PhysicsStaffItemModel implements ItemModel, SpecialModelRende
 
         addLayer(state, displayContext, item, Sheets.cutoutBlockSheet(), foil, commonTransform, -1, false, partialTicks);
         addLayer(state, displayContext, core, SimRenderTypes.itemGlowingSolid(shadersActive),
-                ItemStackRenderState.FoilType.NONE, commonTransform, LightTexture.FULL_BRIGHT, false, partialTicks);
+                ItemStackRenderState.FoilType.NONE, commonTransform, LightCoordsUtil.FULL_BRIGHT, false, partialTicks);
         addLayer(state, displayContext, coreGlow, SimRenderTypes.itemGlowingTranslucent(shadersActive),
-                ItemStackRenderState.FoilType.NONE, commonTransform, LightTexture.FULL_BRIGHT, false, partialTicks);
+                ItemStackRenderState.FoilType.NONE, commonTransform, LightCoordsUtil.FULL_BRIGHT, false, partialTicks);
 
         addLayer(state, displayContext, ring, Sheets.cutoutBlockSheet(), ItemStackRenderState.FoilType.NONE,
                 matrices -> {
@@ -123,9 +123,9 @@ public final class PhysicsStaffItemModel implements ItemModel, SpecialModelRende
                     matrices -> {
                         commonTransform.accept(matrices);
                         matrices.translate(0, 9 / 16.0, 0);
-                        matrices.mulPose(Axis.YP.rotationDegrees(currentSide * 180));
+                        matrices.rotateDegrees(Axis.YP, currentSide * 180);
                         matrices.translate(-3 / 16.0, 0, 0);
-                        matrices.mulPose(Axis.ZP.rotationDegrees(animation.openAmount() * 20));
+                        matrices.rotate(Axis.ZP.rotationDegrees(animation.openAmount() * 20));
                     }, -1, false, partialTicks);
         }
 
@@ -142,19 +142,19 @@ public final class PhysicsStaffItemModel implements ItemModel, SpecialModelRende
                 orientation.m30(0).m31(0).m32(0);
                 orientation.invert();
                 orientation.rotate(handler.lastCubeOrientation);
-                matrices.mulPose(orientation);
+                matrices.rotate(orientation);
             }
             matrices.scale(animation.cubeScale(), animation.cubeScale(), animation.cubeScale());
         };
 
         addLayer(state, displayContext, innerCube, SimRenderTypes.itemGlowingSolid(shadersActive),
-                ItemStackRenderState.FoilType.NONE, cubeTransform, LightTexture.FULL_BRIGHT,
+                ItemStackRenderState.FoilType.NONE, cubeTransform, LightCoordsUtil.FULL_BRIGHT,
                 displayContext.firstPerson() || captureBodyFocus, partialTicks);
         addLayer(state, displayContext, outerCube, SimRenderTypes.itemGlowingTranslucent(shadersActive),
                 ItemStackRenderState.FoilType.NONE, matrices -> {
                     cubeTransform.accept(matrices);
                     matrices.scale(1.2f, 1.2f, 1.2f);
-                }, LightTexture.FULL_BRIGHT, false, partialTicks);
+                }, LightCoordsUtil.FULL_BRIGHT, false, partialTicks);
     }
 
     private StaffAnimation animation(
@@ -219,13 +219,13 @@ public final class PhysicsStaffItemModel implements ItemModel, SpecialModelRende
 
             final Quaternionf aim = SimMathUtils.getQuaternionfFromVectorRotation(
                     new Vector3d(0, 0, -1), direction);
-            matrices.mulPose(quaternion.identity().rotateY(-Mth.HALF_PI));
-            matrices.mulPose(aim.slerp(quaternion.identity(), 0.6f));
-            matrices.mulPose(quaternion.identity().rotateY(Mth.HALF_PI));
+            matrices.rotate(quaternion.identity().rotateY(-Mth.HALF_PI));
+            matrices.rotate(aim.slerp(quaternion.identity(), 0.6f));
+            matrices.rotate(quaternion.identity().rotateY(Mth.HALF_PI));
         }
 
         final float handMultiplier = displayContext == ItemDisplayContext.FIRST_PERSON_LEFT_HAND ? -1 : 1;
-        matrices.mulPose(quaternion.identity().rotateZ(
+        matrices.rotate(quaternion.identity().rotateZ(
                 (float) Math.toRadians((tilt * 0.5f + 0.5f) * -61) * handMultiplier));
     }
 

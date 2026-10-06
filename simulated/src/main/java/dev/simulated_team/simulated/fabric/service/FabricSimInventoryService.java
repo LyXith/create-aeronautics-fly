@@ -11,7 +11,7 @@ import dev.simulated_team.simulated.multiloader.inventory.InventoryLoaderWrapper
 import dev.simulated_team.simulated.multiloader.tanks.SingleTank;
 import dev.simulated_team.simulated.service.SimInventoryService;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
-import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ContainerStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -39,13 +39,13 @@ public final class FabricSimInventoryService implements SimInventoryService {
     @Override
     @SuppressWarnings("unchecked")
     public <T extends InventoryLoaderWrapper> T getWrappedAllItemsFromContraption(final MountedStorageManager manager) {
-        return (T) new FabricInventoryLoaderWrapper(InventoryStorage.of(manager.getAllItems(), null));
+        return (T) new FabricInventoryLoaderWrapper(ContainerStorage.of(manager.getAllItems(), null));
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public <T extends InventoryLoaderWrapper> T getWrappedMountedItemsFromContraption(final MountedStorageManager manager) {
-        return (T) new FabricInventoryLoaderWrapper(InventoryStorage.of(manager.getMountedItems(), null));
+        return (T) new FabricInventoryLoaderWrapper(ContainerStorage.of(manager.getMountedItems(), null));
     }
 
     @Override
@@ -53,7 +53,7 @@ public final class FabricSimInventoryService implements SimInventoryService {
             final BiFunction<T, Direction, AbstractContainer> getter) {
         return type -> ItemStorage.SIDED.registerForBlockEntity((blockEntity, direction) -> {
             final AbstractContainer inventory = getter.apply(blockEntity, direction);
-            return inventory == null ? null : InventoryStorage.of(inventory, direction);
+            return inventory == null ? null : ContainerStorage.of(inventory, direction);
         }, type);
     }
 

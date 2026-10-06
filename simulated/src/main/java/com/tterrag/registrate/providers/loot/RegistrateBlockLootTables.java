@@ -7,8 +7,8 @@ import javax.annotation.processing.Generated;
 
 import com.tterrag.registrate.AbstractRegistrate;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootSubProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.BlockLootSubProvider;
@@ -20,16 +20,17 @@ import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.FunctionUserBuilder;
 import net.minecraft.world.level.storage.loot.predicates.ConditionUserBuilder;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import net.minecraft.core.Holder;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
 
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-public class RegistrateBlockLootTables extends FabricBlockLootTableProvider implements RegistrateLootTables {
+public class RegistrateBlockLootTables extends FabricBlockLootSubProvider implements RegistrateLootTables {
     private final AbstractRegistrate<?> parent;
     private final Consumer<RegistrateBlockLootTables> callback;
 
-    public RegistrateBlockLootTables(HolderLookup.Provider provider, AbstractRegistrate<?> parent, Consumer<RegistrateBlockLootTables> callback, FabricDataOutput output) {
+    public RegistrateBlockLootTables(HolderLookup.Provider provider, AbstractRegistrate<?> parent, Consumer<RegistrateBlockLootTables> callback, FabricPackOutput output) {
         super(output, CompletableFuture.completedFuture(provider));
         this.parent = parent;
         this.callback = callback;
@@ -80,12 +81,12 @@ public class RegistrateBlockLootTables extends FabricBlockLootTableProvider impl
     /** Generated override to expose protected method: {@link BlockLootSubProvider#createSingleItemTable} */
     @Override
     @Generated(value = "com.tterrag.registrate.test.meta.UpdateBlockLootTables", date = "Tue, 18 Jun 2024 17:52:52 GMT")
-    public LootTable.Builder createSingleItemTable(ItemLike p_251584_, NumberProvider p_249865_) { return super.createSingleItemTable(p_251584_, p_249865_); }
+    public LootTable.Builder createSingleItemTable(ItemLike p_251584_, Holder<ContextIntProvider> p_249865_) { return super.createSingleItemTable(p_251584_, p_249865_); }
 
     /** Generated override to expose protected method: {@link BlockLootSubProvider#createSingleItemTableWithSilkTouch} */
     @Override
     @Generated(value = "com.tterrag.registrate.test.meta.UpdateBlockLootTables", date = "Tue, 18 Jun 2024 17:52:52 GMT")
-    public LootTable.Builder createSingleItemTableWithSilkTouch(Block p_251449_, ItemLike p_248558_, NumberProvider p_250047_) { return super.createSingleItemTableWithSilkTouch(p_251449_, p_248558_, p_250047_); }
+    public LootTable.Builder createSingleItemTableWithSilkTouch(Block p_251449_, ItemLike p_248558_, Holder<ContextIntProvider> p_250047_) { return super.createSingleItemTableWithSilkTouch(p_251449_, p_248558_, p_250047_); }
 
     /** Generated override to expose protected method: {@link BlockLootSubProvider#createSlabItemTable} */
     @Override

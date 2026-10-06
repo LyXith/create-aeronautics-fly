@@ -10,8 +10,8 @@ import com.tterrag.registrate.AbstractRegistrate;
 
 import lombok.Getter;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.SimpleFabricLootTableProvider;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.SimpleFabricLootTableSubProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceKey;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +22,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.LootTable.Builder;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 
-public class RegistrateEntityLootTables extends SimpleFabricLootTableProvider implements RegistrateLootTables {
+public class RegistrateEntityLootTables extends SimpleFabricLootTableSubProvider implements RegistrateLootTables {
 
     private final AbstractRegistrate<?> parent;
     @Getter
@@ -31,7 +31,7 @@ public class RegistrateEntityLootTables extends SimpleFabricLootTableProvider im
 
     private final Map<ResourceKey<LootTable>, Builder> entries = new HashMap<>();
 
-    public RegistrateEntityLootTables(HolderLookup.Provider provider, AbstractRegistrate<?> parent, Consumer<RegistrateEntityLootTables> callback, FabricDataOutput output) {
+    public RegistrateEntityLootTables(HolderLookup.Provider provider, AbstractRegistrate<?> parent, Consumer<RegistrateEntityLootTables> callback, FabricPackOutput output) {
         super(output, CompletableFuture.supplyAsync(() -> provider), LootContextParamSets.ENTITY);
         this.parent = parent;
         this.provider = provider;

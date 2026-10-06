@@ -1,5 +1,7 @@
 package dev.eriksonn.aeronautics.content.blocks.hot_air.envelope;
 
+import net.minecraft.util.Prediction;
+
 
 import com.zurrtum.create.api.schematic.requirement.SpecialBlockItemRequirement;
 import com.zurrtum.create.content.kinetics.base.KineticBlockEntity;
@@ -67,7 +69,7 @@ public class EnvelopeEncasedShaftBlock extends EncasedShaftBlock implements Enve
         if (world instanceof ServerLevel) {
             final Player player = context.getPlayer();
             if (player != null && !player.hasInfiniteMaterials())
-                player.getInventory().placeItemBackInInventory(AeroBlocks.WHITE_ENVELOPE_BLOCK.asStack());
+                player.getInventory().placeItemBackInInventory(AeroBlocks.WHITE_ENVELOPE_BLOCK.asStack(, Prediction.SERVER_ONLY));
         }
         return InteractionResult.SUCCESS;
     }

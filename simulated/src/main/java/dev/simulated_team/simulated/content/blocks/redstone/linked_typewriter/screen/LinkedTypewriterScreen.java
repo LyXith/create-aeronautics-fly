@@ -21,7 +21,7 @@ import dev.simulated_team.simulated.network.packets.linked_typewriter.Typewriter
 import dev.simulated_team.simulated.util.SimColors;
 import foundry.veil.api.network.VeilPacketManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
@@ -30,7 +30,7 @@ import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.Nullable;
-import org.lwjgl.glfw.GLFW;
+import com.mojang.blaze3d.platform.InputConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,8 +90,8 @@ public class LinkedTypewriterScreen extends AbstractSimiContainerScreen<LinkedTy
                         // The 16 pixels of padding make a 56-pixel target
                         // around the 40-pixel model, whose center is 28 / 40.
                         pose.translate(0.7, 0.7, 0);
-                        pose.mulPose(Axis.XP.rotationDegrees(-22));
-                        pose.mulPose(Axis.YP.rotationDegrees(153));
+                        pose.rotateDegrees(Axis.XP, -22);
+                        pose.rotateDegrees(Axis.YP, 153);
                         pose.scale(1, -1, 1);
                         pose.translate(-0.5, -0.5, -0.5);
                     });
@@ -163,13 +163,13 @@ public class LinkedTypewriterScreen extends AbstractSimiContainerScreen<LinkedTy
     }
 
     @Override
-    protected void renderBg(final GuiGraphics graphics, final float partialTick,
+    protected void extractContents(GuiGraphicsExtractor graphics, final float partialTick,
                             final int mouseX, final int mouseY) {
         if (this.keyEditor.isActive()) {
             this.keyEditor.renderBackground(graphics, partialTick);
         } else {
             this.background.render(graphics, this.leftPos, this.topPos);
-            graphics.drawString(
+            graphics.text(
                     this.font,
                     this.title,
                     this.leftPos + (this.background.width - this.font.width(this.title)) / 2,
@@ -185,7 +185,7 @@ public class LinkedTypewriterScreen extends AbstractSimiContainerScreen<LinkedTy
         this.modifier.renderBackground(graphics);
     }
 
-    private void renderTypewriter(final GuiGraphics graphics) {
+    private void renderTypewriter(final GuiGraphicsExtractor graphics) {
         if (this.typewriterPreview == null) {
             return;
         }
@@ -308,78 +308,78 @@ public class LinkedTypewriterScreen extends AbstractSimiContainerScreen<LinkedTy
         final KeyRow fifth = new KeyRow(x, y + 56);
         final int key = 14;
 
-        first.addKey(key, GLFW.GLFW_KEY_GRAVE_ACCENT, null);
-        first.addKey(key, GLFW.GLFW_KEY_1, null);
-        first.addKey(key, GLFW.GLFW_KEY_2, null);
-        first.addKey(key, GLFW.GLFW_KEY_3, null);
-        first.addKey(key, GLFW.GLFW_KEY_4, null);
-        first.addKey(key, GLFW.GLFW_KEY_5, null);
-        first.addKey(key, GLFW.GLFW_KEY_6, null);
-        first.addKey(key, GLFW.GLFW_KEY_7, null);
-        first.addKey(key, GLFW.GLFW_KEY_8, null);
-        first.addKey(key, GLFW.GLFW_KEY_9, null);
-        first.addKey(key, GLFW.GLFW_KEY_0, null);
-        first.addKey(key, GLFW.GLFW_KEY_MINUS, null);
-        first.addKey(key, GLFW.GLFW_KEY_EQUAL, null);
-        first.addKey(key + 12, GLFW.GLFW_KEY_BACKSPACE, null);
-        first.addKey(key, GLFW.GLFW_KEY_DELETE, null);
+        first.addKey(key, InputConstants.KEY_GRAVE, null);
+        first.addKey(key, InputConstants.KEY_1, null);
+        first.addKey(key, InputConstants.KEY_2, null);
+        first.addKey(key, InputConstants.KEY_3, null);
+        first.addKey(key, InputConstants.KEY_4, null);
+        first.addKey(key, InputConstants.KEY_5, null);
+        first.addKey(key, InputConstants.KEY_6, null);
+        first.addKey(key, InputConstants.KEY_7, null);
+        first.addKey(key, InputConstants.KEY_8, null);
+        first.addKey(key, InputConstants.KEY_9, null);
+        first.addKey(key, InputConstants.KEY_0, null);
+        first.addKey(key, InputConstants.KEY_MINUS, null);
+        first.addKey(key, InputConstants.KEY_EQUALS, null);
+        first.addKey(key + 12, InputConstants.KEY_BACKSPACE, null);
+        first.addKey(key, InputConstants.KEY_DELETE, null);
 
-        second.addKey(key + 6, GLFW.GLFW_KEY_TAB, null);
-        second.addKey(key, GLFW.GLFW_KEY_Q, null);
-        second.addKey(key, GLFW.GLFW_KEY_W, null);
-        second.addKey(key, GLFW.GLFW_KEY_E, null);
-        second.addKey(key, GLFW.GLFW_KEY_R, null);
-        second.addKey(key, GLFW.GLFW_KEY_T, null);
-        second.addKey(key, GLFW.GLFW_KEY_Y, null);
-        second.addKey(key, GLFW.GLFW_KEY_U, null);
-        second.addKey(key, GLFW.GLFW_KEY_I, null);
-        second.addKey(key, GLFW.GLFW_KEY_O, null);
-        second.addKey(key, GLFW.GLFW_KEY_P, null);
-        second.addKey(key, GLFW.GLFW_KEY_LEFT_BRACKET, null);
-        second.addKey(key, GLFW.GLFW_KEY_RIGHT_BRACKET, null);
-        second.addKey(key + 6, GLFW.GLFW_KEY_BACKSLASH, null);
-        second.addKey(key, GLFW.GLFW_KEY_PAGE_UP, null);
+        second.addKey(key + 6, InputConstants.KEY_TAB, null);
+        second.addKey(key, InputConstants.KEY_Q, null);
+        second.addKey(key, InputConstants.KEY_W, null);
+        second.addKey(key, InputConstants.KEY_E, null);
+        second.addKey(key, InputConstants.KEY_R, null);
+        second.addKey(key, InputConstants.KEY_T, null);
+        second.addKey(key, InputConstants.KEY_Y, null);
+        second.addKey(key, InputConstants.KEY_U, null);
+        second.addKey(key, InputConstants.KEY_I, null);
+        second.addKey(key, InputConstants.KEY_O, null);
+        second.addKey(key, InputConstants.KEY_P, null);
+        second.addKey(key, InputConstants.KEY_LEFT_BRACKET, null);
+        second.addKey(key, InputConstants.KEY_RIGHT_BRACKET, null);
+        second.addKey(key + 6, InputConstants.KEY_BACKSLASH, null);
+        second.addKey(key, InputConstants.KEY_PAGEUP, null);
 
-        third.addKey(key + 12, GLFW.GLFW_KEY_CAPS_LOCK, null);
-        third.addKey(key, GLFW.GLFW_KEY_A, null);
-        third.addKey(key, GLFW.GLFW_KEY_S, null);
-        third.addKey(key, GLFW.GLFW_KEY_D, null);
-        third.addKey(key, GLFW.GLFW_KEY_F, null);
-        third.addKey(key, GLFW.GLFW_KEY_G, null);
-        third.addKey(key, GLFW.GLFW_KEY_H, null);
-        third.addKey(key, GLFW.GLFW_KEY_J, null);
-        third.addKey(key, GLFW.GLFW_KEY_K, null);
-        third.addKey(key, GLFW.GLFW_KEY_L, null);
-        third.addKey(key, GLFW.GLFW_KEY_SEMICOLON, null);
-        third.addKey(key, GLFW.GLFW_KEY_APOSTROPHE, null);
-        third.addKey(key + 14, GLFW.GLFW_KEY_ENTER, null);
-        third.addKey(key, GLFW.GLFW_KEY_PAGE_DOWN, null);
+        third.addKey(key + 12, InputConstants.KEY_CAPSLOCK, null);
+        third.addKey(key, InputConstants.KEY_A, null);
+        third.addKey(key, InputConstants.KEY_S, null);
+        third.addKey(key, InputConstants.KEY_D, null);
+        third.addKey(key, InputConstants.KEY_F, null);
+        third.addKey(key, InputConstants.KEY_G, null);
+        third.addKey(key, InputConstants.KEY_H, null);
+        third.addKey(key, InputConstants.KEY_J, null);
+        third.addKey(key, InputConstants.KEY_K, null);
+        third.addKey(key, InputConstants.KEY_L, null);
+        third.addKey(key, InputConstants.KEY_SEMICOLON, null);
+        third.addKey(key, InputConstants.KEY_APOSTROPHE, null);
+        third.addKey(key + 14, InputConstants.KEY_RETURN, null);
+        third.addKey(key, InputConstants.KEY_PAGEDOWN, null);
 
-        fourth.addKey(key + 18, GLFW.GLFW_KEY_LEFT_SHIFT, null);
-        fourth.addKey(key, GLFW.GLFW_KEY_Z, null);
-        fourth.addKey(key, GLFW.GLFW_KEY_X, null);
-        fourth.addKey(key, GLFW.GLFW_KEY_C, null);
-        fourth.addKey(key, GLFW.GLFW_KEY_V, null);
-        fourth.addKey(key, GLFW.GLFW_KEY_B, null);
-        fourth.addKey(key, GLFW.GLFW_KEY_N, null);
-        fourth.addKey(key, GLFW.GLFW_KEY_M, null);
-        fourth.addKey(key, GLFW.GLFW_KEY_COMMA, null);
-        fourth.addKey(key, GLFW.GLFW_KEY_PERIOD, null);
-        fourth.addKey(key, GLFW.GLFW_KEY_SLASH, null);
-        fourth.addKey(key + 8, GLFW.GLFW_KEY_RIGHT_SHIFT, null);
-        fourth.addKey(key, GLFW.GLFW_KEY_UP, SimIcons.KEY_ARROW_UP);
-        fourth.addKey(key, GLFW.GLFW_KEY_END, null);
+        fourth.addKey(key + 18, InputConstants.KEY_LEFT_SHIFT, null);
+        fourth.addKey(key, InputConstants.KEY_Z, null);
+        fourth.addKey(key, InputConstants.KEY_X, null);
+        fourth.addKey(key, InputConstants.KEY_C, null);
+        fourth.addKey(key, InputConstants.KEY_V, null);
+        fourth.addKey(key, InputConstants.KEY_B, null);
+        fourth.addKey(key, InputConstants.KEY_N, null);
+        fourth.addKey(key, InputConstants.KEY_M, null);
+        fourth.addKey(key, InputConstants.KEY_COMMA, null);
+        fourth.addKey(key, InputConstants.KEY_PERIOD, null);
+        fourth.addKey(key, InputConstants.KEY_SLASH, null);
+        fourth.addKey(key + 8, InputConstants.KEY_RIGHT_SHIFT, null);
+        fourth.addKey(key, InputConstants.KEY_UP, SimIcons.KEY_ARROW_UP);
+        fourth.addKey(key, InputConstants.KEY_END, null);
 
-        fifth.addKey(key + 4, GLFW.GLFW_KEY_LEFT_CONTROL, null);
-        fifth.addKey(key, GLFW.GLFW_KEY_LEFT_SUPER, null);
-        fifth.addKey(key, GLFW.GLFW_KEY_LEFT_ALT, null);
-        fifth.addKey(key + 74, GLFW.GLFW_KEY_SPACE, null);
-        fifth.addKey(key, GLFW.GLFW_KEY_RIGHT_ALT, null);
-        fifth.addKey(key, GLFW.GLFW_KEY_MENU, null);
-        fifth.addKey(key + 4, GLFW.GLFW_KEY_RIGHT_CONTROL, null);
-        fifth.addKey(key, GLFW.GLFW_KEY_LEFT, SimIcons.KEY_ARROW_LEFT);
-        fifth.addKey(key, GLFW.GLFW_KEY_DOWN, SimIcons.KEY_ARROW_DOWN);
-        fifth.addKey(key, GLFW.GLFW_KEY_RIGHT, SimIcons.KEY_ARROW_RIGHT);
+        fifth.addKey(key + 4, InputConstants.KEY_LEFT_CONTROL, null);
+        fifth.addKey(key, InputConstants.KEY_LEFT_SUPER, null);
+        fifth.addKey(key, InputConstants.KEY_LEFT_ALT, null);
+        fifth.addKey(key + 74, InputConstants.KEY_SPACE, null);
+        fifth.addKey(key, InputConstants.KEY_RIGHT_ALT, null);
+        fifth.addKey(key, InputConstants.KEY_RGUI, null);
+        fifth.addKey(key + 4, InputConstants.KEY_RIGHT_CONTROL, null);
+        fifth.addKey(key, InputConstants.KEY_LEFT, SimIcons.KEY_ARROW_LEFT);
+        fifth.addKey(key, InputConstants.KEY_DOWN, SimIcons.KEY_ARROW_DOWN);
+        fifth.addKey(key, InputConstants.KEY_RIGHT, SimIcons.KEY_ARROW_RIGHT);
 
         this.rows.add(first);
         this.rows.add(second);

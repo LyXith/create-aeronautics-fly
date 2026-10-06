@@ -8,7 +8,7 @@ import foundry.veil.api.network.VeilPacketManager;
 import com.zurrtum.create.client.catnip.animation.AnimationTickHolder;
 import com.zurrtum.create.client.catnip.gui.UIRenderHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
@@ -48,7 +48,7 @@ public class ThrottleLeverHandler extends BlockHoldInteraction {
     }
 
     @Override
-    public void renderOverlay(final GuiGraphics graphics, final int width, final int height, final boolean hideGui) {
+    public void renderOverlay(final GuiGraphicsExtractor graphics, final int width, final int height, final boolean hideGui) {
         if (hideGui)
             return;
 
@@ -101,7 +101,7 @@ public class ThrottleLeverHandler extends BlockHoldInteraction {
         UIRenderHelper.drawCropped(graphics, cx, 0, cursorWidth, 14, AllGuiTextures.VALUE_SETTINGS_CURSOR);
         AllGuiTextures.VALUE_SETTINGS_CURSOR_RIGHT.render(graphics, cx + cursorWidth, 0);
 
-        graphics.drawString(Minecraft.getInstance().font, String.valueOf(this.inverted ? 15 - this.signal : this.signal), cx + 1, 3, SimColors.THROTTLE_VALUE_BROWN, false);
+        graphics.text(Minecraft.getInstance().font, String.valueOf(this.inverted ? 15 - this.signal : this.signal), cx + 1, 3, SimColors.THROTTLE_VALUE_BROWN, false);
 
         ps.popMatrix();
 

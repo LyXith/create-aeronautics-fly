@@ -10,7 +10,7 @@ import dev.simulated_team.simulated.content.blocks.redstone.linked_typewriter.sc
 import dev.simulated_team.simulated.index.SimGUITextures;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -35,7 +35,7 @@ public class KeyWidget extends AbstractSimiWidget {
     }
 
     @Override
-    protected void renderWidget(final GuiGraphics graphics, final int mouseX, final int mouseY,
+    protected void extractWidgetRenderState(GuiGraphicsExtractor graphics, final int mouseX, final int mouseY,
                                 final float partialTicks) {
         final boolean bound = this.screen.getNewEntries().getKeyMap().containsKey(this.keyCode);
         final SimGUITextures start = bound ? SimGUITextures.KEY_START : SimGUITextures.INACTIVE_KEY_START;
@@ -58,7 +58,7 @@ public class KeyWidget extends AbstractSimiWidget {
         }
     }
 
-    private void renderHover(final GuiGraphics graphics) {
+    private void renderHover(final GuiGraphicsExtractor graphics) {
         LinkedTypewriterEntries.KeyboardEntry entry = this.screen.getNewEntries().getEntry(this.keyCode);
         if (entry == null) {
             entry = new LinkedTypewriterEntries.KeyboardEntry(
@@ -98,7 +98,7 @@ public class KeyWidget extends AbstractSimiWidget {
         final Couple<RedstoneLinkNetworkHandler.Frequency> frequencies = entry.getAsCouple();
         graphics.renderItem(frequencies.getFirst().getStack(), frequencyX + 1, backgroundY + 5);
         graphics.renderItem(frequencies.getSecond().getStack(), frequencyX + 19, backgroundY + 5);
-        graphics.drawString(
+        graphics.text(
                 font,
                 keyName,
                 this.getX() + (this.width - textWidth) / 2,

@@ -8,7 +8,7 @@ import dev.simulated_team.simulated.content.blocks.redstone.linked_typewriter.sc
 import dev.simulated_team.simulated.index.SimGUITextures;
 import dev.simulated_team.simulated.index.SimIcons;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 
@@ -84,11 +84,11 @@ public class KeyEditorScreen {
         this.scroll = Math.clamp(this.scroll, 0, maxScroll);
     }
 
-    public void renderBackground(final GuiGraphics graphics, final float partialTick) {
+    public void extractBackground(GuiGraphicsExtractor graphics, final float partialTick) {
         KEY_MENU.render(graphics, this.leftPos(), this.topPos());
         final Component title = Component.translatable(
                 "simulated.linked_typewriter.bind_screen_title");
-        graphics.drawString(
+        graphics.text(
                 Minecraft.getInstance().font,
                 title,
                 this.leftPos() + (KEY_MENU.width - Minecraft.getInstance().font.width(title)) / 2,
@@ -193,7 +193,7 @@ public class KeyEditorScreen {
                     + index * ENTRY_SPACING;
         }
 
-        private void renderBackground(final GuiGraphics graphics, final int index) {
+        private void extractBackground(GuiGraphicsExtractor graphics, final int index) {
             final int x = KeyEditorScreen.this.leftPos() + 12;
             final int y = this.currentY(index);
             KEY_ENTRY.render(graphics, x, y);
@@ -201,7 +201,7 @@ public class KeyEditorScreen {
             final Component keyName = InputConstants.Type.KEYSYM
                     .getOrCreate(this.entry.glfwKeyCode)
                     .getDisplayName();
-            graphics.drawString(
+            graphics.text(
                     Minecraft.getInstance().font,
                     keyName,
                     x + 9,

@@ -9,7 +9,7 @@ import dev.simulated_team.simulated.util.hold_interaction.BlockHoldInteraction;
 import dev.simulated_team.simulated.util.hold_interaction.HoldInteractionManager;
 import foundry.veil.api.network.VeilPacketManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
@@ -39,7 +39,7 @@ public class SteeringWheelHandler extends BlockHoldInteraction {
 
 
     @Override
-    public void renderOverlay(final GuiGraphics guiGraphics, final int width1, final int height1, final boolean hideGui) {
+    public void renderOverlay(final GuiGraphicsExtractor guiGraphics, final int width1, final int height1, final boolean hideGui) {
         final Minecraft mc = Minecraft.getInstance();
         if (hideGui) {
             return;
@@ -115,11 +115,11 @@ public class SteeringWheelHandler extends BlockHoldInteraction {
             for (int yoff = -1; yoff < 2; yoff++) {
                 if (xoff == 0 && yoff == 0) continue;
 
-                guiGraphics.drawString(mc.font, text, centeredX + xoff, y + yoff, (int) Long.parseLong("2b2117", 16), false);
+                guiGraphics.text(mc.font, text, centeredX + xoff, y + yoff, (int) Long.parseLong("2b2117", 16), false);
             }
         }
 
-        guiGraphics.drawString(mc.font, text, centeredX, y, (int) Long.parseLong("886539", 16), false);
+        guiGraphics.text(mc.font, text, centeredX, y, (int) Long.parseLong("886539", 16), false);
     }
 
     //custom wrap because mc is a jerk (we need else if here otherwise it'll pass both if statements

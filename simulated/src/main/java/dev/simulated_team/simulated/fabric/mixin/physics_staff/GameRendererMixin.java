@@ -54,7 +54,7 @@ public abstract class GameRendererMixin {
                                                             final CallbackInfo ci) {
         final Camera camera = this.minecraft.gameRenderer.getMainCamera();
         final PoseStack poseStack = new PoseStack();
-        poseStack.mulPose(camera.rotation().conjugate(new Quaternionf()));
+        poseStack.rotate(camera.rotation().conjugate(new Quaternionf()));
 
         final MultiBufferSource.BufferSource bufferSource = this.minecraft.renderBuffers().bufferSource();
         IrisLaserRenderQueue.drawAfterShaderComposite(bufferSource);

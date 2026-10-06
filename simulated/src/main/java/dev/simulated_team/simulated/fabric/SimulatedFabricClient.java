@@ -13,10 +13,10 @@ import foundry.veil.api.network.VeilPacketManager;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
-import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
@@ -36,11 +36,11 @@ public final class SimulatedFabricClient implements ClientModInitializer {
 
         ClientTickEvents.START_CLIENT_TICK.register(SimulatedCommonClientEvents::preClientTick);
         ClientTickEvents.END_CLIENT_TICK.register(SimulatedCommonClientEvents::postClientTick);
-        WorldRenderEvents.START_MAIN.register(context -> {
+        LevelRenderEvents.START_MAIN.register(context -> {
             LateLaserRenderQueue.beginWorldFrame();
             IrisLaserRenderQueue.beginWorldFrame();
         });
-        WorldRenderEvents.END_MAIN.register(context -> {
+        LevelRenderEvents.END_MAIN.register(context -> {
             LateLaserRenderQueue.finishWorldFrameCollection();
             IrisLaserRenderQueue.finishWorldFrameCollection();
             PhysicsStaffRenderHandler.renderSelectionBox(

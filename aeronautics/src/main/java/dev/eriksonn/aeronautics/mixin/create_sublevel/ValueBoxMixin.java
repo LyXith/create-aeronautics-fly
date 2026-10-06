@@ -69,7 +69,7 @@ public abstract class ValueBoxMixin {
                 physicalOrigin.y - camera.y,
                 physicalOrigin.z - camera.z
         );
-        poseStack.mulPose(this.aeronautics$orientationStorage.set(pose.orientation()));
+        poseStack.rotate(this.aeronautics$orientationStorage.set(pose.orientation()));
         poseStack.scale(
                 (float) pose.scale().x(),
                 (float) pose.scale().y(),

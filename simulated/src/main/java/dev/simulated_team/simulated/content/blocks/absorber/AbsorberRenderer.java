@@ -91,7 +91,7 @@ public class AbsorberRenderer extends SmartBlockEntityRenderer<AbsorberBlockEnti
 
         buffer.translate(0.5,0.25+offset,0.5);
         final Matrix4f r = new Matrix4f().rotate(yRot,0,1,0);
-        buffer.mulPose(r.mul(rotationMatrix));
+        buffer.rotate(r.mul(rotationMatrix));
         buffer.translate(-0.5,0,-0.5);
         buffer.light(light).renderInto(ms.last(),vb);
     }

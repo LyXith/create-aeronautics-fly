@@ -15,7 +15,7 @@ import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.LevelRenderer;
-import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.PerspectiveProjectionMatrixBuffer;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
@@ -81,14 +81,14 @@ public class SimpleSubLevelGroupRenderer {
         }
 
         final Minecraft minecraft = Minecraft.getInstance();
-        final LightTexture lightTexture = minecraft.gameRenderer.lightTexture();
+        final LightCoordsUtil lightTexture = minecraft.gameRenderer.lightTexture();
         final BlockRenderDispatcher blockRenderer = minecraft.getBlockRenderer();
 
         CAMERA.setup(cameraPosition, null, minecraft.level, orientation, 0f);
 
         final PoseStack poseStack = new PoseStack();
-        poseStack.mulPose(TRANSFORM.set(modelView));
-        poseStack.mulPose(CAMERA.rotation());
+        poseStack.rotate(TRANSFORM.set(modelView));
+        poseStack.rotate(CAMERA.rotation());
 
         RenderSystem.backupProjectionMatrix();
         RenderSystem.setProjectionMatrix(PROJECTION.getBuffer(projectionMat), ProjectionType.ORTHOGRAPHIC);
@@ -109,7 +109,7 @@ public class SimpleSubLevelGroupRenderer {
                 final SubLevelRenderData renderData = renderedSubLevel.getRenderData();
                 final Vector3d chunkOffset = renderData.getChunkOffset();
                 final PoseStack blockPoseStack = new PoseStack();
-                blockPoseStack.mulPose(renderData.getTransformation(cameraPosition.x, cameraPosition.y, cameraPosition.z));
+                blockPoseStack.rotate(renderData.getTransformation(cameraPosition.x, cameraPosition.y, cameraPosition.z));
                 blockPoseStack.translate(chunkOffset.x, chunkOffset.y, chunkOffset.z);
 
                 final var bounds = renderedSubLevel.getPlot().getBoundingBox();
@@ -121,7 +121,7 @@ public class SimpleSubLevelGroupRenderer {
 
                     blockPoseStack.pushPose();
                     blockPoseStack.translate(blockPos.getX(), blockPos.getY(), blockPos.getZ());
-                    blockRenderer.renderSingleBlock(blockState, blockPoseStack, bufferSource, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY);
+                    blockRenderer.renderSingleBlock(blockState, blockPoseStack, bufferSource, LightCoordsUtil.FULL_BRIGHT, OverlayTexture.NO_OVERLAY);
                     blockPoseStack.popPose();
                 }
             }

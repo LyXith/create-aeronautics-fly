@@ -10,7 +10,6 @@ import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
 import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 
@@ -43,13 +42,15 @@ public final class FabricSimEntityService implements SimEntityService {
             if (data.immuneToFire()) {
                 properties.fireImmune();
             }
-            properties.dimensions(EntityDimensions.fixed(data.width(), data.height()));
+            properties.sized(data.width(), data.height());
             // EntityLoaderData stores a chunk-based range. Fabric's
             // trackable(...) overload takes blocks, which would reduce the
             // plunger's intended 10-chunk range to one chunk.
-            properties.trackRangeChunks(data.clientTrackingRange());
-            properties.trackedUpdateRate(data.updateFrequency());
-            properties.forceTrackedVelocityUpdates(data.sendVelocity());
+            properties.clientTrackingRange(data.clientTrackingRange() * 16);
+            properties.updateInterval(data.updateFrequency());
+            if (!data.sendVelocity()) {
+                properties.dontTrackDeltas();
+            }
         });
     }
 }

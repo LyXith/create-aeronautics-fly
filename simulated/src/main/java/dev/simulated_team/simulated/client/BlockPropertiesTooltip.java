@@ -24,7 +24,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.lwjgl.glfw.GLFW;
+import com.mojang.blaze3d.platform.InputConstants;
 
 import java.text.DecimalFormat;
 import java.util.LinkedHashMap;
@@ -64,7 +64,7 @@ public class BlockPropertiesTooltip {
             return condition.allows();
         }
 
-        return condition.test(AllKeys.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT), GogglesItem.isWearingGoggles(player));
+        return condition.test(AllKeys.isKeyDown(InputConstants.KEY_LEFT_SHIFT), GogglesItem.isWearingGoggles(player));
     }
 
     public static void register(final SimulatedRegistrate registrate, final String name, final TooltipFunction tooltipFunction, final float priority) {

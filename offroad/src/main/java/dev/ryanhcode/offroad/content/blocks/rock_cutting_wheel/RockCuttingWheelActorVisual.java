@@ -10,7 +10,7 @@ import dev.ryanhcode.offroad.index.OffroadPartialModels;
 import com.zurrtum.create.client.catnip.animation.AnimationTickHolder;
 import com.zurrtum.create.catnip.animation.LerpedFloat;
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 public class RockCuttingWheelActorVisual extends ActorVisual {

@@ -1,7 +1,7 @@
 package dev.eriksonn.aeronautics.content.blocks.hot_air.hot_air_burner;
 
 import com.mojang.blaze3d.ProjectionType;
-import com.mojang.blaze3d.buffers.GpuBufferSlice;
+import com.mojang.renderpearl.api.buffers.GpuBufferSlice;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.eriksonn.aeronautics.index.client.AeroRenderTypes;

@@ -1,13 +1,12 @@
 package dev.simulated_team.simulated.index;
 
-import com.mojang.blaze3d.pipeline.BlendFunction;
-import com.mojang.blaze3d.pipeline.RenderPipeline;
-import com.mojang.blaze3d.platform.DestFactor;
+import com.mojang.renderpearl.api.pipeline.BlendFunction;
+import com.mojang.renderpearl.api.pipeline.RenderPipeline;
+import com.mojang.renderpearl.api.pipeline.BlendFactor;
 import com.mojang.blaze3d.platform.DepthTestFunction;
-import com.mojang.blaze3d.platform.SourceFactor;
-import com.mojang.blaze3d.shaders.UniformType;
+import com.mojang.renderpearl.api.pipeline.UniformType;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.renderpearl.api.vertex.VertexFormat;
 import com.zurrtum.create.client.AllSpecialTextures;
 import com.zurrtum.create.client.foundation.render.CreateRenderTypes;
 import dev.simulated_team.simulated.Simulated;
@@ -23,11 +22,11 @@ public final class SimRenderTypes {
     // Split translucent laser composition into two commutative operations.
     // This keeps intersecting colors stable when camera-based quad order flips.
     private static final BlendFunction LASER_ATTENUATION_BLEND = new BlendFunction(
-            SourceFactor.ZERO, DestFactor.ONE_MINUS_SRC_ALPHA,
-            SourceFactor.ZERO, DestFactor.ONE);
+            BlendFactor.ZERO, BlendFactor.ONE_MINUS_SRC_ALPHA,
+            BlendFactor.ZERO, BlendFactor.ONE);
     private static final BlendFunction LASER_EMISSION_BLEND = new BlendFunction(
-            SourceFactor.SRC_ALPHA, DestFactor.ONE,
-            SourceFactor.ZERO, DestFactor.ONE);
+            BlendFactor.SRC_ALPHA, BlendFactor.ONE,
+            BlendFactor.ZERO, BlendFactor.ONE);
 
     // Native 1.21 core-shader port of the original Veil laser. The vertex format,
     // blend, cull, depth-write and primitive mode intentionally match upstream.

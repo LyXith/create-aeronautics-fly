@@ -8,7 +8,7 @@ import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import com.tterrag.registrate.util.nullness.NonnullType;
 
 import io.github.fabricators_of_create.porting_lib.util.DeferredHolder;
-import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
+import net.fabricmc.fabric.api.menu.v1.ExtendedMenuType;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
@@ -74,7 +74,7 @@ public class MenuBuilder<T extends AbstractContainerMenu, S extends Screen & Men
             if (this.extraDataCodec == null) {
                 throw new IllegalStateException("Extended menu '" + this.getName() + "' is missing an opening-data codec");
             }
-            ret = new ExtendedScreenHandlerType<T, Object>(
+            ret = new ExtendedMenuType<T, Object>(
                     (windowId, inv, data) -> factory.create(supplier.get(), windowId, inv, data),
                     this.extraDataCodec
             );

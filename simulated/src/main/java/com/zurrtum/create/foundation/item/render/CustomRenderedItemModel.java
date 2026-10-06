@@ -1,6 +1,6 @@
 package com.zurrtum.create.foundation.item.render;
 
-import net.minecraft.client.renderer.block.model.SimpleModelWrapper;
+import net.minecraft.client.resources.model.SimpleModelWrapper;
 
 public class CustomRenderedItemModel {
     private final SimpleModelWrapper originalModel;

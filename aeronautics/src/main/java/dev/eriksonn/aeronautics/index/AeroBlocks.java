@@ -58,7 +58,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.floats.ConstantValue;
 import io.github.fabricators_of_create.porting_lib.models.generators.ConfiguredModel;
 
 import static com.zurrtum.create.foundation.data.ModelGen.customItemModel;

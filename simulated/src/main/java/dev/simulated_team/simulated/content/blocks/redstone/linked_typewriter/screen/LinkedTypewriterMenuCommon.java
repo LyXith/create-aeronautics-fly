@@ -12,7 +12,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
@@ -90,18 +90,18 @@ public class LinkedTypewriterMenuCommon extends AbstractContainerMenu {
     }
 
     @Override
-    public void clicked(final int slotId, final int dragType, final ClickType clickType, final Player player) {
+    public void clicked(final int slotId, final int dragType, final ContainerInput clickType, final Player player) {
         if (slotId < PLAYER_SLOT_COUNT || slotId >= this.slots.size()) {
             super.clicked(slotId, dragType, clickType, player);
             return;
         }
-        if (!this.slotsActive || clickType == ClickType.THROW) {
+        if (!this.slotsActive || clickType == ContainerInput.THROW) {
             return;
         }
 
         final int ghostSlot = slotId - PLAYER_SLOT_COUNT;
         final ItemStack carried = this.getCarried();
-        if (clickType == ClickType.CLONE) {
+        if (clickType == ContainerInput.CLONE) {
             if (player.isCreative() && carried.isEmpty()) {
                 final ItemStack copy = this.ghostInventory.getItem(ghostSlot).copy();
                 copy.setCount(copy.getMaxStackSize());

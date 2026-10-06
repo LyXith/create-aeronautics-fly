@@ -87,7 +87,7 @@ public class RopeStrandRenderer {
 
                 ps.pushPose();
                 ps.translate(renderPos.x - (ownerPos.getX()), renderPos.y - (ownerPos.getY()), renderPos.z - (ownerPos.getZ()));
-                ps.mulPose(orientation);
+                ps.rotate(orientation);
                 ps.translate(-0.5, -0.5, -0.5);
                 final BlockPos pos = BlockPos.containing(globalRenderPos.x, globalRenderPos.y, globalRenderPos.z);
                 final int worldLight = LevelRenderer.getLightColor(level, pos);

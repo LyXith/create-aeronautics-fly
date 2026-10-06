@@ -34,7 +34,6 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -79,9 +78,9 @@ public class EntityBuilder<T extends Entity, P> extends AbstractBuilder<EntityTy
                 .defaultLang();
     }
 
-    private final NonNullSupplier<FabricEntityTypeBuilder<T>> builder;
+    private final NonNullSupplier<EntityType.Builder<T>> builder;
 
-    private NonNullConsumer<FabricEntityTypeBuilder<T>> builderCallback = $ -> {};
+    private NonNullConsumer<EntityType.Builder<T>> builderCallback = $ -> {};
     @Nullable
     private NonNullSupplier<NonNullFunction<EntityRendererProvider.Context, EntityRenderer>> renderer;
 
@@ -89,7 +88,7 @@ public class EntityBuilder<T extends Entity, P> extends AbstractBuilder<EntityTy
 
     protected EntityBuilder(AbstractRegistrate<?> owner, P parent, String name, BuilderCallback callback, EntityType.EntityFactory<T> factory, MobCategory classification) {
         super(owner, parent, name, callback, Registries.ENTITY_TYPE);
-        this.builder = () -> FabricEntityTypeBuilder.create(classification, factory);
+        this.builder = () -> EntityType.Builder.of(factory, classification);
     }
 
     /**
@@ -100,7 +99,7 @@ public class EntityBuilder<T extends Entity, P> extends AbstractBuilder<EntityTy
      *            The action to perform on the properties
      * @return this {@link EntityBuilder}
      */
-    public EntityBuilder<T, P> properties(NonNullConsumer<FabricEntityTypeBuilder<T>> cons) {
+    public EntityBuilder<T, P> properties(NonNullConsumer<EntityType.Builder<T>> cons) {
         builderCallback = builderCallback.andThen(cons);
         return this;
     }
@@ -265,7 +264,7 @@ public class EntityBuilder<T extends Entity, P> extends AbstractBuilder<EntityTy
 
     @Override
     protected EntityType<T> createEntry() {
-        FabricEntityTypeBuilder<T> builder = this.builder.get();
+        EntityType.Builder<T> builder = this.builder.get();
         builderCallback.accept(builder);
         EntityType<T> type = builder.build(net.minecraft.resources.ResourceKey.create(Registries.ENTITY_TYPE,
                 Identifier.fromNamespaceAndPath(getOwner().getModid(), getName())));

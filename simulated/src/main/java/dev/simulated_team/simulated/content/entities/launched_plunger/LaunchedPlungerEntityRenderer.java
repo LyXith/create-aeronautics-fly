@@ -35,7 +35,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
-import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 import org.joml.*;
@@ -110,7 +110,7 @@ public class LaunchedPlungerEntityRenderer extends EntityRenderer<LaunchedPlunge
             perpendicularNormal = clientPos.transformNormal(perpendicularNormal);
 
             final Quaterniondc quaterniondc = clientPos.orientation();
-            poseStack.mulPose(new Quaternionf(quaterniondc.x(), quaterniondc.y(), quaterniondc.z(), quaterniondc.w()).conjugate());
+            poseStack.rotate(new Quaternionf(quaterniondc.x(), quaterniondc.y(), quaterniondc.z(), quaterniondc.w()).conjugate());
         }
 
         final SubLevel oldSubLevel = Sable.HELPER.getContainingClient(oldPos);
@@ -208,8 +208,8 @@ public class LaunchedPlungerEntityRenderer extends EntityRenderer<LaunchedPlunge
         if (entity.isPlunged()) {
             stack.rotate(dir.getRotation());
         } else {
-            poseStack.mulPose(Axis.YP.rotationDegrees(Mth.lerp(pt, entity.yRotO, entity.getYRot()) - 90.0F));
-            poseStack.mulPose(Axis.ZP.rotationDegrees(Mth.lerp(pt, entity.xRotO, entity.getXRot())));
+            poseStack.rotateDegrees(Axis.YP, Mth.lerp(pt, entity.yRotO, entity.getYRot() - 90.0F));
+            poseStack.rotateDegrees(Axis.ZP, Mth.lerp(pt, entity.xRotO, entity.getXRot()));
             stack.rotateZDegrees(90f);
         }
         stack.rotateXDegrees(-90);

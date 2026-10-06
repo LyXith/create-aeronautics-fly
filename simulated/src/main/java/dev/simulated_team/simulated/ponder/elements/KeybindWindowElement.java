@@ -10,7 +10,7 @@ import com.zurrtum.create.client.ponder.foundation.PonderScene;
 import com.zurrtum.create.client.ponder.foundation.element.InputWindowElement;
 import com.zurrtum.create.client.ponder.foundation.ui.PonderUI;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec2;
@@ -94,7 +94,7 @@ public class KeybindWindowElement extends InputWindowElement {
     }
 
     @Override
-    public void render(final @NotNull PonderScene scene, final PonderUI screen, final @NotNull GuiGraphics graphics, final float partialTicks, final float fade) {
+    public void render(final @NotNull PonderScene scene, final PonderUI screen, final @NotNull GuiGraphicsExtractor graphics, final float partialTicks, final float fade) {
         final Font font = screen.getFontRenderer();
         int width = 0;
         int height = 0;
@@ -140,7 +140,7 @@ public class KeybindWindowElement extends InputWindowElement {
         graphics.nextStratum();
 
         if (hasText) {
-            graphics.drawString(font, text, 2, (int) ((height - font.lineHeight) / 2f + 2),
+            graphics.text(font, text, 2, (int) ((height - font.lineHeight) / 2f + 2),
                     PonderPalette.WHITE.getColorObject().scaleAlpha(fade).getRGB(), false);
         }
 

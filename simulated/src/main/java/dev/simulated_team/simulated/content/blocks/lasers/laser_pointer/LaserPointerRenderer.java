@@ -9,7 +9,7 @@ import dev.simulated_team.simulated.util.SimColors;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
 import net.minecraft.util.Util;
-import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import org.joml.Vector3d;
@@ -38,7 +38,7 @@ public class LaserPointerRenderer extends AbstractLaserRenderer<LaserPointerBloc
         superBuffer.rotateToFace(blockEntity.getBlockState().getValue(LaserPointerBlock.FACING));
         superBuffer.translate(-0.5, -0.5, -0.5);
         if (blockEntity.shouldCast()) {
-            superBuffer.light(LightTexture.FULL_BRIGHT);
+            superBuffer.light(LightCoordsUtil.FULL_BRIGHT);
         } else {
             superBuffer.light(light);
         }

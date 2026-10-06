@@ -40,7 +40,7 @@ public class SubLevelAABBOutline extends AABBOutline {
 
         poseStack.pushPose();
         poseStack.translate(position.x() - camera.x, position.y() - camera.y, position.z() - camera.z);
-        poseStack.mulPose(this.orientation.set(pose.orientation()));
+        poseStack.rotate(this.orientation.set(pose.orientation()));
         poseStack.translate(
                 -(rotationPoint.x() - localCamera.x),
                 -(rotationPoint.y() - localCamera.y),

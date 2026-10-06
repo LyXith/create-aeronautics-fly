@@ -6,7 +6,7 @@ import com.zurrtum.create.api.behaviour.BlockEntityBehaviour;
 import com.zurrtum.create.foundation.blockEntity.SmartBlockEntity;
 import dev.simulated_team.simulated.content.blocks.behaviour.HoldTipBehaviour;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.MutableComponent;
@@ -71,7 +71,7 @@ public class HoldTipManager {
         lastHoverTip = hoverTip;
     }
 
-    public static void renderOverlay(final GuiGraphics graphics) {
+    public static void renderOverlay(final GuiGraphicsExtractor graphics) {
         final Minecraft mc = Minecraft.getInstance();
         if (mc.options.hideGui || !ValueSettingsInputHandler.canInteract(mc.player)) {
             return;
@@ -89,7 +89,7 @@ public class HoldTipManager {
         final int x = graphics.guiWidth() / 2;
         // Preserve the blank title-line spacing used by the reference UI.
         final int y = graphics.guiHeight() - 75 - 12;
-        graphics.drawString(
+        graphics.text(
                 mc.font,
                 lastHoverTip,
                 x - mc.font.width(lastHoverTip) / 2,

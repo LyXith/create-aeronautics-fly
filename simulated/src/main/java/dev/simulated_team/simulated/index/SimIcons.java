@@ -7,8 +7,8 @@ import com.zurrtum.create.client.foundation.gui.AllIcons;
 import dev.simulated_team.simulated.Simulated;
 import com.zurrtum.create.client.catnip.gui.element.DelegatedStencilElement;
 import com.zurrtum.create.catnip.theme.Color;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
@@ -62,7 +62,7 @@ public class SimIcons extends AllIcons {
     }
 
     @Override
-    public void render(final GuiGraphics graphics, final int x, final int y) {
+    public void extractRenderState(GuiGraphicsExtractor graphics, final int x, final int y) {
         graphics.blit(RenderPipelines.GUI_TEXTURED, ICON_ATLAS, x, y, this.iconX, this.iconY, 16, 16, 64, 64);
     }
 
@@ -70,7 +70,7 @@ public class SimIcons extends AllIcons {
         final VertexConsumer builder = buffer.getBuffer(RenderTypes.text(ICON_ATLAS));
         final Matrix4f matrix = ms.last().pose();
         final Color rgb = new Color(color);
-        final int light = LightTexture.FULL_BRIGHT;
+        final int light = LightCoordsUtil.FULL_BRIGHT;
 
         final Vec3 vec1 = new Vec3(0, 0, 0);
         final Vec3 vec2 = new Vec3(0, 1, 0);

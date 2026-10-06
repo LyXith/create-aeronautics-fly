@@ -10,7 +10,7 @@ import com.zurrtum.create.catnip.theme.Color;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarratedElementType;
@@ -66,7 +66,7 @@ public class DiagramForceGroupToggle extends AbstractWidget {
         this.toggleActive();
     }
 
-    public void renderTab(final GuiGraphics guiGraphics, final int mouseX, final int mouseY, final float partialTicks) {
+    public void renderTab(final GuiGraphicsExtractor guiGraphics, final int mouseX, final int mouseY, final float partialTicks) {
         final boolean isEnabled = this.isEnabled();
 
         final int groupColor = this.isEnabled() ? (255 << 24) | this.group.color() : 0xffaaaaaa;
@@ -88,7 +88,7 @@ public class DiagramForceGroupToggle extends AbstractWidget {
     }
 
     @Override
-    protected void renderWidget(final GuiGraphics guiGraphics, final int mouseX, final int mouseY, final float partialTicks) {
+    protected void extractWidgetRenderState(GuiGraphicsExtractor guiGraphics, final int mouseX, final int mouseY, final float partialTicks) {
         final Font font = Minecraft.getInstance().font;
         final boolean isEnabled = this.isEnabled();
         final int groupColor = (255 << 24) | this.group.color();
@@ -106,11 +106,11 @@ public class DiagramForceGroupToggle extends AbstractWidget {
         final MutableComponent name = MutableComponent.create(this.group.name().getContents());
 
         if (isEnabled) {
-            guiGraphics.drawString(font, name, 1, 1, 0xffe2d9c3, false);
-            guiGraphics.drawString(font, name, 0, 0, groupColor, false);
+            guiGraphics.text(font, name, 1, 1, 0xffe2d9c3, false);
+            guiGraphics.text(font, name, 0, 0, groupColor, false);
         } else {
             name.withStyle(ChatFormatting.STRIKETHROUGH);
-            guiGraphics.drawString(font, name, 0, 0, 0xaaaaaaaa, false);
+            guiGraphics.text(font, name, 0, 0, 0xaaaaaaaa, false);
         }
 
         if (this.forceCount > 0) {
@@ -118,10 +118,10 @@ public class DiagramForceGroupToggle extends AbstractWidget {
             final int x = 95 - font.width(forceCountText);
 
             if (isEnabled) {
-                guiGraphics.drawString(font, forceCountText, x + 1, 1, 0xffe2d9c3, false);
-                guiGraphics.drawString(font, forceCountText, x, 0, groupColor, false);
+                guiGraphics.text(font, forceCountText, x + 1, 1, 0xffe2d9c3, false);
+                guiGraphics.text(font, forceCountText, x, 0, groupColor, false);
             } else {
-                guiGraphics.drawString(font, forceCountText, x, 0, 0xaaaaaaaa, false);
+                guiGraphics.text(font, forceCountText, x, 0, 0xaaaaaaaa, false);
             }
         }
 

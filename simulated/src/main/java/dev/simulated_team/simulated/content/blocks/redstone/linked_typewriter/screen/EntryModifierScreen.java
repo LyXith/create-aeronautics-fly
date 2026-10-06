@@ -10,7 +10,7 @@ import dev.simulated_team.simulated.data.SimLang;
 import dev.simulated_team.simulated.index.SimGUITextures;
 import dev.simulated_team.simulated.network.packets.linked_typewriter.TypewriterMenuModifySlots;
 import foundry.veil.api.network.VeilPacketManager;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -96,7 +96,7 @@ public class EntryModifierScreen {
         return pending;
     }
 
-    public void renderBackground(final GuiGraphics graphics) {
+    public void extractBackground(GuiGraphicsExtractor graphics) {
         if (!this.modifying) {
             return;
         }

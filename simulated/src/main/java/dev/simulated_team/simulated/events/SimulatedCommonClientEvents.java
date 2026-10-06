@@ -17,7 +17,7 @@ import dev.simulated_team.simulated.util.click_interactions.InteractCallback.Res
 import dev.simulated_team.simulated.util.hold_interaction.HoldInteractionManager;
 import dev.simulated_team.simulated.util.hold_interaction.HoldTipManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -123,7 +123,7 @@ public class SimulatedCommonClientEvents {
      *
      * @param graphics Minecraft's abstract GUIGraphics class
      */
-    public static void renderOverlays(final GuiGraphics graphics, final float pt) {
+    public static void renderOverlays(final GuiGraphicsExtractor graphics, final float pt) {
         final int width = graphics.guiWidth();
         final int height = graphics.guiHeight();
 

@@ -26,7 +26,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
-import org.lwjgl.glfw.GLFW;
+import com.mojang.blaze3d.platform.InputConstants;
 
 public class SpringItemHandler implements InteractCallback {
     public static final double MAX_LENGTH = 9.0;
@@ -59,7 +59,7 @@ public class SpringItemHandler implements InteractCallback {
         final LocalPlayer player = (LocalPlayer) SimDistUtil.getClientPlayer();
         final Level level = player.level();
 
-        if (action == GLFW.GLFW_PRESS) {
+        if (action == InputConstants.PRESS) {
             final InteractionHand hand = this.getHandOrNull(player);
             if (hand == null) {
                 this.reset(true);

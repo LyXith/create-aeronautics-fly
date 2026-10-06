@@ -1,8 +1,15 @@
 pluginManagement {
     repositories {
-        maven("https://maven.fabricmc.net/")
-        mavenCentral()
+        maven {
+            name = "Fabric"
+            url = uri("https://maven.fabricmc.net/")
+        }
+        maven {
+            name = "Fabric Snapshots"
+            url = uri("https://maven.fabricmc.net/net/fabricmc/fabric-loom/")
+        }
         gradlePluginPortal()
+        mavenCentral()
     }
 }
 
@@ -12,7 +19,6 @@ plugins {
 
 rootProject.name = "create-aeronautics-fabric"
 
-include("sable")
 include("simulated")
 include("offroad")
 include("aeronautics")

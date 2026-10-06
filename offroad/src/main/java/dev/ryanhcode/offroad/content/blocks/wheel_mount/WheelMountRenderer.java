@@ -88,7 +88,7 @@ public class WheelMountRenderer extends KineticBlockEntityRenderer<WheelMountBlo
         ms.pushPose();
         ms.translate(0.0, -6.0 / 16.0, 0.0);
         ms.translate(0.5, 0.5, 0.5);
-        ms.mulPose(Axis.XP.rotation((float) teleAngle));
+        ms.rotate(Axis.XP.rotation((float) teleAngle));
         ms.translate(-0.5, -0.5, -0.5);
         teleOuter.light(light).renderInto(ms.last(), vb);
         ms.translate(0.0, 0.0, -(teleDistance - 1.0));
@@ -111,15 +111,15 @@ public class WheelMountRenderer extends KineticBlockEntityRenderer<WheelMountBlo
                 * (direction.getAxisDirection() == Direction.AxisDirection.POSITIVE ? 1.0 : -1.0)
                 * (direction.getAxis() == Direction.Axis.X ? 1.0 : -1.0);
 
-        ms.mulPose(Axis.ZP.rotation((float) signMultiplier));
+        ms.rotate(Axis.ZP.rotation((float) signMultiplier));
 
         final ItemStack itemStack = be.getHeldItem();
         final TireLike tireLike = itemStack.get(OffroadDataComponents.TIRE);
         if (tireLike != null) {
             final Vec3 rotation = tireLike.rotation();
-            ms.mulPose(Axis.XP.rotation((float) Math.toRadians(rotation.x)));
-            ms.mulPose(Axis.YP.rotation((float) Math.toRadians(rotation.y)));
-            ms.mulPose(Axis.ZP.rotation((float) Math.toRadians(rotation.z)));
+            ms.rotate(Axis.XP.rotation((float) Math.toRadians(rotation.x)));
+            ms.rotate(Axis.YP.rotation((float) Math.toRadians(rotation.y)));
+            ms.rotate(Axis.ZP.rotation((float) Math.toRadians(rotation.z)));
 
             if (tireLike.model().isPresent()) {
                 final Identifier model = tireLike.model().get();
@@ -141,7 +141,7 @@ public class WheelMountRenderer extends KineticBlockEntityRenderer<WheelMountBlo
         // spring
         ms.pushPose();
         ms.translate(0.5, 0.5 + springMountVer, 0.5 - springMountHor);
-        ms.mulPose(Axis.XP.rotation((float) springAngle + Mth.PI / 2.0f));
+        ms.rotate(Axis.XP.rotation((float) springAngle + Mth.PI / 2.0f));
         ms.translate(-0.5, -0.5 - springMountVer, -0.5 + springMountHor);
 
         final float springExtension = (float) springDistance;

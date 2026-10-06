@@ -27,8 +27,7 @@ import io.github.fabricators_of_create.porting_lib.util.DeferredHolder;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
-import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
-import net.fabricmc.fabric.api.client.render.fluid.v1.SimpleFluidRenderHandler;
+import com.tterrag.registrate.fabric.SimpleFluidRenderHandler;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributeHandler;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
 import net.minecraft.client.renderer.rendertype.RenderType;
@@ -426,7 +425,7 @@ public class FluidBuilder<T extends SimpleFlowableFluid, P> extends AbstractBuil
 
     @Environment(EnvType.CLIENT)
     protected void registerDefaultRenderer(T flowing) {
-        FluidRenderHandlerRegistry.INSTANCE.register(getSource(), flowing, new SimpleFluidRenderHandler(stillTexture, flowingTexture));
+        new SimpleFluidRenderHandler(stillTexture, flowingTexture).register(getSource(), flowing);
     }
 
     /**

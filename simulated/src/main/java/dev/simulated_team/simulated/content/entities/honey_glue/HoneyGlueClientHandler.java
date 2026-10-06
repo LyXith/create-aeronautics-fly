@@ -43,7 +43,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.lwjgl.glfw.GLFW;
+import com.mojang.blaze3d.platform.InputConstants;
 
 import java.util.List;
 import java.util.Optional;
@@ -84,7 +84,7 @@ public class HoneyGlueClientHandler implements InteractCallback {
 
     @Override
     public Result onUse(final int modifiers, final int action, final KeyMapping rightKey) {
-        if (action == GLFW.GLFW_PRESS) {
+        if (action == InputConstants.PRESS) {
             final Player player = SimDistUtil.getClientPlayer();
             if (player != null && this.tryUse(player)) {
                 return new Result(true);
@@ -119,7 +119,7 @@ public class HoneyGlueClientHandler implements InteractCallback {
 
     @Override
     public Result onAttack(final int modifiers, final int action, final KeyMapping leftKey) {
-        if (action == GLFW.GLFW_PRESS) {
+        if (action == InputConstants.PRESS) {
             final Player player = SimDistUtil.getClientPlayer();
             if (this.getHoneyGlueHand(player) == null) {
                 return Result.empty();
@@ -215,7 +215,7 @@ public class HoneyGlueClientHandler implements InteractCallback {
     }
 
     private static boolean altDown() {
-        return AllKeys.isKeyDown(GLFW.GLFW_KEY_LEFT_ALT) || AllKeys.isKeyDown(GLFW.GLFW_KEY_RIGHT_ALT);
+        return AllKeys.isKeyDown(InputConstants.KEY_LEFT_ALT) || AllKeys.isKeyDown(InputConstants.KEY_RIGHT_ALT);
     }
 
     public void updateHovered() {

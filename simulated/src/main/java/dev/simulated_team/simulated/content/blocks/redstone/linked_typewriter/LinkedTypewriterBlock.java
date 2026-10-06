@@ -1,5 +1,7 @@
 package dev.simulated_team.simulated.content.blocks.redstone.linked_typewriter;
 
+import net.minecraft.util.Prediction;
+
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.MapCodec;
 import com.zurrtum.create.AllItems;
@@ -171,7 +173,7 @@ public class LinkedTypewriterBlock extends HorizontalDirectionalBlock implements
         if (world instanceof ServerLevel) {
             if (player != null && player.isCreative()) {
                 Block.getDrops(state, (ServerLevel) world, pos, world.getBlockEntity(pos), player, context.getItemInHand()).forEach((itemStack) -> {
-                    player.getInventory().placeItemBackInInventory(itemStack);
+                    player.getInventory().placeItemBackInInventory(itemStack, Prediction.SERVER_ONLY);
                 });
             }
         }

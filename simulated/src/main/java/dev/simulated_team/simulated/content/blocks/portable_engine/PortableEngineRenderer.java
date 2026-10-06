@@ -10,7 +10,7 @@ import com.zurrtum.create.client.catnip.animation.AnimationTickHolder;
 import com.zurrtum.create.catnip.math.AngleHelper;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
-import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
@@ -59,12 +59,12 @@ public class PortableEngineRenderer extends KineticBlockEntityRenderer<PortableE
             final VertexConsumer translucent = buffer.getBuffer(RenderTypes.solidMovingBlock());
             engineParts = be.isSuperHeated() ? SimPartialModels.ENGINE_PARTS_SUPERHEATED : SimPartialModels.ENGINE_PARTS_HEATED;
 
-            this.renderPipes(be, partialTicks, ms, LightTexture.FULL_BRIGHT, blockState, direction, translucent, (int) (visualStrength * 255), engineParts, true);
+            this.renderPipes(be, partialTicks, ms, LightCoordsUtil.FULL_BRIGHT, blockState, direction, translucent, (int) (visualStrength * 255), engineParts, true);
         }
 
         if (lit) {
             final VertexConsumer translucent = buffer.getBuffer(RenderTypes.solidMovingBlock());
-            this.renderHatch(be, partialTicks, ms, LightTexture.FULL_BRIGHT, blockState, direction, translucent, (int) (hatchOpenProgress * 255), engineParts, lit, true);
+            this.renderHatch(be, partialTicks, ms, LightCoordsUtil.FULL_BRIGHT, blockState, direction, translucent, (int) (hatchOpenProgress * 255), engineParts, lit, true);
         }
     }
 

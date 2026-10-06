@@ -5,7 +5,7 @@ import com.zurrtum.create.client.catnip.gui.widget.AbstractSimiWidget;
 import dev.simulated_team.simulated.content.blocks.redstone.linked_typewriter.screen.EntryModifierScreen;
 import dev.simulated_team.simulated.data.SimLang;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
@@ -21,7 +21,7 @@ public class PromptWidget extends AbstractSimiWidget {
     }
 
     @Override
-    protected void doRender(final GuiGraphics graphics, final int mouseX, final int mouseY,
+    protected void doRender(final GuiGraphicsExtractor graphics, final int mouseX, final int mouseY,
                             final float partialTicks) {
         if (!this.modifier.isModifying() || this.modifier.getPendingEntry() == null) {
             return;
@@ -37,7 +37,7 @@ public class PromptWidget extends AbstractSimiWidget {
             displayName = SimLang.translate("linked_typewriter.bind_new_key").component();
         }
 
-        graphics.drawString(
+        graphics.text(
                 Minecraft.getInstance().font,
                 displayName,
                 this.getX() + 3,

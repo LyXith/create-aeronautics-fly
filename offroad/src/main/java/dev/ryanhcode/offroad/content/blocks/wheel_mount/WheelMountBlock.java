@@ -1,5 +1,7 @@
 package dev.ryanhcode.offroad.content.blocks.wheel_mount;
 
+import net.minecraft.util.Prediction;
+
 import com.zurrtum.create.api.schematic.requirement.SpecialBlockItemRequirement;
 import com.zurrtum.create.content.kinetics.base.HorizontalKineticBlock;
 import com.zurrtum.create.content.schematics.requirement.ItemRequirement;
@@ -135,7 +137,7 @@ public class WheelMountBlock extends HorizontalKineticBlock implements IBE<Wheel
                 if (!player.hasInfiniteMaterials()) {
                     heldItem.shrink(1);
                 }
-                player.getInventory().placeItemBackInInventory(save);
+                player.getInventory().placeItemBackInInventory(save, Prediction.SERVER_ONLY);
 
                 final ItemStack newSlotItem = slot.getStack();
                 mount.setChanged();

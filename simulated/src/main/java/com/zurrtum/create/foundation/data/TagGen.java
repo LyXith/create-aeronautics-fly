@@ -33,11 +33,11 @@ public final class TagGen {
     }
 
     public static class CreateTagAppender<T> {
-        private final TagAppender<ResourceKey<T>, T> delegate;
+        private final TagAppender<T> delegate;
         private final ResourceKey<? extends Registry<T>> registry;
         private final Function<T, Holder<T>> holderGetter;
 
-        private CreateTagAppender(TagAppender<ResourceKey<T>, T> delegate,
+        private CreateTagAppender(TagAppender<T> delegate,
                                   ResourceKey<? extends Registry<T>> registry,
                                   Function<T, Holder<T>> holderGetter) {
             this.delegate = delegate;

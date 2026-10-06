@@ -10,7 +10,7 @@ import com.tterrag.registrate.util.nullness.NonNullFunction;
 import com.tterrag.registrate.util.nullness.NonNullUnaryOperator;
 import io.github.fabricators_of_create.porting_lib.data.ExistingFileHelper;
 import net.fabricmc.api.EnvType;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
@@ -60,7 +60,7 @@ public interface ProviderType<T extends RegistrateProvider> {
     record Context<T extends RegistrateProvider>(ProviderType<T> type, AbstractRegistrate<?> parent,
                                                  RegistrateDataProvider.DataInfo info,
                                                  Map<ProviderType<?>, RegistrateProvider> existing,
-                                                 FabricDataOutput output, ExistingFileHelper fileHelper,
+                                                 FabricPackOutput output, ExistingFileHelper fileHelper,
                                                  CompletableFuture<HolderLookup.Provider> provider) {
 
         public <R extends RegistrateProvider> R get(ProviderType<R> other) {
@@ -90,7 +90,7 @@ public interface ProviderType<T extends RegistrateProvider> {
 
     interface SimpleServerDataFactory<T extends RegistrateProvider> extends DependencyAwareProviderType<T> {
 
-        T create(AbstractRegistrate<?> parent, FabricDataOutput output, CompletableFuture<HolderLookup.Provider> provider);
+        T create(AbstractRegistrate<?> parent, FabricPackOutput output, CompletableFuture<HolderLookup.Provider> provider);
 
         @Override
         default T create(Context<T> context) {

@@ -1,6 +1,6 @@
 package dev.simulated_team.simulated.content.physics_staff;
 
-import com.mojang.blaze3d.pipeline.RenderPipeline;
+import com.mojang.renderpearl.api.pipeline.RenderPipeline;
 
 import java.lang.reflect.Method;
 

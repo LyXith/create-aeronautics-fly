@@ -1,7 +1,0 @@
-{
-  "selector": "minecraft:grindstone",
-
-  "properties": {
-    "sable:friction": 0.05
-  }
-}

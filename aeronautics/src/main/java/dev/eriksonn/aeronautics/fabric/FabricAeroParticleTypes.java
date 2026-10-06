@@ -7,7 +7,7 @@ import dev.eriksonn.aeronautics.content.particle.HotAirEmberParticle;
 import dev.eriksonn.aeronautics.content.particle.LevititeSparkleParticle;
 import dev.eriksonn.aeronautics.content.particle.PropellerAirParticle;
 import dev.eriksonn.aeronautics.index.AeroParticleTypes;
-import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
+import net.fabricmc.fabric.api.client.particle.v1.ParticleProviderRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -27,7 +27,7 @@ public final class FabricAeroParticleTypes {
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     public static void registerFactories() {
-        final ParticleFactoryRegistry registry = ParticleFactoryRegistry.getInstance();
+        final ParticleProviderRegistry registry = ParticleProviderRegistry.getInstance();
         registry.register((ParticleType) AeroParticleTypes.PROPELLER_AIR_FLOW.get(), PropellerAirParticle.Factory::new);
         registry.register((ParticleType) AeroParticleTypes.HOT_AIR_EMBER.get(), HotAirEmberParticle.Factory::new);
         registry.register((ParticleType) AeroParticleTypes.LEVITITE_SPARKLE.get(), LevititeSparkleParticle.Factory::new);
