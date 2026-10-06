@@ -3,6 +3,7 @@ package dev.simulated_team.simulated.content.blocks.lasers;
 import com.mojang.blaze3d.ProjectionType;
 import com.mojang.renderpearl.api.buffers.GpuBufferSlice;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.simulated_team.simulated.content.physics_staff.OptionalShaderMods;
 import dev.simulated_team.simulated.index.SimRenderTypes;
@@ -62,7 +63,7 @@ public final class IrisLaserRenderQueue {
         // The block-entity pose does not contain the global camera model-view.
         // Bake that matrix now because Iris replaces it with an identity/composite
         // transform before this queue is drawn.
-        final Matrix4f worldMatrix = new Matrix4f(RenderSystem.getModelViewMatrix()).mul(matrix);
+        final Matrix4f worldMatrix = new Matrix4f(RenderSystem.getModelViewMatrixCopy()).mul(matrix);
         QUEUED_LASERS.add(new QueuedLaser(worldMatrix, beamEnd, offset, endU,
                 red, green, blue, alpha, endAlpha));
         return true;
@@ -94,30 +95,30 @@ public final class IrisLaserRenderQueue {
                 RenderSystem.setShaderFog(worldFog);
             }
 
-            final VertexConsumer glowBuilder = buffer.getBuffer(SimRenderTypes.irisCompositeLaserGlow());
-            for (final QueuedLaser laser : QUEUED_LASERS) {
-                for (int layer = 0; layer < GLOW_SCALES.length; layer++) {
-                    addGlowLayer(glowBuilder, laser, GLOW_SCALES[layer], GLOW_STRENGTHS[layer]);
+            final PoseStack identity = new PoseStack();
+            buffer.submitCustomGeometry(identity, SimRenderTypes.irisCompositeLaserGlow(), (pose, glowBuilder) -> {
+                for (final QueuedLaser laser : QUEUED_LASERS) {
+                    for (int layer = 0; layer < GLOW_SCALES.length; layer++) {
+                        addGlowLayer(glowBuilder, laser, GLOW_SCALES[layer], GLOW_STRENGTHS[layer]);
+                    }
                 }
-            }
-            buffer.endBatch(SimRenderTypes.irisCompositeLaserGlow());
+            });
 
-            final VertexConsumer attenuationBuilder =
-                    buffer.getBuffer(SimRenderTypes.irisCompositeLaserAttenuation());
-            for (final QueuedLaser laser : QUEUED_LASERS) {
-                AbstractLaserRenderer.addQueuedExactLaser(attenuationBuilder, laser.matrix,
-                        laser.beamEnd, laser.offset, laser.endU,
-                        laser.red, laser.green, laser.blue, laser.alpha, laser.endAlpha);
-            }
-            buffer.endBatch(SimRenderTypes.irisCompositeLaserAttenuation());
+            buffer.submitCustomGeometry(identity, SimRenderTypes.irisCompositeLaserAttenuation(), (pose, builder) -> {
+                for (final QueuedLaser laser : QUEUED_LASERS) {
+                    AbstractLaserRenderer.addQueuedExactLaser(builder, laser.matrix,
+                            laser.beamEnd, laser.offset, laser.endU,
+                            laser.red, laser.green, laser.blue, laser.alpha, laser.endAlpha);
+                }
+            });
 
-            final VertexConsumer builder = buffer.getBuffer(SimRenderTypes.irisCompositeLaser());
-            for (final QueuedLaser laser : QUEUED_LASERS) {
-                AbstractLaserRenderer.addQueuedExactLaser(builder, laser.matrix,
-                        laser.beamEnd, laser.offset, laser.endU,
-                        laser.red, laser.green, laser.blue, laser.alpha, laser.endAlpha);
-            }
-            buffer.endBatch(SimRenderTypes.irisCompositeLaser());
+            buffer.submitCustomGeometry(identity, SimRenderTypes.irisCompositeLaser(), (pose, builder) -> {
+                for (final QueuedLaser laser : QUEUED_LASERS) {
+                    AbstractLaserRenderer.addQueuedExactLaser(builder, laser.matrix,
+                            laser.beamEnd, laser.offset, laser.endU,
+                            laser.red, laser.green, laser.blue, laser.alpha, laser.endAlpha);
+                }
+            });
         } finally {
             if (modelViewPushed) {
                 modelViewStack.popMatrix();

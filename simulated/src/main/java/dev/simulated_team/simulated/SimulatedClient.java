@@ -15,7 +15,6 @@ import dev.simulated_team.simulated.compat.create.LegacyItemTooltips;
 import dev.simulated_team.simulated.compat.create.LegacyKineticTooltipBehaviour;
 import dev.simulated_team.simulated.compat.create.LegacyScrollValueClientBehaviour;
 import dev.simulated_team.simulated.compat.create.LegacyTooltipBehaviour;
-import dev.simulated_team.simulated.compat.create.RenderBridge;
 import dev.simulated_team.simulated.compat.create.SableCreateBlockEntityRenderer;
 import dev.simulated_team.simulated.compat.create.SableCreateKineticRenderer;
 import dev.simulated_team.simulated.compat.create.SmartBlockEntityRenderer;
@@ -331,12 +330,8 @@ public class SimulatedClient {
                 .getBlockEntityRenderDispatcher()
                 .getRenderer(blockEntity);
         if (registeredRenderer instanceof final SmartBlockEntityRenderer<?> renderer) {
-            // Legacy renderers still draw through a SubmitNodeCollector; RenderBridge
-            // discovers the render layers they ask for and submits each one through
-            // the 26.3 submit-node path so nothing is dropped.
-            RenderBridge.submit(poseStack, collector, (legacyPose, buffers) ->
-                    ((SmartBlockEntityRenderer) renderer).renderExplicitlyInSubLevel(
-                            blockEntity, partialTick, legacyPose, buffers, light, overlay));
+            ((SmartBlockEntityRenderer) renderer).renderExplicitlyInSubLevel(
+                    blockEntity, partialTick, poseStack, collector, light, overlay);
         }
     }
 

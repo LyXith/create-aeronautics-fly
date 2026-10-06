@@ -1,16 +1,10 @@
 package dev.simulated_team.simulated.fabric.mixin.physics_staff;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import dev.simulated_team.simulated.client.render.FirstPersonItemFocus;
-import dev.simulated_team.simulated.content.blocks.lasers.IrisLaserRenderQueue;
 import dev.simulated_team.simulated.content.physics_staff.PhysicsStaffItem;
-import dev.simulated_team.simulated.content.physics_staff.PhysicsStaffRenderHandler;
-import net.minecraft.client.Camera;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.SubmitNodeCollector;
-import org.joml.Quaternionf;
 import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -42,24 +36,4 @@ public abstract class GameRendererMixin {
         }
     }
 
-    @Inject(
-            method = "renderLevel",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/renderer/LevelRenderer;renderLevel(Lcom/mojang/blaze3d/resource/GraphicsResourceAllocator;Lnet/minecraft/client/DeltaTracker;ZLnet/minecraft/client/Camera;Lorg/joml/Matrix4f;Lorg/joml/Matrix4f;Lorg/joml/Matrix4f;Lcom/mojang/blaze3d/buffers/GpuBufferSlice;Lorg/joml/Vector4f;Z)V",
-                    shift = At.Shift.AFTER
-            )
-    )
-    private void simulated$renderPhysicsStaffShaderOverlay(final DeltaTracker deltaTracker,
-                                                            final CallbackInfo ci) {
-        final Camera camera = this.minecraft.gameRenderer.mainCamera();
-        final PoseStack poseStack = new PoseStack();
-        poseStack.rotate(camera.rotation().conjugate(new Quaternionf()));
-
-        final SubmitNodeCollector bufferSource = this.minecraft.renderBuffers().bufferSource();
-        IrisLaserRenderQueue.drawAfterShaderComposite(bufferSource);
-        if (PhysicsStaffRenderHandler.renderAfterShaderComposite(bufferSource, poseStack, camera)) {
-            bufferSource.endBatch();
-        }
-    }
 }

@@ -2,7 +2,6 @@ package dev.simulated_team.simulated.compat.create;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.SubmitNodeCollector;
-import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
@@ -47,8 +46,7 @@ public class SmartBlockEntityRenderer<T extends net.minecraft.world.level.block.
             return;
         }
 
-        RenderBridge.submit(poseStack, queue, (legacyPose, buffers) -> renderSafe(state.blockEntity, state.partialTicks, legacyPose,
-                buffers, state.lightCoords, OverlayTexture.NO_OVERLAY));
+        renderSafe(state.blockEntity, state.partialTicks, poseStack, queue, state.lightCoords, OverlayTexture.NO_OVERLAY);
     }
 
     protected boolean shouldSkipLegacyRender(final T blockEntity) {

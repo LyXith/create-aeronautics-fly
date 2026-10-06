@@ -17,7 +17,7 @@ import java.lang.reflect.Proxy;
  * <p>The callback hands the renderer a {@link SubmitNodeCollector}, the 26.3
  * replacement for the 1.21 {@code SubmitNodeCollector}; legacy renderers that still
  * draw through a {@code SubmitNodeCollector} are adapted through
- * {@link RenderBridge} so their geometry reaches the submit-node pass.</p>
+ * the 26.3 submit-node path directly so their geometry reaches the frame graph.</p>
  */
 public final class SableSubLevelRendererCompat {
     private SableSubLevelRendererCompat() {
@@ -68,9 +68,8 @@ public final class SableSubLevelRendererCompat {
                 .getBlockEntityRenderDispatcher()
                 .getRenderer(blockEntity);
         if (registeredRenderer instanceof final SmartBlockEntityRenderer<?> renderer) {
-            RenderBridge.submit(poseStack, collector, (legacyPose, buffers) ->
-                    ((SmartBlockEntityRenderer) renderer).renderExplicitlyInSubLevel(
-                            blockEntity, partialTick, legacyPose, buffers, light, overlay));
+            ((SmartBlockEntityRenderer) renderer).renderExplicitlyInSubLevel(
+                    blockEntity, partialTick, poseStack, collector, light, overlay);
         }
     }
 }

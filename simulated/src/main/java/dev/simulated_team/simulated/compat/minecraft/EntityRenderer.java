@@ -49,8 +49,7 @@ public abstract class EntityRenderer<T extends Entity>
             return;
         }
 
-        dev.simulated_team.simulated.compat.create.RenderBridge.submit(poseStack, queue,
-                (legacyPose, buffers) -> render(state.entity, state.yaw, state.partialTicks, legacyPose, buffers, state.lightCoords));
+        render(state.entity, state.yaw, state.partialTicks, poseStack, queue, state.lightCoords);
     }
 
     public void render(final T entity, final float yaw, final float partialTicks, final PoseStack poseStack,

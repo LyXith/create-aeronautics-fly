@@ -8,7 +8,6 @@ import com.zurrtum.create.client.flywheel.lib.transform.TransformStack;
 import dev.ryanhcode.sable.Sable;
 import dev.ryanhcode.sable.api.SubLevelHelper;
 import dev.ryanhcode.sable.util.SableDistUtil;
-import dev.simulated_team.simulated.compat.create.RenderBridge;
 import dev.simulated_team.simulated.content.physics_staff.OptionalShaderMods;
 import dev.simulated_team.simulated.index.SimRenderTypes;
 import com.zurrtum.create.catnip.data.Couple;
@@ -117,20 +116,6 @@ public abstract class AbstractLaserRenderer<T extends AbstractLaserBlockEntity> 
 
         final boolean shadersActive = OptionalShaderMods.isShaderPackActive();
         if (!shadersActive && LateLaserRenderQueue.isCollectingWorldFrame()) {
-            final RenderType lateRenderType = SimRenderTypes.lateLaser();
-            if (RenderBridge.isDiscoveringLayers()) {
-                // Register a real bridge layer, but never capture the bridge's
-                // identity-pose discovery invocation as world geometry.
-                buffer.getBuffer(lateRenderType);
-                return;
-            }
-            if (RenderBridge.isReplayingLayer()) {
-                if (RenderBridge.isReplayingLayer(lateRenderType)) {
-                    LateLaserRenderQueue.enqueue(pose.last().pose(), beamEnd, offset, endU,
-                            red, green, blue, alpha, endAlpha);
-                }
-                return;
-            }
             if (LateLaserRenderQueue.enqueue(pose.last().pose(), beamEnd, offset, endU,
                     red, green, blue, alpha, endAlpha)) {
                 return;
@@ -138,18 +123,6 @@ public abstract class AbstractLaserRenderer<T extends AbstractLaserBlockEntity> 
         }
 
         if (shadersActive && IrisLaserRenderQueue.isCollectingWorldFrame()) {
-            final RenderType irisRenderType = SimRenderTypes.irisCompositeLaser();
-            if (RenderBridge.isDiscoveringLayers()) {
-                buffer.getBuffer(irisRenderType);
-                return;
-            }
-            if (RenderBridge.isReplayingLayer()) {
-                if (RenderBridge.isReplayingLayer(irisRenderType)) {
-                    IrisLaserRenderQueue.enqueue(pose.last().pose(), beamEnd, offset, endU,
-                            red, green, blue, alpha, endAlpha);
-                }
-                return;
-            }
             if (IrisLaserRenderQueue.enqueue(pose.last().pose(), beamEnd, offset, endU,
                     red, green, blue, alpha, endAlpha)) {
                 return;
@@ -164,26 +137,19 @@ public abstract class AbstractLaserRenderer<T extends AbstractLaserBlockEntity> 
         }
 
         final RenderType renderType = SimRenderTypes.laser();
-        final VertexConsumer builder;
-        if (buffer instanceof final SubmitNodeCollector superRenderTypeBuffer) {
-            builder = superRenderTypeBuffer.getLateBuffer(renderType);
-        } else {
-            builder = buffer.getBuffer(renderType);
-        }
+        buffer.submitCustomGeometry(pose, renderType, (laserPose, builder) -> {
+            final Quaternionf rotationQuat = Axis.ZN.rotationDegrees(90);
+            final Matrix4f matrix = new Matrix4f(laserPose.pose());
 
-        pose.pushPose();
-        final Quaternionf rotationQuat = Axis.ZN.rotationDegrees(90);
+            for (int i = 0; i < 4; i++) {
+                addExactLaserSide(builder, matrix, beamEnd, offset, endU,
+                        red, green, blue, alpha, endAlpha);
 
-        for (int i = 0; i < 4; i++) {
-            final Matrix4f matrix = pose.last().pose();
-            addExactLaserSide(builder, matrix, beamEnd, offset, endU,
-                    red, green, blue, alpha, endAlpha);
-
-            pose.translate(0.5, 0.5, 0.5);
-            pose.rotate(rotationQuat);
-            pose.translate(-0.5, -0.5, -0.5);
-        }
-        pose.popPose();
+                matrix.translate(0.5f, 0.5f, 0.5f);
+                matrix.rotate(rotationQuat);
+                matrix.translate(-0.5f, -0.5f, -0.5f);
+            }
+        });
     }
 
     private static void addExactLaserSide(final VertexConsumer builder, final Matrix4f matrix,

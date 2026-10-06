@@ -1,6 +1,6 @@
 package dev.simulated_team.simulated.content.blocks.lasers;
 
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.blaze3d.vertex.PoseStack;
 import dev.simulated_team.simulated.index.SimRenderTypes;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import org.joml.Matrix4f;
@@ -54,22 +54,22 @@ public final class LateLaserRenderQueue {
             // Opacity multiplication and color addition are each commutative.
             // Keeping them in separate passes removes camera-order color shifts
             // without giving up the original beam's translucent overcast.
-            final VertexConsumer attenuationBuilder =
-                    buffer.getBuffer(SimRenderTypes.lateLaserAttenuation());
-            for (final QueuedLaser laser : QUEUED_LASERS) {
-                AbstractLaserRenderer.addQueuedExactLaser(attenuationBuilder, laser.matrix,
-                        laser.beamEnd, laser.offset, laser.endU,
-                        laser.red, laser.green, laser.blue, laser.alpha, laser.endAlpha);
-            }
-            buffer.endBatch(SimRenderTypes.lateLaserAttenuation());
+            final PoseStack identity = new PoseStack();
+            buffer.submitCustomGeometry(identity, SimRenderTypes.lateLaserAttenuation(), (pose, attenuationBuilder) -> {
+                for (final QueuedLaser laser : QUEUED_LASERS) {
+                    AbstractLaserRenderer.addQueuedExactLaser(attenuationBuilder, laser.matrix,
+                            laser.beamEnd, laser.offset, laser.endU,
+                            laser.red, laser.green, laser.blue, laser.alpha, laser.endAlpha);
+                }
+            });
 
-            final VertexConsumer builder = buffer.getBuffer(SimRenderTypes.lateLaser());
-            for (final QueuedLaser laser : QUEUED_LASERS) {
-                AbstractLaserRenderer.addQueuedExactLaser(builder, laser.matrix,
-                        laser.beamEnd, laser.offset, laser.endU,
-                        laser.red, laser.green, laser.blue, laser.alpha, laser.endAlpha);
-            }
-            buffer.endBatch(SimRenderTypes.lateLaser());
+            buffer.submitCustomGeometry(identity, SimRenderTypes.lateLaser(), (pose, builder) -> {
+                for (final QueuedLaser laser : QUEUED_LASERS) {
+                    AbstractLaserRenderer.addQueuedExactLaser(builder, laser.matrix,
+                            laser.beamEnd, laser.offset, laser.endU,
+                            laser.red, laser.green, laser.blue, laser.alpha, laser.endAlpha);
+                }
+            });
         } finally {
             QUEUED_LASERS.clear();
             collectingWorldFrame = false;
