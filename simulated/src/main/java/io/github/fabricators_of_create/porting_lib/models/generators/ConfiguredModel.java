@@ -122,8 +122,14 @@ public class ConfiguredModel implements IGeneratedBlockState {
             return this;
         }
 
-        @SuppressWarnings("unchecked")
+        /**
+         * 把当前累积的 {@link ConfiguredModel} 交给 owner（多重方块状态的 PartBuilder）
+         * 记录下来，再返回 owner 以便继续链式写 condition。
+         */
         public T addModel() {
+            if (this.onAddModel != null) {
+                this.onAddModel.accept(this.model);
+            }
             return this.owner;
         }
 

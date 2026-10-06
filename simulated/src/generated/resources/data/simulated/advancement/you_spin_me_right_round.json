@@ -12,7 +12,6 @@
       "translate": "advancement.simulated.you_spin_me_right_round.desc"
     },
     "icon": {
-      "count": 1,
       "id": "simulated:swivel_bearing"
     },
     "title": {

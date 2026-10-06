@@ -1,12 +1,10 @@
 {
   "type": "minecraft:crafting_shapeless",
-  "category": "misc",
   "ingredients": [
     "minecraft:paper",
     "simulated:physics_assembler"
   ],
   "result": {
-    "count": 1,
     "id": "simulated:contraption_diagram"
   }
 }

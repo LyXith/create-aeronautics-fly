@@ -12,7 +12,6 @@
       "translate": "advancement.simulated.i_declare_thee.desc"
     },
     "icon": {
-      "count": 1,
       "id": "simulated:white_nameplate"
     },
     "title": {

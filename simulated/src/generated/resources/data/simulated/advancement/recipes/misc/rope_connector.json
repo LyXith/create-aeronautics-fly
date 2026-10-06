@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "simulated:rope_connector"
+        "recipes": "simulated:rope_connector"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

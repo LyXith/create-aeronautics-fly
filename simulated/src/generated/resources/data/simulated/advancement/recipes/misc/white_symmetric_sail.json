@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "simulated:white_symmetric_sail"
+        "recipes": "simulated:white_symmetric_sail"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

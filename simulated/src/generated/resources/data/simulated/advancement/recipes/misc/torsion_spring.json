@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "simulated:torsion_spring"
+        "recipes": "simulated:torsion_spring"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

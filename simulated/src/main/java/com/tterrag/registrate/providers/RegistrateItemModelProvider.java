@@ -151,8 +151,13 @@ public class RegistrateItemModelProvider extends ItemModelProvider implements Re
         return "Item models and client item definitions";
     }
 
+    /**
+     * 写入 {@code assets/<ns>/items/<name>.json} 的 {@code model.type}。
+     * key 是 {@code <modid>:<name>}，和 {@link #run} 里用去掉 {@code item/ 前缀的
+     * itemId 查表保持一致；value 是注册过的自定义 item model 类型 id。
+     */
     public void customItemModel(String itemName, Identifier modelType) {
-        customItemModels.put(modLoc("item/" + itemName), modelType);
+        customItemModels.put(modLoc(itemName), modelType);
     }
 
     public String modid(NonNullSupplier<? extends ItemLike> item) {

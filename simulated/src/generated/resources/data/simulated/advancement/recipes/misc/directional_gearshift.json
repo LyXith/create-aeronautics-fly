@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "simulated:directional_gearshift"
+        "recipes": "simulated:directional_gearshift"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

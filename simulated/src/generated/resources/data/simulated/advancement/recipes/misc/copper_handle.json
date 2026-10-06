@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "simulated:copper_handle"
+        "recipes": "simulated:copper_handle"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -3,12 +3,10 @@
   "criteria": {
     "0": {
       "conditions": {
-        "location": [
-          {
-            "block": "simulated:gimbal_sensor",
-            "condition": "minecraft:block_state_property"
-          }
-        ]
+        "location": {
+          "type": "minecraft:match_block",
+          "blocks": "simulated:gimbal_sensor"
+        }
       },
       "trigger": "minecraft:placed_block"
     }
@@ -20,7 +18,6 @@
       "translate": "advancement.simulated.the_definition_of_up.desc"
     },
     "icon": {
-      "count": 1,
       "id": "simulated:gimbal_sensor"
     },
     "title": {

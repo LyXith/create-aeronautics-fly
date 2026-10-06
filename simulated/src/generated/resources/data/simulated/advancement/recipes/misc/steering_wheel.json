@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "simulated:steering_wheel"
+        "recipes": "simulated:steering_wheel"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

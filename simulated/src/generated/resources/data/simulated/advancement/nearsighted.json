@@ -3,12 +3,10 @@
   "criteria": {
     "0": {
       "conditions": {
-        "location": [
-          {
-            "block": "simulated:optical_sensor",
-            "condition": "minecraft:block_state_property"
-          }
-        ]
+        "location": {
+          "type": "minecraft:match_block",
+          "blocks": "simulated:optical_sensor"
+        }
       },
       "trigger": "minecraft:placed_block"
     }
@@ -20,7 +18,6 @@
       "translate": "advancement.simulated.nearsighted.desc"
     },
     "icon": {
-      "count": 1,
       "id": "simulated:optical_sensor"
     },
     "title": {

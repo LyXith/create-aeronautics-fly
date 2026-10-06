@@ -13,7 +13,6 @@
       "translate": "advancement.simulated.measure_once_build_twice.desc"
     },
     "icon": {
-      "count": 1,
       "id": "simulated:contraption_diagram"
     },
     "title": {

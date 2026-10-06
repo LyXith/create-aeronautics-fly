@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
     "A": "create:transmitter",
     "B": "create:golden_sheet",
@@ -12,7 +11,6 @@
     "C"
   ],
   "result": {
-    "count": 1,
     "id": "simulated:modulating_linked_receiver"
   }
 }

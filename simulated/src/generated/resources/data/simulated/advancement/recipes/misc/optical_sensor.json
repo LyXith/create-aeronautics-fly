@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "simulated:optical_sensor"
+        "recipes": "simulated:optical_sensor"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

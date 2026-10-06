@@ -18,7 +18,6 @@
       "translate": "advancement.simulated.applied_kinematics.desc"
     },
     "icon": {
-      "count": 1,
       "id": "simulated:physics_assembler"
     },
     "title": {

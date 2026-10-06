@@ -28,6 +28,11 @@ public class MultiPartBlockStateBuilder implements IGeneratedBlockState {
     public JsonElement toJSON() {
         final JsonArray array = new JsonArray();
         for (final PartBuilder part : this.parts) {
+            // 调用方普遍写成 ``....end().part();``，链尾会多挂一个还没填模型的空 part，
+            // 空 part 序列化出来是非法的 `"apply": []`，直接跳过。
+            if (part.models.isEmpty()) {
+                continue;
+            }
             array.add(part.toJSON());
         }
         return array;
@@ -88,15 +93,15 @@ public class MultiPartBlockStateBuilder implements IGeneratedBlockState {
                 for (final Map.Entry<Property<?>, List<Comparable<?>>> entry : this.conditions.entrySet()) {
                     final Property<?> property = entry.getKey();
                     final List<Comparable<?>> values = entry.getValue();
-                    if (values.size() == 1) {
-                        when.put(property.getName(), new JsonPrimitive(render(property, values.get(0))));
-                    } else {
-                        final JsonArray array = new JsonArray();
-                        for (final Comparable<?> value : values) {
-                            array.add(render(property, value));
+                    // 同一属性的多个取值在 multipart 里是 “或”，写成 "a|b"
+                    final StringBuilder joined = new StringBuilder();
+                    for (final Comparable<?> value : values) {
+                        if (joined.length() > 0) {
+                            joined.append('|');
                         }
-                        when.put(property.getName(), array);
+                        joined.append(render(property, value));
                     }
+                    when.put(property.getName(), new JsonPrimitive(joined.toString()));
                 }
                 final JsonObject whenJson = new JsonObject();
                 when.forEach(whenJson::add);

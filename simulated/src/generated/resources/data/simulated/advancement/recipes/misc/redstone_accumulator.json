@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "simulated:redstone_accumulator"
+        "recipes": "simulated:redstone_accumulator"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

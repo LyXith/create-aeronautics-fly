@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
     "A": "create:andesite_alloy",
     "N": "minecraft:lever",
@@ -12,7 +11,6 @@
     "ARA"
   ],
   "result": {
-    "count": 1,
     "id": "simulated:physics_assembler"
   }
 }

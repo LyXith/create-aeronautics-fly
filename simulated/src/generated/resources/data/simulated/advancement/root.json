@@ -12,7 +12,6 @@
       "translate": "advancement.simulated.root.desc"
     },
     "icon": {
-      "count": 1,
       "id": "simulated:contraption_diagram"
     },
     "show_toast": false,

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "simulated:crafting/gray_nameplate_from_other_nameplate"
+        "recipes": "simulated:crafting/gray_nameplate_from_other_nameplate"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

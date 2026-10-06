@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "simulated:auger_shaft_from_auger_cogwheel"
+        "recipes": "simulated:auger_shaft_from_auger_cogwheel"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

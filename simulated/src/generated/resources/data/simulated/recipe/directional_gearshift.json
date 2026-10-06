@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shapeless",
-  "category": "misc",
   "ingredients": [
     "create:andesite_casing",
     "create:cogwheel",
@@ -8,7 +7,6 @@
     "create:shaft"
   ],
   "result": {
-    "count": 1,
     "id": "simulated:directional_gearshift"
   }
 }

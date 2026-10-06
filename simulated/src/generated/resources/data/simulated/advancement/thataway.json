@@ -3,12 +3,10 @@
   "criteria": {
     "0": {
       "conditions": {
-        "location": [
-          {
-            "block": "simulated:navigation_table",
-            "condition": "minecraft:block_state_property"
-          }
-        ]
+        "location": {
+          "type": "minecraft:match_block",
+          "blocks": "simulated:navigation_table"
+        }
       },
       "trigger": "minecraft:placed_block"
     }
@@ -19,7 +17,6 @@
       "translate": "advancement.simulated.thataway.desc"
     },
     "icon": {
-      "count": 1,
       "id": "simulated:navigation_table"
     },
     "title": {

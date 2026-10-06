@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "simulated:pink_handle"
+        "recipes": "simulated:pink_handle"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

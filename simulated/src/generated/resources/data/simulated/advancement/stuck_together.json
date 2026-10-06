@@ -19,7 +19,6 @@
       "translate": "advancement.simulated.stuck_together.desc"
     },
     "icon": {
-      "count": 1,
       "id": "simulated:plunger_launcher"
     },
     "title": {

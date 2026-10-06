@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "simulated:directional_linked_receiver"
+        "recipes": "simulated:directional_linked_receiver"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

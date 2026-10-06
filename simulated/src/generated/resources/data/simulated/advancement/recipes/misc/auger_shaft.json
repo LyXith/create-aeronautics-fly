@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "simulated:auger_shaft"
+        "recipes": "simulated:auger_shaft"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

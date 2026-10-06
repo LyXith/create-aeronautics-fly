@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "simulated:rope_winch"
+        "recipes": "simulated:rope_winch"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

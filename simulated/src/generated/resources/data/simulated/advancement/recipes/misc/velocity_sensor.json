@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "simulated:velocity_sensor"
+        "recipes": "simulated:velocity_sensor"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

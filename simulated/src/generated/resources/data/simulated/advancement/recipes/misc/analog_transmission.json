@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "simulated:analog_transmission"
+        "recipes": "simulated:analog_transmission"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

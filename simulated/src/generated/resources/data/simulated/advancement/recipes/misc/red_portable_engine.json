@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "simulated:red_portable_engine"
+        "recipes": "simulated:red_portable_engine"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

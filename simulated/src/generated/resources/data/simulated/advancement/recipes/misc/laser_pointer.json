@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "simulated:laser_pointer"
+        "recipes": "simulated:laser_pointer"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

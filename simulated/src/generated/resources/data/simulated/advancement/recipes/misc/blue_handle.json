@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "simulated:blue_handle"
+        "recipes": "simulated:blue_handle"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

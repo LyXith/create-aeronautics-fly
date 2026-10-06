@@ -41,8 +41,12 @@ public class BlockModelProvider {
         return Identifier.fromNamespaceAndPath(this.modid, path);
     }
 
+    /**
+     * 26.3 的 {@link Identifier#withDefaultNamespace} 会把整个字符串当路径，遇到
+     * {@code ns:path} 里的冒号会直接抛异常；而 datagen 的 parent 传递的常常就是完整 id。
+     */
     public Identifier mcLoc(final String path) {
-        return Identifier.withDefaultNamespace(path);
+        return path.indexOf(':') >= 0 ? Identifier.parse(path) : Identifier.withDefaultNamespace(path);
     }
 
     public Identifier blockTexture(final net.minecraft.world.level.block.Block block) {

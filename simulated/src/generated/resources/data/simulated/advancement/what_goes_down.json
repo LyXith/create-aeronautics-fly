@@ -19,7 +19,6 @@
       "translate": "advancement.simulated.what_goes_down.desc"
     },
     "icon": {
-      "count": 1,
       "id": "simulated:spring"
     },
     "title": {

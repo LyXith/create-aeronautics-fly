@@ -12,7 +12,6 @@
       "translate": "advancement.simulated.a_calculated_connection.desc"
     },
     "icon": {
-      "count": 1,
       "id": "simulated:docking_connector"
     },
     "title": {

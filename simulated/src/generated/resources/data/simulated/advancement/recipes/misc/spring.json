@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "simulated:spring"
+        "recipes": "simulated:spring"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

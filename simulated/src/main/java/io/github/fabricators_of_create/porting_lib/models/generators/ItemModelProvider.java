@@ -6,7 +6,6 @@ import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.Identifier;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -59,8 +58,12 @@ public class ItemModelProvider implements DataProvider {
         return Identifier.fromNamespaceAndPath(this.modid, path);
     }
 
+    /**
+     * 26.3 的 {@link Identifier#withDefaultNamespace} 会把整个字符串当路径，遇到
+     * {@code ns:path} 里的冒号会直接抛异常；而 datagen 的 parent 传递的常常就是完整 id。
+     */
     public Identifier mcLoc(final String path) {
-        return Identifier.withDefaultNamespace(path);
+        return path.indexOf(':') >= 0 ? Identifier.parse(path) : Identifier.withDefaultNamespace(path);
     }
 
     @Override
@@ -68,10 +71,10 @@ public class ItemModelProvider implements DataProvider {
         registerModels();
 
         final List<CompletableFuture<?>> futures = new ArrayList<>();
-        final Path assets = this.output.getOutputFolder(PackOutput.Target.RESOURCE_PACK);
+        // PathProvider 负责插入 <namespace>，直接拼 getOutputFolder() 会漏掉它
+        final PackOutput.PathProvider models = this.output.createPathProvider(PackOutput.Target.RESOURCE_PACK, "models");
         for (final Map.Entry<Identifier, ItemModelBuilder> entry : this.generatedModels.entrySet()) {
-            futures.add(DataProvider.saveStable(cache, entry.getValue().toJSON(),
-                    assets.resolve("models").resolve(entry.getKey().getPath() + ".json")));
+            futures.add(DataProvider.saveStable(cache, entry.getValue().toJSON(), models.json(entry.getKey())));
         }
         return CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new));
     }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "simulated:magenta_handle"
+        "recipes": "simulated:magenta_handle"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

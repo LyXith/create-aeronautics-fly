@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "simulated:laser_sensor"
+        "recipes": "simulated:laser_sensor"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

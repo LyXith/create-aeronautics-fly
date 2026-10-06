@@ -1,11 +1,9 @@
 {
   "type": "minecraft:crafting_shapeless",
-  "category": "misc",
   "ingredients": [
     "simulated:white_symmetric_sail"
   ],
   "result": {
-    "count": 1,
     "id": "create:white_sail"
   }
 }

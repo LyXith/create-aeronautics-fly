@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
     "B": "create:brass_sheet",
     "C": "create:copper_sheet",
@@ -14,7 +13,6 @@
     "SSS"
   ],
   "result": {
-    "count": 1,
     "id": "simulated:redstone_inductor"
   }
 }

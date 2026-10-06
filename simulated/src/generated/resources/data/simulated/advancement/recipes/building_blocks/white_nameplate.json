@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "simulated:white_nameplate"
+        "recipes": "simulated:white_nameplate"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

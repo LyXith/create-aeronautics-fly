@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "simulated:navigation_table"
+        "recipes": "simulated:navigation_table"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

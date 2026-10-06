@@ -14,7 +14,6 @@
     "frame": "goal",
     "hidden": true,
     "icon": {
-      "count": 1,
       "id": "minecraft:end_portal_frame"
     },
     "title": {
