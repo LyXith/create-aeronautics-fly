@@ -31,7 +31,6 @@
     "new_ponder.PonderTooltipHandlerMixin",
     "new_ponder.PonderUIMixin",
     "physics_staff.GuiGraphicsMixin",
-    "shader_compat.GhostBlockRendererMixin",
     "ponder.PonderLocalizationMixin",
     "ponder.PonderSceneMixin",
     "ponder.PonderSceneTransformMixin",

@@ -56,13 +56,12 @@ public class SimIcons extends AllIcons {
         return new SimIcons(x = 0, ++y);
     }
 
-    @Override
     public RenderType bind() {
         return RenderTypes.text(ICON_ATLAS);
     }
 
     @Override
-    public void extractRenderState(GuiGraphicsExtractor graphics, final int x, final int y) {
+    public void render(final GuiGraphicsExtractor graphics, final int x, final int y) {
         graphics.blit(RenderPipelines.GUI_TEXTURED, ICON_ATLAS, x, y, this.iconX, this.iconY, 16, 16, 64, 64);
     }
 

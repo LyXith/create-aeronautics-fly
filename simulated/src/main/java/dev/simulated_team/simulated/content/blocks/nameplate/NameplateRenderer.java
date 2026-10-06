@@ -95,9 +95,11 @@ public class NameplateRenderer extends SafeBlockEntityRenderer<NameplateBlockEnt
 
         for (final FormattedCharSequence sequence : sequences) {
             if (glowing) {
-                font.drawInBatch8xOutline(sequence, 0, 0, textColor, be.getDarkColor(be.getTextColor()), ps.last().pose(), pBuffer, packedLight);
+                pBuffer.submitText(ps, 0f, 0f, sequence, false, Font.DisplayMode.SEE_THROUGH,
+                        textColor, packedLight, 0, be.getDarkColor(be.getTextColor()));
             } else {
-                font.drawInBatch(sequence, 0f /*x offset*/, 0f /*y offset*/, textColor, false, ps.last().pose(), pBuffer, Font.DisplayMode.NORMAL, 0x000000, packedLight);
+                pBuffer.submitText(ps, 0f /*x offset*/, 0f /*y offset*/, sequence, false, Font.DisplayMode.NORMAL,
+                        textColor, packedLight, 0, 0x000000);
             }
         }
 
