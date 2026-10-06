@@ -13,7 +13,7 @@ public class MagnetFieldParticle extends SimpleAnimatedParticle {
 
     protected MagnetFieldParticle(final ClientLevel world, final double x, final double y, final double z, final double dx, final double dy,
                                   final double dz, final SpriteSet sprite, final boolean negative) {
-        super(world, x, y, z, sprite, world.random.nextFloat() * .5f);
+        super(world, x, y, z, sprite, world.getRandom().nextFloat() * .5f);
         this.hasPhysics = false;
         this.lifetime = 5;
         this.quadSize *= 0.75F;

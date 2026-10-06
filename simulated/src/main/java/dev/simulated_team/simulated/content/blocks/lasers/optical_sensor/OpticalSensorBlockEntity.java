@@ -1,4 +1,5 @@
 package dev.simulated_team.simulated.content.blocks.lasers.optical_sensor;
+import net.minecraft.core.component.DataComponents;
 
 import com.zurrtum.create.foundation.blockEntity.behaviour.ValueSettings;
 
@@ -182,8 +183,8 @@ public class OpticalSensorBlockEntity extends AbstractLaserBlockEntity implement
      * @return true if successful opacity change
      */
     public boolean tryApplyDye(final ItemStack item) {
-        if (item.getItem() instanceof final DyeItem dyeItem) {
-            final Color color = new Color(dyeItem.getDyeColor().getTextColor());
+        if (item.getItem() instanceof DyeItem) {
+            final Color color = new Color(item.get(DataComponents.DYE).getTextColor());
             
             // color is grayscale
             if (color.getRed() == color.getGreen() && color.getGreen() == color.getBlue()) {

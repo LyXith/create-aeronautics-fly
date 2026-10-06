@@ -258,7 +258,7 @@ public class DockingConnectorBlockEntity extends SmartBlockEntity implements Sim
 
         final SubLevel subLevel = Sable.HELPER.getContaining(this);
 
-        final SimMovementContext context = SimMovementContext.getMovementContext(this.level, this.getBlockPos().getCenter());
+        final SimMovementContext context = SimMovementContext.getMovementContext(this.level, Vec3.atCenterOf(this.getBlockPos()));
         final List<SimMovementContext> contexts = controller.findNearby(context);
 
         for (final SimMovementContext movementContext : contexts) {

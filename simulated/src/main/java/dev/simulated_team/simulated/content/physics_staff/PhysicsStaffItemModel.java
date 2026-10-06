@@ -105,13 +105,13 @@ public final class PhysicsStaffItemModel implements ItemModel, SpecialModelRende
         final Consumer<PoseStack> commonTransform = matrices -> applyCommonTransform(
                 matrices, displayContext, handler, player, minecraft, partialTicks, animation.tilt());
 
-        addLayer(state, displayContext, item, Sheets.cutoutBlockSheet(), foil, commonTransform, -1, false, partialTicks);
+        addLayer(state, displayContext, item, Sheets.cutoutBlockItemSheet(), foil, commonTransform, -1, false, partialTicks);
         addLayer(state, displayContext, core, SimRenderTypes.itemGlowingSolid(shadersActive),
                 ItemStackRenderState.FoilType.NONE, commonTransform, LightCoordsUtil.FULL_BRIGHT, false, partialTicks);
         addLayer(state, displayContext, coreGlow, SimRenderTypes.itemGlowingTranslucent(shadersActive),
                 ItemStackRenderState.FoilType.NONE, commonTransform, LightCoordsUtil.FULL_BRIGHT, false, partialTicks);
 
-        addLayer(state, displayContext, ring, Sheets.cutoutBlockSheet(), ItemStackRenderState.FoilType.NONE,
+        addLayer(state, displayContext, ring, Sheets.cutoutBlockItemSheet(), ItemStackRenderState.FoilType.NONE,
                 matrices -> {
                     commonTransform.accept(matrices);
                     matrices.translate(0, 6.5 / 16.0, 0);
@@ -119,7 +119,7 @@ public final class PhysicsStaffItemModel implements ItemModel, SpecialModelRende
 
         for (int side = 0; side < 2; side++) {
             final int currentSide = side;
-            addLayer(state, displayContext, sigma, Sheets.cutoutBlockSheet(), ItemStackRenderState.FoilType.NONE,
+            addLayer(state, displayContext, sigma, Sheets.cutoutBlockItemSheet(), ItemStackRenderState.FoilType.NONE,
                     matrices -> {
                         commonTransform.accept(matrices);
                         matrices.translate(0, 9 / 16.0, 0);
@@ -209,7 +209,7 @@ public final class PhysicsStaffItemModel implements ItemModel, SpecialModelRende
         final PhysicsStaffClientHandler.ClientDragSession dragSession = handler.getDragSession();
         final Quaternionf quaternion = new Quaternionf();
         if (dragSession != null && player != null) {
-            final Quaternionf cameraRotation = minecraft.gameRenderer.getMainCamera().rotation();
+            final Quaternionf cameraRotation = minecraft.gameRenderer.mainCamera().rotation();
             final Vector3d globalAnchor = ((ClientSubLevel) dragSession.dragSubLevel()).renderPose()
                     .transformPosition(new Vector3d(dragSession.dragLocalAnchor()));
             final Vector3d direction = globalAnchor

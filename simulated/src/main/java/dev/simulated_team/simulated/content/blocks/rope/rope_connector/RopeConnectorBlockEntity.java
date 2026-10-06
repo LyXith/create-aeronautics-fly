@@ -66,13 +66,13 @@ public class RopeConnectorBlockEntity extends SmartBlockEntity implements RopeSt
         final Direction facing = state.getValue(RopeConnectorBlock.FACING);
         final double offset = -3.0 / 16.0;
 
-        return pos.getCenter().add(facing.getStepX() * offset, facing.getStepY() * offset, facing.getStepZ() * offset);
+        return Vec3.atCenterOf(pos).add(facing.getStepX() * offset, facing.getStepY() * offset, facing.getStepZ() * offset);
     }
 
     public Vec3 getVisualAttachmentPoint(final BlockPos pos, final BlockState state) {
         final Direction facing = state.getValue(RopeConnectorBlock.FACING);
         final double offset = -4.0 / 16.0;
 
-        return pos.getCenter().add(facing.getStepX() * offset, facing.getStepY() * offset, facing.getStepZ() * offset);
+        return Vec3.atCenterOf(pos).add(facing.getStepX() * offset, facing.getStepY() * offset, facing.getStepZ() * offset);
     }
 }

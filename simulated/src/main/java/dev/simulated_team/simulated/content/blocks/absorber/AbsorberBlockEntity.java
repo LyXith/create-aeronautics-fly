@@ -119,7 +119,7 @@ public class AbsorberBlockEntity extends SmartBlockEntity {
             final float t = this.animationTimer.getValue();
             final float offset = 0.5f+t*t*0.5f;
             for (int i = 0; i < 2; i++) {
-                this.level.addParticle(ParticleTypes.SPLASH,pos.getX()+ this.level.random.nextFloat(),pos.getY()+offset,pos.getZ()+ this.level.random.nextFloat(),0,0,0);
+                this.level.addParticle(ParticleTypes.SPLASH,pos.getX()+ this.level.getRandom().nextFloat(),pos.getY()+offset,pos.getZ()+ this.level.getRandom().nextFloat(),0,0,0);
             }
 
         }

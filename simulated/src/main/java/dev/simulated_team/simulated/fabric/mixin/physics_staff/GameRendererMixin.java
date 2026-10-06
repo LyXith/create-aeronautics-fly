@@ -52,7 +52,7 @@ public abstract class GameRendererMixin {
     )
     private void simulated$renderPhysicsStaffShaderOverlay(final DeltaTracker deltaTracker,
                                                             final CallbackInfo ci) {
-        final Camera camera = this.minecraft.gameRenderer.getMainCamera();
+        final Camera camera = this.minecraft.gameRenderer.mainCamera();
         final PoseStack poseStack = new PoseStack();
         poseStack.rotate(camera.rotation().conjugate(new Quaternionf()));
 

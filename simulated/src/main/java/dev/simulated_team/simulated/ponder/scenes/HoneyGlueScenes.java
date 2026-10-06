@@ -251,7 +251,7 @@ public class HoneyGlueScenes {
                 .attachKeyFrame()
                 .text("For more complex Simulated Contraptions...")
                 .placeNearTarget()
-                .pointAt(carFull.getCenter().getCenter());
+                .pointAt(Vec3.atCenterOf(carFull.getCenter()));
         scene.idle(40);
         overlay.showControls(vector.centerOf(carAssembler), Pointing.DOWN, 10).rightClick();
         scene.idle(5);
@@ -295,13 +295,13 @@ public class HoneyGlueScenes {
         }
         overlay.chaseBoundingBoxOutline(PonderPalette.GREEN, carGlueFull, carGlueFull, 16);
         scene.idle(10);
-        overlay.showControls(carFull.getCenter().getCenter(), Pointing.DOWN, 10).withItem(AllItems.SUPER_GLUE.getDefaultInstance()).leftClick();
+        overlay.showControls(Vec3.atCenterOf(carFull.getCenter()), Pointing.DOWN, 10).withItem(AllItems.SUPER_GLUE.getDefaultInstance()).leftClick();
         scene.idle(30);
         overlay.showText(75)
                 .attachKeyFrame()
                 .text("Honey Glue may be preferable in this scenario")
                 .placeNearTarget()
-                .pointAt(carFull.getCenter().getCenter());
+                .pointAt(Vec3.atCenterOf(carFull.getCenter()));
         scene.idle(20);
         overlay.showControls(vector.centerOf(carMinCorner), Pointing.RIGHT, 10).withItem(SimItems.HONEY_GLUE.asStack()).rightClick();
         effects.emitParticles(vector.centerOf(carMinCorner), effects.particleEmitterWithinBlockSpace(new DustParticleOptions(new Color(255, 232, 142).getRGB(), 1.0F), Vec3.ZERO), 10.0f, 2);

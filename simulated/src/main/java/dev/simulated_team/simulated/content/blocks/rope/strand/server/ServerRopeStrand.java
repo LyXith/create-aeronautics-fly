@@ -1,5 +1,7 @@
 package dev.simulated_team.simulated.content.blocks.rope.strand.server;
 
+import net.minecraft.world.phys.Vec3;
+
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.zurrtum.create.foundation.blockEntity.SmartBlockEntity;
@@ -248,8 +250,8 @@ public class ServerRopeStrand extends RopePhysicsObject {
         final PhysicsPipeline pipeline = physicsSystem.getPipeline();
 
         final FreeConstraintConfiguration config = new FreeConstraintConfiguration(
-                JOMLConversion.toJOML(start.blockAttachment().getCenter()),
-                JOMLConversion.toJOML(end.blockAttachment().getCenter()),
+                JOMLConversion.toJOML(Vec3.atCenterOf(start.blockAttachment())),
+                JOMLConversion.toJOML(Vec3.atCenterOf(end.blockAttachment())),
                 new Quaterniond()
         );
 

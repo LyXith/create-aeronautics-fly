@@ -55,7 +55,7 @@ public class SimPonderTags {
                 .add(AllBlocks.WEIGHTED_EJECTOR.asItem())
                 .add(SimBlocks.DOCKING_CONNECTOR.asItem())
                 .add(SimBlocks.REDSTONE_MAGNET.asItem())
-                .add(AllBlocks.SAIL.asItem())
+                .add(AllItems.SAIL)
                 .add(SimBlocks.WHITE_SYMMETRIC_SAIL.asItem())
                 .add(AllItems.BELT_CONNECTOR.asItem())
                 .add(SimItems.SPRING.asItem())

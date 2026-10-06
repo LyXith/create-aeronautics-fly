@@ -546,7 +546,7 @@ public class SensorScenes {
 
         scene.overlay().showControls(util.vector().topOf(laserPointerPos), Pointing.DOWN, 20).withItem(dye);
         world.modifyBlockEntity(laserPointerPos, LaserPointerBlockEntity.class,
-                laser -> laser.setLaserColor(((DyeItem) dye.getItem()).getDyeColor().getTextColor()));
+                laser -> laser.setLaserColor(dye.get(DataComponents.DYE).getTextColor()));
 
         world.toggleRedstonePower(laserSensor);
         laserSetRedstone(6, world, laserNixiePos, laserRedstonePos);

@@ -83,11 +83,11 @@ public final class CommonLangBuilder {
     }
 
     public void sendStatus(final Player player) {
-        player.displayClientMessage(component(), true);
+        player.sendOverlayMessage(component());
     }
 
     public void sendChat(final Player player) {
-        player.displayClientMessage(component(), false);
+        player.sendSystemMessage(component());
     }
 
     public void addTo(final List<? super MutableComponent> tooltip) {

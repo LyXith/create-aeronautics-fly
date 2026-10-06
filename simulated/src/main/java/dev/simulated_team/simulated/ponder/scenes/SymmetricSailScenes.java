@@ -109,7 +109,7 @@ public class SymmetricSailScenes {
         scene.idle(20);
 
         scene.overlay().showControls(vector.centerOf(5 + offset, 2, 2), Pointing.DOWN, 48)
-                .withItem(AllBlocks.SAIL.asItem().getDefaultInstance());
+                .withItem(AllItems.SAIL.getDefaultInstance());
 
         scene.idle(2);
 

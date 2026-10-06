@@ -1,4 +1,5 @@
 package dev.simulated_team.simulated.index;
+import com.zurrtum.create.AllItems;
 
 import com.zurrtum.create.AllBlocks;
 import com.tterrag.registrate.util.entry.ItemProviderEntry;
@@ -39,12 +40,12 @@ public class SimPonderScenes {
         helper.forComponents(SimBlocks.DOCKING_CONNECTOR)
                 .addStoryBoard("docking_connector", DockingConnectorScenes::DockingConnector);
 
-        helper.forComponents(itemProvider(AllBlocks.SAIL.asItem()))
+        helper.forComponents(itemProvider(AllItems.SAIL))
                         .addStoryBoard("symmetric_sail/main", SymmetricSailScenes::symmetricSailMain);
         helper.forComponents(SimBlocks.WHITE_SYMMETRIC_SAIL)
                 .addStoryBoard("symmetric_sail/main", SymmetricSailScenes::symmetricSailMain)
                 .addStoryBoard("symmetric_sail/windmill", SymmetricSailScenes::symmetricSailWindmill);
-        NewPonderTooltipManager.forItems(AllBlocks.SAIL.asItem())
+        NewPonderTooltipManager.forItems(AllItems.SAIL)
                 .addScenes(Simulated.path("symmetric_sail"));
 
         helper.forComponents(SimBlocks.ROPE_CONNECTOR, SimBlocks.ROPE_WINCH, SimItems.ROPE_COUPLING)

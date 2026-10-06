@@ -96,8 +96,8 @@ public class KeyWidget extends AbstractSimiWidget {
         frequency.render(graphics, frequencyX, backgroundY + 4);
 
         final Couple<RedstoneLinkNetworkHandler.Frequency> frequencies = entry.getAsCouple();
-        graphics.renderItem(frequencies.getFirst().getStack(), frequencyX + 1, backgroundY + 5);
-        graphics.renderItem(frequencies.getSecond().getStack(), frequencyX + 19, backgroundY + 5);
+        graphics.item(frequencies.getFirst().getStack(), frequencyX + 1, backgroundY + 5);
+        graphics.item(frequencies.getSecond().getStack(), frequencyX + 19, backgroundY + 5);
         graphics.text(
                 font,
                 keyName,
@@ -109,6 +109,6 @@ public class KeyWidget extends AbstractSimiWidget {
     }
 
     private Component keyName() {
-        return InputConstants.Type.KEYSYM.getOrCreate(this.keyCode).getDisplayName();
+        return InputConstants.Type.KEYBOARD.getOrCreate(this.keyCode).getDisplayName();
     }
 }

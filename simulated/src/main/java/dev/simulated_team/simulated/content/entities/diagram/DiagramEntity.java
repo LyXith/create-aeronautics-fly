@@ -408,7 +408,7 @@ public class DiagramEntity extends HangingEntity implements ISyncPersistentData,
             final SubLevel subLevel = Sable.HELPER.getContaining(this);
 
             if (subLevel == null) {
-                player.displayClientMessage(SimLang.translate("contraption_diagram.cannot_use").color(SimColors.NUH_UH_RED).component(), true);
+                player.sendOverlayMessage(SimLang.translate("contraption_diagram.cannot_use").color(SimColors.NUH_UH_RED).component());
             }
         } else {
             final SubLevel subLevel = Sable.HELPER.getContaining(this);

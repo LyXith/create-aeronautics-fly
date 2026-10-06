@@ -154,7 +154,7 @@ public class RopeStrandHolderBehavior extends BlockEntityBehaviour {
         final ServerLevel level = (ServerLevel) this.getLevel();
         if (level == null) return List.of();
 
-        final ChunkPos chunk = new ChunkPos(this.getPos());
+        final ChunkPos chunk = ChunkPos.containing(this.getPos());
 
         return level.getChunkSource().chunkMap.getPlayers(chunk, false);
     }
@@ -211,19 +211,19 @@ public class RopeStrandHolderBehavior extends BlockEntityBehaviour {
         final BlockEntity blockEntity = level.getBlockEntity(blockAttachment);
 
         if (blockEntity == null) {
-            this.destroyRope(null, blockAttachment.getCenter(), tileDrops);
+            this.destroyRope(null, Vec3.atCenterOf(blockAttachment), tileDrops);
             return;
         }
 
         if (!(blockEntity instanceof final SmartBlockEntity smartBlockEntity)) {
-            this.destroyRope(null, blockAttachment.getCenter(), tileDrops);
+            this.destroyRope(null, Vec3.atCenterOf(blockAttachment), tileDrops);
             return;
         }
 
         final RopeStrandHolderBehavior holderBehavior = smartBlockEntity.getBehaviour(RopeStrandHolderBehavior.TYPE);
 
         if (holderBehavior == null) {
-            this.destroyRope(null, blockAttachment.getCenter(), tileDrops);
+            this.destroyRope(null, Vec3.atCenterOf(blockAttachment), tileDrops);
         }
     }
 

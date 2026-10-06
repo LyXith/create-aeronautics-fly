@@ -65,7 +65,7 @@ public class PlungerLauncherItem extends Item implements CustomArmPoseItem {
         if (!level.isClientSide()) {
             if (player.isShiftKeyDown()) {
                 LaunchedPlungerServerHandler.removePlayerPlungers(player);
-                player.displayClientMessage(SimLang.translate("plunger_launcher.clear_plungers").color(0xaaaaaa).component(),true);
+                player.sendOverlayMessage(SimLang.translate("plunger_launcher.clear_plungers").color(0xaaaaaa).component());
                 return InteractionResult.SUCCESS;
             }
 

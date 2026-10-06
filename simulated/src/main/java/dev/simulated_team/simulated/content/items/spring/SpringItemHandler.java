@@ -1,4 +1,5 @@
 package dev.simulated_team.simulated.content.items.spring;
+import net.minecraft.world.item.component.SwingAnimation;
 
 import dev.ryanhcode.sable.Sable;
 import dev.simulated_team.simulated.client.SubLevelAABBOutline;
@@ -68,7 +69,7 @@ public class SpringItemHandler implements InteractCallback {
 
             if (this.linkPos != null) {
                 if (player.isShiftKeyDown()) {
-                    player.swing(hand);
+                    player.swing(hand, SwingAnimation.DEFAULT, false);
 
                     this.reset(true);
                     return new Result(true);
@@ -97,7 +98,7 @@ public class SpringItemHandler implements InteractCallback {
                     return Result.empty();
                 }
 
-                player.swing(hand);
+                player.swing(hand, SwingAnimation.DEFAULT, false);
                 VeilPacketManager.server().sendPacket(new PlaceSpringPacket(this.linkPos, pos, this.linkDirection, dir, hand));
                 this.reset(false);
                 return new Result(true);

@@ -77,7 +77,7 @@ public class RedstoneMagnetBlockEntity extends SmartBlockEntity implements SimMa
         //todo: do this in the behaviour or using common method or something
         if (this.latestSubLevel != null) {
             final MagnetMap<RedstoneMagnetBlockEntity> map = RedstoneMagnetBlockEntity.GLOBAL_REDSTONE_MAGNET_MAP;
-            final SimMovementContext context = SimMovementContext.getMovementContext(this.getLevel(), this.getBlockPos().getCenter());
+            final SimMovementContext context = SimMovementContext.getMovementContext(this.getLevel(), Vec3.atCenterOf(this.getBlockPos()));
             final List<SimMovementContext> contexts = map.findNearby(context);
             for (final SimMovementContext movementContext : contexts) {
                 if (movementContext.subLevel() != this.latestSubLevel) {
@@ -113,8 +113,8 @@ public class RedstoneMagnetBlockEntity extends SmartBlockEntity implements SimMa
 
     private void spawnParticles() {
         final float probability = 0.1f * (this.signalStrength / 15f);
-        if (probability > 0 && this.level.random.nextFloat() < probability) {
-            final boolean negative = this.level.random.nextBoolean();
+        if (probability > 0 && this.level.getRandom().nextFloat() < probability) {
+            final boolean negative = this.level.getRandom().nextBoolean();
 
             Vec3i dir = (this.getBlockState().getValue(RedstoneMagnetBlock.FACING)).getUnitVec3i();
             if (negative) {
@@ -125,7 +125,7 @@ public class RedstoneMagnetBlockEntity extends SmartBlockEntity implements SimMa
             if (this.level.getBlockState(blockpos).isSolidRender()) {
                 return;
             }
-            final Vector3d offset = JOMLConversion.toJOML(VecHelper.offsetRandomly(new Vec3(0, 0, 0), this.level.random, 0.35f));
+            final Vector3d offset = JOMLConversion.toJOML(VecHelper.offsetRandomly(new Vec3(0, 0, 0), this.level.getRandom(), 0.35f));
             final Vector3d pos = JOMLConversion.toJOML(Vec3.atLowerCornerOf(dir));
             offset.fma(-pos.dot(offset), pos);
             pos.mul(0.55);
@@ -150,7 +150,7 @@ public class RedstoneMagnetBlockEntity extends SmartBlockEntity implements SimMa
                 this.nearbyMagnetPositions.put(JOMLConversion.toJOML(movementContext.globalPosition()), otherMagneticMoment);
             }
 
-            final int steps = 4 + (int) (20 * (this.signalStrength / 15f) * this.level.random.nextFloat());
+            final int steps = 4 + (int) (20 * (this.signalStrength / 15f) * this.level.getRandom().nextFloat());
 
             this.particleEmitters.add(new MagnetParticleEmitter(pos, this.nearbyMagnetPositions, steps, this.level, negative));
         }

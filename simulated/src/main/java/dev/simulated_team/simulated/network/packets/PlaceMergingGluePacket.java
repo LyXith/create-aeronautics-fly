@@ -1,5 +1,7 @@
 package dev.simulated_team.simulated.network.packets;
 
+import net.minecraft.world.phys.Vec3;
+
 import dev.ryanhcode.sable.Sable;
 import dev.ryanhcode.sable.sublevel.SubLevel;
 import dev.simulated_team.simulated.Simulated;
@@ -47,7 +49,7 @@ public record PlaceMergingGluePacket(BlockPos parentPos, BlockPos childPos, Dire
         final Level level = ctx.level();
 
         final ItemStack glue = player.getItemInHand(this.hand);
-        final double distanceSquared = Sable.HELPER.distanceSquaredWithSubLevels(level, this.parentPos.getCenter(), this.childPos.getCenter());
+        final double distanceSquared = Sable.HELPER.distanceSquaredWithSubLevels(level, Vec3.atCenterOf(this.parentPos), Vec3.atCenterOf(this.childPos));
         final float mergingGlueRange = SimConfigService.INSTANCE.server().assembly.mergingGlueRange.getF();
 
         if (!(glue.is(SimTags.Items.MERGING_GLUE)) || distanceSquared > mergingGlueRange * mergingGlueRange) {

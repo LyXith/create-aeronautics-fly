@@ -60,7 +60,7 @@ public class RopeConnectorRenderer extends SafeBlockEntityRenderer<RopeConnector
         final float yRot = AngleHelper.horizontalAngle(facing) + (axisAlongFirstCoordinate || facing.getAxis() != Direction.Axis.Y ? 0.0f : 90.0f);
         final float zRot = facing == Direction.UP ? 270 : facing == Direction.DOWN ? 90 : 0;
 
-        knotBuffer.translate(attachmentPoint.subtract(blockPos.getCenter()));
+        knotBuffer.translate(attachmentPoint.subtract(Vec3.atCenterOf(blockPos)));
         knotBuffer.rotateCentered((float) ((zRot) / 180 * Math.PI), Direction.SOUTH);
         knotBuffer.rotateCentered((float) ((yRot) / 180 * Math.PI), Direction.UP);
         knotBuffer.rotateCentered((float) ((zRotLast) / 180 * Math.PI), Direction.SOUTH);

@@ -19,7 +19,7 @@ public class KeyboardHandlerMixin {
 
     @Inject(method = "keyPress", at = @At(value = "FIELD", target = "Lnet/minecraft/client/Minecraft;screen:Lnet/minecraft/client/gui/screens/Screen;", ordinal = 0, opcode = 180/*GETFIELD*/), cancellable = true)
     private void simulated$preOnPress(final long windowPointer, final int action, final KeyEvent event, final CallbackInfo ci) {
-        if (this.minecraft.screen == null) {
+        if (this.minecraft.gui.screen() == null) {
             if (SimDistUtil.getClientPlayer() != null && !SimDistUtil.getClientPlayer().isSpectator()) {
                 final InteractCallback.Result status = SimulatedCommonClientEvents.onBeforeMouseInput(InteractCallback.Input.key(event.key(), event.scancode()), event.modifiers(), action);
                 if (status.cancelled()) {

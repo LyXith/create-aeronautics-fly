@@ -36,7 +36,7 @@ public final class FirstPersonItemFocus {
      */
     public void captureProjected(final PoseStack matrices, final Minecraft minecraft, final float partialTicks) {
         this.capturePosition(matrices);
-        final Camera camera = minecraft.gameRenderer.getMainCamera();
+        final Camera camera = minecraft.gameRenderer.mainCamera();
         camera.rotation().transformInverse(this.capturedPosition);
         // The hand pass has its own lens; the configured world FOV does not apply to it.
         this.capturedProjection.set(minecraft.gameRenderer.getProjectionMatrix(
@@ -78,7 +78,7 @@ public final class FirstPersonItemFocus {
         }
 
         final GameRenderer gameRenderer = Minecraft.getInstance().gameRenderer;
-        final Camera camera = gameRenderer.getMainCamera();
+        final Camera camera = gameRenderer.mainCamera();
         final Quaternionf orientation = camera.rotation();
         final Vector4f projectedPoint = new Vector4f(
                 (float) focusPoint.x, (float) focusPoint.y, (float) focusPoint.z, 1.0f);
@@ -122,7 +122,7 @@ public final class FirstPersonItemFocus {
             return false;
         }
 
-        final Camera camera = minecraft.gameRenderer.getMainCamera();
+        final Camera camera = minecraft.gameRenderer.mainCamera();
         return minecraft.options.getCameraType().isFirstPerson()
                 && !camera.isDetached()
                 && camera.entity() == player;

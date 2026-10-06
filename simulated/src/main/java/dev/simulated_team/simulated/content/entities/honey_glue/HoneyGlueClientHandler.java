@@ -1,4 +1,5 @@
 package dev.simulated_team.simulated.content.entities.honey_glue;
+import net.minecraft.world.item.component.SwingAnimation;
 
 import com.zurrtum.create.client.AllKeys;
 import com.zurrtum.create.client.foundation.utility.CreateLang;
@@ -112,7 +113,7 @@ public class HoneyGlueClientHandler implements InteractCallback {
 
         final boolean success = this.selectPos(bhr.getBlockPos(), player, player.getItemInHand(hand));
         if (success) {
-            player.swing(hand);
+            player.swing(hand, SwingAnimation.DEFAULT, false);
         }
         return true;
     }
@@ -386,7 +387,7 @@ public class HoneyGlueClientHandler implements InteractCallback {
     private void clearAndSwing(final Player player) {
         this.selectedPos = null;
         this.currentState = State.UNBOUND;
-        player.swing(InteractionHand.MAIN_HAND);
+        player.swing(InteractionHand.MAIN_HAND, SwingAnimation.DEFAULT, false);
     }
 
     public enum State {

@@ -55,7 +55,7 @@ public final class VeilPacketManager {
             final StreamCodec<? super RegistryFriendlyByteBuf, T> codec,
             final PacketHandler<ClientPacketContext, T> handler,
             final boolean optional) {
-        PayloadTypeRegistry.playS2C().register(id, codec);
+        PayloadTypeRegistry.clientboundPlay().register(id, codec);
         CLIENTBOUND.put(id, new ClientRegistration<>(id, handler));
     }
 
@@ -71,7 +71,7 @@ public final class VeilPacketManager {
             final StreamCodec<? super RegistryFriendlyByteBuf, T> codec,
             final PacketHandler<ServerPacketContext, T> handler,
             final boolean optional) {
-        PayloadTypeRegistry.playC2S().register(id, codec);
+        PayloadTypeRegistry.serverboundPlay().register(id, codec);
         ServerPlayNetworking.registerGlobalReceiver(id,
                 (payload, context) -> handler.handlePacket(payload, new FabricServerPacketContext(context.player())));
     }
@@ -114,7 +114,7 @@ public final class VeilPacketManager {
     }
 
     public static PacketSink level(final ServerLevel level) {
-        return players(PlayerLookup.world(level));
+        return players(PlayerLookup.level(level));
     }
 
     public static PacketSink around(@Nullable final ServerPlayer excluded, final ServerLevel level,
@@ -151,7 +151,7 @@ public final class VeilPacketManager {
 
     public static PacketSink tracking(final ServerLevel level, final BlockPos min, final BlockPos max) {
         final Set<ServerPlayer> players = new LinkedHashSet<>();
-        ChunkPos.rangeClosed(new ChunkPos(min), new ChunkPos(max))
+        ChunkPos.rangeClosed(ChunkPos.containing(min), ChunkPos.containing(max))
                 .forEach(pos -> players.addAll(PlayerLookup.tracking(level, pos)));
         return players(players);
     }

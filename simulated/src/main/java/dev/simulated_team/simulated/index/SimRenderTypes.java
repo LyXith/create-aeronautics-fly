@@ -269,7 +269,7 @@ public final class SimRenderTypes {
     }
 
     public static RenderType itemGlowingSolid(boolean shadersActive) {
-        return shadersActive ? Sheets.solidBlockSheet() : CreateRenderTypes.itemGlowingSolid();
+        return shadersActive ? Sheets.cutoutBlockItemSheet() : CreateRenderTypes.itemGlowingSolid();
     }
 
     public static RenderType itemGlowingTranslucent(boolean shadersActive) {

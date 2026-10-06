@@ -45,7 +45,7 @@ public class GameRendererMixin {
             if (hitResultDistance != null) {
                 if (hitResultDistance < minDistance) {
                     minDistance = hitResultDistance;
-                    this.minecraft.hitResult = new BlockHitResult(lever.getBlockPos().getCenter(), Direction.UP, lever.getBlockPos(), false);
+                    this.minecraft.hitResult = new BlockHitResult(Vec3.atCenterOf(lever.getBlockPos()), Direction.UP, lever.getBlockPos(), false);
                 }
             }
 

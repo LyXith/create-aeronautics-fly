@@ -20,7 +20,7 @@ public class MagnetFieldParticle2 extends SimpleAnimatedParticle {
                                    final double prevX, final double prevY, final double prevZ,
                                    final double nextX, final double nextY, final double nextZ,
                                    final SpriteSet sprite, final boolean negative,final int timeUntilEnd) {
-        super(world, x, y, z, sprite, world.random.nextFloat() * .5f);
+        super(world, x, y, z, sprite, world.getRandom().nextFloat() * .5f);
         this.hasPhysics = false;
         this.lifetime = 5;
 

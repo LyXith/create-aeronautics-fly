@@ -46,9 +46,9 @@ public class SceneScheduler {
      */
     public void run(boolean debug) {
         if (this.ran) {
-            SimDistUtil.getClientPlayer().displayClientMessage(
+            SimDistUtil.getClientPlayer().sendSystemMessage(
                     Component.literal("Set of scheduled sequences being re-run! See logs for more info")
-                            .withStyle(ChatFormatting.RED), false);
+                            .withStyle(ChatFormatting.RED));
             debug = true;
             Simulated.LOGGER.error("Trying to re-run scheduled sequences! Undefined behaviour ahead. " +
                     "A new instance should be made for running a new set of sequences");
@@ -104,8 +104,8 @@ public class SceneScheduler {
                 }
             }
             if (hasSyncing && isDeadlocked) {
-                SimDistUtil.getClientPlayer().displayClientMessage(Component.literal(
-                        "Ponder sequence deadlock! See logs for more info").withStyle(ChatFormatting.RED), false);
+                SimDistUtil.getClientPlayer().sendSystemMessage(Component.literal(
+                        "Ponder sequence deadlock! See logs for more info").withStyle(ChatFormatting.RED));
                 debug = true;
                 Simulated.LOGGER.error("Every sequence is awaiting syncs that will never happen");
                 for (int i = 0; i < this.sequences.size(); i++) {
@@ -227,8 +227,8 @@ public class SceneScheduler {
          */
         public int getDuration() {
             if (!this.independent) {
-                SimDistUtil.getClientPlayer().displayClientMessage(Component.literal(
-                        "Getting independent timestamp of synced sequence " + this.id).withStyle(ChatFormatting.RED), false);
+                SimDistUtil.getClientPlayer().sendSystemMessage(Component.literal(
+                        "Getting independent timestamp of synced sequence " + this.id).withStyle(ChatFormatting.RED));
                 Simulated.LOGGER.error("Getting independent timestamp of synced sequence " + this.id);
             }
             return this.duration;

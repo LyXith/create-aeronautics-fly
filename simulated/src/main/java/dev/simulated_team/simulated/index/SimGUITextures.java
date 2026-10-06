@@ -4,13 +4,14 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import dev.simulated_team.simulated.Simulated;
 import com.zurrtum.create.client.catnip.gui.UIRenderHelper;
 import com.zurrtum.create.client.catnip.gui.element.ScreenElement;
+import com.zurrtum.create.client.catnip.render.BindableTexture;
 import com.zurrtum.create.catnip.theme.Color;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
-public enum SimGUITextures implements ScreenElement {
+public enum SimGUITextures implements ScreenElement, BindableTexture {
 
     MODULATINGLINK("modulating_linked_receiver", 182, 99),
     MODULATINGLINK_MARKER("modulating_linked_receiver", 193, 4, 3, 20),
@@ -122,21 +123,28 @@ public enum SimGUITextures implements ScreenElement {
         this.texHeight = texHeight;
     }
 
-    public void bind() {
-        // Texture binding is managed by GuiGraphicsExtractor in 1.21.10.
+    @Override
+    public Identifier getLocation() {
+        return this.location;
     }
 
-    public void extractRenderState(GuiGraphicsExtractor graphics, final int x, final int y) {
+    @Override
+    public void render(GuiGraphicsExtractor graphics, final int x, final int y) {
         graphics.blit(RenderPipelines.GUI_TEXTURED, this.location,
                 x, y, this.startX, this.startY, this.width, this.height, this.texWidth, this.texHeight);
     }
 
-    public void extractRenderState(GuiGraphicsExtractor graphics, final int x, final int y, final int width, final int height) {
-        graphics.blit(RenderPipelines.GUI_TEXTURED, this.location,
-                x, y, this.startX, this.startY, width, height, this.texWidth, this.texHeight);
+    /**
+     * Tinted variant: the sprite is drawn through Create's own colored-texture helper so the
+     * {@link Color} multiplies the sampled texels instead of being dropped.
+     */
+    public void render(GuiGraphicsExtractor graphics, final int x, final int y, final Color c) {
+        UIRenderHelper.drawColoredTexture(graphics, this.bind(), c,
+                x, y, this.startX, this.startY, this.width, this.height, this.texWidth, this.texHeight);
     }
 
-    public void extractRenderState(GuiGraphicsExtractor graphics, final int x, final int y, final Color c) {
-        this.render(graphics, x, y);
+    public void render(GuiGraphicsExtractor graphics, final int x, final int y, final int width, final int height) {
+        graphics.blit(RenderPipelines.GUI_TEXTURED, this.location,
+                x, y, this.startX, this.startY, width, height, this.texWidth, this.texHeight);
     }
 }

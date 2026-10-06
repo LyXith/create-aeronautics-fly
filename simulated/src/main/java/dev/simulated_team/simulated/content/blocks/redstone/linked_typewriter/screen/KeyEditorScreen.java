@@ -198,7 +198,7 @@ public class KeyEditorScreen {
             final int y = this.currentY(index);
             KEY_ENTRY.render(graphics, x, y);
 
-            final Component keyName = InputConstants.Type.KEYSYM
+            final Component keyName = InputConstants.Type.KEYBOARD
                     .getOrCreate(this.entry.glfwKeyCode)
                     .getDisplayName();
             graphics.text(
@@ -209,8 +209,8 @@ public class KeyEditorScreen {
                     0xFFFFFFFF,
                     true
             );
-            graphics.renderItem(this.entry.getFirstAsItemStack(), x + 82, y + 7);
-            graphics.renderItem(this.entry.getSecondAsItemStack(), x + 100, y + 7);
+            graphics.item(this.entry.getFirstAsItemStack(), x + 82, y + 7);
+            graphics.item(this.entry.getSecondAsItemStack(), x + 100, y + 7);
 
             this.editButton.setX(x + 167);
             this.editButton.setY(y + 6);

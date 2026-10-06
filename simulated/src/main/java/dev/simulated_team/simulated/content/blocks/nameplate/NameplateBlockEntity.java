@@ -177,7 +177,7 @@ public class NameplateBlockEntity extends SmartBlockEntity implements ClipboardC
         }
 
         final Vec3i dir = nbe.getBlockState().getValue(NameplateBlock.FACING).getCounterClockWise().getUnitVec3i();
-        Vec3 A = nbe.getBlockPos().getCenter();
+        Vec3 A = Vec3.atCenterOf(nbe.getBlockPos());
         Vec3 B = A.add(dir.getX() * nbe.controllerWidth, dir.getY() * nbe.controllerWidth, dir.getZ() * nbe.controllerWidth);
         final SubLevel subLevel = Sable.HELPER.getContaining(nbe);
         if (subLevel != null) {

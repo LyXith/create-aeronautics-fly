@@ -30,7 +30,7 @@ public class PromptWidget extends AbstractSimiWidget {
         final int keyCode = this.modifier.getPendingEntry().getKeyCode();
         Component displayName = keyCode == -1
                 ? Component.empty()
-                : InputConstants.Type.KEYSYM.getOrCreate(keyCode).getDisplayName();
+                : InputConstants.Type.KEYBOARD.getOrCreate(keyCode).getDisplayName();
         if (this.bindingActive) {
             displayName = SimLang.translate("linked_typewriter.bind_screen_prompt").component();
         } else if (this.modifier.getPendingEntry().getKeyCode() == -1) {

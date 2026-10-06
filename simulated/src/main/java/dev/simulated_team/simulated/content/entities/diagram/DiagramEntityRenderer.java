@@ -33,7 +33,7 @@ public class DiagramEntityRenderer extends EntityRenderer<DiagramEntity> {
 
 		sbb.disableDiffuse()
 			.light(light)
-			.renderInto(ms.last(), buffer.getBuffer(Sheets.solidBlockSheet()));
+			.renderInto(ms.last(), buffer.getBuffer(Sheets.cutoutBlockItemSheet()));
 		super.render(entity, yaw, pt, ms, buffer, light);
 	}
 

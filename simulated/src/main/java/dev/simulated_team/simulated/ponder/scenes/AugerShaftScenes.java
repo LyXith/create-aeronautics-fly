@@ -125,13 +125,13 @@ public class AugerShaftScenes {
                 .attachKeyFrame()
                 .colored(PonderPalette.RED)
                 .text("Items cannot be inserted or extracted from the Auger Cog...")
-                .pointAt(invalidSideFunnel.getCenter())
+                .pointAt(Vec3.atCenterOf(invalidSideFunnel))
                 .placeNearTarget();
         scene.idle(80);
         overlay.showOutlineWithText(select.position(invalidFunnel), 60)
                 .colored(PonderPalette.RED)
                 .text("...or either end of the Auger")
-                .pointAt(invalidFunnel.getCenter())
+                .pointAt(Vec3.atCenterOf(invalidFunnel))
                 .placeNearTarget();
         scene.idle(80);
         world.showSection(validFunnel, Direction.DOWN);

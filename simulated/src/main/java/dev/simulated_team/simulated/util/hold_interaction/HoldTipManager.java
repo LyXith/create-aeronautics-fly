@@ -31,7 +31,7 @@ public class HoldTipManager {
 
         final Minecraft mc = Minecraft.getInstance();
         final HitResult target = mc.hitResult;
-        if (mc.screen != null || !(target instanceof final BlockHitResult result)) {
+        if (mc.gui.screen() != null || !(target instanceof final BlockHitResult result)) {
             return;
         }
 
@@ -73,7 +73,7 @@ public class HoldTipManager {
 
     public static void renderOverlay(final GuiGraphicsExtractor graphics) {
         final Minecraft mc = Minecraft.getInstance();
-        if (mc.options.hideGui || !ValueSettingsInputHandler.canInteract(mc.player)) {
+        if (mc.gui.hud.isHidden() || !ValueSettingsInputHandler.canInteract(mc.player)) {
             return;
         }
         if (hoverTicks == 0 || lastHoverTip == null) {

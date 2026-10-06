@@ -262,14 +262,14 @@ public class SwivelBearingBlockEntity extends LegacyKineticBlockEntity implement
     private void playGrindingEffect() {
         final Direction facing = this.getBlockState().getValue(SwivelBearingBlock.FACING);
 
-        final RandomSource random = this.level.random;
+        final RandomSource random = this.level.getRandom();
 
         final int stepX = facing.getStepX();
         final int stepY = facing.getStepY();
         final int stepZ = facing.getStepZ();
 
         for (int i = 0; i < 2; i++) {
-            final Vec3 particlePos = this.getBlockPos().getCenter()
+            final Vec3 particlePos = Vec3.atCenterOf(this.getBlockPos())
                     .add(stepX * 7.0 / 16.0, stepY * 7.0 / 16.0, stepZ * 7.0 / 16.0)
                     .add((random.nextFloat() - 0.5f) * (stepX == 0 ? 1 : 0), (random.nextFloat() - 0.5f) * (stepY == 0 ? 1 : 0), (random.nextFloat() - 0.5f) * (stepZ == 0 ? 1 : 0));
 
@@ -557,7 +557,7 @@ public class SwivelBearingBlockEntity extends LegacyKineticBlockEntity implement
             if (!plateState.is(SimBlocks.SWIVEL_BEARING_LINK_BLOCK)) return;
 
             final Direction plateFacing = plateState.getValue(SwivelBearingPlateBlock.FACING);
-            this.attachConstraints(plateSubLevel, JOMLConversion.toJOML(platePos.relative(plateFacing).getCenter()));
+            this.attachConstraints(plateSubLevel, JOMLConversion.toJOML(Vec3.atCenterOf(platePos.relative(plateFacing))));
         }
     }
 
@@ -578,7 +578,7 @@ public class SwivelBearingBlockEntity extends LegacyKineticBlockEntity implement
 
         if (!plateState.is(SimBlocks.SWIVEL_BEARING_LINK_BLOCK)) return;
 
-        final Vector3d anchorPos = JOMLConversion.toJOML(this.getBlockPos().relative(this.getBlockState().getValue(DirectionalKineticBlock.FACING)).getCenter());
+        final Vector3d anchorPos = JOMLConversion.toJOML(Vec3.atCenterOf(this.getBlockPos().relative(this.getBlockState().getValue(DirectionalKineticBlock.FACING))));
         final Vec3 facingVec = Vec3.atLowerCornerOf(this.getBlockState().getValue(DirectionalKineticBlock.FACING).getUnitVec3i());
         final Vec3 plateFacingVec = Vec3.atLowerCornerOf(plateState.getValue(DirectionalKineticBlock.FACING).getUnitVec3i());
 
@@ -710,7 +710,7 @@ public class SwivelBearingBlockEntity extends LegacyKineticBlockEntity implement
     }
 
     private @NotNull Vector3d getConstraintPos(final BlockPos relative, final BlockPos offset) {
-        return JOMLConversion.toJOML(relative.offset(offset).getCenter());
+        return JOMLConversion.toJOML(Vec3.atCenterOf(relative.offset(offset)));
     }
 
     private void destroyPlate() {

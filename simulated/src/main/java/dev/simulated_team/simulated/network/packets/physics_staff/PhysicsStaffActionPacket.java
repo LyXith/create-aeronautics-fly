@@ -70,7 +70,7 @@ public class PhysicsStaffActionPacket implements CustomPacketPayload {
             final Vector3d beamStart = JOMLConversion.toJOML(player.getEyePosition());
             final Vector3d beamEnd = new Vector3d(this.location);
 
-            final ChunkPos chunk = new ChunkPos(BlockPos.containing(this.location.x(), this.location.y(), this.location.z()));
+            final ChunkPos chunk = ChunkPos.containing(BlockPos.containing(this.location.x(), this.location.y(), this.location.z()));
             final ClientboundCustomPayloadPacket beamPacket = new ClientboundCustomPayloadPacket(new PhysicsStaffBeamPacket(player.getUUID(), beamStart, beamEnd));
 
             for (final ServerPlayer otherPlayer : level.getChunkSource().chunkMap.getPlayers(chunk, false)) {

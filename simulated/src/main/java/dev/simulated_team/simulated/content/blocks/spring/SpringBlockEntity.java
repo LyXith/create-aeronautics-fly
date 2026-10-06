@@ -109,7 +109,7 @@ public class SpringBlockEntity extends SmartBlockEntity implements BlockEntitySu
         double newDesiredLength = Math.clamp(this.desiredLength + delta, 1, SpringItemHandler.MAX_LENGTH);
         newDesiredLength = Math.round(newDesiredLength / 0.25) * 0.25;
 
-        final double currentLength = Sable.HELPER.distanceSquaredWithSubLevels(level, this.worldPosition.getCenter(), this.partnerPos.getCenter()) + 1;
+        final double currentLength = Sable.HELPER.distanceSquaredWithSubLevels(level, Vec3.atCenterOf(this.worldPosition), Vec3.atCenterOf(this.partnerPos)) + 1;
         if (delta < 0 && currentLength > newDesiredLength * newDesiredLength * 4) {
             return "too_stretched";
         }
@@ -537,8 +537,8 @@ public class SpringBlockEntity extends SmartBlockEntity implements BlockEntitySu
             return new AABB(this.getBlockPos());
         }
 
-        final Vec3 center = this.getBlockPos().getCenter();
-        Vec3 partnerPos = this.partnerPos.getCenter();
+        final Vec3 center = Vec3.atCenterOf(this.getBlockPos());
+        Vec3 partnerPos = Vec3.atCenterOf(this.partnerPos);
 
         final SubLevel subLevel = Sable.HELPER.getContaining(this);
         final SubLevel partnerSubLevel = Sable.HELPER.getContaining(this.level, this.partnerPos);

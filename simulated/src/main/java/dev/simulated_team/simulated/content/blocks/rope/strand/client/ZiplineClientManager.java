@@ -1,4 +1,5 @@
 package dev.simulated_team.simulated.content.blocks.rope.strand.client;
+import net.minecraft.world.item.component.SwingAnimation;
 
 import com.zurrtum.create.AllTags;
 import com.zurrtum.create.client.foundation.utility.RaycastHelper;
@@ -157,7 +158,7 @@ public class ZiplineClientManager implements InteractCallback {
                     continue;
                 }
                 embark(foundStrand);
-                player.swing(InteractionHand.MAIN_HAND);
+                player.swing(InteractionHand.MAIN_HAND, SwingAnimation.DEFAULT, false);
                 return;
             }
         }
@@ -244,13 +245,13 @@ public class ZiplineClientManager implements InteractCallback {
     public static boolean canStartRiding(final ClosestQuery query, final Player player, final boolean sendMessage) {
         if (!canStartRidingDistance(query, player)) {
             if (sendMessage) {
-                player.displayClientMessage(SimLang.translate("zipline.too_far").color(SimColors.NUH_UH_RED).component(), true);
+                player.sendOverlayMessage(SimLang.translate("zipline.too_far").color(SimColors.NUH_UH_RED).component());
             }
             return false;
         }
         if (!canStartRidingSteepness(query, player)) {
             if (sendMessage) {
-                player.displayClientMessage(SimLang.translate("zipline.too_steep").color(SimColors.NUH_UH_RED).component(), true);
+                player.sendOverlayMessage(SimLang.translate("zipline.too_steep").color(SimColors.NUH_UH_RED).component());
             }
             return false;
         }
@@ -353,13 +354,13 @@ public class ZiplineClientManager implements InteractCallback {
             }
 
             embark(hoveringRope);
-            mc.player.swing(InteractionHand.MAIN_HAND);
+            mc.player.swing(InteractionHand.MAIN_HAND, SwingAnimation.DEFAULT, false);
             return new Result(true);
         }
 
         if (isDestroyer || (isWrench && mc.player.isShiftKeyDown())) {
             VeilPacketManager.server().sendPacket(new RopeBreakPacket(hoveringRope));
-            mc.player.swing(InteractionHand.MAIN_HAND);
+            mc.player.swing(InteractionHand.MAIN_HAND, SwingAnimation.DEFAULT, false);
             return new Result(true);
         }
 

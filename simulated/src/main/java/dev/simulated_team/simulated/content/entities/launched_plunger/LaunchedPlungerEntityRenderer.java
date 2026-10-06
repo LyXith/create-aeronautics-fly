@@ -276,7 +276,7 @@ public class LaunchedPlungerEntityRenderer extends EntityRenderer<LaunchedPlunge
     public static void renderRope(final List<Vec3> positions, final MultiBufferSource multiBufferSource, final BlockAndTintGetter level, final PoseStack poseStack) {
         final Vec3 first = positions.getFirst();
         final Vector3d origin = new Vector3d();
-        final Vec3 cameraPosition = Minecraft.getInstance().gameRenderer.getMainCamera().position();
+        final Vec3 cameraPosition = Minecraft.getInstance().gameRenderer.mainCamera().position();
 
         final RenderType renderType = SimRenderTypes.rope();
         final VertexConsumer builder = multiBufferSource.getBuffer(renderType);

@@ -99,7 +99,7 @@ public class RopeScenes {
 
         scene.idle(15);
 
-        final RopeStrandElement initialRope = new RopeStrandElement(winch.getCenter(), connector.getCenter().subtract(0, connectorRopeOffset,0), 4, 0, 1);
+        final RopeStrandElement initialRope = new RopeStrandElement(Vec3.atCenterOf(winch), Vec3.atCenterOf(connector).subtract(0, connectorRopeOffset,0), 4, 0, 1);
         scene.addInstruction(new CreateRopeStrandInstruction(initialRope));
 
         scene.world().modifyBlockEntity(winch, RopeWinchBlockEntity.class, be -> be.getRopeHolder().renderAttached = true);
@@ -308,7 +308,7 @@ public class RopeScenes {
 
         scene.idle(6);
 
-        final RopeStrandElement rightRope = new RopeStrandElement(tallConnector.getCenter().add(0.15,0,0), lowConnector.getCenter().subtract(0,0.15,0), 4, 0, 1);
+        final RopeStrandElement rightRope = new RopeStrandElement(Vec3.atCenterOf(tallConnector).add(0.15,0,0), Vec3.atCenterOf(lowConnector).subtract(0,0.15,0), 4, 0, 1);
         scene.addInstruction(new CreateRopeStrandInstruction(rightRope));
 
         scene.world().modifyBlockEntity(connector, RopeConnectorBlockEntity.class, be -> be.getRopeHolder().renderAttached = true);

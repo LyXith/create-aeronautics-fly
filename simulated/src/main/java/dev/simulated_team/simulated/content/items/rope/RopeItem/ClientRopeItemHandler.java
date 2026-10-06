@@ -30,7 +30,7 @@ public class ClientRopeItemHandler {
 
         if (player == null || level == null)
             return;
-        if (Minecraft.getInstance().screen != null)
+        if (Minecraft.getInstance().gui.screen() != null)
             return;
 
         for (final InteractionHand hand : InteractionHand.values()) {
@@ -48,7 +48,7 @@ public class ClientRopeItemHandler {
 
             if (rayTrace instanceof final BlockHitResult hitResult) {
                 final BlockPos hitBlock = hitResult.getBlockPos();
-                final Vec3 firstPoint = firstBlock.getCenter();
+                final Vec3 firstPoint = Vec3.atCenterOf(firstBlock);
 
                 final SimBlockConfigs blockConfig = SimConfigService.INSTANCE.server().blocks;
                 final double maxRopeRange = blockConfig.maxRopeRange.get();
@@ -66,7 +66,7 @@ public class ClientRopeItemHandler {
                         holderB != null && holderB.blockEntity instanceof RopeWinchBlockEntity)
                     valid = false;
 
-                final Vec3 target = valid ? hitBlock.getCenter() : hitResult.getLocation();
+                final Vec3 target = valid ? Vec3.atCenterOf(hitBlock) : hitResult.getLocation();
 
                 final Color color;
                 if (valid) {
@@ -113,7 +113,7 @@ public class ClientRopeItemHandler {
                 final int segments = (((int) totalFlyingTicks) / 3) + 1;
 
                 for (int i = 0; i < segments; i++) {
-                    final Vec3 vec = globalFirstPoint.lerp(globalTarget, level.random.nextFloat());
+                    final Vec3 vec = globalFirstPoint.lerp(globalTarget, level.getRandom().nextFloat());
                     level.addParticle(data, vec.x, vec.y, vec.z, 0, 0, 0);
                 }
             }

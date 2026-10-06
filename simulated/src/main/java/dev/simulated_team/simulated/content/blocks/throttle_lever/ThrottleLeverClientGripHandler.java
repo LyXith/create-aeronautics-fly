@@ -52,7 +52,7 @@ public class ThrottleLeverClientGripHandler {
 
         final BlockPos blockPos = blockEntity.getBlockPos();
 
-        return player.distanceToSqr(blockPos.getCenter()) > reach * reach;
+        return player.distanceToSqr(Vec3.atCenterOf(blockPos)) > reach * reach;
     }
 
     public static void clearNearbyThrottleLevers() {

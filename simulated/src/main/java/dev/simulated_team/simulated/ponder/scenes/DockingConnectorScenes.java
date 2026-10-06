@@ -216,7 +216,7 @@ public class DockingConnectorScenes {
         scene.addInstruction(new ToggleConnectorLockInstruction(connector2,false));
         scene.idle(20);
         overlay.showText(70)
-                .pointAt(connector2.getCenter())
+                .pointAt(Vec3.atCenterOf(connector2))
                 .attachKeyFrame()
                 .placeNearTarget()
                 .text("Either Connector can be retracted to undock");
@@ -236,7 +236,7 @@ public class DockingConnectorScenes {
         effects.indicateRedstone(new BlockPos(10,3,5));
         scene.idle(10);
         overlay.showText(80)
-                .pointAt(new BlockPos(9,3,5).getCenter())
+                .pointAt(new Vec3.atCenterOf(BlockPos(9,3,5)))
                 .attachKeyFrame()
                 .placeNearTarget()
                 .text("Redstone Comparators can be used to read the Docking progress");

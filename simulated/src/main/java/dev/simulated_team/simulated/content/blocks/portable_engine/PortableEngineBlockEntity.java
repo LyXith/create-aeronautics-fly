@@ -258,7 +258,7 @@ public class PortableEngineBlockEntity extends LegacyGeneratingKineticBlockEntit
         if (!isLitState && isLit) {
             this.level.setBlock(this.getBlockPos(), this.getBlockState().setValue(LIT, true), 2);
             this.level.playSound(null, this.worldPosition, SimSoundEvents.PORTABLE_ENGINE_ROARS.event(), SoundSource.BLOCKS,
-                    .125f + this.level.random.nextFloat() * .125f, .75f - this.level.random.nextFloat() * .25f);
+                    .125f + this.level.getRandom().nextFloat() * .125f, .75f - this.level.getRandom().nextFloat() * .25f);
 
             Vec3 pos = VecHelper.getCenterOf(this.worldPosition);
 
@@ -321,7 +321,7 @@ public class PortableEngineBlockEntity extends LegacyGeneratingKineticBlockEntit
         boolean openHatch = false;
 
         final BlockPos pos = this.getBlockPos();
-        final Vec3 center = pos.getCenter();
+        final Vec3 center = Vec3.atCenterOf(pos);
         final List<Player> players = this.level.getEntitiesOfClass(Player.class, new AABB(pos).inflate(7.0));
 
         for (final Player player : players) {
@@ -359,13 +359,13 @@ public class PortableEngineBlockEntity extends LegacyGeneratingKineticBlockEntit
         hatchPos = hatchPos.add(-facingDirI.getX() * 0.53, -0.1, -facingDirI.getZ() * 0.53);
 
 
-        if (this.level.random.nextFloat() < 0.12) {
+        if (this.level.getRandom().nextFloat() < 0.12) {
             Vec3 random = VecHelper.offsetRandomly(Vec3.ZERO, RandomSource.create(), 0.15f);
             random = random.subtract(facingDir.scale(random.dot(facingDir)));
             hatchPos = hatchPos.add(random);
 
             final ParticleOptions particle;
-            if (this.isSuperHeated() && this.level.random.nextFloat() < 0.3) {
+            if (this.isSuperHeated() && this.level.getRandom().nextFloat() < 0.3) {
                 particle = ParticleTypes.FLAME;
             } else {
                 particle = ParticleTypes.SMOKE;
@@ -376,7 +376,7 @@ public class PortableEngineBlockEntity extends LegacyGeneratingKineticBlockEntit
         }
 
         for (int i = -1; i < 2; i+=2) {
-            if (this.level.random.nextFloat() < 0.25) {
+            if (this.level.getRandom().nextFloat() < 0.25) {
                 final Vec3 random = VecHelper.offsetRandomly(Vec3.ZERO, RandomSource.create(), 1.0f / 16.0f);
                 final Vec3 pos = Vec3.upFromBottomCenterOf(this.worldPosition, 11.0 / 16.0)
                         .add(facingDir.scale(0.5))
@@ -390,7 +390,7 @@ public class PortableEngineBlockEntity extends LegacyGeneratingKineticBlockEntit
 
 
 
-        if (this.hatchOpenTime > 0 && this.level.random.nextFloat() < 0.08) {
+        if (this.hatchOpenTime > 0 && this.level.getRandom().nextFloat() < 0.08) {
             Vec3 random = VecHelper.offsetRandomly(Vec3.ZERO, RandomSource.create(), 0.1f);
             random = random.subtract(facingDir.scale(random.dot(facingDir)));
             hatchPos = hatchPos.add(random);

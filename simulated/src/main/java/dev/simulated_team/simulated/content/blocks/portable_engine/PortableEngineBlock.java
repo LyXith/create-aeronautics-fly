@@ -115,7 +115,7 @@ public class PortableEngineBlock extends HorizontalKineticBlock implements IBE<P
         final DyeColor color = SimItemService.getDyeColor(heldItem);
         if (color != null) {
             if (!level.isClientSide())
-                level.playSound(null, blockPos, SoundEvents.DYE_USE, SoundSource.BLOCKS, 1.0f, 1.1f - level.random.nextFloat() * .2f);
+                level.playSound(null, blockPos, SoundEvents.DYE_USE, SoundSource.BLOCKS, 1.0f, 1.1f - level.getRandom().nextFloat() * .2f);
 
             final BlockState newState = BlockHelper.copyProperties(blockState, SimBlocks.PORTABLE_ENGINES.get(color).defaultBlockState());
             level.setBlockAndUpdate(blockPos, newState);

@@ -761,7 +761,7 @@ public class KineticScenes {
         overlay.showText(80)
                 .text("Redstone Comparators can be used to read the current angle of the Steering Wheel")
                 .placeNearTarget()
-                .pointAt(steeringWheelPos.getCenter())
+                .pointAt(Vec3.atCenterOf(steeringWheelPos))
                 .attachKeyFrame();
 
         scene.idle(60);
@@ -850,7 +850,7 @@ public class KineticScenes {
         overlay.showText(100)
                 .text("Redstone Comparators placed on the back of the Steering Wheel will read if it is in use")
                 .placeNearTarget()
-                .pointAt(redstoneLamp.getCenter());
+                .pointAt(Vec3.atCenterOf(redstoneLamp));
 
         scene.idle(40);
 

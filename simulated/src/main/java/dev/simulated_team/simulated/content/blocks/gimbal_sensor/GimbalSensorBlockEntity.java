@@ -128,9 +128,9 @@ public class GimbalSensorBlockEntity extends SmartBlockEntity implements IHaveGo
     }
 
     public void randomNudge() {
-        final Vec3 v = (VecHelper.offsetRandomly(new Vec3(0, 0, 0), this.level.random, 0.2f));
+        final Vec3 v = (VecHelper.offsetRandomly(new Vec3(0, 0, 0), this.level.getRandom(), 0.2f));
         this.angleVelocities.set(v.x, v.y, v.z);
-        this.eulerAngles.set(0, 0, this.level.random.nextFloat() * Math.PI * 2);
+        this.eulerAngles.set(0, 0, this.level.getRandom().nextFloat() * Math.PI * 2);
     }
 
     void animateClientRotation(final SubLevel subLevel, final Pose3dc pose) {
@@ -149,7 +149,7 @@ public class GimbalSensorBlockEntity extends SmartBlockEntity implements IHaveGo
 
         this.addCompassTorque(pose, acceleration, target);
         if (this.compassTarget.isRandom())
-            acceleration.z += (2 * this.level.random.nextFloat() - 1) * 2.1;
+            acceleration.z += (2 * this.level.getRandom().nextFloat() - 1) * 2.1;
 
         acceleration.div(this.angleInertia);
         final Vector3d relativeVelocity = this.angleVelocities.add(shellVelocity, new Vector3d());
@@ -562,7 +562,7 @@ public class GimbalSensorBlockEntity extends SmartBlockEntity implements IHaveGo
             if (!this.isRandom) {
                 this.target.set(0, 0, -1);
             } else {
-                final RandomSource r = level.random;
+                final RandomSource r = level.getRandom();
                 if (this.randomTargetTimer-- < 0) {
 
                     final float radius = 1.0f;
@@ -570,7 +570,7 @@ public class GimbalSensorBlockEntity extends SmartBlockEntity implements IHaveGo
                             (r.nextFloat() - .5f) * 2 * radius,
                             (r.nextFloat() - .5f) * 2 * radius,
                             (r.nextFloat() - .5f) * 2 * radius);
-                    this.randomTargetTimer = level.random.nextInt(5, 15);
+                    this.randomTargetTimer = level.getRandom().nextInt(5, 15);
                 }
                 final float nudge = 0.3f;
                 this.randomTarget.add(

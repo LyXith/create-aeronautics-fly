@@ -369,7 +369,7 @@ public class LaunchedPlungerEntity extends ThrowableProjectile {
         this.removeConstraint();
 
         if (!this.level().isClientSide()) {
-            this.playSound(SimSoundEvents.PLUNGER_RELEASE.event(), 1.0f, 0.9f + 0.2f * this.level().random.nextFloat());
+            this.playSound(SimSoundEvents.PLUNGER_RELEASE.event(), 1.0f, 0.9f + 0.2f * this.level().getRandom().nextFloat());
             LaunchedPlungerServerHandler.removeLaunchedPlunger(this.level(), this);
         }
 

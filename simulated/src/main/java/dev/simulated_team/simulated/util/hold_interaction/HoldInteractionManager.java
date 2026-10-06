@@ -58,7 +58,7 @@ public class HoldInteractionManager {
 
     public static void renderOverlay(final GuiGraphicsExtractor graphics, final int width, final int height) {
         if (active != null) {
-            active.renderOverlay(graphics, width, height, Minecraft.getInstance().options.hideGui);
+            active.renderOverlay(graphics, width, height, Minecraft.getInstance().gui.hud.isHidden());
         }
     }
 

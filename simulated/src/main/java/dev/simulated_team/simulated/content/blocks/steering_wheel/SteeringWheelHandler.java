@@ -1,5 +1,7 @@
 package dev.simulated_team.simulated.content.blocks.steering_wheel;
 
+import net.minecraft.world.phys.Vec3;
+
 import com.zurrtum.create.content.equipment.goggles.GogglesItem;
 import dev.simulated_team.simulated.Simulated;
 import dev.simulated_team.simulated.index.SimBlockEntityTypes;
@@ -175,7 +177,7 @@ public class SteeringWheelHandler extends BlockHoldInteraction {
         }
 
         this.setTargetAngle(effectiveAngle);
-        return !BlockHoldInteraction.inInteractionRange(player, this.getInteractionPos().getCenter());
+        return !BlockHoldInteraction.inInteractionRange(player, Vec3.atCenterOf(this.getInteractionPos()));
     }
 
     @Override

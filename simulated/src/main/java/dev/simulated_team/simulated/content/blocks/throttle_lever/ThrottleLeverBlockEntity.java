@@ -1,5 +1,7 @@
 package dev.simulated_team.simulated.content.blocks.throttle_lever;
 
+import net.minecraft.world.phys.Vec3;
+
 import dev.simulated_team.simulated.compat.create.IHaveGoggleInformation;
 import dev.simulated_team.simulated.compat.create.SmartBlockEntity;
 import com.zurrtum.create.api.behaviour.BlockEntityBehaviour;
@@ -102,7 +104,7 @@ public class ThrottleLeverBlockEntity extends SmartBlockEntity implements IHaveG
 
     @Override
     public AABB getRenderBoundingBox() {
-        return AABB.ofSize(this.getBlockPos().getCenter(), 1.5, 1.5, 1.5);
+        return AABB.ofSize(Vec3.atCenterOf(this.getBlockPos()), 1.5, 1.5, 1.5);
     }
 
     public int getState() {

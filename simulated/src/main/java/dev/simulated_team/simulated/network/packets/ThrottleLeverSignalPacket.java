@@ -1,5 +1,7 @@
 package dev.simulated_team.simulated.network.packets;
 
+import net.minecraft.world.phys.Vec3;
+
 import dev.simulated_team.simulated.Simulated;
 import dev.simulated_team.simulated.content.blocks.throttle_lever.ThrottleLeverBlockEntity;
 import dev.simulated_team.simulated.util.hold_interaction.BlockHoldInteraction;
@@ -33,7 +35,7 @@ public record ThrottleLeverSignalPacket(BlockPos pos, int signal) implements Cus
         final BlockEntity blockEntity = level.getBlockEntity(this.pos);
 
         if (blockEntity instanceof final ThrottleLeverBlockEntity throttleLever) {
-            if (!BlockHoldInteraction.inInteractionRange(player, this.pos.getCenter(), 1)) return;
+            if (!BlockHoldInteraction.inInteractionRange(player, Vec3.atCenterOf(this.pos), 1)) return;
 
             throttleLever.setSignal(this.signal);
         }

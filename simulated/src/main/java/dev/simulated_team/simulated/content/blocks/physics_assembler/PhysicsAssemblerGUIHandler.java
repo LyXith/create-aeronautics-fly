@@ -1,5 +1,7 @@
 package dev.simulated_team.simulated.content.blocks.physics_assembler;
 
+import net.minecraft.world.phys.Vec3;
+
 import dev.ryanhcode.sable.Sable;
 import dev.ryanhcode.sable.sublevel.ClientSubLevel;
 import dev.ryanhcode.sable.sublevel.SubLevel;
@@ -71,7 +73,7 @@ public class PhysicsAssemblerGUIHandler extends BlockHoldInteraction {
         }
 
         if (level.getBlockEntity(this.getInteractionPos()) instanceof final PhysicsAssemblerBlockEntity be) {
-            if (BlockHoldInteraction.inInteractionRange(player, this.getInteractionPos().getCenter(), 2)) {
+            if (BlockHoldInteraction.inInteractionRange(player, Vec3.atCenterOf(this.getInteractionPos()), 2)) {
                 lastAnimatedValue = animatedValue;
                 animatedValue += animatedVelocity;
                 animatedVelocity *= 0.8f;

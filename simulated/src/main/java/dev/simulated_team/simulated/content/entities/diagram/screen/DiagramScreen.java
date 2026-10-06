@@ -133,7 +133,7 @@ public class DiagramScreen extends AbstractSimiScreen {
         screen.config = config;
         screen.updateViewportOrientation();
 
-        minecraft.setScreen(screen);
+        minecraft.gui.setScreen(screen);
         minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.VILLAGER_WORK_CARTOGRAPHER, 1.0f));
     }
 

@@ -56,7 +56,7 @@ public class PlungerLauncherItemRenderer extends CustomRenderedItemModelRenderer
                                         final PoseStack matrices, final float partialTicks) {
         final Vector3f point = matrices.last().pose().transformPosition(new Vector3f());
         final Vec3 worldPoint = new Vec3(point.x, point.y, point.z)
-                .add(Minecraft.getInstance().gameRenderer.getMainCamera().position());
+                .add(Minecraft.getInstance().gameRenderer.mainCamera().position());
         final HumanoidArm arm = displayContext == ItemDisplayContext.THIRD_PERSON_LEFT_HAND
                 ? HumanoidArm.LEFT : HumanoidArm.RIGHT;
         // Keep an offset from this player so movement between render submissions does not leave a stale world point.
@@ -77,7 +77,7 @@ public class PlungerLauncherItemRenderer extends CustomRenderedItemModelRenderer
     public static Vec3 getFirstPersonFocusPos(final float partialTicks,
                                               final boolean rotateProjectedForShader) {
         return FIRST_PERSON_FOCUS.resolveCameraRelative(partialTicks, rotateProjectedForShader)
-                .add(Minecraft.getInstance().gameRenderer.getMainCamera().position());
+                .add(Minecraft.getInstance().gameRenderer.mainCamera().position());
     }
 
     @Override
@@ -159,7 +159,7 @@ public class PlungerLauncherItemRenderer extends CustomRenderedItemModelRenderer
 
                 final Vec3 focusPos1 = LaunchedPlungerEntityRenderer.getFirstPersonFocusPos(0f);
                 for (int i = 0; i < Math.random() * 4; i++) {
-                    final Vec3 m2 = VecHelper.offsetRandomly(player.getViewVector(0), player.level().random, 0.5f);
+                    final Vec3 m2 = VecHelper.offsetRandomly(player.getViewVector(0), player.level().getRandom(), 0.5f);
                     player.level().addParticle(new AirParticleData(1, 1 / 4f), focusPos1.x, focusPos1.y, focusPos1.z, m2.x, m2.y, m2.z);
                 }
 

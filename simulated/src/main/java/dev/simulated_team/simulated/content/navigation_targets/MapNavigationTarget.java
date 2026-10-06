@@ -45,7 +45,7 @@ public class MapNavigationTarget implements NavigationTarget {
 			if (mapData != null) {
 				final Collection<MapBanner> banners = mapData.getBanners();
 				for (final MapBanner banner : banners) {
-					final Vec3 bannerPos = banner.pos().getCenter();
+					final Vec3 bannerPos = Vec3.atCenterOf(banner.pos());
 					final double dist = pos.distanceToSqr(bannerPos.x(), pos.y(), bannerPos.z());
 					if(dist < closestDist) {
 						closestPos = bannerPos;

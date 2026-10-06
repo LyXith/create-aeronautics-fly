@@ -86,7 +86,7 @@ public class PhysicsStaffItemRenderer extends CustomRenderedItemModelRenderer {
             if (clientHandler.getDragSession() != null) {
                 final PhysicsStaffClientHandler.ClientDragSession dragSession = clientHandler.getDragSession();
 
-                final Quaternionf rotation = minecraft.gameRenderer.getMainCamera().rotation();
+                final Quaternionf rotation = minecraft.gameRenderer.mainCamera().rotation();
                 final Vector3d globalAnchor = ((ClientSubLevel) dragSession.dragSubLevel()).renderPose().transformPosition(new Vector3d(dragSession.dragLocalAnchor()));
                 final Vector3d dirToAnchor = globalAnchor.sub(JOMLConversion.toJOML(player.getEyePosition(partialTicks))).normalize();
                 rotation.transformInverse(dirToAnchor);
@@ -102,7 +102,7 @@ public class PhysicsStaffItemRenderer extends CustomRenderedItemModelRenderer {
         }
 
 
-        renderer.render(model.getOriginalModel(), Sheets.cutoutBlockSheet(), light);
+        renderer.render(model.getOriginalModel(), Sheets.cutoutBlockItemSheet(), light);
 
         renderer.render(SimPartialModels.PHYSICS_STAFF_CORE.get(), SimRenderTypes.itemGlowingSolid(shadersActive), LightCoordsUtil.FULL_BRIGHT);
         renderer.render(SimPartialModels.PHYSICS_STAFF_CORE_GLOW.get(), SimRenderTypes.itemGlowingTranslucent(shadersActive), LightCoordsUtil.FULL_BRIGHT);
@@ -110,7 +110,7 @@ public class PhysicsStaffItemRenderer extends CustomRenderedItemModelRenderer {
 
         ms.pushPose();
         ms.translate(0, 6.5 / 16.0, 0);
-        renderer.render(SimPartialModels.PHYSICS_STAFF_RING.get(), Sheets.cutoutBlockSheet(), light);
+        renderer.render(SimPartialModels.PHYSICS_STAFF_RING.get(), Sheets.cutoutBlockItemSheet(), light);
         ms.popPose();
 
         ms.translate(0, 9 / 16.0, 0);
@@ -119,7 +119,7 @@ public class PhysicsStaffItemRenderer extends CustomRenderedItemModelRenderer {
             ms.rotateDegrees(Axis.YP, i * 180);
             ms.translate(-3 / 16.0, 0, 0);
             ms.rotateDegrees(Axis.ZP, openAmount * 20);
-            renderer.render(SimPartialModels.PHYSICS_STAFF_SIGMA.get(), Sheets.cutoutBlockSheet(), light);
+            renderer.render(SimPartialModels.PHYSICS_STAFF_SIGMA.get(), Sheets.cutoutBlockItemSheet(), light);
             ms.popPose();
         }
         ms.translate(0, 6 / 16.0, 0);

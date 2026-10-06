@@ -90,7 +90,7 @@ public class LinkedTypewriterInteractionHandler {
             associateTypewriter(null);
         }
 
-        if (getMode() != Mode.SCREEN_BINDING && Minecraft.getInstance().screen != null && !be.isRemoved()) {
+        if (getMode() != Mode.SCREEN_BINDING && Minecraft.getInstance().gui.screen() != null && !be.isRemoved()) {
             VeilPacketManager.server().sendPacket(new TypewriterDisconnectUser(be.getBlockPos()));
             associateTypewriter(null);
         }
@@ -123,7 +123,7 @@ public class LinkedTypewriterInteractionHandler {
                     be.disconnectUser();
                     VeilPacketManager.server().sendPacket(new TypewriterDisconnectUser(be.getBlockPos()));
 
-                    minecraft.setScreen(null);
+                    minecraft.gui.setScreen(null);
                 }
 
                 if (frequency != null) {

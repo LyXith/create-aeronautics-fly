@@ -87,7 +87,7 @@ public final class PlungerLauncherItemModel implements ItemModel, SpecialModelRe
             matrices.translate(0, 0, 0.15f);
         };
 
-        addLayer(state, displayContext, item, Sheets.cutoutBlockSheet(), foil,
+        addLayer(state, displayContext, item, Sheets.cutoutBlockItemSheet(), foil,
                 commonTransform, true, displayContext.firstPerson() || captureWorldFocus, partialTicks, focusOwner);
 
         boolean renderFirst = player == null;
@@ -134,11 +134,11 @@ public final class PlungerLauncherItemModel implements ItemModel, SpecialModelRe
         };
 
         // Unlike the launcher base, these partials are authored around [0, 0, 0].
-        addLayer(state, displayContext, body, Sheets.solidBlockSheet(),
+        addLayer(state, displayContext, body, Sheets.cutoutBlockItemSheet(),
                 ItemStackRenderState.FoilType.NONE, bodyTransform, false, false, 0, null);
-        addLayer(state, displayContext, joint, Sheets.solidBlockSheet(),
+        addLayer(state, displayContext, joint, Sheets.cutoutBlockItemSheet(),
                 ItemStackRenderState.FoilType.NONE, bodyTransform, false, false, 0, null);
-        addLayer(state, displayContext, spool, Sheets.solidBlockSheet(),
+        addLayer(state, displayContext, spool, Sheets.cutoutBlockItemSheet(),
                 ItemStackRenderState.FoilType.NONE, matrices -> {
                     bodyTransform.accept(matrices);
                     matrices.translate(0, 0, 3 / 16.0);

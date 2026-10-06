@@ -1,4 +1,5 @@
 package dev.simulated_team.simulated.content.blocks.handle;
+import net.minecraft.world.item.component.SwingAnimation;
 
 import com.zurrtum.create.AllItems;
 import dev.ryanhcode.sable.Sable;
@@ -44,7 +45,7 @@ public class ClientHandleHandler extends BlockHoldInteraction {
         final Vec3 eyePosition = player.getEyePosition();
         this.desiredRange = (float) Math.min(projected.distance(eyePosition.x, eyePosition.y, eyePosition.z), Math.min(HandleBlockEntity.MAX_HANDLE_RANGE, player.getAttribute(Attributes.BLOCK_INTERACTION_RANGE).getValue()));
         this.movingSubLevel = player.isShiftKeyDown();
-        player.swing(hand);
+        player.swing(hand, SwingAnimation.DEFAULT, false);
 
         super.startHold(level, player, blockPos);
         this.sendUpdate(false);
@@ -53,7 +54,7 @@ public class ClientHandleHandler extends BlockHoldInteraction {
     @Override
     public boolean activeTick(final Level level, final LocalPlayer player) {
         final BlockPos interactionPos = this.getInteractionPos();
-        final ChunkPos chunk = new ChunkPos(interactionPos);
+        final ChunkPos chunk = ChunkPos.containing(interactionPos);
 
         final SubLevelContainer container = SubLevelContainer.getContainer(level);
         assert container != null;
@@ -81,7 +82,7 @@ public class ClientHandleHandler extends BlockHoldInteraction {
         final Minecraft minecraft = Minecraft.getInstance();
 
         // force constant swinging for "animation" in first person
-        if (!minecraft.gameRenderer.getMainCamera().isDetached()) {
+        if (!minecraft.gameRenderer.mainCamera().isDetached()) {
             player.swingTime = 0;
             player.swinging = true;
             player.swingingArm = InteractionHand.MAIN_HAND;

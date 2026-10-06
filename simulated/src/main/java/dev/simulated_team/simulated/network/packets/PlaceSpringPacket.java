@@ -1,5 +1,7 @@
 package dev.simulated_team.simulated.network.packets;
 
+import net.minecraft.world.phys.Vec3;
+
 import dev.ryanhcode.sable.Sable;
 import dev.ryanhcode.sable.sublevel.SubLevel;
 import dev.simulated_team.simulated.Simulated;
@@ -50,7 +52,7 @@ public record PlaceSpringPacket(BlockPos parentPos, BlockPos childPos, Direction
         final BlockPos childRelative = this.childPos().relative(this.childFacing);
 
         final ItemStack spring = player.getItemInHand(this.hand);
-        final double distanceSquared = Sable.HELPER.distanceSquaredWithSubLevels(level, parentRelative.getCenter(), childRelative.getCenter());
+        final double distanceSquared = Sable.HELPER.distanceSquaredWithSubLevels(level, Vec3.atCenterOf(parentRelative), Vec3.atCenterOf(childRelative));
         if (!(spring.getItem() instanceof SpringItem) || distanceSquared > (SpringItemHandler.MAX_LENGTH + 1) * (SpringItemHandler.MAX_LENGTH + 1)) {
             return;
         }

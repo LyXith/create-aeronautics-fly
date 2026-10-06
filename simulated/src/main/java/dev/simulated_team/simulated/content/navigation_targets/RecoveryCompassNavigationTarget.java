@@ -44,7 +44,7 @@ public class RecoveryCompassNavigationTarget implements NavigationTarget {
                 return null;
             }
 
-            return lastDeathLocation.pos().getCenter();
+            return Vec3.atCenterOf(lastDeathLocation.pos());
         }
 
         return null;

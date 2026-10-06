@@ -105,7 +105,7 @@ public class LinkedTypewriterBlock extends HorizontalDirectionalBlock implements
             if (level.isClientSide()) {
                 final ItemStack item = player.getMainHandItem().is(linkedControllerItem) ?
                         player.getMainHandItem() : player.getOffhandItem();
-                player.displayClientMessage(SimLang.translate("linked_typewriter.linked_controller_copy").component(), true);
+                player.sendOverlayMessage(SimLang.translate("linked_typewriter.linked_controller_copy").component());
                 LinkedTypewriterInteractionHandler.sendLinkedControllerData(level, blockPos, item);
                 LinkedControllerClientHandler.MODE = LinkedControllerClientHandler.Mode.IDLE;
             }

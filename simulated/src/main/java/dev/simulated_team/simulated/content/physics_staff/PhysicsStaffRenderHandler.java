@@ -102,7 +102,7 @@ public class PhysicsStaffRenderHandler {
         SimulatedClient.PHYSICS_STAFF_CLIENT_HANDLER.onRender(ps, bufferSource);
         ps.popPose();
 
-        if (minecraft.options.hideGui) {
+        if (minecraft.gui.hud.isHidden()) {
             return;
         }
 
@@ -277,7 +277,7 @@ public class PhysicsStaffRenderHandler {
             ps.pushPose();
             final Vector3dc renderPos = clientSubLevel.renderPose().position();
             ps.translate(renderPos.x() - cameraPos.x(), renderPos.y() - cameraPos.y(), renderPos.z() - cameraPos.z());
-            ps.rotate(client.gameRenderer.getMainCamera().rotation());
+            ps.rotate(client.gameRenderer.mainCamera().rotation());
 
             final VertexConsumer buffer = bufferSource.getBuffer(SimRenderTypes.lock());
 

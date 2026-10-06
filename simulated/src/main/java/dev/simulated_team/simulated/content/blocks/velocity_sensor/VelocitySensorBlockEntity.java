@@ -144,7 +144,7 @@ public class VelocitySensorBlockEntity extends SmartBlockEntity implements IHave
             return new Vector3d();
         }
 
-        final Vector3d jomlPos = JOMLConversion.toJOML(this.worldPosition.getCenter());
+        final Vector3d jomlPos = JOMLConversion.toJOML(Vec3.atCenterOf(this.worldPosition));
         return subLevel.logicalPose().transformPosition(jomlPos, new Vector3d()).sub(subLevel.lastPose().transformPosition(jomlPos, new Vector3d()), jomlPos).mul(20.0F);
     }
 

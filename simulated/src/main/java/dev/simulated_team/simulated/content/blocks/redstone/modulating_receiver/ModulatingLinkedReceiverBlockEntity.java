@@ -107,7 +107,7 @@ public class ModulatingLinkedReceiverBlockEntity extends AbstractLinkedReceiverB
         this.distanceToClosest = compound.getDoubleOr("DistanceToClosest", 0);
 
         if (!clientPacket ||
-                !(Minecraft.getInstance().screen instanceof final ModulatingLinkedReceiverScreen screen) ||
+                !(Minecraft.getInstance().gui.screen() instanceof final ModulatingLinkedReceiverScreen screen) ||
                 !screen.isThisBlock(this.getBlockPos())) {
             this.minRange = compound.getIntOr("MinRange", 0);
             this.maxRange = compound.getIntOr("MaxRange", 0);

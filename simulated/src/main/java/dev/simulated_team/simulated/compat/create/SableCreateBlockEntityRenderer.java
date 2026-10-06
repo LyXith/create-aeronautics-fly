@@ -56,7 +56,7 @@ public final class SableCreateBlockEntityRenderer {
             return;
         }
 
-        final Camera camera = minecraft.gameRenderer.getMainCamera();
+        final Camera camera = minecraft.gameRenderer.mainCamera();
         final Pose3dc renderPose = subLevel.renderPose(partialTick);
         final Vec3 localCameraPosition =
                 renderPose.transformPositionInverse(camera.position());

@@ -73,7 +73,7 @@ public final class SimulatedFabricClient implements ClientModInitializer {
             LateLaserRenderQueue.finishWorldFrameCollection();
             IrisLaserRenderQueue.finishWorldFrameCollection();
             PhysicsStaffRenderHandler.renderSelectionBox(
-                    context.consumers(), context.matrices(), Minecraft.getInstance().gameRenderer.getMainCamera());
+                    context.consumers(), context.matrices(), Minecraft.getInstance().gameRenderer.mainCamera());
         });
         HudElementRegistry.attachElementAfter(VanillaHudElements.HOTBAR, Simulated.path("interaction_overlay"),
                 (graphics, tickCounter) -> SimulatedCommonClientEvents.renderOverlays(
