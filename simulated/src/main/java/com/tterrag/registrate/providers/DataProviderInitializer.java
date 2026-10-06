@@ -3,6 +3,7 @@ package com.tterrag.registrate.providers;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistrySetBuilder;
+import net.minecraft.core.registries.SingleRegistryBootstrap;
 import net.minecraft.resources.ResourceKey;
 
 import javax.annotation.Nullable;
@@ -42,7 +43,7 @@ public class DataProviderInitializer {
 		return ans;
 	}
 
-	public <T> void add(ResourceKey<Registry<T>> registry, RegistrySetBuilder.RegistryBootstrap<T> provider) {
+	public <T> void add(ResourceKey<Registry<T>> registry, SingleRegistryBootstrap<T> provider) {
 		datapackEntryProvider.add(registry, provider);
 	}
 

@@ -3,13 +3,17 @@ package dev.simulated_team.simulated.index;
 import com.mojang.renderpearl.api.pipeline.BlendFunction;
 import com.mojang.renderpearl.api.pipeline.RenderPipeline;
 import com.mojang.renderpearl.api.pipeline.BlendFactor;
-import com.mojang.blaze3d.platform.DepthTestFunction;
 import com.mojang.renderpearl.api.pipeline.UniformType;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.renderpearl.api.pipeline.ColorTargetState;
+import com.mojang.renderpearl.api.pipeline.CompareOp;
+import com.mojang.renderpearl.api.pipeline.DepthStencilState;
+import com.mojang.renderpearl.api.pipeline.PrimitiveTopology;
 import com.mojang.renderpearl.api.vertex.VertexFormat;
 import com.zurrtum.create.client.AllSpecialTextures;
 import com.zurrtum.create.client.foundation.render.CreateRenderTypes;
 import dev.simulated_team.simulated.Simulated;
+import net.minecraft.client.renderer.BindGroupLayouts;
 import net.minecraft.client.renderer.rendertype.RenderSetup;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.rendertype.RenderType;
@@ -60,14 +64,15 @@ public final class SimRenderTypes {
             .withLocation(Simulated.path("pipeline/lock"))
             .withVertexShader("core/rendertype_text_see_through")
             .withFragmentShader("core/rendertype_text_see_through")
-            .withUniform("DynamicTransforms", UniformType.UNIFORM_BUFFER)
-            .withUniform("Projection", UniformType.UNIFORM_BUFFER)
-            .withSampler("Sampler0")
-            .withBlend(BlendFunction.TRANSLUCENT)
+            .withBindGroupLayout(BindGroupLayouts.DYNAMIC_TRANSFORMS)
+            .withBindGroupLayout(BindGroupLayouts.PROJECTION)
+            .withBindGroupLayout(BindGroupLayouts.SAMPLER0)
+            .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
             .withCull(false)
-            .withDepthWrite(false)
-            .withDepthTestFunction(DepthTestFunction.NO_DEPTH_TEST)
-            .withVertexFormat(DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP, VertexFormat.Mode.QUADS)
+            // 26.3: DepthTestFunction.NO_DEPTH_TEST -> CompareOp.ALWAYS_PASS, 且不写深度
+            .withDepthStencilState(new DepthStencilState(CompareOp.ALWAYS_PASS, false))
+            .withVertexBinding(0, DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP)
+            .withPrimitiveTopology(PrimitiveTopology.QUADS)
             .build();
 
     // Reuse the vanilla shader-compatible lightning pipeline, but draw to the main target.
@@ -134,13 +139,14 @@ public final class SimRenderTypes {
                 .withLocation(Simulated.path("pipeline/" + name))
                 .withVertexShader(Simulated.path("core/laser"))
                 .withFragmentShader(Simulated.path("core/laser"))
-                .withUniform("DynamicTransforms", UniformType.UNIFORM_BUFFER)
-                .withUniform("Projection", UniformType.UNIFORM_BUFFER)
-                .withUniform("Fog", UniformType.UNIFORM_BUFFER)
-                .withBlend(BlendFunction.TRANSLUCENT)
+                .withBindGroupLayout(BindGroupLayouts.DYNAMIC_TRANSFORMS)
+                .withBindGroupLayout(BindGroupLayouts.PROJECTION)
+                .withBindGroupLayout(BindGroupLayouts.FOG)
+                .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
                 .withCull(false)
-                .withDepthWrite(depthWrite)
-                .withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS)
+                .withDepthStencilState(new DepthStencilState(CompareOp.LESS_THAN, depthWrite))
+                .withVertexBinding(0, DefaultVertexFormat.POSITION_TEX_COLOR)
+                .withPrimitiveTopology(PrimitiveTopology.QUADS)
                 .build());
     }
 
@@ -149,13 +155,14 @@ public final class SimRenderTypes {
                 .withLocation(Simulated.path("pipeline/" + name))
                 .withVertexShader(Simulated.path("core/laser"))
                 .withFragmentShader(Simulated.path("core/laser"))
-                .withUniform("DynamicTransforms", UniformType.UNIFORM_BUFFER)
-                .withUniform("Projection", UniformType.UNIFORM_BUFFER)
-                .withUniform("Fog", UniformType.UNIFORM_BUFFER)
-                .withBlend(BlendFunction.LIGHTNING)
+                .withBindGroupLayout(BindGroupLayouts.DYNAMIC_TRANSFORMS)
+                .withBindGroupLayout(BindGroupLayouts.PROJECTION)
+                .withBindGroupLayout(BindGroupLayouts.FOG)
+                .withColorTargetState(new ColorTargetState(BlendFunction.LIGHTNING))
                 .withCull(false)
-                .withDepthWrite(false)
-                .withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS)
+                .withDepthStencilState(new DepthStencilState(CompareOp.LESS_THAN, false))
+                .withVertexBinding(0, DefaultVertexFormat.POSITION_TEX_COLOR)
+                .withPrimitiveTopology(PrimitiveTopology.QUADS)
                 .build());
     }
 
@@ -164,13 +171,14 @@ public final class SimRenderTypes {
                 .withLocation(Simulated.path("pipeline/" + name))
                 .withVertexShader(Simulated.path("core/laser"))
                 .withFragmentShader(Simulated.path("core/laser"))
-                .withUniform("DynamicTransforms", UniformType.UNIFORM_BUFFER)
-                .withUniform("Projection", UniformType.UNIFORM_BUFFER)
-                .withUniform("Fog", UniformType.UNIFORM_BUFFER)
-                .withBlend(blend)
+                .withBindGroupLayout(BindGroupLayouts.DYNAMIC_TRANSFORMS)
+                .withBindGroupLayout(BindGroupLayouts.PROJECTION)
+                .withBindGroupLayout(BindGroupLayouts.FOG)
+                .withColorTargetState(new ColorTargetState(blend))
                 .withCull(false)
-                .withDepthWrite(false)
-                .withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS)
+                .withDepthStencilState(new DepthStencilState(CompareOp.LESS_THAN, false))
+                .withVertexBinding(0, DefaultVertexFormat.POSITION_TEX_COLOR)
+                .withPrimitiveTopology(PrimitiveTopology.QUADS)
                 .build());
     }
 
@@ -180,16 +188,17 @@ public final class SimRenderTypes {
                 .withLocation(Simulated.path("pipeline/" + name))
                 .withVertexShader("core/block")
                 .withFragmentShader("core/block")
-                .withUniform("DynamicTransforms", UniformType.UNIFORM_BUFFER)
-                .withUniform("Projection", UniformType.UNIFORM_BUFFER)
-                .withUniform("Fog", UniformType.UNIFORM_BUFFER)
-                .withUniform("Lighting", UniformType.UNIFORM_BUFFER)
-                .withSampler("Sampler0")
-                .withSampler("Sampler2")
+                .withBindGroupLayout(BindGroupLayouts.DYNAMIC_TRANSFORMS)
+                .withBindGroupLayout(BindGroupLayouts.PROJECTION)
+                .withBindGroupLayout(BindGroupLayouts.FOG)
+                .withBindGroupLayout(BindGroupLayouts.LIGHTING)
+                .withBindGroupLayout(BindGroupLayouts.SAMPLER0_SAMPLER2)
                 .withShaderDefine("ALPHA_CUTOUT", 0.1f)
-                .withVertexFormat(format, VertexFormat.Mode.QUADS);
+                .withVertexBinding(0, format)
+                .withPrimitiveTopology(PrimitiveTopology.QUADS);
         if (translucent) {
-            builder.withBlend(BlendFunction.TRANSLUCENT).withDepthWrite(false);
+            builder.withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
+                    .withDepthStencilState(new DepthStencilState(CompareOp.LESS_THAN, false));
         }
         return builder.build();
     }

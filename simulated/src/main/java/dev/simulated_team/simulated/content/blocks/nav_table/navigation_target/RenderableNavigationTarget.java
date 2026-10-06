@@ -5,7 +5,6 @@ import dev.simulated_team.simulated.content.blocks.nav_table.NavTableBlockEntity
 import dev.simulated_team.simulated.content.blocks.nav_table.NavTableRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;

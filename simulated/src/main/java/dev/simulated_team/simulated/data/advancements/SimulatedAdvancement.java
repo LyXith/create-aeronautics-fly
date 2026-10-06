@@ -3,6 +3,7 @@ package dev.simulated_team.simulated.data.advancements;
 import com.tterrag.registrate.util.entry.ItemProviderEntry;
 import dev.simulated_team.simulated.util.SimColors;
 import net.minecraft.advancements.*;
+import net.minecraft.advancements.triggers.Criterion;
 import net.minecraft.advancements.triggers.InventoryChangeTrigger;
 import net.minecraft.advancements.predicates.ItemPredicate;
 import net.minecraft.advancements.triggers.ItemUsedOnLocationTrigger;
@@ -16,6 +17,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -125,15 +127,28 @@ public class SimulatedAdvancement {
         for (int index = 0; index < this.configuration.criteria.size(); index++) {
             builder.addCriterion(String.valueOf(index), this.configuration.criteria.get(index).get());
         }
-        builder.display(this.configuration.icon.get(), Component.translatable(this.titleKey()),
-                Component.translatable(this.descriptionKey()).withStyle(s -> s.withColor(SimColors.ADVANCABLE_GOLD)),
-                id.equals("root") ? this.background : null, this.configuration.type.advancementType,
-                this.configuration.type.toast, this.configuration.type.announce, this.configuration.type.hide);
+        // 26.3：图标改为 ItemStackTemplate，背景只允许在根进阶上声明（rootDisplay），
+        // 且 Builder 不再接收 Consumer，而是 build() 直接产出 AdvancementHolder。
+        final ItemStackTemplate icon = ItemStackTemplate.fromStack(this.configuration.icon.get());
+        final Component title = Component.translatable(this.titleKey());
+        final Component description = Component.translatable(this.descriptionKey())
+                .withStyle(s -> s.withColor(SimColors.ADVANCABLE_GOLD));
+        if (id.equals("root")) {
+            builder.rootDisplay(icon, title, description, this.background,
+                    this.configuration.type.advancementType,
+                    this.configuration.type.toast, this.configuration.type.announce,
+                    this.configuration.type.hide);
+        } else {
+            builder.display(icon, title, description,
+                    this.configuration.type.advancementType,
+                    this.configuration.type.toast, this.configuration.type.announce,
+                    this.configuration.type.hide);
+        }
         if (this.parent != null)
             builder.parent(this.parent.datagenResult);
 
-        this.datagenResult = builder.save(t, Identifier.fromNamespaceAndPath(this.modid, this.id)
-                .toString());
+        this.datagenResult = builder.build(Identifier.fromNamespaceAndPath(this.modid, this.id));
+        t.accept(this.datagenResult);
     }
 
     public void provideLang(final BiConsumer<String, String> consumer) {

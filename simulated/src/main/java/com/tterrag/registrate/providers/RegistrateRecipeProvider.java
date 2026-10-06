@@ -7,15 +7,18 @@ import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import io.github.fabricators_of_create.porting_lib.tags.Tags;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
-import net.minecraft.advancements.Criterion;
+import net.minecraft.advancements.triggers.Criterion;
 import net.minecraft.advancements.triggers.EnterBlockTrigger;
 import net.minecraft.advancements.triggers.InventoryChangeTrigger;
 import net.minecraft.advancements.predicates.ItemPredicate;
 import net.minecraft.advancements.predicates.MinMaxBounds;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.BlockFamily;
@@ -23,6 +26,7 @@ import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
@@ -36,6 +40,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.BlastingRecipe;
 import net.minecraft.world.item.crafting.CampfireCookingRecipe;
+import net.minecraft.world.item.crafting.CookingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -50,18 +55,21 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
- * Registrate's recipe runner and callback facade for the post-1.21 recipe API.
- * Vanilla split recipe generation into a {@link RecipeProvider.Runner} and a
- * registry-aware {@link RecipeProvider}; this class keeps Registrate's existing
- * callback type while delegating the actual generation to the latter.
+ * Registrate's recipe callback facade on top of 26.3's datagen API.
+ * <p>
+ * 1.21.1 时代的 {@code RecipeProvider.Runner} 已被移除：Fabric 现在提供
+ * {@link FabricRecipeProvider}，由它构造两个 {@link BootstrapContext}
+ * （配方 + 进阶）并交给 {@link #createRecipeProvider}。Registrate 保持原有的
+ * {@link RecipeOutput} 回调类型，把实际写入转发给内层 {@link Delegate}——
+ * 后者继承的 {@code RecipeProvider#output} 正是把配方注册进
+ * {@code BootstrapContext<Recipe<?>>} 的桥接对象。
  */
-public class RegistrateRecipeProvider extends RecipeProvider.Runner implements RegistrateProvider, RecipeOutput {
+public class RegistrateRecipeProvider extends FabricRecipeProvider implements RegistrateProvider, RecipeOutput {
     private final AbstractRegistrate<?> owner;
 
-    @Nullable
-    private RecipeOutput output;
     @Nullable
     private Delegate delegate;
 
@@ -72,15 +80,21 @@ public class RegistrateRecipeProvider extends RecipeProvider.Runner implements R
     }
 
     @Override
-    protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries, RecipeOutput output) {
-        this.output = output;
-        this.delegate = new Delegate(registries);
-        return delegate;
+    protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries,
+                                                  BootstrapContext<Recipe<?>> recipeContext,
+                                                  BootstrapContext<Advancement> advancementContext) {
+        this.delegate = new Delegate(registries, recipeContext, advancementContext);
+        return this.delegate;
     }
 
     private final class Delegate extends RecipeProvider {
-        private Delegate(HolderLookup.Provider registries) {
-            super(registries, RegistrateRecipeProvider.this);
+        private final HolderLookup.Provider registries;
+
+        private Delegate(HolderLookup.Provider registries,
+                         BootstrapContext<Recipe<?>> recipeContext,
+                         BootstrapContext<Advancement> advancementContext) {
+            super(recipeContext, advancementContext);
+            this.registries = registries;
         }
 
         @Override
@@ -88,13 +102,17 @@ public class RegistrateRecipeProvider extends RecipeProvider.Runner implements R
             try {
                 owner.genData(ProviderType.RECIPE, RegistrateRecipeProvider.this);
             } finally {
-                RegistrateRecipeProvider.this.output = null;
                 RegistrateRecipeProvider.this.delegate = null;
             }
         }
 
         private HolderLookup.Provider registries() {
             return registries;
+        }
+
+        /** {@link RecipeProvider#output} 是 protected 且来自其他包，这里做一个受控出口。 */
+        private RecipeOutput recipeOutput() {
+            return this.output;
         }
     }
 
@@ -106,10 +124,7 @@ public class RegistrateRecipeProvider extends RecipeProvider.Runner implements R
     }
 
     private RecipeOutput output() {
-        if (output == null) {
-            throw new IllegalStateException("Recipe output is only available while Registrate recipes are being generated");
-        }
-        return output;
+        return delegate().recipeOutput();
     }
 
     public HolderLookup.Provider registries() {
@@ -138,9 +153,15 @@ public class RegistrateRecipeProvider extends RecipeProvider.Runner implements R
         return output().advancement();
     }
 
+    /** {@link RecipeOutput} 在 26.3 还继承了 {@link net.minecraft.data.worldgen.BootstrapContextAccess}。 */
     @Override
-    public void includeRootAdvancement() {
-        output().includeRootAdvancement();
+    public <S> HolderGetter<S> lookup(ResourceKey<? extends Registry<? extends S>> registryKey) {
+        return output().lookup(registryKey);
+    }
+
+    @Override
+    public <S> Stream<Holder.Reference<S>> listContextElements(ResourceKey<? extends Registry<? extends S>> registryKey) {
+        return output().listContextElements(registryKey);
     }
 
     @Override
@@ -214,10 +235,20 @@ public class RegistrateRecipeProvider extends RecipeProvider.Runner implements R
             DataIngredient source, RecipeCategory category, Supplier<? extends T> result,
             float experience, int cookingTime, String typeName, RecipeSerializer<S> serializer,
             AbstractCookingRecipe.Factory<S> factory) {
-        SimpleCookingRecipeBuilder.generic(source.toVanilla(this), category, result.get(), experience,
-                        cookingTime, serializer, factory)
+        // 26.3：SimpleCookingRecipeBuilder 不再接收 RecipeSerializer（序列化器由 Factory 推导），
+        // 改为要求显式声明写入配方书的 CookingBookCategory；serializer 仍用于推导配方 id 后缀。
+        SimpleCookingRecipeBuilder.generic(source.toVanilla(this), category,
+                        cookingBookCategory(category), result.get(), experience, cookingTime, factory)
                 .unlockedBy("has_" + safeName(source), source.getCriterion(this))
                 .save(this, safeId(result.get()) + "_from_" + safeName(source) + "_" + typeName);
+    }
+
+    private static CookingBookCategory cookingBookCategory(RecipeCategory category) {
+        return switch (category) {
+            case FOOD -> CookingBookCategory.FOOD;
+            case BUILDING_BLOCKS, DECORATIONS, REDSTONE, TRANSPORTATION -> CookingBookCategory.BLOCKS;
+            case BREWING, COMBAT, TOOLS, MISC -> CookingBookCategory.MISC;
+        };
     }
 
     public <T extends ItemLike> void smelting(DataIngredient source, RecipeCategory category,

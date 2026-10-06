@@ -63,8 +63,11 @@ public final class SimulatedFabric implements ModInitializer {
                 SimulatedCommonEvents.onChunkLoad(level, chunk, true));
         ServerTickEvents.END_WORLD_TICK.register(SimulatedCommonEvents::onServerTickEnd);
         ServerLifecycleEvents.SERVER_STARTED.register(server ->
-                FabricSimItemService.setServerFuels(server.fuelValues()));
-        ServerLifecycleEvents.SERVER_STOPPED.register(SimulatedCommonEvents::onServerStopped);
+                FabricSimItemService.setServer(server));
+        ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
+                FabricSimItemService.setServer(null);
+                SimulatedCommonEvents.onServerStopped(server);
+        });
         ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.register((player, joined) ->
                 EndSeaPhysicsData.syncDataPacket(packet -> player.connection.send(packet)));
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) ->
