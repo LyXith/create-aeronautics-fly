@@ -20,8 +20,8 @@ public class BlockModelProvider {
     }
 
     public ModelBuilder getBuilder(final String name) {
-        final ModelBuilder builder = new ModelBuilder(modLoc(name));
-        this.generatedModels.put(modLoc(name), builder);
+        final ModelBuilder builder = new ModelBuilder(modLoc("block/" + name));
+        this.generatedModels.put(modLoc("block/" + name), builder);
         return builder;
     }
 

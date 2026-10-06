@@ -19,11 +19,15 @@ public class ConfiguredModel implements IGeneratedBlockState {
     }
 
     public static <T> Builder<T> builder() {
-        return new Builder<>(null);
+        return new Builder<>(null, null);
     }
 
-    static <T> Builder<T> builder(final T owner) {
-        return new Builder<>(owner);
+    public static <T> Builder<T> builder(final T owner) {
+        return new Builder<>(owner, null);
+    }
+
+    static <T> Builder<T> builder(final T owner, final java.util.function.Consumer<ConfiguredModel> onAddModel) {
+        return new Builder<>(owner, onAddModel);
     }
 
     public static ConfiguredModel[] single(final ModelFile model) {
@@ -54,8 +58,8 @@ public class ConfiguredModel implements IGeneratedBlockState {
     @Override
     public JsonElement toJSON() {
         final JsonObject json = new JsonObject();
-        if (this.model != null) {
-            json.add("model", this.model.toJSON());
+        if (this.model != null && this.model.getLocation() != null) {
+            json.addProperty("model", this.model.getLocation().toString());
         }
         if (this.x != 0) {
             json.addProperty("x", this.x);
@@ -75,10 +79,12 @@ public class ConfiguredModel implements IGeneratedBlockState {
     public static class Builder<T> {
         private final T owner;
         private final ConfiguredModel model;
+        private final java.util.function.Consumer<ConfiguredModel> onAddModel;
 
-        Builder(final T owner) {
+        Builder(final T owner, final java.util.function.Consumer<ConfiguredModel> onAddModel) {
             this.owner = owner;
             this.model = new ConfiguredModel(null);
+            this.onAddModel = onAddModel;
         }
 
         public Builder<T> modelFile(final ModelFile file) {

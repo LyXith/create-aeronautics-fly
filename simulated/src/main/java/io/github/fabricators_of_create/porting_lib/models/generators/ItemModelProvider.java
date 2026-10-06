@@ -6,12 +6,15 @@ import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.Identifier;
 
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Porting-Lib 没有 26.3 版本，本地桩实现。
+ * Porting-Lib 没有 26.3 版本，本地实现。
  */
 public class ItemModelProvider implements DataProvider {
     protected final PackOutput output;
@@ -28,9 +31,15 @@ public class ItemModelProvider implements DataProvider {
     protected void registerModels() {
     }
 
+    /**
+     * 模型 id 必须落在 {@code <modid>:item/<name>}：
+     * {@code com.tterrag.registrate.providers.RegistrateItemModelProvider} 会据此把物品定义写进
+     * {@code assets/<ns>/items/<name>.json}，模型本体则写进
+     * {@code assets/<ns>/models/item/<name>.json}。
+     */
     public ItemModelBuilder getBuilder(final String name) {
-        final ItemModelBuilder builder = new ItemModelBuilder(modLoc(name));
-        this.generatedModels.put(modLoc(name), builder);
+        final ItemModelBuilder builder = new ItemModelBuilder(modLoc("item/" + name));
+        this.generatedModels.put(modLoc("item/" + name), builder);
         return builder;
     }
 
@@ -57,7 +66,14 @@ public class ItemModelProvider implements DataProvider {
     @Override
     public CompletableFuture<?> run(final CachedOutput cache) {
         registerModels();
-        return CompletableFuture.completedFuture(null);
+
+        final List<CompletableFuture<?>> futures = new ArrayList<>();
+        final Path assets = this.output.getOutputFolder(PackOutput.Target.RESOURCE_PACK);
+        for (final Map.Entry<Identifier, ItemModelBuilder> entry : this.generatedModels.entrySet()) {
+            futures.add(DataProvider.saveStable(cache, entry.getValue().toJSON(),
+                    assets.resolve("models").resolve(entry.getKey().getPath() + ".json")));
+        }
+        return CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new));
     }
 
     @Override

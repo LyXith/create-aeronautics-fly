@@ -152,7 +152,7 @@ public class RegistrateItemModelProvider extends ItemModelProvider implements Re
     }
 
     public void customItemModel(String itemName, Identifier modelType) {
-        customItemModels.put(modLoc(itemName), modelType);
+        customItemModels.put(modLoc("item/" + itemName), modelType);
     }
 
     public String modid(NonNullSupplier<? extends ItemLike> item) {

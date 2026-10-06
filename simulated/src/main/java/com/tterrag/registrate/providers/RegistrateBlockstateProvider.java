@@ -40,7 +40,7 @@ public class RegistrateBlockstateProvider extends BlockStateProvider implements 
     public void simpleBlock(final Block block) {
         if (SimRenderLayers.requiresForceTranslucent(block)) {
             final String name = BuiltInRegistries.BLOCK.getKey(block).getPath();
-            final ModelBuilder model = models().withExistingParent("block/" + name, "block/cube_all")
+            final ModelBuilder model = models().withExistingParent(name, "block/cube_all")
                     .texture("all", blockTexture(block));
             model.forceTranslucent("all");
             super.simpleBlock(block, model);
