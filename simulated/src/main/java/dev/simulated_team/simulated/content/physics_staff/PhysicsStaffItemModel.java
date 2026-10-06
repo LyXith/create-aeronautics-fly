@@ -1,5 +1,9 @@
 package dev.simulated_team.simulated.content.physics_staff;
 
+import org.joml.Matrix4fc;
+
+import net.minecraft.client.resources.model.geometry.ItemQuads;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.mojang.serialization.MapCodec;
@@ -105,13 +109,13 @@ public final class PhysicsStaffItemModel implements ItemModel, SpecialModelRende
         final Consumer<PoseStack> commonTransform = matrices -> applyCommonTransform(
                 matrices, displayContext, handler, player, minecraft, partialTicks, animation.tilt());
 
-        addLayer(state, displayContext, item, Sheets.cutoutBlockItemSheet(), foil, commonTransform, -1, false, partialTicks);
-        addLayer(state, displayContext, core, SimRenderTypes.itemGlowingSolid(shadersActive),
+        addLayer(state, displayContext, item, foil, commonTransform, -1, false, partialTicks);
+        addLayer(state, displayContext, core,
                 ItemStackRenderState.FoilType.NONE, commonTransform, LightCoordsUtil.FULL_BRIGHT, false, partialTicks);
-        addLayer(state, displayContext, coreGlow, SimRenderTypes.itemGlowingTranslucent(shadersActive),
+        addLayer(state, displayContext, coreGlow,
                 ItemStackRenderState.FoilType.NONE, commonTransform, LightCoordsUtil.FULL_BRIGHT, false, partialTicks);
 
-        addLayer(state, displayContext, ring, Sheets.cutoutBlockItemSheet(), ItemStackRenderState.FoilType.NONE,
+        addLayer(state, displayContext, ring, ItemStackRenderState.FoilType.NONE,
                 matrices -> {
                     commonTransform.accept(matrices);
                     matrices.translate(0, 6.5 / 16.0, 0);
@@ -119,7 +123,7 @@ public final class PhysicsStaffItemModel implements ItemModel, SpecialModelRende
 
         for (int side = 0; side < 2; side++) {
             final int currentSide = side;
-            addLayer(state, displayContext, sigma, Sheets.cutoutBlockItemSheet(), ItemStackRenderState.FoilType.NONE,
+            addLayer(state, displayContext, sigma, ItemStackRenderState.FoilType.NONE,
                     matrices -> {
                         commonTransform.accept(matrices);
                         matrices.translate(0, 9 / 16.0, 0);
@@ -142,15 +146,15 @@ public final class PhysicsStaffItemModel implements ItemModel, SpecialModelRende
                 orientation.m30(0).m31(0).m32(0);
                 orientation.invert();
                 orientation.rotate(handler.lastCubeOrientation);
-                matrices.rotate(orientation);
+                matrices.mulPose(orientation);
             }
             matrices.scale(animation.cubeScale(), animation.cubeScale(), animation.cubeScale());
         };
 
-        addLayer(state, displayContext, innerCube, SimRenderTypes.itemGlowingSolid(shadersActive),
+        addLayer(state, displayContext, innerCube,
                 ItemStackRenderState.FoilType.NONE, cubeTransform, LightCoordsUtil.FULL_BRIGHT,
                 displayContext.firstPerson() || captureBodyFocus, partialTicks);
-        addLayer(state, displayContext, outerCube, SimRenderTypes.itemGlowingTranslucent(shadersActive),
+        addLayer(state, displayContext, outerCube,
                 ItemStackRenderState.FoilType.NONE, matrices -> {
                     cubeTransform.accept(matrices);
                     matrices.scale(1.2f, 1.2f, 1.2f);
@@ -233,7 +237,6 @@ public final class PhysicsStaffItemModel implements ItemModel, SpecialModelRende
             final ItemStackRenderState state,
             final ItemDisplayContext displayContext,
             final BakedItemModelPart part,
-            final RenderType renderType,
             final ItemStackRenderState.FoilType foil,
             final Consumer<PoseStack> transform,
             final int lightOverride,
@@ -241,19 +244,18 @@ public final class PhysicsStaffItemModel implements ItemModel, SpecialModelRende
             final float partialTicks
     ) {
         final LayerRenderState layer = state.newLayer();
-        layer.setRenderType(renderType);
         layer.setExtents(part.extents());
         item.properties().applyToLayer(layer, displayContext);
-        layer.prepareQuadList().addAll(part.quads());
+        layer.setQuads(ItemQuads.split(part.quads()));
         layer.setFoilType(foil);
         layer.setupSpecialModel(this,
-                new RenderData(layer, renderType, foil, transform, lightOverride, captureFocus, partialTicks));
+                new RenderData(layer, ItemQuads.split(part.quads()), displayContext, foil,
+                        transform, lightOverride, captureFocus, partialTicks));
     }
 
     @Override
     public void submit(
             final RenderData data,
-            final ItemDisplayContext displayContext,
             final PoseStack matrices,
             final SubmitNodeCollector queue,
             final int light,
@@ -265,7 +267,7 @@ public final class PhysicsStaffItemModel implements ItemModel, SpecialModelRende
         matrices.translate(0.5, 0.5, 0.5);
         data.transform().accept(matrices);
         if (data.captureFocus()) {
-            if (displayContext.firstPerson()) {
+            if (data.displayContext().firstPerson()) {
                 PhysicsStaffItemRenderer.captureFirstPersonFocus(
                         matrices, Minecraft.getInstance(), data.partialTicks());
             } else {
@@ -276,13 +278,12 @@ public final class PhysicsStaffItemModel implements ItemModel, SpecialModelRende
         matrices.translate(-0.5, -0.5, -0.5);
         queue.submitItem(
                 matrices,
-                displayContext,
+                data.displayContext(),
                 data.lightOverride() < 0 ? light : data.lightOverride(),
                 overlay,
-                0,
-                data.layer().prepareTintLayers(0),
-                data.layer().prepareQuadList(),
-                data.renderType(),
+                seed,
+                data.layer().tintLayers().toArray(ItemStackRenderState.LayerRenderState.EMPTY_TINTS),
+                data.quads(),
                 data.foil()
         );
         matrices.popPose();
@@ -304,7 +305,8 @@ public final class PhysicsStaffItemModel implements ItemModel, SpecialModelRende
 
     public record RenderData(
             LayerRenderState layer,
-            RenderType renderType,
+            ItemQuads quads,
+            ItemDisplayContext displayContext,
             ItemStackRenderState.FoilType foil,
             Consumer<PoseStack> transform,
             int lightOverride,
@@ -333,7 +335,7 @@ public final class PhysicsStaffItemModel implements ItemModel, SpecialModelRende
         }
 
         @Override
-        public ItemModel bake(final ItemModel.BakingContext context) {
+        public ItemModel bake(final ItemModel.BakingContext context, final Matrix4fc matrix) {
             final ModelBaker baker = context.blockModelBaker();
             return new PhysicsStaffItemModel(
                     BakedItemModelPart.bake(baker, ITEM),

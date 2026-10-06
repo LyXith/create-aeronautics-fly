@@ -2,9 +2,6 @@ package dev.simulated_team.simulated.content.items.plunger_launcher;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.zurrtum.create.client.content.equipment.zapper.ShootableGadgetRenderHandler;
-import com.zurrtum.create.foundation.item.render.CustomRenderedItemModel;
-import com.zurrtum.create.foundation.item.render.CustomRenderedItemModelRenderer;
-import com.zurrtum.create.foundation.item.render.PartialItemModelRenderer;
 import com.zurrtum.create.infrastructure.particle.AirParticleData;
 import com.zurrtum.create.client.flywheel.lib.transform.TransformStack;
 import dev.simulated_team.simulated.client.render.FirstPersonItemFocus;
@@ -38,7 +35,7 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-public class PlungerLauncherItemRenderer extends CustomRenderedItemModelRenderer {
+public class PlungerLauncherItemRenderer {
 
     private static final FirstPersonItemFocus FIRST_PERSON_FOCUS = new FirstPersonItemFocus();
     private static final Map<AbstractClientPlayer, EnumMap<HumanoidArm, Vec3>> THIRD_PERSON_FOCUS = new WeakHashMap<>();
@@ -78,35 +75,6 @@ public class PlungerLauncherItemRenderer extends CustomRenderedItemModelRenderer
                                               final boolean rotateProjectedForShader) {
         return FIRST_PERSON_FOCUS.resolveCameraRelative(partialTicks, rotateProjectedForShader)
                 .add(Minecraft.getInstance().gameRenderer.mainCamera().position());
-    }
-
-    @Override
-    protected void render(final ItemStack stack, final CustomRenderedItemModel model, final PartialItemModelRenderer renderer, final ItemDisplayContext transformType, final PoseStack ms, final SubmitNodeCollector buffer, final int light, final int overlay) {
-        ms.scale(0.8f, 0.8f, 0.8f);
-        ms.translate(0, 0, 0.15f);
-        renderer.render(model.getOriginalModel(), light);
-
-        final LocalPlayer player = Minecraft.getInstance().player;
-        final DeltaTracker timer = Minecraft.getInstance().getDeltaTracker();
-        final float partialTicks = timer.getGameTimeDeltaPartialTick(false);
-
-        final PlayerLaunchedPlungerExtension duck = (PlayerLaunchedPlungerExtension) player;
-
-        final LaunchedPlungerEntity plunger = duck.simulated$getLaunchedPlunger();
-        if (player.getCooldowns().getCooldownPercent(stack, partialTicks) <= 0.6f || (plunger != null && plunger.getOther() == null)) {
-            if ((plunger == null || plunger.isRemoved() || plunger.getOther() != null) && player.getCooldowns().getCooldownPercent(stack, partialTicks) <= 0.4f) {
-                this.renderPlunger(ms, buffer, light, true);
-            }
-
-            this.renderPlunger(ms, buffer, light, false);
-        }
-
-        ms.translate(2 / 16f, -1 / 16f, -5 / 16f);
-        ms.translate(0, 0, 3 / 16f);
-
-        if (transformType.firstPerson()) {
-            captureFirstPersonFocus(ms, Minecraft.getInstance(), partialTicks);
-        }
     }
 
     private void renderPlunger(final PoseStack ms, final SubmitNodeCollector buffer, final int light, final boolean first) {

@@ -178,33 +178,35 @@ public class PhysicsStaffRenderHandler {
         final Pose3dc renderPose = subLevel.renderPose(partialTicks);
         final Vec3[] localCorners = createCorners(minX, minY, minZ, maxX, maxY, maxZ);
 
-        final VertexConsumer faceBuffer = bufferSource.getBuffer(SimRenderTypes.staffSelectionFace());
-        for (int faceIndex = 0; faceIndex < BOX_FACES.length; faceIndex++) {
-            final Vec3 localNormal = BOX_FACE_NORMALS[faceIndex];
-            final Vec3 faceOffset = localNormal.scale(SELECTION_FACE_OFFSET);
-            final Vec3[] faceVertices = new Vec3[4];
-            for (int vertex = 0; vertex < faceVertices.length; vertex++) {
-                faceVertices[vertex] = renderPose
-                        .transformPosition(localCorners[BOX_FACES[faceIndex][vertex]].add(faceOffset))
-                        .subtract(cameraPos);
+        bufferSource.submitCustomGeometry(ps, SimRenderTypes.staffSelectionFace(), (facePose, faceBuffer) -> {
+            for (int faceIndex = 0; faceIndex < BOX_FACES.length; faceIndex++) {
+                final Vec3 localNormal = BOX_FACE_NORMALS[faceIndex];
+                final Vec3 faceOffset = localNormal.scale(SELECTION_FACE_OFFSET);
+                final Vec3[] faceVertices = new Vec3[4];
+                for (int vertex = 0; vertex < faceVertices.length; vertex++) {
+                    faceVertices[vertex] = renderPose
+                            .transformPosition(localCorners[BOX_FACES[faceIndex][vertex]].add(faceOffset))
+                            .subtract(cameraPos);
+                }
+                final Vec3 worldNormal = renderPose.transformNormal(localNormal);
+                bufferFaceQuad(facePose, faceBuffer, faceVertices, worldNormal, SELECTION_FACE_COLOR);
             }
-            final Vec3 worldNormal = renderPose.transformNormal(localNormal);
-            bufferFaceQuad(ps.last(), faceBuffer, faceVertices, worldNormal, SELECTION_FACE_COLOR);
-        }
+        });
 
-        final VertexConsumer edgeBuffer = bufferSource.getBuffer(SimRenderTypes.staffSelectionEdge());
-        final double halfWidth = SELECTION_LINE_WIDTH * 0.5;
-        for (final int[] edge : BOX_EDGES) {
-            final Vec3 start = localCorners[edge[0]];
-            final Vec3 end = localCorners[edge[1]];
-            bufferCuboid(ps.last(), edgeBuffer, renderPose, cameraPos,
-                    Math.min(start.x, end.x) - halfWidth,
-                    Math.min(start.y, end.y) - halfWidth,
-                    Math.min(start.z, end.z) - halfWidth,
-                    Math.max(start.x, end.x) + halfWidth,
-                    Math.max(start.y, end.y) + halfWidth,
-                    Math.max(start.z, end.z) + halfWidth);
-        }
+        bufferSource.submitCustomGeometry(ps, SimRenderTypes.staffSelectionEdge(), (edgePose, edgeBuffer) -> {
+            final double halfWidth = SELECTION_LINE_WIDTH * 0.5;
+            for (final int[] edge : BOX_EDGES) {
+                final Vec3 start = localCorners[edge[0]];
+                final Vec3 end = localCorners[edge[1]];
+                bufferCuboid(edgePose, edgeBuffer, renderPose, cameraPos,
+                        Math.min(start.x, end.x) - halfWidth,
+                        Math.min(start.y, end.y) - halfWidth,
+                        Math.min(start.z, end.z) - halfWidth,
+                        Math.max(start.x, end.x) + halfWidth,
+                        Math.max(start.y, end.y) + halfWidth,
+                        Math.max(start.z, end.z) + halfWidth);
+            }
+        });
     }
 
     private static Vec3[] createCorners(final double minX, final double minY, final double minZ,
@@ -279,14 +281,13 @@ public class PhysicsStaffRenderHandler {
             ps.translate(renderPos.x() - cameraPos.x(), renderPos.y() - cameraPos.y(), renderPos.z() - cameraPos.z());
             ps.rotate(client.gameRenderer.mainCamera().rotation());
 
-            final VertexConsumer buffer = bufferSource.getBuffer(SimRenderTypes.lock());
-
-            final PoseStack.Pose pose = ps.last();
-            final int color = 0xffffffff;
-            buffer.addVertex(pose, 0.0f - 0.5f, 0.0f - 0.5f, 0.0f).setColor(color).setUv(0.0f, 1.0f).setLight(LightCoordsUtil.FULL_BRIGHT);
-            buffer.addVertex(pose, 0.0f - 0.5f, 1.0f - 0.5f, 0.0f).setColor(color).setUv(0.0f, 0.0f).setLight(LightCoordsUtil.FULL_BRIGHT);
-            buffer.addVertex(pose, 1.0f - 0.5f, 1.0f - 0.5f, 0.0f).setColor(color).setUv(1.0f, 0.0f).setLight(LightCoordsUtil.FULL_BRIGHT);
-            buffer.addVertex(pose, 1.0f - 0.5f, 0.0f - 0.5f, 0.0f).setColor(color).setUv(1.0f, 1.0f).setLight(LightCoordsUtil.FULL_BRIGHT);
+            bufferSource.submitCustomGeometry(ps, SimRenderTypes.lock(), (pose, buffer) -> {
+                final int color = 0xffffffff;
+                buffer.addVertex(pose, 0.0f - 0.5f, 0.0f - 0.5f, 0.0f).setColor(color).setUv(0.0f, 1.0f).setLight(LightCoordsUtil.FULL_BRIGHT);
+                buffer.addVertex(pose, 0.0f - 0.5f, 1.0f - 0.5f, 0.0f).setColor(color).setUv(0.0f, 0.0f).setLight(LightCoordsUtil.FULL_BRIGHT);
+                buffer.addVertex(pose, 1.0f - 0.5f, 1.0f - 0.5f, 0.0f).setColor(color).setUv(1.0f, 0.0f).setLight(LightCoordsUtil.FULL_BRIGHT);
+                buffer.addVertex(pose, 1.0f - 0.5f, 0.0f - 0.5f, 0.0f).setColor(color).setUv(1.0f, 1.0f).setLight(LightCoordsUtil.FULL_BRIGHT);
+            });
 
             ps.popPose();
         }

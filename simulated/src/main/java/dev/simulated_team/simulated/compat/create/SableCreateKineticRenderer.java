@@ -1,7 +1,6 @@
 package dev.simulated_team.simulated.compat.create;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.zurrtum.create.AllBlocks;
 import com.zurrtum.create.client.AllPartialModels;
 import com.zurrtum.create.catnip.math.AngleHelper;
@@ -66,7 +65,7 @@ public final class SableCreateKineticRenderer {
                     direction,
                     color,
                     poseStack,
-                    consumer,
+                    bufferSource,
                     light
             );
             renderRotating(
@@ -76,14 +75,18 @@ public final class SableCreateKineticRenderer {
                             state,
                             direction
                     ),
-                    BracketedKineticBlockEntityRenderer.getAngleForLargeCogShaft(
+                    KineticBlockEntityRenderer.getAngleForBe(
                             kinetic,
+                            kinetic.getBlockPos(),
                             axis
+                    ) + BracketedKineticBlockEntityRenderer.getShaftAngleOffset(
+                            axis,
+                            kinetic.getBlockPos()
                     ),
                     direction,
                     color,
                     poseStack,
-                    consumer,
+                    bufferSource,
                     light
             );
             return;
@@ -166,12 +169,12 @@ public final class SableCreateKineticRenderer {
             final Direction direction,
             final Color color,
             final PoseStack poseStack,
-            final VertexConsumer consumer,
+            final SubmitNodeCollector collector,
             final int light
     ) {
         model.light(light)
                 .rotateCentered(angle, direction)
                 .color(color)
-                .submit(poseStack, bufferSource);
+                .submit(poseStack, collector);
     }
 }

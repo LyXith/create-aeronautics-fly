@@ -1,5 +1,9 @@
 package dev.simulated_team.simulated.content.items.plunger_launcher;
 
+import org.joml.Matrix4fc;
+
+import net.minecraft.client.resources.model.geometry.ItemQuads;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.serialization.MapCodec;
 import dev.simulated_team.simulated.Simulated;
@@ -87,7 +91,7 @@ public final class PlungerLauncherItemModel implements ItemModel, SpecialModelRe
             matrices.translate(0, 0, 0.15f);
         };
 
-        addLayer(state, displayContext, item, Sheets.cutoutBlockItemSheet(), foil,
+        addLayer(state, displayContext, item, foil,
                 commonTransform, true, displayContext.firstPerson() || captureWorldFocus, partialTicks, focusOwner);
 
         boolean renderFirst = player == null;
@@ -134,11 +138,11 @@ public final class PlungerLauncherItemModel implements ItemModel, SpecialModelRe
         };
 
         // Unlike the launcher base, these partials are authored around [0, 0, 0].
-        addLayer(state, displayContext, body, Sheets.cutoutBlockItemSheet(),
+        addLayer(state, displayContext, body,
                 ItemStackRenderState.FoilType.NONE, bodyTransform, false, false, 0, null);
-        addLayer(state, displayContext, joint, Sheets.cutoutBlockItemSheet(),
+        addLayer(state, displayContext, joint,
                 ItemStackRenderState.FoilType.NONE, bodyTransform, false, false, 0, null);
-        addLayer(state, displayContext, spool, Sheets.cutoutBlockItemSheet(),
+        addLayer(state, displayContext, spool,
                 ItemStackRenderState.FoilType.NONE, matrices -> {
                     bodyTransform.accept(matrices);
                     matrices.translate(0, 0, 3 / 16.0);
@@ -149,7 +153,6 @@ public final class PlungerLauncherItemModel implements ItemModel, SpecialModelRe
             final ItemStackRenderState state,
             final ItemDisplayContext displayContext,
             final BakedItemModelPart part,
-            final RenderType renderType,
             final ItemStackRenderState.FoilType foil,
             final Consumer<PoseStack> transform,
             final boolean centerQuads,
@@ -158,19 +161,18 @@ public final class PlungerLauncherItemModel implements ItemModel, SpecialModelRe
             @Nullable final AbstractClientPlayer focusOwner
     ) {
         final LayerRenderState layer = state.newLayer();
-        layer.setRenderType(renderType);
         layer.setExtents(part.extents());
         item.properties().applyToLayer(layer, displayContext);
-        layer.prepareQuadList().addAll(part.quads());
+        layer.setQuads(ItemQuads.split(part.quads()));
         layer.setFoilType(foil);
         layer.setupSpecialModel(this,
-                new RenderData(layer, renderType, foil, transform, centerQuads, captureFocus, partialTicks, focusOwner));
+                new RenderData(layer, ItemQuads.split(part.quads()), displayContext, foil,
+                        transform, centerQuads, captureFocus, partialTicks, focusOwner));
     }
 
     @Override
     public void submit(
             final RenderData data,
-            final ItemDisplayContext displayContext,
             final PoseStack matrices,
             final SubmitNodeCollector queue,
             final int light,
@@ -186,13 +188,13 @@ public final class PlungerLauncherItemModel implements ItemModel, SpecialModelRe
             // The tether spool is rendered two sixteenths in front of the
             // launcher body; capture its center so the world rope meets it.
             matrices.translate(2 / 16.0, -1 / 16.0, -2 / 16.0);
-            if (displayContext.firstPerson()) {
+            if (data.displayContext().firstPerson()) {
                 PlungerLauncherItemRenderer.captureFirstPersonFocus(
                         matrices, Minecraft.getInstance(), data.partialTicks());
             } else {
                 PlungerLauncherItemRenderer.captureThirdPersonFocus(
-                        data.focusOwner(), displayContext, matrices, data.partialTicks());
-                if (FirstPersonItemFocus.isLocalPlayerBodyRender(displayContext, data.focusOwner(), Minecraft.getInstance())) {
+                        data.focusOwner(), data.displayContext(), matrices, data.partialTicks());
+                if (FirstPersonItemFocus.isLocalPlayerBodyRender(data.displayContext(), data.focusOwner(), Minecraft.getInstance())) {
                     PlungerLauncherItemRenderer.captureFirstPersonBodyFocus(matrices);
                 }
             }
@@ -204,13 +206,12 @@ public final class PlungerLauncherItemModel implements ItemModel, SpecialModelRe
         }
         queue.submitItem(
                 matrices,
-                displayContext,
+                data.displayContext(),
                 light,
                 overlay,
-                0,
-                data.layer().prepareTintLayers(0),
-                data.layer().prepareQuadList(),
-                data.renderType(),
+                seed,
+                data.layer().tintLayers().toArray(ItemStackRenderState.LayerRenderState.EMPTY_TINTS),
+                data.quads(),
                 data.foil()
         );
         matrices.popPose();
@@ -229,7 +230,8 @@ public final class PlungerLauncherItemModel implements ItemModel, SpecialModelRe
 
     public record RenderData(
             LayerRenderState layer,
-            RenderType renderType,
+            ItemQuads quads,
+            ItemDisplayContext displayContext,
             ItemStackRenderState.FoilType foil,
             Consumer<PoseStack> transform,
             boolean centerQuads,
@@ -256,7 +258,7 @@ public final class PlungerLauncherItemModel implements ItemModel, SpecialModelRe
         }
 
         @Override
-        public ItemModel bake(final ItemModel.BakingContext context) {
+        public ItemModel bake(final ItemModel.BakingContext context, final Matrix4fc matrix) {
             final ModelBaker baker = context.blockModelBaker();
             return new PlungerLauncherItemModel(
                     BakedItemModelPart.bake(baker, ITEM),
