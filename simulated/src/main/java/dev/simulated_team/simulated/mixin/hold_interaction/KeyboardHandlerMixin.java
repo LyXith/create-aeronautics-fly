@@ -33,6 +33,17 @@ public class KeyboardHandlerMixin {
         }
     }
 
+    // 26.3: keyPress 一共有 6 个 return。没有打开屏幕时：
+    //  - PRESS/REPEAT 走到最后一个 return（1078，在 KeyMapping.set(key, true) 之后）
+    //  - RELEASE 却在 KeyMapping.set(key, false)（867）之后于 870 提前 return
+    // 所以 @At("TAIL") 永远收不到 RELEASE：打字机不会发出释放包（服务端的
+    // onKeyInteraction(pressed=false) 从不执行，红石信号永久保持点亮）、UNTAP 不响、
+    // 按键模型也不复位。RETURN#4 即 870 那个 return。
+    @Inject(method = "keyPress", at = @At(value = "RETURN", ordinal = 4))
+    private void simulated$postOnRelease(final long windowPointer, final int action, final KeyEvent event, final CallbackInfo ci) {
+        SimulatedCommonClientEvents.onAfterKeyPress(event.key(), event.keycode(), action, event.modifiers());
+    }
+
     @Inject(method = "keyPress", at = @At("TAIL"))
     private void simulated$postOnPress(final long windowPointer, final int action, final KeyEvent event, final CallbackInfo ci) {
         SimulatedCommonClientEvents.onAfterKeyPress(event.key(), event.keycode(), action, event.modifiers());

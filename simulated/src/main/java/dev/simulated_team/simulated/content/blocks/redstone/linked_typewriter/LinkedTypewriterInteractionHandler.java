@@ -117,19 +117,25 @@ public class LinkedTypewriterInteractionHandler {
 
         if (getMode() != Mode.SCREEN_BINDING) {
             if (be != null && !be.isRemoved()) {
-                final LinkedTypewriterEntries.KeyboardEntry frequency = be.getTypewriterEntries().getEntry(key);
-
                 if (key == InputConstants.KEY_ESCAPE) {
                     be.disconnectUser();
                     VeilPacketManager.server().sendPacket(new TypewriterDisconnectUser(be.getBlockPos()));
 
                     minecraft.gui.setScreen(null);
+                    return;
                 }
 
-                if (frequency != null) {
-                    // TODO: cache these that way we don't iterate every keypress and repeat
-                    preventPress(key, scanCode);
+                // Every key has to be swallowed while a typewriter owns the input, not just the
+                // ones carrying a linked-controller frequency: preventPress() used to be gated
+                // on frequency != null, so unbound keys (and WASD in general) still drove the
+                // vanilla movement bindings, and keys like inventory or chat popped open a screen
+                // that immediately disconnects us.
+                // TODO: cache these that way we don't iterate every keypress and repeat
+                preventPress(key, scanCode);
 
+                final LinkedTypewriterEntries.KeyboardEntry frequency = be.getTypewriterEntries().getEntry(key);
+
+                if (frequency != null) {
                     if (action != InputConstants.REPEAT) {
                         VeilPacketManager.server().sendPacket(new TypewriterKeyInteractionPacket(be.getBlockPos(), key, scanCode, action));
                     }

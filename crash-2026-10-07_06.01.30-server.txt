@@ -1,0 +1,204 @@
+---- Minecraft Crash Report ----
+// I'm sorry, Dave.
+
+Time: 2026-10-07 06:01:30
+Description: Ticking block entity
+
+java.lang.NullPointerException: Cannot invoke "net.minecraft.world.level.block.Rotation.ordinal()" because "rotation" is null
+	at knot//dev.simulated_team.simulated.util.SimAssemblyHelper.disassembleSubLevel(SimAssemblyHelper.java:55)
+	at knot//dev.simulated_team.simulated.content.blocks.merging_glue.MergingGlueBlockEntity.disassembleToPartner(MergingGlueBlockEntity.java:112)
+	at knot//dev.simulated_team.simulated.content.blocks.merging_glue.MergingGlueBlockEntity.tick(MergingGlueBlockEntity.java:95)
+	at knot//com.zurrtum.create.foundation.blockEntity.SmartBlockEntityTicker.tick(SmartBlockEntityTicker.java:16)
+	at knot//net.minecraft.world.level.chunk.LevelChunk$BoundTickingBlockEntity.tick(LevelChunk.java:773)
+	at knot//net.minecraft.world.level.chunk.LevelChunk$RebindableTickingBlockEntityWrapper.tick(LevelChunk.java:827)
+	at knot//net.minecraft.world.level.Level.tickBlockEntities(Level.java:475)
+	at knot//net.minecraft.server.level.ServerLevel.tick(ServerLevel.java:461)
+	at knot//net.minecraft.server.MinecraftServer.tickChildren(MinecraftServer.java:1116)
+	at knot//net.minecraft.server.MinecraftServer.tickServer(MinecraftServer.java:980)
+	at knot//net.minecraft.client.server.IntegratedServer.tickServer(IntegratedServer.java:139)
+	at knot//net.minecraft.server.MinecraftServer.processPacketsAndTick(MinecraftServer.java:1013)
+	at knot//net.minecraft.client.server.IntegratedServer.processPacketsAndTick(IntegratedServer.java:107)
+	at knot//net.minecraft.server.MinecraftServer.runServer(MinecraftServer.java:752)
+	at knot//net.minecraft.server.MinecraftServer.lambda$spin$0(MinecraftServer.java:310)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- Head --
+Thread: Server thread
+Stacktrace:
+	at knot//dev.simulated_team.simulated.util.SimAssemblyHelper.disassembleSubLevel(SimAssemblyHelper.java:55)
+	at knot//dev.simulated_team.simulated.content.blocks.merging_glue.MergingGlueBlockEntity.disassembleToPartner(MergingGlueBlockEntity.java:112)
+	at knot//dev.simulated_team.simulated.content.blocks.merging_glue.MergingGlueBlockEntity.tick(MergingGlueBlockEntity.java:95)
+	at knot//com.zurrtum.create.foundation.blockEntity.SmartBlockEntityTicker.tick(SmartBlockEntityTicker.java:16)
+	at knot//net.minecraft.world.level.chunk.LevelChunk$BoundTickingBlockEntity.tick(LevelChunk.java:773)
+	at knot//net.minecraft.world.level.chunk.LevelChunk$RebindableTickingBlockEntityWrapper.tick(LevelChunk.java:827)
+	at knot//net.minecraft.world.level.Level.tickBlockEntities(Level.java:475)
+
+-- Block entity being ticked --
+Details:
+	Name: simulated:merging_glue // dev.simulated_team.simulated.content.blocks.merging_glue.MergingGlueBlockEntity
+	Cached block: Block{simulated:merging_glue}[facing=south]
+	Actual block: Block{simulated:merging_glue}[facing=south]
+	Block location: World: (20481032,128,20481033), Section: (at 8,0,9 in 1280064,8,1280064; chunk contains blocks 20481024,-64,20481024 to 20481039,319,20481039), Region: (40002,40002; contains chunks 1280064,1280064 to 1280095,1280095, blocks 20481024,-64,20481024 to 20481535,319,20481535)
+Stacktrace:
+	at knot//net.minecraft.world.level.chunk.LevelChunk$BoundTickingBlockEntity.tick(LevelChunk.java:773)
+	at knot//net.minecraft.world.level.chunk.LevelChunk$RebindableTickingBlockEntityWrapper.tick(LevelChunk.java:827)
+	at knot//net.minecraft.world.level.Level.tickBlockEntities(Level.java:475)
+	at knot//net.minecraft.server.level.ServerLevel.tick(ServerLevel.java:461)
+	at knot//net.minecraft.server.MinecraftServer.tickChildren(MinecraftServer.java:1116)
+	at knot//net.minecraft.server.MinecraftServer.tickServer(MinecraftServer.java:980)
+	at knot//net.minecraft.client.server.IntegratedServer.tickServer(IntegratedServer.java:139)
+	at knot//net.minecraft.server.MinecraftServer.processPacketsAndTick(MinecraftServer.java:1013)
+	at knot//net.minecraft.client.server.IntegratedServer.processPacketsAndTick(IntegratedServer.java:107)
+	at knot//net.minecraft.server.MinecraftServer.runServer(MinecraftServer.java:752)
+	at knot//net.minecraft.server.MinecraftServer.lambda$spin$0(MinecraftServer.java:310)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+
+-- Affected level --
+Details:
+	All players: 1 total; ServerPlayer{name=Mikaple, id=1, pos=(31.62017074189337, -62.99999999936953, 20.40088363108793), mode=CREATIVE, permission=owner}
+	Chunk stats: 1222
+	Level dimension: minecraft:overworld
+	Level time: 487507 game time, 49186 day time
+	Level spawn location: World: (0,-60,0), Section: (at 0,4,0 in 0,-4,0; chunk contains blocks 0,-64,0 to 15,319,15), Region: (0,0; contains chunks 0,0 to 31,31, blocks 0,-64,0 to 511,319,511)
+	Level name: 新的世界
+	Level game mode: Game mode: creative (ID 1). Hardcore: false. Commands: true
+	Known server brands: fabric
+	Removed feature flags: 
+	Level was modded: true
+	Level storage version: 0x04ABD - Anvil
+	Loaded entity count: 1
+	Server weather: Rain time: 1 (now: false), thunder time: 1 (now: false)
+Stacktrace:
+	at knot//net.minecraft.server.level.ServerLevel.fillReportDetails(ServerLevel.java:1892)
+	at knot//net.minecraft.server.MinecraftServer.tickChildren(MinecraftServer.java:1119)
+	at knot//net.minecraft.server.MinecraftServer.tickServer(MinecraftServer.java:980)
+	at knot//net.minecraft.client.server.IntegratedServer.tickServer(IntegratedServer.java:139)
+	at knot//net.minecraft.server.MinecraftServer.processPacketsAndTick(MinecraftServer.java:1013)
+	at knot//net.minecraft.client.server.IntegratedServer.processPacketsAndTick(IntegratedServer.java:107)
+	at knot//net.minecraft.server.MinecraftServer.runServer(MinecraftServer.java:752)
+	at knot//net.minecraft.server.MinecraftServer.lambda$spin$0(MinecraftServer.java:310)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+
+-- System Details --
+Details:
+	Minecraft Version: 26.3
+	Minecraft Version ID: 26.3
+	Operating System: Linux (amd64) version 7.2.8-zen1-2-zen
+	Java Version: 25.0.4.1, Arch Linux
+	Java VM Version: OpenJDK 64-Bit Server VM (mixed mode, sharing), Arch Linux
+	Memory: 224182496 bytes (213 MiB) / 1006632960 bytes (960 MiB) up to 5033164800 bytes (4800 MiB)
+	Memory (heap): init: 256MiB, used: 693MiB, committed: 960MiB, max: 4800MiB
+	Memory (non-heap): init: 007MiB, used: 293MiB, committed: 297MiB, max: 000MiB
+	CPUs: 16
+	Processor Vendor: AuthenticAMD
+	Processor Name: AMD Ryzen 7 6800H with Radeon Graphics
+	Identifier: AuthenticAMD Family 25 Model 68 Stepping 1
+	Microarchitecture: Zen 3
+	Frequency (GHz): -0.00
+	Number of physical packages: 1
+	Number of physical CPUs: 8
+	Number of logical CPUs: 16
+	Graphics card #0 name: GA107M [GeForce RTX 3050 Mobile]
+	Graphics card #0 vendor: NVIDIA Corporation (0x10de)
+	Graphics card #0 VRAM (MiB): 4128.00
+	Graphics card #0 deviceId: 0x25a2
+	Graphics card #0 versionInfo: unknown
+	Graphics card #1 name: Rembrandt [Radeon 680M]
+	Graphics card #1 vendor: Advanced Micro Devices, Inc. [AMD/ATI] (0x1002)
+	Graphics card #1 VRAM (MiB): 258.00
+	Graphics card #1 deviceId: 0x1681
+	Graphics card #1 versionInfo: unknown
+	Virtual memory max (MiB): 11712.48
+	Virtual memory used (MiB): 15401.32
+	Swap memory total (MiB): 4096.00
+	Swap memory used (MiB): 4095.99
+	Space in storage for jna.tmpdir (MiB): available: 236405.55, total: 431241.31
+	Space in storage for org.lwjgl.system.SharedLibraryExtractPath (MiB): available: 236405.55, total: 431241.31
+	Space in storage for io.netty.native.workdir (MiB): available: 236405.55, total: 431241.31
+	Space in storage for java.io.tmpdir (MiB): available: 5233.03, total: 7616.48
+	Space in storage for workdir (MiB): available: 236405.55, total: 431241.31
+	Operating System Version: GNU/Linux Arch Linux unknown (unknown) build 7.2.8-zen1-2-zen
+	Process Elevated: false
+	Process Loads: Uptime: 26s, user: 117s (453.65%), kernel: 3s (13.12%), total: 120s (466.77%)
+	Process Virtual Size (MiB): 9023.52
+	Process Resident Size (MiB): 1911.98
+	JVM Flags: 20 total; -Xmx4792m -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+UseG1GC -XX:G1MixedGCCountTarget=5 -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32m -XX:-OmitStackTraceInFastThrow -XX:-DontCompileHugeMethods -XX:MaxNodeLimit=240000 -XX:NodeLimitFudgeFactor=8000 -XX:TieredCompileTaskTimeout=10000 -XX:ReservedCodeCacheSize=400M -XX:NonNMethodCodeHeapSize=12M -XX:ProfiledCodeHeapSize=194M -XX:NmethodSweepActivity=1 -XX:+UseCompactObjectHeaders -XX:StackShadowPages=32
+	Debug Flags: 0 total; 
+	Fabric Mods: 
+		aeronautics: Create Aeronautics 1.3.0
+		create: Create Fly 6.0.9-1
+		fabric-api: Fabric API 0.161.0+26.3
+			fabric-advancement-api-v1: Fabric Advancement API (v1) 1.0.0+38c7a2d55d
+			fabric-api-lookup-api-v1: Fabric API Lookup API (v1) 2.0.24+3434d6d95d
+			fabric-biome-api-v1: Fabric Biome API (v1) 20.0.9+74ed1ea55d
+			fabric-block-api-v1: Fabric Block API (v1) 3.1.0+0ae6f9115d
+			fabric-block-getter-api-v2: Fabric BlockGetter API (v2) 2.0.9+3434d6d95d
+			fabric-command-api-v2: Fabric Command API (v2) 3.1.2+fcdff87f5d
+			fabric-content-registries-v0: Fabric Content Registries (v0) 15.0.4+74ed1ea55d
+			fabric-convention-tags-v2: Fabric Convention Tags (v2) 4.10.3+6b5b47fd5d
+			fabric-crash-report-info-v1: Fabric Crash Report Info (v1) 1.0.7+fcdff87f5d
+			fabric-creative-tab-api-v1: Fabric Creative Tab API (v1) 5.0.21+fcdff87f5d
+			fabric-data-attachment-api-v1: Fabric Data Attachment API (v1) 2.2.30+3434d6d95d
+			fabric-data-generation-api-v1: Fabric Data Generation API (v1) 27.2.4+427eab975d
+			fabric-debug-api-v1: Fabric Debug API (v1) 1.0.4+3434d6d95d
+			fabric-dimensions-v1: Fabric Dimensions API (v1) 5.1.19+47f74c985d
+			fabric-entity-events-v1: Fabric Entity Events (v1) 6.0.4+3434d6d95d
+			fabric-events-interaction-v0: Fabric Events Interaction (v0) 5.3.6+3434d6d95d
+			fabric-game-rule-api-v1: Fabric Game Rule API (v1) 4.0.10+3434d6d95d
+			fabric-item-api-v1: Fabric Item API (v1) 14.7.0+cf6bc2db5d
+			fabric-loot-api-v3: Fabric Loot API (v3) 4.0.8+4068fd645d
+			fabric-menu-api-v1: Fabric Menu API (v1) 2.0.27+ed66f0a35d
+			fabric-message-api-v1: Fabric Message API (v1) 7.0.10+3434d6d95d
+			fabric-model-loading-api-v1: Fabric Model Loading API (v1) 8.0.35+fcdff87f5d
+			fabric-networking-api-v1: Fabric Networking API (v1) 6.3.8+fcdff87f5d
+			fabric-object-builder-api-v1: Fabric Object Builder API (v1) 24.1.9+3434d6d95d
+			fabric-particles-v1: Fabric Particles (v1) 5.0.24+3434d6d95d
+			fabric-permission-api-v1: Fabric Permission API (v1) 1.0.8+fcdff87f5d
+			fabric-recipe-api-v1: Fabric Recipe API (v1) 10.0.8+fcdff87f5d
+			fabric-registry-sync-v0: Fabric Registry Sync (v0) 8.0.1+fcdff87f5d
+			fabric-renderer-api-v1: Fabric Renderer API (v1) 17.0.15+79385d0b5d
+			fabric-renderer-indigo: Fabric Renderer - Indigo 9.1.23+b9d63e335d
+			fabric-rendering-fluids-v1: Fabric Rendering Fluids (v1) 6.0.6+3434d6d95d
+			fabric-rendering-v1: Fabric Rendering (v1) 27.0.14+901a437c5d
+			fabric-resource-conditions-api-v1: Fabric Resource Conditions API (v1) 6.1.5+3434d6d95d
+			fabric-resource-loader-v0: Fabric Resource Loader (v0) 3.3.26+4fc5413f5d
+			fabric-serialization-api-v1: Fabric Serialization API (v1) 2.0.7+74ed1ea55d
+			fabric-sound-api-v1: Fabric Sound API (v1) 2.0.7+3434d6d95d
+			fabric-tag-api-v1: Fabric Tag API (v1) 2.1.10+fcdff87f5d
+			fabric-transfer-api-v1: Fabric Transfer API (v1) 8.0.25+fcdff87f5d
+			fabric-transitive-access-wideners-v1: Fabric Transitive Access Wideners (v1) 8.1.16+52268a0e5d
+		fabricloader: Fabric Loader 0.19.5
+			mixinextras: MixinExtras 0.5.5
+		forgeconfigapiport: Forge Config API Port 26.3.1
+			com_electronwill_night-config_core: core 3.8.4
+			com_electronwill_night-config_toml: toml 3.8.4
+		java: OpenJDK 64-Bit Server VM 25
+		minecraft: Minecraft 26.3
+		modmenu: Mod Menu 21.0.0
+			fabric-api-base: Fabric API Base 2.0.6+fcdff87f5d
+			fabric-key-mapping-api-v1: Fabric Key Mapping API (v1) 2.0.8+3434d6d95d
+			fabric-lifecycle-events-v1: Fabric Lifecycle Events (v1) 4.1.9+ffef5f675d
+			fabric-resource-loader-v1: Fabric Resource Loader (v1) 3.0.4+fcdff87f5d
+			fabric-screen-api-v1: Fabric Screen API (v1) 5.2.4+48607d035d
+		offroad: Create Offroad 1.3.0
+		placeholder-api: Placeholder API 3.2.0+26.3
+		sable: Sable 3.0.0
+			at_yawk_lz4_lz4-java: lz4-java 1.11.0
+			org_apache_maven_maven-artifact: maven-artifact 3.8.5
+		simulated: Create Simulated 1.3.0
+			team_reborn_energy: Energy 5.0.0
+	Server Running: true
+	Player Count: 1 / 8; [ServerPlayer['Mikaple'/1, l='ServerLevel[新的世界]', x=31.62, y=-63.00, z=20.40]]
+	Active Data Packs: vanilla, aeronautics, create, fabric-convention-tags-v2, offroad, sable, simulated
+	Available Data Packs: aeronautics, create, fabric-convention-tags-v2, minecart_improvements, offroad, redstone_experiments, sable, simulated, trade_rebalance, vanilla
+	Enabled Feature Flags: minecraft:vanilla
+	World Generation: Stable
+	World Seed: 2511832179601887769
+	Suppressed Exceptions: ~~NONE~~
+	Type: Integrated Server
+	Is Modded: Definitely; Client brand changed to 'fabric'; Server brand changed to 'fabric'
+	Launched Version: 26.3-Fabric

@@ -249,7 +249,10 @@ public class LinkedTypewriterBlockEntity extends SmartBlockEntity implements Men
         this.typedEntry = tag.getStringOr("typedEntry", "");
         this.entryMap = LinkedTypewriterEntries.readKeys(registries, tag.getListOrEmpty("Keys"), this.getBlockPos());
         if (tag.contains("CurrentUser")) {
-            this.currentUser = null;
+            // write() stores the UUID, but both branches used to discard it here, so after a
+            // reload every typewriter read back as "not in use": the occupancy check passed for
+            // anyone and checkUser() rejected the real owner's key packets.
+            this.currentUser = UUID.fromString(tag.getStringOr("CurrentUser", ""));
         } else {
             this.currentUser = null;
         }
