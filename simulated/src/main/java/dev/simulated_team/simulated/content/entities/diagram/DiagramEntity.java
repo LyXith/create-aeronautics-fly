@@ -218,6 +218,29 @@ public class DiagramEntity extends HangingEntity implements ISyncPersistentData,
         this.updateFacingWithBoundingBox(this.getDirection(), this.verticalOrientation);
     }
 
+    /**
+     * 原版 {@link HangingEntity#setDirection} 断言朝向必须水平
+     * ({@code Validate.isTrue(direction.getAxis().isHorizontal())})，而图纸可以贴在地板/天花板上
+     * —— {@link #survives()} 和 {@link #calculateBoundingBox} 都显式处理了垂直朝向。
+     *
+     * <p>26.3 里 {@code setDirectionRaw()} 写入同步数据后会回调
+     * {@code onSyncedDataUpdated() -> setDirection()}，于是点顶/底面放图纸必定命中那条断言并崩溃
+     * （同样会影响读档时 {@code Facing} 存成 UP/DOWN 的旧图纸）。这里对水平朝向完全沿用原版行为，
+     * 对垂直朝向只写数据并重算包围盒，旋转交由 {@link #updateFacingWithBoundingBox} 计算。
+     */
+    @Override
+    protected void setDirection(final Direction direction) {
+        Objects.requireNonNull(direction);
+
+        if (direction.getAxis().isHorizontal()) {
+            super.setDirection(direction);
+            return;
+        }
+
+        this.setDirectionRaw(direction);
+        this.recalculateBoundingBox();
+    }
+
     protected void updateFacingWithBoundingBox(final Direction facing, final Direction verticalOrientation) {
         Objects.requireNonNull(facing);
         this.setDirectionRaw(facing);

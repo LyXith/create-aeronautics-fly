@@ -32,7 +32,8 @@ public final class FabricSimItemService implements SimItemService {
     private static volatile @Nullable MinecraftServer server;
     private static volatile @Nullable LootContext cachedContext;
 
-    private FabricSimItemService() {}
+    // 必须是 public 无参构造：ServiceLoader 通过它实例化本类（private 会直接 ServiceConfigurationError）
+    public FabricSimItemService() {}
 
     public static void setServer(final @Nullable MinecraftServer value) {
         server = value;

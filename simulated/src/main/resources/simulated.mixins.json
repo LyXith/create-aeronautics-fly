@@ -40,6 +40,7 @@
     "ponder.WorldSectionElementImplMixin",
     "quiet_use.MultiPlayerGameModeMixin",
     "redstone_link.LinkBehaviourMixin",
+    "rope.BaseRopeMixin",
     "rope.ClientSubLevelContainerMixin",
     "rope.LevelExtractorMixin",
     "sable_render.KineticBlockEntityRendererMixin",

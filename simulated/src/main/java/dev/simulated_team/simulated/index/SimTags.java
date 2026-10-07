@@ -104,7 +104,10 @@ public class SimTags {
                     .addOptionalTag(AMETHYST_SHARDS);
             prov.tag(LASER_POINTER_RAINBOW)
                     .add(NETHER_STAR);
+            // 手持弹簧右击弹簧方块 = 调整原长（潜行为减），
+            // 见 item.simulated.spring.tooltip.behaviour2/3。扳手另有 onWrenched 调 SIZE（劲度）。
             prov.tag(SPRING_ADJUSTER)
+                    .add(SimItems.SPRING.asItem())
                     .add(AllItems.IRON_SHEET.asItem());
         }
     }
