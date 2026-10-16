@@ -41,6 +41,12 @@ loom {
             client()
             name = "${mod_name} Fabric Client"
             runDir = 'runs/client'
+            // -PquickPlaySingleplayer='<世界名>' 让 runClient 启动后直接进那个单人世界。
+            // 用来复现"进世界后卡死"这类只在世界里出现的问题：进程一起就挂着等，
+            // 一旦日志停止推进就 jstack 抓渲染线程栈。
+            if (project.hasProperty('quickPlaySingleplayer')) {
+                programArgs(['--quickPlaySingleplayer', project.property('quickPlaySingleplayer').toString()])
+            }
         }
         server {
             server()

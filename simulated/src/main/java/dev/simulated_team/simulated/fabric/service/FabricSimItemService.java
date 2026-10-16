@@ -78,12 +78,11 @@ public final class FabricSimItemService implements SimItemService {
         final MinecraftServer running = server;
         if (running != null) return running.overworld();
 
+        // 这个分支只能在客户端走到：客户端类型全部关在 ClientServerAccess 里，
+        // 本类自身的字节码不能出现任何 net.minecraft.client.* —— 否则专用服务器
+        // 链接本类时会因找不到客户端类而 NoClassDefFoundError（详见该类注释）。
         if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
-            final net.minecraft.client.Minecraft minecraft = net.minecraft.client.Minecraft.getInstance();
-            if (minecraft != null) {
-                final MinecraftServer integrated = minecraft.getSingleplayerServer();
-                if (integrated != null) return integrated.overworld();
-            }
+            return ClientServerAccess.overworldOrNull();
         }
         return null;
     }

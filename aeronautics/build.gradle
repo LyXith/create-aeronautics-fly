@@ -33,6 +33,12 @@ dependencies {
 
     // Runtime dependencies which are not nested in the four-in-one distribution.
     // Loom's production tasks put these alongside the packaged JAR as real mods.
+    //
+    // Sable used to ride along as a git submodule and therefore as a bundled module, but the
+    // submodule is gone and its JAR now only lives in libs/. All three modules declare
+    // `depends: sable [3.0.0,4.0.0)`, so without it every production run (CI's server/client
+    // smoke tests included) dies in FabricLoader.init with "Incompatible mods found".
+    productionRuntimeMods files("${rootProject.projectDir}/libs/sable-fabric-${sable_mod_version}.jar")
     productionRuntimeMods "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
     productionRuntimeMods "com.github.LyXith:create-fly-fly:${create_fly_version}"
     productionRuntimeMods "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${forgeconfigapiport_version}"
