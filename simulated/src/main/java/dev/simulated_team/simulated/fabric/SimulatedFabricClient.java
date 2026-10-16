@@ -2,6 +2,7 @@ package dev.simulated_team.simulated.fabric;
 
 import dev.simulated_team.simulated.Simulated;
 import dev.simulated_team.simulated.SimulatedClient;
+import dev.simulated_team.simulated.client.RenderStallWatchdog;
 import dev.simulated_team.simulated.content.blocks.lasers.IrisLaserRenderQueue;
 import dev.simulated_team.simulated.content.blocks.lasers.LateLaserRenderQueue;
 import dev.simulated_team.simulated.content.physics_staff.PhysicsStaffRenderHandler;
@@ -65,6 +66,9 @@ public final class SimulatedFabricClient implements ClientModInitializer {
 
         ClientTickEvents.START_CLIENT_TICK.register(SimulatedCommonClientEvents::preClientTick);
         ClientTickEvents.END_CLIENT_TICK.register(SimulatedCommonClientEvents::postClientTick);
+        // 心跳：渲染线程每 tick 推进一次。一旦停滞超过阈值，看门狗会把线程栈落盘 ——
+        // "卡死但日志里什么都没有"的情况就不再无从下手。
+        ClientTickEvents.END_CLIENT_TICK.register(client -> RenderStallWatchdog.onClientTick());
         LevelRenderEvents.START_MAIN.register(context -> {
             LateLaserRenderQueue.beginWorldFrame();
             IrisLaserRenderQueue.beginWorldFrame();
@@ -114,5 +118,8 @@ public final class SimulatedFabricClient implements ClientModInitializer {
                     new FabricResourceReloadListener(
                             Simulated.path("client_resources/" + listenerIndex++), listener));
         }
+
+        // 必须最后调用：当前线程就是渲染线程，看门狗要拿它做栈采样。
+        RenderStallWatchdog.start();
     }
 }
